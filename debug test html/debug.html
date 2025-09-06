@@ -1,0 +1,26 @@
+
+<div id="myDiv" style="width:100px; height:100px; background:tomato; text-align:center; line-height:100px; user-select:none; cursor:pointer;">
+  Hold me
+</div>
+
+<script>
+  const myDiv = document.getElementById('myDiv');
+  let intervalId;
+
+  myDiv.addEventListener('mousedown', () => {
+    
+    intervalId = setInterval(() => {
+      console.log('Function running...');
+    
+    }, 100); 
+  });
+
+  myDiv.addEventListener('mouseup', () => {
+    clearInterval(intervalId);
+  });
+
+  myDiv.addEventListener('mouseleave', () => {
+    clearInterval(intervalId);
+  });
+</script>
+

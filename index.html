@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Istrit Fighter</title>
+    <style>
+        html,
+        body {
+          font-family: "Arcade Interlaced";
+          position: relative;
+          padding: 0;
+          margin: 0;
+          
+          display: flex;
+          flex-direction: column;
+          --form-height: 6rem;
+          --form-content-size: 2rem;
+          align-items: center;
+          justify-content: center;
+          background-color: rgb(0, 0, 1);
+        }
+main{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+        canvas {
+          transform: scale(1.5) translateY(50%);
+          background-color: black;
+          object-fit: contain;
+          image-rendering: crisp-edges;
+          image-rendering: pixelated;
+          position: absolute ;
+          z-index: 101;
+          width: 50vw;
+          height: 61vh;
+          border: solid 8px white;
+          border-radius: 5px;
+          font-family: "Arcade Interlaced";
+        }
+          img{
+            display: none;
+          }
+          .arcade{
+            rotate: 0.5deg;
+            position: relative;
+            display:none;
+          }
+          .forms{
+            
+            font-family: Arial, Helvetica, sans-serif;
+          }
+          .forms select, .forms button{
+            display: none;
+          }
+
+          .moveLists {
+            top: 65%;
+            transform: scale(0.5);
+            display: flex;
+            flex-wrap: wrap;           /* allow items to wrap to new rows */
+            position: fixed;
+            left: 2.5vw;
+            z-index: 130;
+            width: 70vw;              /* 3 items × (100px + 2×10px margin) = ~360px */
+            /* adjust width as needed */
+}
+
+.moveListsP2 {
+            top: 30vh;
+            display: none;
+            flex-wrap: wrap;           /* allow items to wrap to new rows */
+            position: fixed;
+            left: 8vw;
+            transform: scale(0.5);
+            z-index: 130;
+            width: 480px;              /* 3 items × (100px + 2×10px margin) = ~360px */
+            /* adjust width as needed */
+}
+          .move{
+            opacity: 20%;
+            position: absolute;
+            font-family: Arial, Helvetica, sans-serif;
+            width: 100px;
+           top:50px;
+            border-radius: 100%;
+            border: 2px solid black;
+            height: 100px;
+            align-content: center;
+            justify-content: center;
+            text-align: center;
+            justify-items: center;
+            align-items: center;
+            background-color: yellow;
+            transition: all 0.1s ease-in-out;
+          }
+          .move:hover{
+            transform: scale(1.2);
+            background-color: red;
+          }
+
+          .move1{
+            opacity: 100%;
+            font-family: Arial, Helvetica, sans-serif;
+            width: 100px;
+            font-weight: bold;
+            border-radius: 100%;
+            border: 2px solid black;
+            height: 100px;
+            
+            align-content: center;
+            justify-content: center;
+            text-align: center;
+            justify-items: center;
+            align-items: center;
+            background-color: rgb(94, 250, 16);
+            transition: all 0.1s ease-in-out;
+
+             background-image: url("./images/joystick/white.png");
+  background-size: cover;     /* Makes the image cover the div */
+  background-position: center; /* Centers the image */
+          }
+          .move1:hover{
+            background-image: url("./images/joystick/red.png");
+  background-size: cover;     /* Makes the image cover the div */
+  background-position: center; /* Centers the image */
+            transform: scale(1.2);
+            background-color: red;
+          }
+
+          .move2{
+            opacity: 20%;
+            font-family: Arial, Helvetica, sans-serif;
+            width: 100px;
+            font-weight: bold;
+            border-radius: 100%;
+            border: 2px solid black;
+            height: 100px;
+            align-content: center;
+            justify-content: center;
+            text-align: center;
+            justify-items: center;
+            align-items: center;
+            background-color: rgb(94, 250, 16);
+            transition: all 0.1s ease-in-out;
+          }
+          .move2:hover{
+            transform: scale(1.2);
+            background-color: red;
+          }
+
+          .movePlayer{
+            opacity: 20%;
+           display: none;
+            font-family: Arial, Helvetica, sans-serif;
+            width: 100px;
+            margin: 10px;
+            border-radius: 100%;
+            border: 2px solid black;
+            height: 100px;
+            align-content: center;
+            justify-content: center;
+            text-align: center;
+            justify-items: center;
+            align-items: center;
+            background-color: White;
+            transition: all 0.1s ease-in-out;
+          }
+          .movePlayer input[type="checkbox"] {
+            accent-color: #007bff;
+           width: 30%;
+           border-radius: 20px;
+           height: 30%;
+          }
+          .movePlayer:hover{
+            transform: scale(1.2);
+            background-color: red;
+          }
+          .moveTitle{
+            position: absolute;
+            left: 5%;
+            font-size: 3vw;
+            color: White;
+            font-weight: bold;
+            font-family: Arial, Helvetica, sans-serif;
+            top: -5vh;
+          }
+
+          .movebtnsP1{
+            top: 7vh;
+            display: flex;
+            position: relative;
+            
+            right: -120vh;
+            flex-wrap: wrap;           /* allow items to wrap to new rows */
+            position: fixed;
+           
+            z-index: 130;
+            width: 120vh;   
+          }
+
+          .move.disabled, .move2.disabled, .move1.disabled, #joystick.disabled {
+        pointer-events: none;   /* prevent clicks/taps */
+        opacity: 0.4;           /* faded out look */
+        cursor: not-allowed;    /* optional, shows user can't click */
+    }
+
+        
+  #joystick {
+  
+  width: 6vw;
+  height: 12vh;
+  background: rgba(255,255,255,0.2);
+  border: 2px solid white;
+  border-radius: 50%;
+  opacity: 100%;
+  position: fixed;
+  bottom: 20vh;
+  left: 20vw;
+  z-index: 200;
+  touch-action: none;
+  background-image: url("./images/joystick/placer.png");
+  background-size: cover;     /* Makes the image cover the div */
+  background-position: center; /* Centers the image */
+  
+}
+
+
+#knob {
+  content: url('./images/joystick/handle.png');
+  width: 6vw;
+  height: 12vh;
+  
+  background: yellow;
+  border: 2px solid black;
+  border-radius: 50%;
+  position: absolute;
+  opacity: 100%;
+  top: 18%;
+  z-index: 205;
+  left: 24%;
+  transform: translate(-25.5%, -20%);
+}
+.screenJoystick{
+  position: fixed;
+ z-index: 105;
+ top: 20vh;
+ left: 1vw;
+ font-family: Arial, Helvetica, sans-serif;
+ color: rgb(64, 255, 0);
+}
+
+.screenJoystickP2{
+  position: fixed;
+ z-index: 105;
+ top: 20vh;
+ right: 1vw;
+ font-family: Arial, Helvetica, sans-serif;
+ color: rgb(64, 255, 0);
+}
+
+
+.move.active {
+  background-color: red !important;
+}
+
+    </style>
+
+    <div class="screenJoystick">
+<label>
+   P1 Controls
+  <br>
+  <input type="radio" name="joystickToggle" value="on" checked > On
+</label>
+
+<label>
+  <input type="radio" name="joystickToggle" value="off" > Off
+</label>
+    </div>
+
+    <div class="screenJoystickP2">
+<label>
+   P2 Controls
+  <br>
+  <input type="radio" name="joystick2Toggle" value="on" > On
+</label>
+
+<label>
+  <input type="radio" name="joystick2Toggle" value="off" checked> Off
+</label>
+    </div>
+    
+        <script defer type="module"src="./src/index.js"></script>
+  </head>
+  <body>
+    <main>
+      <canvas width="384" height="224"></canvas>
+    <img src="./arcade.png" alt="arcade" class="arcade"/>
+  </main>
+ 
+<div id="joystick" style="display: block;">
+  <div id="knob"></div>
+</div>
+  
+  <div class="scrninput" style="display:block">
+  <div class="moveLists">
+    <div class="moveTitle"> </div>
+    <div class="movePlayer">
+        <input id="ken" type="checkbox" name="fighter" value="Ken"/>
+        <lagel for="ken">P1</lagel>
+      </div>
+      <div class="movePlayer">
+        <input id="malupiton" type="checkbox" name="fighter" value="Malupiton"/>
+        <lagel for="malupiton">P2</lagel>
+      </div>
+      <div class="move" style="top:50px;right: 52%; display: none;" id="jump">Up</div>
+  <div class="move" style="top:160px;right: 30%; display: none;"  id="mFor">Right</div>
+  <div class="move" style="top:160px;left: 5%; display: none;" id="mBack">Left</div>
+  <div class="move" style="top:160px;left: 27%; display: none;" id="crouchDown">Down</div>
+  <div class="movebtnsP1">   <div class="move1" id="AP1">A</div>
+  <div class="move1"  id="BP1">B</div>
+  <div class="move1" id="CP1">C</div>
+  <div class="move1" id="DP1">D</div></div>
+
+  </div>
+
+  <div class="moveListsP2">
+    <div class="moveTitle"> Player 2 Test Control</div>
+    <div class="movePlayer">
+        <input id="ken" type="checkbox" name="fighter" value="Ken"/>
+        <lagel for="ken">P1</lagel>
+      </div>
+      <div class="movePlayer">
+        <input id="malupiton" type="checkbox" name="fighter" value="Malupiton"/>
+        <lagel for="malupiton">P2</lagel>
+      </div>
+    <div class="move" style="top:50px;right: 52%" id="jumpP2">Up</div>
+  <div class="move" style="top:160px;right: 30%"  id="mForP2">Right</div>
+  <div class="move" style="top:160px;left: 5%" id="mBackP2">Left</div>
+  <div class="move" style="top:160px;left: 27%" id="crouchDownP2">Down</div>
+<div class="movebtnsP1">   <div class="move2"  id="AP2">A</div>
+  <div class="move2" id="BP2">B</div>
+  <div class="move2"  id="CP2">C</div>
+  <div class="move2" id="DP2">D</div></div>
+
+  </div>
+  <form class="forms">
+      <select id="state-dropdown"name="state"></select>
+      <button type="submit" >Transition!</button>
+    </form>
+    </div>
+   
+    <img src="./images/malupiton2.png" alt="malupiton" />
+   
+    <img src="./images/payatas-stage.png" alt="payatas-stage"/>
+    <img src="./images/intro.png" alt="intro"/>
+    <img src="./images/hitSplash.png" alt="hitsplash"/>
+    <img src="./images/misc.png" alt="misc"/>
+    <img src="./images/golem.png" alt="golem" />
+    <img src="./images/shadow.png" alt="shadow"/>
+    <img src="./images/background.png" alt="background" />
+
+    <audio 
+    id="theme-guile" 
+    src="./sounds/stage-payatas.mp3" 
+    preload="auto" 
+    loop></audio>  
+
+     <audio 
+    id="sound-fighter-heavy-attack" 
+    src="./sounds/attacks/heavy-attack.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-fighter-heavy-kick-hit" 
+    src="./sounds/attacks/heavy-kick-hit.ogg" 
+    preload="auto" 
+    ></audio> 
+
+     <audio 
+    id="sound-fighter-heavy-punch-hit" 
+    src="./sounds/attacks/heavy-punch-hit.ogg" 
+    preload="auto" 
+    ></audio> 
+
+     <audio 
+    id="sound-fighter-land" 
+    src="./sounds/attacks/land.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-fighter-light-attack" 
+    src="./sounds/attacks/light-attack.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-fighter-light-kick-hit" 
+    src="./sounds/attacks/light-kick-hit.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-fighter-light-punch-hit" 
+    src="./sounds/attacks/light-punch-hit.ogg" 
+    preload="auto" 
+    ></audio> 
+    
+     <audio 
+    id="sound-fight" 
+    src="./sounds/fight.ogg" 
+    preload="auto" 
+    ></audio> 
+
+     <audio 
+    id="sound-round1" 
+    src="./sounds/round1.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-round2" 
+    src="./sounds/round2.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-round3" 
+    src="./sounds/round3.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-round4" 
+    src="./sounds/round4.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-round5" 
+    src="./sounds/round5.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-round6" 
+    src="./sounds/round6.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-round7" 
+    src="./sounds/round7.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-round8" 
+    src="./sounds/round8.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-round9" 
+    src="./sounds/round9.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-round10" 
+    src="./sounds/round10.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-win" 
+    src="./sounds/sound-win.ogg" 
+    preload="auto" 
+    ></audio> 
+
+     <audio 
+    id="sound-lose" 
+    src="./sounds/sound-lose.ogg" 
+    preload="auto" 
+    ></audio> 
+
+     <audio 
+    id="sound-malupiton-special-1" 
+    src="./sounds/attacks/malupiton/malupitonSP1.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="game-start" 
+    src="./sounds/game-start.ogg" 
+    preload="auto" 
+    ></audio> 
+
+     <audio 
+    id="game-start2" 
+    src="./sounds/game-start2.mp3" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="music-intro" 
+    src="./sounds/music-intro2.mp3" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="music-character-select" 
+    src="./sounds/music-character-select.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-choose" 
+    src="./sounds/sound-choose.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-select" 
+    src="./sounds/sound-select.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="super-activate" 
+    src="./sounds/super-activate.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="super-launch" 
+    src="./sounds/super-launch.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="choose-fighter" 
+    src="./sounds/choose-fighter.mp3" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-teleport" 
+    src="./sounds/sound-teleport.ogg" 
+    preload="auto" 
+    ></audio> 
+
+
+  </body>
+
+
+</html>
+
