@@ -19,21 +19,42 @@ export class HitSplash {
         this.animationFrame += 1;
         this.animationTimer = time.previous;
 
-        if (this.animationFrame >= 4) this.entityList.remove.call(this.entityList, this);
+        if (this.animationFrame >= this.frameNumber) this.entityList.remove.call(this.entityList, this);
     }
 
-    draw(context, camera){
-        const [
-            [x, y, width, height], [originX, originY],
-        ] = this.frames[this.animationFrame + this.playerId * 4];
+    draw(context, camera) {
+    const [
+        [x, y, width, height], [originX, originY],
+    ] = this.frames[this.animationFrame];
 
+    const drawX = Math.floor(this.position.x - camera.position.x - originX);
+    const drawY = Math.floor(this.position.y - camera.position.y - originY);
+
+    context.save();
+
+    if (this.playerId == 1) {
+        // Flip horizontally around the sprite center
+        context.scale(-1, 1);
         context.drawImage(
             this.image,
             x, y,
             width, height,
-            Math.floor(this.position.x - camera.position.x - originX),
-            Math.floor(this.position.y - camera.position.y - originY),
+            -(drawX + width), // negative X because of the flipped scale
+            drawY,
+            width, height,
+        );
+    } else {
+        // Normal drawing
+        context.drawImage(
+            this.image,
+            x, y,
+            width, height,
+            drawX, drawY,
             width, height,
         );
     }
+
+    context.restore();
+}
+
 }

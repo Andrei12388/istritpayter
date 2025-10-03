@@ -1,8 +1,8 @@
 
-import { registerKeyboardEvents } from './inputHandler.js';
+import { pollGamepads, registerGamepadEvents, registerKeyboardEvents } from './inputHandler.js';
 
 import { registerScreenButtonEvents } from './inputHandler.js';
-
+import * as control from './inputHandler.js'; 
 import { getContext } from './utils/context.js';
 import { BattleScene } from './scenes/Battlescene.js';
 import { Intro } from './scenes/Intro.js';
@@ -16,7 +16,7 @@ const selectedCharacters = [
         imageBig: 'malupitonBig' 
     },
     { 
-        name: "Golem", 
+        name: "Malupiton", 
         color: "gray", 
         imageSml: 'malupitonSmall', 
         imageBig: 'malupitonBig' 
@@ -33,8 +33,8 @@ export class StreetFighterGame{
 
     constructor(){
         
-  // this.scene = new Intro(this);
- this.scene = new BattleScene(this, selectedCharacters);
+ this.scene = new Intro(this);
+// this.scene = new BattleScene(this, selectedCharacters);
 // this.scene = new CharacterSelect(this);
     }
 
@@ -50,12 +50,13 @@ frame(time){
         secondsPassed: (time - this.frameTime.previous)/1000,
         previous: time,
     }
+    control.pollGamepads();
    this.scene.update(this.frameTime, this.context);
    this.scene.draw(this.context);
     }
 
 start(){
-    
+    control.registerGamepadEvents();
     //document.addEventListener('submit', this.handleFormSubmit.bind(this));
     window.requestAnimationFrame(this.frame.bind(this));
 }

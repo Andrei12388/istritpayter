@@ -60,6 +60,8 @@ export class StatusBar {
         this.screenTimer = 0;
         this.screenTimerMax = 50;
 
+        this.hyperskillframe = 1;
+
         this.winSituation = '';
         
         this.timeFlashTimer = 0;
@@ -124,6 +126,28 @@ export class StatusBar {
              ['babygiantBig', [218, 739, 100, 100]],
              ['otlumBig', [313, 739, 100, 100]],
              ['golemBig', [17, 841, 100, 100]],
+
+             //HyperSkill BG
+             ['hyper1', [11, 1378, 384, 223]],
+             ['hyper2', [10, 1609, 384, 223]],
+             ['hyper3', [10, 1838, 384, 223]],
+             ['hyper4', [11, 2071, 384, 223]],
+             ['hyper5', [10, 2299, 384, 223]],
+             ['hyper6', [10, 2526, 384, 223]],
+             ['hyper7', [10, 2752, 384, 223]],
+             ['hyper8', [402, 1378, 384, 223]],
+             ['hyper9', [402, 1608, 384, 223]],
+             ['hyper10', [402, 1838, 384, 223]],
+             ['hyper11', [402, 2069, 384, 223]],
+             ['hyper12', [402, 2299, 384, 223]],
+             ['hyper13', [402, 2528, 384, 223]],
+             ['hyper14', [402, 2753, 384, 223]],
+             ['hyper15', [797, 1378, 384, 223]],
+             ['hyper16', [797, 1610, 384, 223]],
+             ['hyper17', [797, 1841, 384, 223]],
+             ['hyper18', [797, 2070, 384, 223]],
+             ['hyper19', [797, 2301, 384, 223]],
+
 
 
             ['fight', [16,168, 63, 18]],
@@ -225,16 +249,71 @@ export class StatusBar {
         this.names = gameState.fighters.map(({ id }) => `tag-${id.toLowerCase()}`);
     }
 
+    resetBattle(){
+     //    gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;
+       //  gameState.fighters[1].hitPoints = HEALTH_MAX_HIT_POINTS;
+        this.time = 90;
+        this.gameIn = true;
+        this.timeCount = 90;
+        this.timeTimer = 0;
+        this.soundEnable = true;
+        this.blinkMax = false;
+        this.updateSkill = false;
+        this.inputRegistered = false;
+        this.enemyStart = false;
+        this.healthBars = [{
+            timer: 0,
+            hitPoints: HEALTH_MAX_HIT_POINTS,
+        }, {
+            timer: 0,
+            hitPoints: HEALTH_MAX_HIT_POINTS,
+        }];
+        this.skillReady = [{
+            player1: {
+                skillNum: gameState.skillNum,
+                skillColor: SKILL_POINTS1_COLOR,
+            },
+            player2: {
+                skillNum: gameState.skillNum,
+                skillColor: SKILL_POINTS1_COLOR,
+            },
+        }];
+        
+        this.fightOver = false;
+        this.fightOverEnable = false;
+        this.fightOverTimer = 0;
+        this.flashScreen = false;
+        this.flashAlpha = 0;
+
+        this.screenTimer = 0;
+        this.screenTimerMax = 50;
+
+        this.hyperskillframe = 1;
+
+        this.winSituation = '';
+        
+        this.timeFlashTimer = 0;
+        this.useFlashFrames = false;
+        this.music.loop = true;
+        this.music.volume = 1;
+        console.log('Statsbar reset');
+    }
+
     updateTime(time,context){
         //Move Big Image
         gameState.pauseFrameMove = Math.min(gameState.pauseFrameMove + 5, 10);
-        console.log(gameState.pauseFrameMove);
+        this.hyperskillframe += 1;
+        if(this.hyperskillframe === 19) this.hyperskillframe = 1;
+       // console.log(gameState.pauseFrameMove);
         if(time.previous > this.timeTimer + TIME_DELAY){
             this.time -=1;
-            console.log(gameState.pause, gameState.pauseTimer);
+           // console.log(gameState.pause, gameState.pauseTimer);
             gameState.pauseTimer = Math.max(gameState.pauseTimer - 0.7, 0);
             
-            if(gameState.pause && gameState.pauseTimer <= 0) gameState.pause = false;
+            if(gameState.pause && gameState.pauseTimer <= 0){
+                gameState.pause = false;
+                gameState.hyperSkill = false;
+            } 
            
             if(this.fightOver) this.fightOverTimer += 1;
             this.timeTimer = time.previous;
@@ -419,7 +498,7 @@ drawSkillNum(context, label, x, y){
     }
 }
 
-    drawSkillBars(context){
+    drawSkillBars(context){ 
         this.drawFrame(context, 'skill-bar', 105, 205, -1);
         this.drawFrame(context, 'skill-bar', 280, 205);
       //  this.drawFrame(context, 'skill-num', 270, 205);

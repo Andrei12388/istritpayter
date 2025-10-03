@@ -19,7 +19,9 @@ export const FighterAttackType = {
 export const FighterAttackStrength = {
    LIGHT: 'light',
    HEAVY: 'heavy',
-   SUPER1: 'super1'
+   SUPER1: 'super1',
+   SLASH: 'slash',
+   BLOCK: 'block',
 };
 
 export const FighterHurtBox = {
@@ -50,10 +52,28 @@ export const FighterAttackBaseData = {
   [FighterAttackStrength.SUPER1]: {
     score: 1000,
     skill: 5,
-    damage: 45,
+    damage: 8,
     slide: {
         velocity: -16 * FRAME_TIME,
         friction: 500,
+    },
+ },
+ [FighterAttackStrength.SLASH]: {
+    score: 100,
+    skill: 5,
+    damage: 7,
+    slide: {
+        velocity: -16 * FRAME_TIME,
+        friction: 300,
+    },
+ },
+ [FighterAttackStrength.BLOCK]: {
+    score: 5,
+    skill: 1,
+    damage: 1,
+    slide: {
+        velocity: -5 * FRAME_TIME,
+        friction: 20,
     },
  },
 };
@@ -90,7 +110,13 @@ HURT_HEAD_HEAVY: 'hurt-head-heavy',
 HURT_BODY_LIGHT: 'hurt-body-light',
 HURT_BODY_HEAVY: 'hurt-body-heavy',
 SPECIAL_1: 'special-1',
-DODGE: 'dodge',
+SPECIAL_2: 'special-2',
+HYPERSKILL_1: 'hyper-skill1',
+HYPERSKILL_2: 'hyper-skill2',
+DODGE_FORWARD: 'dodge-forward',
+DODGE_BACKWARD: 'dodge-backward',
+BLOCK: 'block',
+CROUCH_BLOCK: 'crouch-block',
 };
 
 export const FrameDelay = {
@@ -124,6 +150,8 @@ export const HitBox ={
     CROUCH_HEAVYKICK: [10,-25,55,18],
     JUMP_HEAVYKICKK: [8,-60,40,18],
     JUMP_LIGHTKICK: [8,-60,50,18],
+    HYPERSKILL_1: [0,-100,400,250],
+    SLASH: [3,-40,50,18],
 }
 
 export const hurtStateValidFrom = [
@@ -135,7 +163,8 @@ export const hurtStateValidFrom = [
     FighterState.HURT_BODY_LIGHT, FighterState.HURT_BODY_HEAVY,
     FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_HEAVYKICK,
     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
-    FighterState.SPECIAL_1, FighterState.DODGE,
+    FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.DODGE_FORWARD,
+    FighterState.DODGE_BACKWARD, FighterState.HYPERSKILL_2,
 ];
 
 export const SpecialMoveDirection = {
@@ -153,4 +182,14 @@ export const SpecialMoveDirection = {
 export const SpecialMoveButton = {
     ANY_PUNCH: 'any-punch',
     ANY_KICK: 'any-kick',
+    LIGHT_PUNCH: 'light-punch',
+    LIGHT_KICK: 'light-kick',
+    HEAVY_PUNCH: 'heavy-punch',
+    HEAVY_KICK: 'heavy-kick',
+    AB: 'ab',
+    AC: 'ac',
+    AD: 'ad',
+    BC: 'bc',
+    BD: 'bd',
+    CD: 'cd',
 };

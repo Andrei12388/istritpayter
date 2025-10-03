@@ -37,7 +37,8 @@ main{
           z-index: 101;
           width: 50vw;
           height: 61vh;
-          border: solid 8px white;
+          margin-top: 30px;
+          border: solid 1px blue;
           border-radius: 5px;
           font-family: "Arcade Interlaced";
         }
@@ -81,7 +82,7 @@ main{
             /* adjust width as needed */
 }
           .move{
-            opacity: 20%;
+            opacity: 100%;
             position: absolute;
             font-family: Arial, Helvetica, sans-serif;
             width: 100px;
@@ -94,10 +95,17 @@ main{
             text-align: center;
             justify-items: center;
             align-items: center;
-            background-color: yellow;
-            transition: all 0.1s ease-in-out;
+            
+            
+            background-image: url("./images/joystick/blue.png");
+  background-size: cover;     /* Makes the image cover the div */
+  background-position: center; /* Centers the image */
           }
-          .move:hover{
+          
+          .move.clicked{
+             background-image: url("./images/joystick/red.png");
+  background-size: cover;     /* Makes the image cover the div */
+  background-position: center; /* Centers the image */
             transform: scale(1.2);
             background-color: red;
           }
@@ -105,25 +113,33 @@ main{
           .move1{
             opacity: 100%;
             font-family: Arial, Helvetica, sans-serif;
-            width: 100px;
+            width: 120px;
             font-weight: bold;
             border-radius: 100%;
             border: 2px solid black;
-            height: 100px;
+            height: 120px;
             
             align-content: center;
             justify-content: center;
             text-align: center;
             justify-items: center;
             align-items: center;
-            background-color: rgb(94, 250, 16);
-            transition: all 0.1s ease-in-out;
+            
+           
 
              background-image: url("./images/joystick/white.png");
   background-size: cover;     /* Makes the image cover the div */
   background-position: center; /* Centers the image */
           }
-          .move1:hover{
+
+          #start1, #select1{
+            background-image: url("./images/joystick/blue.png");
+  background-size: cover;     /* Makes the image cover the div */
+  background-position: center; /* Centers the image */
+          }
+          
+
+          .move1.clicked, #start1.clicked, #select1.clicked{
             background-image: url("./images/joystick/red.png");
   background-size: cover;     /* Makes the image cover the div */
   background-position: center; /* Centers the image */
@@ -132,7 +148,7 @@ main{
           }
 
           .move2{
-            opacity: 20%;
+            opacity: 100%;
             font-family: Arial, Helvetica, sans-serif;
             width: 100px;
             font-weight: bold;
@@ -145,9 +161,20 @@ main{
             justify-items: center;
             align-items: center;
             background-color: rgb(94, 250, 16);
-            transition: all 0.1s ease-in-out;
+           
+            background-image: url("./images/joystick/white.png");
+  background-size: cover;     /* Makes the image cover the div */
+  background-position: center; /* Centers the image */
           }
           .move2:hover{
+            transform: scale(1.2);
+            background-color: red;
+          }
+
+          .move2.clicked{
+            background-image: url("./images/joystick/red.png");
+  background-size: cover;     /* Makes the image cover the div */
+  background-position: center; /* Centers the image */
             transform: scale(1.2);
             background-color: red;
           }
@@ -190,16 +217,16 @@ main{
           }
 
           .movebtnsP1{
-            top: 7vh;
+            top: -20vh;
             display: flex;
             position: relative;
-            
-            right: -120vh;
+            gap: 5vh;
+            right: -125vh;
             flex-wrap: wrap;           /* allow items to wrap to new rows */
             position: fixed;
            
             z-index: 130;
-            width: 120vh;   
+            width: 100vh;   
           }
 
           .move.disabled, .move2.disabled, .move1.disabled, #joystick.disabled {
@@ -231,8 +258,8 @@ main{
 
 #knob {
   content: url('./images/joystick/handle.png');
-  width: 6vw;
-  height: 12vh;
+  width: 8vw;
+  height: 15vh;
   
   background: yellow;
   border: 2px solid black;
@@ -268,14 +295,24 @@ main{
 }
 
     </style>
-
+<div id="notice" style="
+     display:none;
+     background:#4caf50;
+     color:white;
+     padding:12px;
+     font-family: 'Courier New', Courier, monospace;
+     position:fixed;
+     z-index: 1005;
+     top:20px; right:20px;
+     border-radius:6px;">
+</div>
     <div class="screenJoystick">
 <label>
-   P1 Controls
+   P1 Control
   <br>
   <input type="radio" name="joystickToggle" value="on" checked > On
 </label>
-
+<br>
 <label>
   <input type="radio" name="joystickToggle" value="off" > Off
 </label>
@@ -283,11 +320,11 @@ main{
 
     <div class="screenJoystickP2">
 <label>
-   P2 Controls
+   P2 Control
   <br>
   <input type="radio" name="joystick2Toggle" value="on" > On
 </label>
-
+<br>
 <label>
   <input type="radio" name="joystick2Toggle" value="off" checked> Off
 </label>
@@ -314,16 +351,22 @@ main{
       </div>
       <div class="movePlayer">
         <input id="malupiton" type="checkbox" name="fighter" value="Malupiton"/>
-        <lagel for="malupiton">P2</lagel>
+        <lagel for="malupiton">P1</lagel>
+        
       </div>
+      <div class="move1" style="top:-75px;right: -125%; position: absolute; " id="start1">Start</div>
+       <div class="move1"  style="top:75px;right: -125%; position: absolute" id="select1">Select</div>
       <div class="move" style="top:50px;right: 52%; display: none;" id="jump">Up</div>
   <div class="move" style="top:160px;right: 30%; display: none;"  id="mFor">Right</div>
   <div class="move" style="top:160px;left: 5%; display: none;" id="mBack">Left</div>
   <div class="move" style="top:160px;left: 27%; display: none;" id="crouchDown">Down</div>
+  
   <div class="movebtnsP1">   <div class="move1" id="AP1">A</div>
   <div class="move1"  id="BP1">B</div>
   <div class="move1" id="CP1">C</div>
-  <div class="move1" id="DP1">D</div></div>
+  <div class="move1" id="DP1">D</div>
+   
+</div>
 
   </div>
 
@@ -344,7 +387,9 @@ main{
 <div class="movebtnsP1">   <div class="move2"  id="AP2">A</div>
   <div class="move2" id="BP2">B</div>
   <div class="move2"  id="CP2">C</div>
-  <div class="move2" id="DP2">D</div></div>
+  <div class="move2" id="DP2">D</div>
+ <div class="move2" style="top:160px;left: 27%; " id="start2">Start</div>
+  <div class="move2"  style="top:160px;left: 27%; " id="select2">Select</div></div>
 
   </div>
   <form class="forms">
@@ -552,6 +597,36 @@ main{
     <audio 
     id="sound-teleport" 
     src="./sounds/sound-teleport.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-malupiton-special-2" 
+    src="./sounds/attacks/malupiton/malupitonSP2.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-malupiton-special-3" 
+    src="./sounds/attacks/malupiton/malupitonSP3.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-malupiton-hyperskill-1" 
+    src="./sounds/attacks/malupiton/malupitonHS1.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-slash-hit" 
+    src="./sounds/attacks/slash-hit.ogg" 
+    preload="auto" 
+    ></audio> 
+
+    <audio 
+    id="sound-slash" 
+    src="./sounds/attacks/slash.ogg" 
     preload="auto" 
     ></audio> 
 

@@ -1,210 +1,316 @@
-import { Control, controls } from './constants/control.js'; 
+import { Control, controls, GamepadThumbstick } from './constants/control.js';
 import { FighterDirection } from './constants/fighter.js';
 import { state as controlHold } from './index.js';
+import { gameState } from './state/gameState.js';
 
 const heldKeys = new Set();
 const pressedKeys = new Set();
+const lastAxes = new Map(); // Map<padId, number[]>
+
+// Store *live* Gamepad objects keyed by index
+const gamePads = new Map();
+
 let tapped = true;
 let holdTimer = 0;
-export { heldKeys };
-export { pressedKeys };
+
+export { heldKeys, pressedKeys };
+
 export const state = {
-    holding: 0
+  holding: 0,
 };
 
+// CHeck axis
+function checkAxisTap(padId, axeId, positive, threshold) {
+  const pad = gamePads.get(padId);
+  if (!pad) return false;
 
+  const value = pad.axes?.[axeId] ?? 0;
+  const prev  = lastAxes.get(padId)?.[axeId] ?? 0;
 
-function handleKeyDown(event){
-    // if (!mappedKeys.includes(event.code)) return;
- 
- event.preventDefault();
- heldKeys.add(event.code);
+  const crossed =
+      positive ? (value >= threshold && prev < threshold)
+               : (value <= threshold && prev > threshold);
 
- //console.log(`Key "${event.code}" pressed`);
+  // save current for next frame
+  const next = lastAxes.get(padId) || [];
+  next[axeId] = value;
+  lastAxes.set(padId, next);
+
+  return crossed;
 }
 
-function handleKeyUp(event){
-   
-    controlHold.tapped = false;
-    holdTimer = 0;
-    //if (!mappedKeys.includes(event.code)) return;
-    tapped = true;
-    event.preventDefault();
-    heldKeys.delete(event.code);
-    pressedKeys.delete(event.code);
-  
-
+function showNotice(message) {
+  const el = document.getElementById('notice');
+  el.textContent = message;      // <-- change the text here
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 3000);
 }
 
-export function registerKeyboardEvents(){
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
+
+/* -------------------------------------------------
+   KEYBOARD
+--------------------------------------------------*/
+function handleKeyDown(event) {
+  event.preventDefault();
+  heldKeys.add(event.code);
 }
 
-export function registerScreenButtonEvents() {
-    controls.forEach((controlSet) => {
-        Object.entries(controlSet.buttons).forEach(([control, elementId]) => {
-            const buttonEl = document.getElementById(elementId);
-            if (!buttonEl) {
-                console.warn(`Missing on-screen button element with id="${elementId}"`);
-                return;
-            }
-
-            const virtualKeyCode = elementId;
-
-            const handlePress = (e) => {
-                e.preventDefault();
-                if (!heldKeys.has(virtualKeyCode)) {
-                    heldKeys.add(virtualKeyCode);
-                    controlHold.tapped = true;
-                                holdTimer += 1;
-                    if(holdTimer === 4){
-                        controlHold.tapped = true;
-                    }
-                    if(holdTimer >= 10){
-                        controlHold.tapped = true;
-                        holdTimer = 0;
-                    }
-                   
-                    
-                 //   console.log(`On-screen button "${elementId}" pressed`);
-                }
-            };
-
-            const handleRelease = (e) => {
-                e.preventDefault();
-                controlHold.tapped = false;
-                holdTimer = 0;
-                if (heldKeys.has(virtualKeyCode)) {
-                    heldKeys.delete(virtualKeyCode);
-                    pressedKeys.delete(virtualKeyCode);
-                //    console.log(`On-screen button "${elementId}" released`);
-                }
-            };
-
-            // Mouse
-            buttonEl.addEventListener('mousedown', handlePress);
-            buttonEl.addEventListener('mouseup', handleRelease);
-            buttonEl.addEventListener('mouseleave', handleRelease);
-            // Touch
-            buttonEl.addEventListener('touchstart', handlePress, { passive: false });
-            buttonEl.addEventListener('touchend', handleRelease);
-            buttonEl.addEventListener('touchcancel', handleRelease);
-        });
-    });
+function handleKeyUp(event) {
+  controlHold.tapped = false;
+  holdTimer = 0;
+  tapped = true;
+  event.preventDefault();
+  heldKeys.delete(event.code);
+  pressedKeys.delete(event.code);
 }
 
+export function registerKeyboardEvents() {
+  window.addEventListener('keydown', handleKeyDown);
+  window.addEventListener('keyup', handleKeyUp);
+}
 
 export function unregisterKeyboardEvents() {
-    window.removeEventListener('keydown', handleKeyDown);
-    window.removeEventListener('keyup', handleKeyUp);
+  window.removeEventListener('keydown', handleKeyDown);
+  window.removeEventListener('keyup', handleKeyUp);
+}
+
+/* -------------------------------------------------
+   GAMEPAD
+--------------------------------------------------*/
+function handleGamepadConnected(e) {
+  const pad = e.gamepad;
+  gamePads.set(pad.index, pad);
+
+  // Display the ID and index
+  showNotice(`🎮 Gamepad Player ${pad.index + 1} connected: ${pad.id}`);
+}
+
+function handleGamepadDisconnected(e) {
+  const pad = e.gamepad;
+  gamePads.delete(pad.index);
+  showNotice(`❌ Gamepad Player ${pad.index + 1} disconnected: ${pad.id}`);
+}
+
+export function registerGamepadEvents() {
+  window.addEventListener('gamepadconnected', handleGamepadConnected);
+  window.addEventListener('gamepaddisconnected', handleGamepadDisconnected);
+}
+
+// Call this every animation frame
+export function pollGamepads() {
+  const pads = navigator.getGamepads();
+  for (const pad of pads) {
+    if (!pad) continue;
+    gamePads.set(pad.index, pad);
+    
+   holdTimer += 1;
+          //controlHold.tapped = true;
+          if (holdTimer === 10 || holdTimer >= 20) {
+           controlHold.tapped = true;
+            if (holdTimer >= 20) holdTimer = 0;
+          }
+  }
+}
+
+/* -------------------------------------------------
+   ON-SCREEN BUTTONS (touch / mouse)
+--------------------------------------------------*/
+export function registerScreenButtonEvents() {
+  controls.forEach((controlSet) => {
+    Object.entries(controlSet.buttons).forEach(([_, elementId]) => {
+      const buttonEl = document.getElementById(elementId);
+      if (!buttonEl) {
+        console.warn(`Missing on-screen button element with id="${elementId}"`);
+        return;
+      }
+      const virtualKeyCode = elementId;
+
+      const handlePress = (e) => {
+        e.preventDefault();
+        if (!heldKeys.has(virtualKeyCode)) {
+          heldKeys.add(virtualKeyCode);
+          holdTimer += 1;
+          if(gameState.characterSelectMode){
+            controlHold.tapped = true;
+            console.log('Control Hold Tapped!');
+          }
+          if (holdTimer === 10 || holdTimer >= 20) {
+            tapped = true;
+            if (holdTimer >= 20) holdTimer = 0;
+          }
+        }
+        buttonEl.classList.add('clicked');
+      };
+
+      const handleRelease = (e) => {
+        e.preventDefault();
+        controlHold.tapped = false;
+        holdTimer = 0;
+        heldKeys.delete(virtualKeyCode);
+        pressedKeys.delete(virtualKeyCode);
+        buttonEl.classList.remove('clicked');
+      };
+
+      // Mouse
+      buttonEl.addEventListener('mousedown', handlePress);
+      buttonEl.addEventListener('mouseup', handleRelease);
+      buttonEl.addEventListener('mouseleave', handleRelease);
+      // Touch
+      buttonEl.addEventListener('touchstart', handlePress, { passive: false });
+      buttonEl.addEventListener('touchend', handleRelease);
+      buttonEl.addEventListener('touchcancel', handleRelease);
+    });
+  });
+}
+
+export function unregisterScreenButtonEvents() {
+  controls.forEach((controlSet) => {
+    Object.entries(controlSet.buttons).forEach(([_, elementId]) => {
+      const buttonEl = document.getElementById(elementId);
+      if (!buttonEl) return;
+
+      // remove by cloning element (simpler than storing handlers)
+      const newEl = buttonEl.cloneNode(true);
+      buttonEl.parentNode.replaceChild(newEl, buttonEl);
+    });
+  });
 }
 
 export function disableScreenButtons() {
-    const buttons = document.querySelectorAll('.move, .move1, .move2, #joystick');
-    buttons.forEach(button => button.classList.add('disabled'));
+  document.querySelectorAll('.move, .move1, .move2, #joystick')
+    .forEach(btn => btn.classList.add('disabled'));
 }
 
 export function enableScreenButtons() {
-    const buttons = document.querySelectorAll('.move, .move1, .move2, #joystick');
-    buttons.forEach(button => button.classList.remove('disabled'));
+  document.querySelectorAll('.move, .move1, .move2, #joystick')
+    .forEach(btn => btn.classList.remove('disabled'));
 }
 
+/* -------------------------------------------------
+   STATE HELPERS
+--------------------------------------------------*/
+export const isKeyDown   = (code) => heldKeys.has(code);
+export const isKeyUp     = (code) => !heldKeys.has(code);
 
-
-export function unregisterScreenButtonEvents() {
-    controls.forEach((controlSet) => {
-        Object.entries(controlSet.buttons).forEach(([, elementId]) => {
-            const buttonEl = document.getElementById(elementId);
-            if (!buttonEl) return;
-
-            const handlePress = (e) => {
-                e.preventDefault();
-                heldKeys.add(elementId);
-            };
-            const handleRelease = (e) => {
-                e.preventDefault();
-                heldKeys.delete(elementId);
-            };
-
-            // Remove same handlers
-            buttonEl.removeEventListener('mousedown', handlePress);
-            buttonEl.removeEventListener('mouseup', handleRelease);
-            buttonEl.removeEventListener('mouseleave', handleRelease);
-
-            buttonEl.removeEventListener('touchstart', handlePress);
-            buttonEl.removeEventListener('touchend', handleRelease);
-            buttonEl.removeEventListener('touchcancel', handleRelease);
-        });
-    });
-}
-
-
-
-export const isControlDown = (id, control) => isKeyDown(controls[id].keyboard[control]) 
-|| isKeyDown(controls[id].buttons[control]);
-
-export const isControlPressed = (id, control) => isKeyPressed(controls[id].keyboard[control]) 
-|| isKeyDown(controls[id].buttons[control]);
-
-export const isControlTapped = (id, control) => isKeyTapped(controls[id].keyboard[control]) 
-|| isKeyDown(controls[id].buttons[control]);
-
-export const isKeyDown = (code) => heldKeys.has(code);
-export const isKeyUp = (code) => !heldKeys.has(code);
-
-export function isKeyPressed(code){
-    if (heldKeys.has(code) && !pressedKeys.has(code)) {
-        pressedKeys.add(code);
-       
-        
-         holdTimer += 1;
-         if(holdTimer === 4){
-            controlHold.tapped = true;
-         }
-          if(holdTimer >= 10){
-            controlHold.tapped = true;
-            holdTimer = 0;
-          }
-         
-        return true; // Key was pressed this frame
+export function isKeyPressed(code) {
+  if (heldKeys.has(code) && !pressedKeys.has(code)) {
+    pressedKeys.add(code);
+    holdTimer += 1;
+    if (holdTimer === 4 || holdTimer >= 10) {
+      controlHold.tapped = true;
+      if (holdTimer >= 10) holdTimer = 0;
     }
-    return false;
+    return true;
+  }
+  return false;
 }
 
-export function isKeyTapped(code){
-    if (heldKeys.has(code) && !pressedKeys.has(code) && tapped === true) {
-        tapped = false;
-        pressedKeys.add(code);
-        
-        
-        controlHold.tapped = true;
-        return true; // Key was pressed this frame
-    }
-    return false;
+export function isKeyTapped(code) {
+  if (heldKeys.has(code) && !pressedKeys.has(code) && tapped) {
+    tapped = false;
+    pressedKeys.add(code);
+    controlHold.tapped = true;
+    return true;
+  }
+  return false;
 }
 
-//export const isLeft = (id) => isKeyDown(controls[id].keyboard[Control.LEFT]);
-//export const isRight = (id) => isKeyDown(controls[id].keyboard[Control.RIGHT]);
-//export const isUp = (id) => isKeyDown(controls[id].keyboard[Control.UP]);
-//export const isDown = (id) => isKeyDown(controls[id].keyboard[Control.DOWN]);
+/* -------------------------------------------------
+   COMPOSITE CONTROLS
+--------------------------------------------------*/
+export const isControlDown = (id, ctl) =>
+  isKeyDown(controls[id].keyboard[ctl]) ||
+  isKeyDown(controls[id].buttons[ctl]) ||
+  isButtonDown(id, controls[id].gamePad[ctl]);
 
-export const isLeft = (id) => isKeyDown(controls[id].buttons[Control.LEFT]) || isKeyDown(controls[id].keyboard[Control.LEFT]);
-export const isRight = (id) => isKeyDown(controls[id].buttons[Control.RIGHT])|| isKeyDown(controls[id].keyboard[Control.RIGHT]);
-export const isUp = (id) => isKeyDown(controls[id].buttons[Control.UP])|| isKeyDown(controls[id].keyboard[Control.UP]);
-export const isDown = (id) => isKeyDown(controls[id].buttons[Control.DOWN])|| isKeyDown(controls[id].keyboard[Control.DOWN]);
+export const isControlPressed = (id, ctl) => {
+  // normal keys/buttons
+  if (
+    isKeyPressed(controls[id].keyboard[ctl]) ||
+    isKeyDown(controls[id].buttons[ctl])    ||
+    isButtonDown(id, controls[id].gamePad[ctl])
+  ) return true;
 
-export const isForward = (id, direction) => direction === FighterDirection.RIGHT ? isRight(id) : isLeft(id);
-export const isBackward = (id, direction) => direction === FighterDirection.RIGHT ? isLeft(id) : isRight(id);
+  // --- Axis directions ---
+  // If this control is a direction, check the stick
+  switch (ctl) {
+    case Control.LEFT:
+      return isAxeLower(
+        id,
+        controls[id].gamePad[GamepadThumbstick.HORIZONTAL_AXE_ID],
+        -controls[id].gamePad[GamepadThumbstick.DEAD_ZONE]
+      );
+    case Control.RIGHT:
+      return isAxeGreater(
+        id,
+        controls[id].gamePad[GamepadThumbstick.HORIZONTAL_AXE_ID],
+        controls[id].gamePad[GamepadThumbstick.DEAD_ZONE]
+      );
+    case Control.UP:
+      return isAxeLower(
+        id,
+        controls[id].gamePad[GamepadThumbstick.VERTICAL_AXE_ID],
+        -controls[id].gamePad[GamepadThumbstick.DEAD_ZONE]
+      );
+    case Control.DOWN:
+      return isAxeGreater(
+        id,
+        controls[id].gamePad[GamepadThumbstick.VERTICAL_AXE_ID],
+        controls[id].gamePad[GamepadThumbstick.DEAD_ZONE]
+      );
+    default:
+      return false;
+  }
+};
 
 
-export const isIdle = (id) => !(isLeft(id) || isRight(id) || isUp(id) || isDown(id));
+export const isControlTapped = (id, ctl) =>
+  isKeyTapped(controls[id].keyboard[ctl]) ||
+  isKeyDown(controls[id].buttons[ctl]) ||
+  isButtonDown(id, controls[id].gamePad[ctl]);
+
+export const isLeft  = (id) => isKeyDown(controls[id].buttons[Control.LEFT])  || isKeyDown(controls[id].keyboard[Control.LEFT])
+                          || isButtonDown(id, controls[id].gamePad[Control.LEFT])
+                          || isAxeLower(id, controls[id].gamePad[GamepadThumbstick.HORIZONTAL_AXE_ID],
+                                         -controls[id].gamePad[GamepadThumbstick.DEAD_ZONE]);
+
+export const isRight = (id) => isKeyDown(controls[id].buttons[Control.RIGHT]) || isKeyDown(controls[id].keyboard[Control.RIGHT])
+                          || isButtonDown(id, controls[id].gamePad[Control.RIGHT])
+                          || isAxeGreater(id, controls[id].gamePad[GamepadThumbstick.HORIZONTAL_AXE_ID],
+                                          controls[id].gamePad[GamepadThumbstick.DEAD_ZONE]);
+
+export const isUp    = (id) => isKeyDown(controls[id].buttons[Control.UP])    || isKeyDown(controls[id].keyboard[Control.UP])
+                          || isButtonDown(id, controls[id].gamePad[Control.UP])
+                          || isAxeLower(id, controls[id].gamePad[GamepadThumbstick.VERTICAL_AXE_ID],
+                                        -controls[id].gamePad[GamepadThumbstick.DEAD_ZONE]);
+
+export const isDown  = (id) => isKeyDown(controls[id].buttons[Control.DOWN])  || isKeyDown(controls[id].keyboard[Control.DOWN])
+                          || isButtonDown(id, controls[id].gamePad[Control.DOWN])
+                          || isAxeGreater(id, controls[id].gamePad[GamepadThumbstick.VERTICAL_AXE_ID],
+                                          controls[id].gamePad[GamepadThumbstick.DEAD_ZONE]);
+
+export const isForward  = (id, dir) => dir === FighterDirection.RIGHT ? isRight(id) : isLeft(id);
+export const isBackward = (id, dir) => dir === FighterDirection.RIGHT ? isLeft(id)  : isRight(id);
+export const isIdle     = (id) => !(isLeft(id) || isRight(id) || isUp(id) || isDown(id));
 
 export const isLightPunch = (id) => isControlPressed(id, Control.LIGHT_PUNCH);
 export const isHeavyPunch = (id) => isControlPressed(id, Control.HEAVY_PUNCH);
+export const isLightKick  = (id) => isControlPressed(id, Control.LIGHT_KICK);
+export const isHeavyKick  = (id) => isControlPressed(id, Control.HEAVY_KICK);
+export const isDodge      = (id) => isControlPressed(id, Control.LIGHT_PUNCH) &&
+                                    isControlPressed(id, Control.LIGHT_KICK);
 
-export const isLightKick = (id) => isControlPressed(id, Control.LIGHT_KICK);
-export const isHeavyKick = (id) => isControlPressed(id, Control.HEAVY_KICK);
+/* -------------------------------------------------
+   GAMEPAD HELPERS
+--------------------------------------------------*/
+export const isButtonDown = (padId, buttonIndex) =>
+  (buttonIndex !== '' && gamePads.get(padId)?.buttons?.[buttonIndex]?.pressed) || false;
 
-export const isDodge = (id) => isControlPressed(id, Control.LIGHT_PUNCH && Control.LIGHT_KICK);
+export const isButtonUp = (padId, buttonIndex) =>
+  (buttonIndex !== '' && !gamePads.get(padId)?.buttons?.[buttonIndex]?.pressed) || false;
 
+export const isAxeGreater = (padId, axeId, value) =>
+  gamePads.get(padId)?.axes?.[axeId] >= value;
+
+export const isAxeLower = (padId, axeId, value) =>
+  gamePads.get(padId)?.axes?.[axeId] <= value;

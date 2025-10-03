@@ -19,8 +19,8 @@ export const controlHistory = [
 ];
 
 export const buttonOrder = [
-    Control.LIGHT_KICK, Control.HEAVY_KICK,
     Control.LIGHT_PUNCH, Control.HEAVY_PUNCH,
+    Control.LIGHT_KICK, Control.HEAVY_KICK,
 ];
 
 function getMoveDirection(controls){
@@ -67,14 +67,52 @@ function isLastSnapShotDifferent(snapshot, id){
 function hasControlMatched(control, id){
     switch(control){
         case SpecialMoveButton.ANY_PUNCH:
-            for (let buttonIndex = 3; buttonIndex < 6; buttonIndex++){
+            for (let buttonIndex = 0; buttonIndex < 2; buttonIndex++){
                 if (controlHistory[id][0].buttons[buttonIndex]) return buttonOrder[buttonIndex];
             }
             break;
             case SpecialMoveButton.ANY_KICK:
-            for (let buttonIndex = 0; buttonIndex < 3; buttonIndex++){
+            for (let buttonIndex = 2; buttonIndex < 4; buttonIndex++){
                 if (controlHistory[id][0].buttons[buttonIndex]) return buttonOrder[buttonIndex];
             }
+            break;
+            case SpecialMoveButton.LIGHT_PUNCH:
+            
+                if (controlHistory[id][0].buttons[0]) return buttonOrder[0];
+            
+            break;
+            case SpecialMoveButton.HEAVY_PUNCH:
+            
+                if (controlHistory[id][0].buttons[1]) return buttonOrder[1];
+            
+            break;
+            case SpecialMoveButton.LIGHT_KICK:
+            
+                if (controlHistory[id][0].buttons[2]) return buttonOrder[2];
+            
+            break;
+            case SpecialMoveButton.HEAVY_KICK:
+            
+                if (controlHistory[id][0].buttons[3]) return buttonOrder[3];
+            
+            break;
+            case SpecialMoveButton.AB:
+                if (controlHistory[id][0].buttons[0] && controlHistory[id][0].buttons[1]) return buttonOrder[0] && buttonOrder[1];
+            break;
+            case SpecialMoveButton.AC:
+                if (controlHistory[id][0].buttons[0] && controlHistory[id][0].buttons[2]) return buttonOrder[0] && buttonOrder[2];
+            break;
+            case SpecialMoveButton.AD:
+                if (controlHistory[id][0].buttons[0] && controlHistory[id][0].buttons[3]) return buttonOrder[0] && buttonOrder[3];
+            break;
+            case SpecialMoveButton.BC:
+                if (controlHistory[id][0].buttons[1] && controlHistory[id][0].buttons[2]) return buttonOrder[1] && buttonOrder[2];
+            break;
+            case SpecialMoveButton.BD:
+                if (controlHistory[id][0].buttons[1] && controlHistory[id][0].buttons[3]) return buttonOrder[1] && buttonOrder[3];
+            break;
+            case SpecialMoveButton.CD:
+                if (controlHistory[id][0].buttons[2] && controlHistory[id][0].buttons[3]) return buttonOrder[2] && buttonOrder[3];
             break;
         default:
             if (control === controlHistory[id][0].move) return true;

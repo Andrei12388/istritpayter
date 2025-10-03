@@ -1,8 +1,13 @@
 import { FRAME_TIME } from "../../../constants/game.js";
 import { FireballCollidedState, FireballState, fireballVelocity} from "../../../constants/fireball.js";
 import { boxOverlap, getActualBoxDimensions } from "../../../utils/collisions.js";
-import { FighterAttackStrength, FighterAttackType, FighterHurtBox } from "../../../constants/fighter.js";
+import { FighterAttackStrength, FighterAttackType, FighterHurtBox, FighterState } from "../../../constants/fighter.js";
 import { gameState } from "../../../state/gameState.js";
+import { LightHitSplash } from "../shared/LightHitSplash.js";
+import { HeavyHitSplash } from "../shared/HeavyHitSplash.js";
+import { SuperHitSplash } from "../shared/SuperHitSplash.js";
+import { BlockHitSplash } from "../shared/BlockHitSplash.js";
+import { GreenHitSplash } from "../shared/GreenHitSplash.js";
 
 const frames = new Map([
     ['special1-1', [[[4, 365, 73, 30],[24,18]], [-15, -13, 30, 24],[-28, 20, 56, 38]]],
@@ -35,7 +40,7 @@ const animations = {
 
 export class Fireball {
     image = document.querySelector('img[alt="malupiton"]');
-
+     
     animationFrame = 0;
     state = FireballState.ACTIVE;
 
@@ -98,10 +103,10 @@ export class Fireball {
         const screenX = this.position.x - camera.position.x;
         if (screenX > 384 + 56 || screenX < -56) {
         this.entityList.remove(this);
-        console.log('end Projectile');
+        
         }
 
-         console.log('Updating Projectile');
+         
 
          const hasCollided = this.hasCollided();
 if (!hasCollided) return;
@@ -111,23 +116,48 @@ this.animationFrame = 0;
 this.animationTimer = time.previous + animations[this.state][this.animationFrame][1] * FRAME_TIME;
 
 // ✅ Only deal damage if you actually want to
+if (this.fighter.opponent.currentState === FighterState.WALK_BACKWARD || this.fighter.opponent.currentState === FighterState.BLOCK) {
+        this.entityList.add(BlockHitSplash, time, this.fighter.opponent.position.x, this.fighter.opponent.position.y - 40, 1);
+        this.fighter.opponent.changeState(FighterState.BLOCK, time);
+        this.direction *= -1;
+        this.directionY = 1;
+        this.fighter.opponent.position.y -= 30 * time.secondsPassed;
+        
+        return
+    }
 if (hasCollided === FireballCollidedState.OPPONENT && this.canDealDamage) {
     this.canDealDamage = false;
     this.fighter.opponent.position.y -= 100 * time.secondsPassed;
     this.direction *= -1;
     this.directionY = 1;
+    this.entityList.add(GreenHitSplash, time, this.fighter.opponent.position.x, this.fighter.opponent.position.y - 40, 1);
    // gameState.fighters[1].hitPoints -= 40;
     this.fighter.opponent.handleAttackHit(
+        
         time,
         FighterAttackStrength.SUPER1,
         FighterAttackType.PUNCH,
         undefined,
-        FighterHurtBox.HEAD
+        FighterHurtBox.BODY
     );
 }
 
         
     }
+
+    getHitSplashClass(strength){
+            switch(strength){
+                case FighterAttackStrength.LIGHT:
+                    return LightHitSplash;
+                case FighterAttackStrength.HEAVY:
+                    return HeavyHitSplash;
+                case FighterAttackStrength.SUPER1:
+                    return HeavyHitSplash;
+                default:
+                    throw new Error('Unknown strength requested');
+    
+            }
+        }
 
     updateAnimation(time){
         if (time.previous < this.animationTimer) return;
@@ -136,7 +166,7 @@ if (hasCollided === FireballCollidedState.OPPONENT && this.canDealDamage) {
         if (this.animationFrame >= animations[this.state].length){
             this.animationFrame = 0;
           //  if (this.state === FireballState.COLLIDED)  this.entityList.remove(this);
-            console.log('COllide Shot');
+           
         }
         this.animationTimer = time.previous + animations[this.state][this.animationFrame][1] * FRAME_TIME;
     }

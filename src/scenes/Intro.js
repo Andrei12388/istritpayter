@@ -1,8 +1,11 @@
 
+import { Control } from '../constants/control.js';
 import { IntroBG, IntroScreen } from '../entities/IntroScreen.js';
 import { playSound, stopSound } from '../soundHandler.js';
 import { gameState } from '../state/gameState.js';
 import { CharacterSelect } from './CharacterSelect.js';
+import * as control from '../inputHandler.js'; 
+
 
 
 export class Intro {
@@ -10,12 +13,16 @@ export class Intro {
 
     constructor(game) {
         this.game = game; // store reference to main game
+        this.image = document.querySelector('img[alt="misc"]');
         this.flashAlpha = 0;
         this.screenTimer = 0;
         this.screenTimerMax = 25;
+        this.soundSelect = document.querySelector('audio#sound-select');
+        this.soundChoose = document.querySelector('audio#sound-choose');
         this.nextScene = false;
         this.musicIntro = document.querySelector('audio#music-intro');
         this.soundStart = document.querySelector('audio#game-start');
+
         
 
         this.introScreen = new IntroScreen(this.game, this.fighters);
@@ -32,9 +39,9 @@ export class Intro {
         this.screenTimer = Math.min(this.screenTimer + 1, this.screenTimerMax);
          if(this.screenTimer >= this.screenTimerMax){
             this.flashAlpha = 1;
-            if(gameState.credits > 0){
+            
                  this.game.setScene(new CharacterSelect(this.game));
-            }
+            
            
             this.flash = false;
             this.screenFlashTrigger = false;
@@ -69,8 +76,41 @@ export class Intro {
         
     }
 
+    
+        handleInput(playerId) {
+            
+            if (control.isControlPressed(playerId, Control.START) && gameState.kapeCom && gameState.credits>=1){
+              
+                 playSound(this.soundSelect, 1);
+                 this.introScreen.stopwatch = 11;
+                 this.introScreen.time = 0;
+                 this.introScreen.gameStart = true;
+                 this.introScreen.insertCoin = false;
+                 this.introScreen.timeDraw = true;
+                 this.introScreen.kapecomPresent = false;
+                 gameState.credits -= 1;
+                 
+                 
+                 stopSound(this.musicIntro);
+                 
+            } 
+            if (control.isControlPressed(playerId, Control.SELECT) && gameState.kapeCom ){
+                
+                gameState.credits += 1;
+                this.introScreen.stopwatch = 11;
+                 this.introScreen.time = 10;
+                 this.introScreen.gameStart = true;
+                 this.introScreen.insertCoin = false;
+                 this.introScreen.timeDraw = true;
+                 this.introScreen.kapecomPresent = false;
+                playSound(this.soundSelect, 1);
+                stopSound(this.musicIntro);
+            } 
+        }
+
     update(time, context) {
-       
+         this.handleInput(0);
+        this.handleInput(1);
         this.updateEntities(time, context);
          if(this.flashScreen)this.startTimer();
 
@@ -83,6 +123,7 @@ export class Intro {
            this.nextScene = true;
          //  this.game.setScene(new BattleScene(this.game));
         }
+        
     }
 
   drawFlash(context){
@@ -111,9 +152,16 @@ export class Intro {
         }
     }
 
+   
+
     draw(context) {
+        
         this.drawEntities(context);
+        
+        
          if(this.flashScreen)this.drawFlash(context);
+        
     }
+    
 }
 

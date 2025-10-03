@@ -37,10 +37,10 @@ export class CharacterSelect {
         { name: "Unknown1", color: "gray", imageSml: 'unknownSmall', imageBig: 'unknownBig' },
         { name: "Otlum", color: "gray", imageSml: 'otlumSmall', imageBig: 'otlumBig' },
         { name: "Golem", color: "gray", imageSml: 'golemSmall', imageBig: 'golemBig' },
-        { name: "Unknown2", color: "gray",  imageSml: 'unknownSmall', imageBig: 'unknownBig' },
-        { name: "Unknown3", color: "gray",  imageSml: 'unknownSmall', imageBig: 'unknownBig' },
-        { name: "Unknown4", color: "gray",  imageSml: 'unknownSmall', imageBig: 'unknownBig' },
-        { name: "Unknown5", color: "gray",  imageSml: 'unknownSmall', imageBig: 'unknownBig' },
+        { name: "Lamok", color: "gray",  imageSml: 'lamokSmall', imageBig: 'lamokBig' },
+        { name: "Pinuno", color: "gray",  imageSml: 'pinunoSmall', imageBig: 'pinunoBig' },
+        { name: "Toni", color: "gray",  imageSml: 'toniSmall', imageBig: 'toniBig' },
+        { name: "Tyga", color: "gray",  imageSml: 'tygaSmall', imageBig: 'tygaBig' },
         { name: "Unknown6", color: "gray",  imageSml: 'unknownSmall', imageBig: 'unknownBig' },
     ];
 
@@ -68,7 +68,7 @@ export class CharacterSelect {
         this.blinkSelect = false;
         this.screenTimerMax = 30;
         this.stageAnim = false;
-
+        gameState.characterSelectMode = true;
         this.stageSelect = false;
         this.stageIndexs = 1;
         this.selectStagePrev = true;
@@ -118,6 +118,10 @@ export class CharacterSelect {
                     ['babygiantSmall', [67, 684, 50, 50]],
                     ['otlumSmall', [118, 684, 50, 50]],
                     ['golemSmall', [169, 684, 50, 50]],
+                    ['lamokSmall', [271, 684, 50, 50]],
+                    ['pinunoSmall', [322, 684, 50, 50]],
+                    ['toniSmall', [373, 684, 50, 50]],
+                    ['tygaSmall', [424, 684, 50, 50]],
 
                     //Char Select Big imgs
                     ['unknownBig', [16, 739, 100, 100]],
@@ -125,6 +129,10 @@ export class CharacterSelect {
                     ['babygiantBig', [218, 739, 100, 100]],
                     ['otlumBig', [313, 739, 100, 100]],
                     ['golemBig', [17, 841, 100, 100]],
+                    ['lamokBig', [116, 841, 100, 100]],
+                    ['pinunoBig', [412, 736, 100, 103]],
+                    ['toniBig', [514, 739, 100, 100]],
+                    ['tygaBig', [615, 739, 100, 100]],
 
                     //Stage Images
                     ['stage-pointer', [31, 1066, 20, 23]],
@@ -235,7 +243,7 @@ export class CharacterSelect {
              this.imageBigP[playerId] = this.characters[index].imageBig;
             
              controlHold.tapped = false;
-             playSound(this.soundChoose, 1);
+             playSound(this.soundChoose, 0.6);
             
         }
 
@@ -244,7 +252,7 @@ export class CharacterSelect {
              this.imageBigP[playerId] = this.characters[index].imageBig;
              
              controlHold.tapped = false;
-             playSound(this.soundChoose, 1);
+             playSound(this.soundChoose, 0.6);
             
         }
 
@@ -254,7 +262,7 @@ export class CharacterSelect {
              this.imageBigP[playerId] = this.characters[index].imageBig;
               
              controlHold.tapped = false;
-             playSound(this.soundChoose, 1);
+             playSound(this.soundChoose, 0.6);
            }
             
 
@@ -266,7 +274,7 @@ export class CharacterSelect {
              } 
              if(this.stageIndexs === 0) this.selectStagePrev = false;
 
-             playSound(this.soundChoose, 1);
+             playSound(this.soundChoose, 0.6);
             controlHold.tapped = false;
             
             
@@ -290,7 +298,7 @@ export class CharacterSelect {
                 this.selectStagePrev = true;
              }
              if(this.stageIndexs === this.stage.length-1) this.selectStageNext = false;
-             playSound(this.soundChoose, 1);
+             playSound(this.soundChoose, 0.6);
             controlHold.tapped = false;
              
              
@@ -403,6 +411,7 @@ export class CharacterSelect {
       
 
     update(time, context) {
+       // control.pollGamepads();
         this.blinkTime += 1;
         this.handleInput(0);
         this.handleInput(1);
@@ -604,3 +613,4 @@ drawImageBig(context){
 
 control.registerKeyboardEvents();
 control.registerScreenButtonEvents();
+//control.registerGamepadEvents();

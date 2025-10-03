@@ -3,7 +3,7 @@ import { HitSplash } from './HitSplash.js';
 export class HeavyHitSplash extends HitSplash {
     constructor(args, time, entityList){
         super(args, time, entityList);
-
+        this.frameNumber = 4;
         this.frames = [
             //Player1
             [[14, 41, 14, 15], [7, 7]],

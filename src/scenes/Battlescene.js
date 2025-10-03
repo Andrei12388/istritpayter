@@ -2,11 +2,11 @@ import { Camera } from "../Camera.js";
 import { FIGHTER_HURT_DELAY, FighterAttackBaseData, FighterAttackStrength, FighterDirection, FighterId } from "../constants/fighter.js";
 import { FRAME_TIME } from "../constants/game.js";
 import { STAGE_MID_POINT, STAGE_PADDING } from "../constants/stage.js";
-import { pollControl } from "../controlHistory.js";
+import { controlHistory, pollControl } from "../controlHistory.js";
 import { Malupiton } from "../entities/fighters/Malupiton.js";
 import { Shadow } from "../entities/fighters/Shadow.js";
 
-import { LightHitSplash, HeavyHitSplash } from "../entities/fighters/shared/index.js";
+import { LightHitSplash, HeavyHitSplash, SuperHitSplash, BlockHitSplash, GreenHitSplash, HyperHitSplash } from "../entities/fighters/shared/index.js";
 
 import { FpsCounter } from "../entities/FpsCounter.js";
 import { StatusBar } from "../entities/overlays/StatusBar.js";
@@ -25,6 +25,9 @@ import { EnemyAI } from "../entities/fighters/EnemyAI.js";
 import { HEALTH_MAX_HIT_POINTS } from "../constants/battle.js";
 import { Golem } from "../entities/fighters/Golem.js";
 import { createDefaultFighterState } from "../state/fighterState.js";
+import { SlashHitSplash } from "../entities/fighters/shared/SlashHitSplash.js";
+
+
 
 export class BattleScene {
     fighters = [];
@@ -38,6 +41,9 @@ export class BattleScene {
 
     constructor(game, selectedCharacters){
         this.game = game;
+        gameState.characterSelectMode = false;
+         controlHistory[0].time = 0;
+         controlHistory[1].time = 0;
         this.image = document.querySelector('img[alt="misc"]');
         this.selectedCharacters = selectedCharacters;
         this.selectedCharacterP1 = selectedCharacters[0].name;
@@ -60,6 +66,28 @@ export class BattleScene {
                      ['otlumBig', [313, 739, 100, 100]],
                      ['golemBig', [17, 841, 100, 100]],
 
+                      //HyperSkill BG
+                    ['hyper1', [11, 1378, 384, 223]],
+                    ['hyper2', [10, 1609, 384, 223]],
+                    ['hyper3', [10, 1838, 384, 223]],
+                    ['hyper4', [11, 2071, 384, 223]],
+                    ['hyper5', [10, 2299, 384, 223]],
+                    ['hyper6', [10, 2526, 384, 223]],
+                    ['hyper7', [10, 2752, 384, 223]],
+                    ['hyper8', [402, 1378, 384, 223]],
+                    ['hyper9', [402, 1608, 384, 223]],
+                    ['hyper10', [402, 1838, 384, 223]],
+                    ['hyper11', [402, 2069, 384, 223]],
+                    ['hyper12', [402, 2299, 384, 223]],
+                    ['hyper13', [402, 2528, 384, 223]],
+                    ['hyper14', [402, 2753, 384, 223]],
+                    ['hyper15', [797, 1378, 384, 223]],
+                    ['hyper16', [797, 1610, 384, 223]],
+                    ['hyper17', [797, 1841, 384, 223]],
+                    ['hyper18', [797, 2070, 384, 223]],
+                    ['hyper19', [797, 2301, 384, 223]],
+
+
                 ]);
 
         this.fighters = this.getFighterEntities();
@@ -69,6 +97,7 @@ export class BattleScene {
         
         // Initialize AI to control player 2 (index 1)
         this.enemyAI = new EnemyAI(this.fighters[1], this.fighters[0]);
+        this.enemyAI2 = new EnemyAI(this.fighters[0], this.fighters[1]);
             
         this.overlays = [
            // new StatusBar(this.game, this.fighters),
@@ -124,6 +153,12 @@ export class BattleScene {
                 return LightHitSplash;
             case FighterAttackStrength.HEAVY:
                 return HeavyHitSplash;
+            case FighterAttackStrength.SUPER1:
+                return GreenHitSplash;
+            case FighterAttackStrength.BLOCK:
+                return BlockHitSplash;
+            case FighterAttackStrength.SLASH:
+                return SlashHitSplash;
             default:
                 throw new Error('Unknown strength requested');
 
@@ -131,22 +166,26 @@ export class BattleScene {
     }
 
     resetBattle() {
-    this.fighters = this.getFighterEntities();
-    this.camera = new Camera(STAGE_MID_POINT + STAGE_PADDING - 192, 16, this.fighters);
-    this.shadows = this.fighters.map(fighter => new Shadow(fighter));
+   // this.fighters = this.getFighterEntities();
+   // this.camera = new Camera(STAGE_MID_POINT + STAGE_PADDING - 192, 16, this.fighters);
+    // this.shadows = this.fighters.map(fighter => new Shadow(fighter));
     this.hurtTimer = undefined;
     this.fighterDrawOrder = [0, 1];
-    this.enemyAI = new EnemyAI(this.fighters[1], this.fighters[0]);
-    this.statsBar = new StatusBar(this.game, this.fighters);
-    this.overlays = [new FpsCounter(), this.statsBar];
+  //  this.enemyAI = new EnemyAI(this.fighters[1], this.fighters[0]);
+   // this.statsBar = new StatusBar(this.game, this.fighters);
+   // this.overlays = [new FpsCounter(), this.statsBar];
     this.fightOver = false;
     this.inGame = true;
     console.log('Reset Battle');
+    this.statsBar.resetBattle();
+    controlHistory[0].time = 0;
+    controlHistory[1].time = 0;
 }
 
 
     handleAttackHit(time, playerId, opponentId, position, strength){
         gameState.fighters[playerId].score += FighterAttackBaseData[strength].score;
+        gameState.fighters[playerId].skillPoints += FighterAttackBaseData[strength].skill;
         gameState.fighters[opponentId].hitPoints -= FighterAttackBaseData[strength].damage;
         gameState.fighters[opponentId].skillPoints += 2;
 
@@ -156,6 +195,43 @@ export class BattleScene {
         this.entities.add(this.getHitSplashClass(strength), time, position.x, position.y, playerId);
     }
 
+    updateSpriteEntity(time, context){
+        const player1 = this.fighters[0];
+        const player2 = this.fighters[1];
+        const sprite1 = gameState.fighters[0].sprite;
+        const sprite2 = gameState.fighters[1].sprite;
+        const hyperSprite1 = gameState.fighters[0].hyperSprite;
+        const hyperSprite2 = gameState.fighters[1].hyperSprite;
+
+        if(sprite1 === 1){
+            
+            this.entities.add(SuperHitSplash, time, player1.position.x, player1.position.y - 50, player1.playerId);
+            
+            gameState.fighters[0].sprite = 0;
+        }
+        if(sprite2 === 1){
+            
+            this.entities.add(SuperHitSplash, time, player2.position.x, player2.position.y - 50, player2.playerId);
+            gameState.fighters[1].sprite = 0;
+        }
+
+        if(hyperSprite1 === 1){
+            
+            this.entities.add(HyperHitSplash, time, player1.position.x, player1.position.y - 50, player1.playerId);
+            gameState.fighters[0].hyperSprite = 0;
+        }
+
+        if(hyperSprite2 === 1){
+            
+            this.entities.add(HyperHitSplash, time, player2.position.x, player2.position.y - 50, player2.playerId);
+            gameState.fighters[1].hyperSprite = 0;
+        }
+        
+
+      
+        
+    }
+
     updateFighters(time, context) {
         if (this.paused) {
             // Optional: still draw overlays like pause text
@@ -163,7 +239,8 @@ export class BattleScene {
         }
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
-     //    this.enemyAI.update(time);
+         this.enemyAI.update(time);
+        // this.enemyAI2.update(time);
     }
    
 
@@ -198,6 +275,7 @@ export class BattleScene {
             ...time,
             secondsPassed: time.secondsPassed * this.timeScale
         };
+        this.updateSpriteEntity(scaledTime, context);
         this.updateFighters(scaledTime, context);
         this.updateShadows(scaledTime, context);
         this.stage.update(scaledTime);
@@ -208,7 +286,8 @@ export class BattleScene {
             this.statsBar.fightOver = false;
              gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;
              gameState.fighters[1].hitPoints = HEALTH_MAX_HIT_POINTS;
-            this.game.setScene(new BattleScene(this.game, this.selectedCharacters));
+           // this.game.setScene(new BattleScene(this.game, this.selectedCharacters));
+           this.resetBattle();
         }
     }
 
@@ -257,6 +336,15 @@ export class BattleScene {
    if(gameState.pause) {
     if(gameState.fighters[0].superAcivated)this.drawFrame(context,  name1, x, 20, 1, 1.5);
     if(gameState.fighters[1].superAcivated)this.drawFrame(context,  name2, x2 + 360, 20, -1, 1.5);
+   }
+}
+
+drawHyperSkillBG(context){
+        
+        const hyperskillFrames = this.statsBar.hyperskillframe;
+
+   if(gameState.pause) {
+    this.drawFrame(context, `hyper${hyperskillFrames}`, 0, 0, 1);
    }
 }
 
@@ -341,9 +429,15 @@ export class BattleScene {
                 this.paused = false;
                // this.timeScale = 1;
             }
-
+            if(gameState.hyperSkill) this.drawHyperSkillBG(context);
         this.drawBigImage(context);
+        
         this.drawShadows(context);
+        if(gameState.flash){
+                context.fillStyle = 'rgba(255, 255, 255, 1)';
+              context.fillRect(0, 0, 400, 400);
+               
+        }
         this.drawFighters(context);
 
         this.entities.draw(context, this.camera);
