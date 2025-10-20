@@ -33,8 +33,8 @@ export class StreetFighterGame{
 
     constructor(){
         
- this.scene = new Intro(this);
-// this.scene = new BattleScene(this, selectedCharacters);
+ //this.scene = new Intro(this);
+this.scene = new BattleScene(this, selectedCharacters);
 // this.scene = new CharacterSelect(this);
     }
 

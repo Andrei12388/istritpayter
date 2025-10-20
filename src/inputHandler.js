@@ -299,6 +299,7 @@ export const isLightKick  = (id) => isControlPressed(id, Control.LIGHT_KICK);
 export const isHeavyKick  = (id) => isControlPressed(id, Control.HEAVY_KICK);
 export const isDodge      = (id) => isControlPressed(id, Control.LIGHT_PUNCH) &&
                                     isControlPressed(id, Control.LIGHT_KICK);
+export const isSelect = (id) => isControlPressed(id, Control.SELECT);
 
 /* -------------------------------------------------
    GAMEPAD HELPERS

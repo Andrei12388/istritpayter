@@ -176,7 +176,20 @@ export class Malupiton extends Fighter {
             ['hyperskill2-6', [[[8, 606, 59, 70], [30,68]], PushBox.IDLE, HurtBox.IDLE, HitBox.SLASH]],
             ['hyperskill2-7', [[[91, 604, 67, 71], [33,69]], PushBox.IDLE, HurtBox.IDLE, HitBox.SLASH]],
             ['hyperskill2-8', [[[181, 605, 58, 111], [29,109]], PushBox.IDLE, HurtBox.IDLE, PushBox.IDLE, HurtBox.IDLE, HitBox.SLASH]],
-           
+
+            //Death State
+            ['death-1', [[[9, 838, 53, 91], [27,89]], PushBox.IDLE, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
+            ['death-2', [[[84, 836, 48, 98], [24,96]], PushBox.BEND, [[3, -76, 30, 18],[-3, -69, 50, 20], [-2, -52, 44, 58]]]],
+            ['death-3', [[[150, 840, 69, 97], [34,95]], PushBox.BEND, [[3, -76, 30, 18],[3, -69, 84, 30], [-2, -52, 44, 58]]]],
+            ['death-4', [[[234, 852, 77, 76], [38,74]], PushBox.BEND, [[3, -76, 30, 18],[3, -69, 84, 30], [-2, -52, 44, 58]]]],
+            ['death-5', [[[321, 855, 101, 51], [50,49]], PushBox.BEND, [[3, -76, 30, 18],[3, -69, 84, 30], [-2, -52, 44, 58]]]],
+            ['death-6', [[[433, 870, 99, 37], [49,35]], PushBox.BEND, [[3, -76, 30, 18],[3, -69, 84, 30], [-2, -52, 44, 58]]]],
+            ['death-7', [[[540, 873, 101, 27], [50,25]], PushBox.BEND, [[3, -76, 30, 18],[3, -69, 84, 30], [-2, -52, 44, 58]]]],
+            
+            //GetUp State
+             ['getUp-1', [[[11, 955, 53, 55], [27,53]], PushBox.IDLE, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
+             ['getUp-2', [[[82, 959, 63, 50], [31,48]], PushBox.IDLE, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
+             ['getUp-3', [[[160, 959, 60, 59], [30,57]], PushBox.IDLE, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
         ]);
 
                   
@@ -336,14 +349,14 @@ export class Malupiton extends Fighter {
                 ['hyperskill1-1', 60], ['hyperskill1-2', 210],
                 ['hyperskill1-3', 120], ['hyperskill1-4', 130],
                 ['hyperskill1-5', 170], ['hyperskill1-6', 150],
-                ['hyperskill1-7', 60], ['hyperskill1-8', 60],
-                ['hyperskill1-7', 60],
-                ['hyperskill1-6', 60], ['hyperskill1-7', 60],
-                ['hyperskill1-8', 60],
-                ['hyperskill1-7', 60],
-                ['hyperskill1-6', 60], ['hyperskill1-7', 60],
-                ['hyperskill1-8', 60],
-                ['hyperskill1-7', 60], ['hyperskill1-8', 60],
+                ['hyperskill1-7', 50], ['hyperskill1-8', 50],
+                ['hyperskill1-7', 50],
+                ['hyperskill1-6', 50], ['hyperskill1-7', 50],
+                ['hyperskill1-8', 50],
+                ['hyperskill1-7', 50],
+                ['hyperskill1-6', 50], ['hyperskill1-7', 50],
+                ['hyperskill1-8', 50],
+                ['hyperskill1-7', 50], ['hyperskill1-8', 50],
                 ['hyperskill1-9', 50], 
                 ['hyperskill1-3', 60], ['hyperskill1-2', 120],
                 ['hyperskill1-1', 120],
@@ -362,6 +375,22 @@ export class Malupiton extends Fighter {
                 ['hyperskill2--2', 150], ['hyperskill2--3', 200],
                 ['hyperskill2--4', 150],
                 ['hyperskill2--4', FrameDelay.TRANSITION],
+            ],
+             [FighterState.DEATH]:[
+                ['death-1', 300], ['death-2', 120], ['death-3', 120], 
+                ['death-4', 120], ['death-5', 120], ['death-6', 120], 
+                ['death-7', 300],
+                ['death-7', FrameDelay.FREEZE],
+            ],
+            [FighterState.KNOCKUP]:[
+                ['death-1', 100], ['death-2', 120], ['death-3', 120], 
+                ['death-4', 120], ['death-5', 120], ['death-6', 120], 
+                ['death-7', 300],
+                ['death-7', FrameDelay.TRANSITION],
+            ],
+             [FighterState.GETUP]:[
+                ['getUp-1', 70], ['getUp-2', 60], ['getUp-3', 60],
+                ['getUp-3', FrameDelay.TRANSITION],
             ],
           
 
@@ -663,7 +692,7 @@ handleHyperSkill2Init(_, strength){
             this.velocity.x  = -300;
             this.velocity.y = -100;
             gameState.fighters[this.playerId].sprite += 1;
-
+            
             }
         
     }
@@ -672,12 +701,13 @@ handleHyperSkill2Init(_, strength){
         if(Math.floor(gameState.fighters[this.playerId].skillNumber) > 0 ) {
         // if(gameState.fighters[this.playerId].skillNumber < 1)this.changeState(FighterState.IDLE);
         if (!this.fireball.fired && this.animationFrame === 3){
-            this.fireball.fired = true;
+            
             
             
              
             this.entityList.add.call(this.entityList, Fireball, time, this, this.fireball.strength);
-            
+            this.fireball.fired = true;
+            console.log('Fireball launched');
             
         }
     
@@ -718,7 +748,6 @@ handleSpecial2Init(_, strength){
         // if(gameState.fighters[this.playerId].skillNumber < 1)this.changeState(FighterState.IDLE);
         if (!this.fireball.fired && this.animationFrame === 3){
             this.fireball.fired = true;
-             
             this.changeState(FighterState.SPECIAL_2);
             console.log('Rolling');
         }

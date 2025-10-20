@@ -117,6 +117,9 @@ DODGE_FORWARD: 'dodge-forward',
 DODGE_BACKWARD: 'dodge-backward',
 BLOCK: 'block',
 CROUCH_BLOCK: 'crouch-block',
+DEATH: 'death',
+KNOCKUP: 'knockup',
+GETUP: 'getup',
 };
 
 export const FrameDelay = {
@@ -164,7 +167,7 @@ export const hurtStateValidFrom = [
     FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_HEAVYKICK,
     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
     FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.DODGE_FORWARD,
-    FighterState.DODGE_BACKWARD, FighterState.HYPERSKILL_2,
+    FighterState.DODGE_BACKWARD, FighterState.HYPERSKILL_2, FighterState.DEATH, FighterState.KNOCKUP, FighterState.GETUP,
 ];
 
 export const SpecialMoveDirection = {

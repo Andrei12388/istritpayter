@@ -81,7 +81,7 @@ export class Fighter {
                     FighterState.HURT_BODY_LIGHT, FighterState.HURT_BODY_HEAVY,
                     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
                     FighterState.SPECIAL_1, FighterState.DODGE, FighterState.SPECIAL_2, FighterState.BLOCK, FighterState.CROUCH_BLOCK,
-                    FighterState.DODGE_FORWARD, FighterState.DODGE_BACKWARD,
+                    FighterState.DODGE_FORWARD, FighterState.DODGE_BACKWARD, FighterState.DEATH, FighterState.KNOCKUP, FighterState.GETUP
                 ],
             },
             [FighterState.WALK_FORWARD]:{
@@ -249,6 +249,21 @@ export class Fighter {
                 update: this.handleCrouchBlockState.bind(this),
                 //validFrom: hurtStateValidFrom,
                 validFrom:[FighterState.CROUCH,FighterState.CROUCH_DOWN,FighterState.CROUCH_TURN,],
+            },
+            [FighterState.DEATH]:{
+                init: this.handleDeathInit.bind(this),
+                update: this.handleDeathState.bind(this),
+                validFrom: hurtStateValidFrom,
+            },
+            [FighterState.KNOCKUP]:{
+                init: this.handleKnockUpInit.bind(this),
+                update: this.handleKnockUpState.bind(this),
+                validFrom: hurtStateValidFrom,
+            },
+            [FighterState.GETUP]:{
+                init: this.handleGetUpInit.bind(this),
+                update: this.handleGetUpState.bind(this),
+                validFrom: hurtStateValidFrom,
             },
         }
         this.changeState(FighterState.IDLE);
@@ -578,7 +593,48 @@ export class Fighter {
         console.log(`${gameState.fighters[this.playerId].id} has hit ${gameState.fighters[this.opponent.playerId].id}'s ${hurtLocation} with a ${attackStrength} attacks`);
     }
 
+    //Death init and States
+    handleDeathInit(){
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+        console.log('Death Init');
+        playSound(this.soundHits.BLOCK);
+    }
 
+     handleDeathState(){
+        console.log("animating death state");
+        if (!this.isAnimationCompleted()) return;
+        this.changeState(FighterState.IDLE);
+       
+    }
+
+    //Knock Up States and Init
+    handleKnockUpInit(){
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+        console.log('Knock Up Init');
+        playSound(this.soundHits.BLOCK);
+    }
+
+     handleKnockUpState(){
+        console.log("animating Knock UP state");
+        if (!this.isAnimationCompleted()) return;
+        this.changeState(FighterState.GETUP);
+    }
+
+    //Get Up States and Init
+    handleGetUpInit(){
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+        console.log('Get Up Init');
+        playSound(this.soundHits.BLOCK);
+    }
+
+     handleGetUpState(){
+        console.log("animating Get UP state");
+        if (!this.isAnimationCompleted()) return;
+        this.changeState(FighterState.IDLE);
+    }
 
     handleIdleState(time){
         gameState.fighters[this.playerId].sprite = 0;
@@ -598,7 +654,9 @@ export class Fighter {
             this.changeState(FighterState.LIGHT_KICK);
         }else if(control.isHeavyKick(this.playerId)){
             this.changeState(FighterState.HEAVY_KICK);
-        } 
+        } else if(control.isSelect(this.playerId)){
+            this.changeState(FighterState.KNOCKUP);
+        }
 
         
         
