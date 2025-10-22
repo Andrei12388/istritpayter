@@ -43,6 +43,7 @@ export const FighterAttackBaseData = {
  [FighterAttackStrength.HEAVY]: {
     score: 500,
     skill: 10,
+    knockup: true,
     damage: 10,
     slide: {
         velocity: -16 * FRAME_TIME,
@@ -52,6 +53,7 @@ export const FighterAttackBaseData = {
   [FighterAttackStrength.SUPER1]: {
     score: 1000,
     skill: 5,
+    knockup: true,
     damage: 8,
     slide: {
         velocity: -16 * FRAME_TIME,
@@ -61,6 +63,7 @@ export const FighterAttackBaseData = {
  [FighterAttackStrength.SLASH]: {
     score: 100,
     skill: 5,
+    knockup: true,
     damage: 7,
     slide: {
         velocity: -16 * FRAME_TIME,
@@ -120,6 +123,7 @@ CROUCH_BLOCK: 'crouch-block',
 DEATH: 'death',
 KNOCKUP: 'knockup',
 GETUP: 'getup',
+DIE: 'die',
 };
 
 export const FrameDelay = {
@@ -167,7 +171,20 @@ export const hurtStateValidFrom = [
     FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_HEAVYKICK,
     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
     FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.DODGE_FORWARD,
-    FighterState.DODGE_BACKWARD, FighterState.HYPERSKILL_2, FighterState.DEATH, FighterState.KNOCKUP, FighterState.GETUP,
+    FighterState.DODGE_BACKWARD, FighterState.HYPERSKILL_2, FighterState.DIE, FighterState.DEATH,
+];
+
+export const knockUpStateValidFrom = [
+    FighterState.IDLE, FighterState.WALK_BACKWARD,FighterState.WALK_FORWARD,
+    FighterState.JUMP_LAND, FighterState.JUMP_START, FighterState.IDLE_TURN,
+    FighterState.LIGHT_PUNCH, FighterState.HEAVY_PUNCH,
+    FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
+    FighterState.HURT_HEAD_LIGHT, FighterState.HURT_HEAD_HEAVY,
+    FighterState.HURT_BODY_LIGHT, FighterState.HURT_BODY_HEAVY,
+    FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_HEAVYKICK,
+    FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
+    FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.DODGE_FORWARD,
+    FighterState.DODGE_BACKWARD, FighterState.HYPERSKILL_2, FighterState.KNOCKUP,
 ];
 
 export const SpecialMoveDirection = {

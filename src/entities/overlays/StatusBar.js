@@ -690,6 +690,12 @@ drawCredits(context){
              console.log('Round 1');
              gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;
              gameState.fighters[1].hitPoints = HEALTH_MAX_HIT_POINTS;
+
+             //reset Gamestate death of the players
+             gameState.fighters[0].dead = "alive";
+             gameState.fighters[1].dead = "alive";
+
+
              gameState.rounds += 1;
              const soundName = `soundRound${gameState.rounds}`;
              playSound(this[soundName], 1);

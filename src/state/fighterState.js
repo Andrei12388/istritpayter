@@ -11,5 +11,6 @@ hitPoints: HEALTH_MAX_HIT_POINTS,
 skillPoints: SKILL_POINTS,
 superAcivated: false,
 sprite: 0,
+dead: "alive",
 hyperSprite: 0,
 });

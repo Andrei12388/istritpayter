@@ -352,7 +352,7 @@ drawHyperSkillBG(context){
     if (gameState.fighters[1].hitPoints <= 0 && !this.fightOver && !this.statsBar.fightOver) {
         
         this.statsBar.fightOverTimer = 0;
-        
+
         this.statsBar.enemyStart = false;
         this.statsBar.fightOver = true;
         this.fightOver = true;
@@ -360,6 +360,9 @@ drawHyperSkillBG(context){
         console.log('P1 Win');
         this.statsBar.gameIn = false;
         gameState.fighters[0].wins += 1;
+
+        //deadState
+        gameState.fighters[1].dead = "dead";
         return;
     }
     if (gameState.fighters[0].hitPoints <= 0 && !this.statsBar.fightOver && !this.fightOver) {
@@ -370,19 +373,22 @@ drawHyperSkillBG(context){
         this.statsBar.enemyStart = false;
         this.statsBar.fightOver = true;
         this.fightOver = true;
-         this.statsBar.winSituation = 'P2WIN';
+        this.statsBar.winSituation = 'P2WIN';
         console.log('P2 Win');
         this.statsBar.gameIn = false;
         gameState.fighters[1].wins += 1;
+
+        //deadState
+        gameState.fighters[0].dead = "dead";
         return;
     }
-    
+
     if(this.statsBar.time < 0 && !this.statsBar.fightOver && !this.fightOver){
-      
         if(gameState.fighters[0].hitPoints === gameState.fighters[1].hitPoints){
             this.statsBar.fightOver = true;
             this.fightOver = true;
             this.statsBar.enemyStart = false;
+
             console.log('draw');
             this.statsBar.winSituation = 'DRAW';
            
@@ -398,6 +404,10 @@ drawHyperSkillBG(context){
             this.statsBar.winSituation = 'P1WIN';
             this.statsBar.enemyStart = false;
              console.log('P1 win');
+             
+             //deadState
+             gameState.fighters[1].dead = "dead";
+              
              console.log(gameState.fighters[0].hitPoints,gameState.fighters[1].hitPoints);
             console.log(gameState.fighters[0].wins, "P1win");
         console.log(gameState.fighters[1].wins, "P2win");
@@ -406,9 +416,13 @@ drawHyperSkillBG(context){
             this.statsBar.fightOver = true;
             this.fightOver = true;
             
+            //deadState
+             gameState.fighters[0].dead = "dead";
+
             this.statsBar.winSituation = 'P2WIN';
             this.statsBar.enemyStart = false;
             console.log('P2 win');
+
              console.log(gameState.fighters[0].hitPoints,gameState.fighters[1].hitPoints);
             console.log(gameState.fighters[0].wins, "P1win");
         console.log(gameState.fighters[1].wins, "P2win");
@@ -421,6 +435,7 @@ drawHyperSkillBG(context){
         //When Super Activates
          if (gameState.pause) { // P or ESC to pause
             this.paused = true;
+
                // this.timeScale = 0.3;
                 context.fillStyle = 'rgba(0, 0, 0, 0.40)';
               context.fillRect(0, 0, 400, 400);

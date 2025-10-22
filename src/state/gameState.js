@@ -15,7 +15,7 @@ export const gameState = {
     ],
     rounds: 0,
     pause: false,
-   
+    
     pauseTimer: 0,
     credits: 0,
     pauseFrameMove: -30,

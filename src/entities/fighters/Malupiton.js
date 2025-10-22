@@ -380,7 +380,11 @@ export class Malupiton extends Fighter {
                 ['death-1', 300], ['death-2', 120], ['death-3', 120], 
                 ['death-4', 120], ['death-5', 120], ['death-6', 120], 
                 ['death-7', 300],
-                ['death-7', FrameDelay.FREEZE],
+                ['death-7', FrameDelay.TRANSITION],
+            ],
+            [FighterState.DIE]:[
+                ['death-7', 7000],
+                ['death-7', FrameDelay.TRANSITION],
             ],
             [FighterState.KNOCKUP]:[
                 ['death-1', 100], ['death-2', 120], ['death-3', 120], 
@@ -389,10 +393,9 @@ export class Malupiton extends Fighter {
                 ['death-7', FrameDelay.TRANSITION],
             ],
              [FighterState.GETUP]:[
-                ['getUp-1', 70], ['getUp-2', 60], ['getUp-3', 60],
+                ['death-7', 300], ['getUp-1', 120], ['getUp-2', 120], ['getUp-3', 120],
                 ['getUp-3', FrameDelay.TRANSITION],
             ],
-          
 
         };
 

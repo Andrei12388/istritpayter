@@ -10,7 +10,8 @@ import { FIGHTER_START_DISTANCE,
     FighterAttackBaseData,
     FighterHurtBox,
     hurtStateValidFrom,
-    FIGHTER_HURT_DELAY} from "../../constants/fighter.js";
+    FIGHTER_HURT_DELAY,
+    knockUpStateValidFrom} from "../../constants/fighter.js";
 import { STAGE_FLOOR, STAGE_MID_POINT, STAGE_PADDING } from "../../constants/stage.js";
 import { boxOverlap, getActualBoxDimensions, rectsOverlap } from '../../utils/collisions.js';
 import { Control } from '../../constants/control.js';
@@ -81,7 +82,8 @@ export class Fighter {
                     FighterState.HURT_BODY_LIGHT, FighterState.HURT_BODY_HEAVY,
                     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
                     FighterState.SPECIAL_1, FighterState.DODGE, FighterState.SPECIAL_2, FighterState.BLOCK, FighterState.CROUCH_BLOCK,
-                    FighterState.DODGE_FORWARD, FighterState.DODGE_BACKWARD, FighterState.DEATH, FighterState.KNOCKUP, FighterState.GETUP
+                    FighterState.DODGE_FORWARD, FighterState.DODGE_BACKWARD, FighterState.DEATH, FighterState.KNOCKUP, FighterState.GETUP,
+                    FighterState.DIE,
                 ],
             },
             [FighterState.WALK_FORWARD]:{
@@ -247,7 +249,7 @@ export class Fighter {
              [FighterState.CROUCH_BLOCK]:{
                 init: this.handleCrouchBlockInit.bind(this),
                 update: this.handleCrouchBlockState.bind(this),
-                //validFrom: hurtStateValidFrom,
+                
                 validFrom:[FighterState.CROUCH,FighterState.CROUCH_DOWN,FighterState.CROUCH_TURN,],
             },
             [FighterState.DEATH]:{
@@ -255,15 +257,20 @@ export class Fighter {
                 update: this.handleDeathState.bind(this),
                 validFrom: hurtStateValidFrom,
             },
+            [FighterState.DIE]:{
+                init: this.handleDieInit.bind(this),
+                update: this.handleDieState.bind(this),
+                validFrom: hurtStateValidFrom,
+            },
             [FighterState.KNOCKUP]:{
                 init: this.handleKnockUpInit.bind(this),
                 update: this.handleKnockUpState.bind(this),
-                validFrom: hurtStateValidFrom,
+                validFrom: knockUpStateValidFrom,
             },
             [FighterState.GETUP]:{
                 init: this.handleGetUpInit.bind(this),
                 update: this.handleGetUpState.bind(this),
-                validFrom: hurtStateValidFrom,
+                validFrom: [FighterState.KNOCKUP,FighterState.DIE, FighterState.DEATH],
             },
         }
         this.changeState(FighterState.IDLE);
@@ -407,7 +414,7 @@ export class Fighter {
 
      handleCrouchState(time){
          if (!control.isDown(this.playerId)) this.changeState(FighterState.CROUCH_UP);
-        console.log('crouching');
+       
 
         if(control.isLightKick(this.playerId)){
             this.changeState(FighterState.CROUCH_LIGHTKICK);
@@ -454,7 +461,7 @@ export class Fighter {
 
     handleBlockInit(time, hitPosition){
        this.onAttackHit?.(time, this.opponent.playerId, this.playerId, hitPosition, FighterAttackStrength.BLOCK);
-        console.log('BLock Init');
+        
          playSound(this.soundHits.BLOCK);
       //  this.EntityList.add(SuperHitSplash, time, this.opponent.position.x, this.opponent.position.y - 30, this.opponent.playerId);
         this.handleMoveInit();
@@ -462,7 +469,7 @@ export class Fighter {
 
     handleCrouchBlockInit(time, hitPosition){
        this.onAttackHit?.(time, this.opponent.playerId, this.playerId, hitPosition, FighterAttackStrength.BLOCK);
-        console.log('Crouch BLock Init');
+      
         playSound(this.soundHits.BLOCK);
       
         this.handleMoveInit();
@@ -574,6 +581,10 @@ export class Fighter {
     }
 
     handleAttackHit(time, attackStrength, attackType, hitPosition, hurtLocation){
+         if(gameState.fighters[this.playerId].dead === "invulnerable"){
+            console.log("cannot be attacked");
+            return;
+        } 
         const newState = this.getHitState(attackStrength, hurtLocation);
         const { velocity, friction } = FighterAttackBaseData[attackStrength].slide;
 
@@ -587,7 +598,12 @@ export class Fighter {
             playSound(this.soundHits[attackStrength][attackType]);
         }
         this.onAttackHit?.(time, this.opponent.playerId, this.playerId, hitPosition, attackStrength);
-         this.changeState(newState);
+        if(FighterAttackBaseData[attackStrength].knockup){
+            console.log("Knock up hit activate");
+            this.changeState(FighterState.KNOCKUP);
+            return;
+        }
+        if(gameState.fighters[this.playerId].dead === "breathing") this.changeState(newState);
          
 
         console.log(`${gameState.fighters[this.playerId].id} has hit ${gameState.fighters[this.opponent.playerId].id}'s ${hurtLocation} with a ${attackStrength} attacks`);
@@ -597,42 +613,63 @@ export class Fighter {
     handleDeathInit(){
         this.velocity.x = 0;
         this.velocity.y = 0;
-        console.log('Death Init');
+        
         playSound(this.soundHits.BLOCK);
     }
 
      handleDeathState(){
-        console.log("animating death state");
-        if (!this.isAnimationCompleted()) return;
-        this.changeState(FighterState.IDLE);
        
+        if (!this.isAnimationCompleted()) return;
+        gameState.fighters[this.playerId].dead = "die";
+        this.changeState(FighterState.IDLE);
+    }
+
+    //Die
+    handleDieInit(){
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+        console.log("Die Init !");
+        playSound(this.soundHits.BLOCK);
+    }
+
+     handleDieState(){
+     
+       // if (!this.isAnimationCompleted()) return;
+        if (gameState.fighters[this.playerId].dead === "die") return;
+        this.changeState(FighterState.GETUP);
     }
 
     //Knock Up States and Init
     handleKnockUpInit(){
         this.velocity.x = 0;
-        this.velocity.y = 0;
-        console.log('Knock Up Init');
+        this.velocity.y = -500;
+        
+       
         playSound(this.soundHits.BLOCK);
     }
 
      handleKnockUpState(){
-        console.log("animating Knock UP state");
+       
         if (!this.isAnimationCompleted()) return;
+         if(this.position.y >= STAGE_FLOOR){
+         gameState.fighters[this.playerId].dead = "invulnerable";
         this.changeState(FighterState.GETUP);
+         }
     }
 
     //Get Up States and Init
     handleGetUpInit(){
         this.velocity.x = 0;
         this.velocity.y = 0;
-        console.log('Get Up Init');
+        console.log("GetUp activated!");
+    
         playSound(this.soundHits.BLOCK);
     }
 
      handleGetUpState(){
-        console.log("animating Get UP state");
+       
         if (!this.isAnimationCompleted()) return;
+        gameState.fighters[this.playerId].dead = "breathing";
         this.changeState(FighterState.IDLE);
     }
 
@@ -656,6 +693,18 @@ export class Fighter {
             this.changeState(FighterState.HEAVY_KICK);
         } else if(control.isSelect(this.playerId)){
             this.changeState(FighterState.KNOCKUP);
+
+        } else if(gameState.fighters[this.playerId].dead === "dead"){
+            console.log("Dead State");
+             this.changeState(FighterState.DEATH);
+        }  else if(gameState.fighters[this.playerId].dead === "die"){
+            
+             this.changeState(FighterState.DIE);
+            console.log("Die State");
+        }  else if(gameState.fighters[this.playerId].dead === "alive"){
+           console.log("Alive Getup State");
+             this.changeState(FighterState.GETUP);
+            gameState.fighters[this.playerId].dead = "breathing";
         }
 
         
@@ -842,6 +891,7 @@ export class Fighter {
     }
 
     updateAttackBoxCollided(time) {
+       
     const { attackStrength, attackType } = this.states[this.currentState];
     if (!attackType || this.attackStruck) return;
     if (!this.boxes?.hit || !this.opponent?.boxes?.hurt) return;

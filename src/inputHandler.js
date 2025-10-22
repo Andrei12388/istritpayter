@@ -132,7 +132,7 @@ export function registerScreenButtonEvents() {
           holdTimer += 1;
           if(gameState.characterSelectMode){
             controlHold.tapped = true;
-            console.log('Control Hold Tapped!');
+           
           }
           if (holdTimer === 10 || holdTimer >= 20) {
             tapped = true;
