@@ -598,9 +598,14 @@ export class Fighter {
             playSound(this.soundHits[attackStrength][attackType]);
         }
         this.onAttackHit?.(time, this.opponent.playerId, this.playerId, hitPosition, attackStrength);
+        
         if(FighterAttackBaseData[attackStrength].knockup){
             console.log("Knock up hit activate");
             this.changeState(FighterState.KNOCKUP);
+            if(gameState.fighters[this.playerId].hitPoints < 0){
+            playSound(this.deathSound);
+            return;
+        }
             return;
         }
         if(gameState.fighters[this.playerId].dead === "breathing") this.changeState(newState);
@@ -614,14 +619,15 @@ export class Fighter {
         this.velocity.x = 0;
         this.velocity.y = 0;
         
-        playSound(this.soundHits.BLOCK);
+        playSound(this.deathSound);
     }
 
      handleDeathState(){
        
         if (!this.isAnimationCompleted()) return;
         gameState.fighters[this.playerId].dead = "die";
-        this.changeState(FighterState.IDLE);
+        if(gameState.fighters[this.playerId].hitPoints < 0) return;
+        this.changeState(FighterState.GETUP);
     }
 
     //Die
@@ -629,13 +635,14 @@ export class Fighter {
         this.velocity.x = 0;
         this.velocity.y = 0;
         console.log("Die Init !");
-        playSound(this.soundHits.BLOCK);
+        playSound(this.deathSound);
     }
 
      handleDieState(){
-     
+        
        // if (!this.isAnimationCompleted()) return;
         if (gameState.fighters[this.playerId].dead === "die") return;
+        if(gameState.fighters[this.playerId].hitPoints < 0) return;
         this.changeState(FighterState.GETUP);
     }
 
@@ -643,16 +650,18 @@ export class Fighter {
     handleKnockUpInit(){
         this.velocity.x = 0;
         this.velocity.y = -500;
-        
-       
-        playSound(this.soundHits.BLOCK);
+         if(this.position.y >= STAGE_FLOOR){
+            playSound(this.soundHits.BLOCK);
+         }
     }
 
      handleKnockUpState(){
-       
+        
         if (!this.isAnimationCompleted()) return;
          if(this.position.y >= STAGE_FLOOR){
+            playSound(this.soundHits.BLOCK);
          gameState.fighters[this.playerId].dead = "invulnerable";
+         if(gameState.fighters[this.playerId].hitPoints < 0) return;
         this.changeState(FighterState.GETUP);
          }
     }
@@ -662,18 +671,18 @@ export class Fighter {
         this.velocity.x = 0;
         this.velocity.y = 0;
         console.log("GetUp activated!");
-    
-        playSound(this.soundHits.BLOCK);
     }
 
      handleGetUpState(){
        
         if (!this.isAnimationCompleted()) return;
         gameState.fighters[this.playerId].dead = "breathing";
+        if(gameState.fighters[this.playerId].hitPoints < 0) return;
         this.changeState(FighterState.IDLE);
     }
 
     handleIdleState(time){
+        
         gameState.fighters[this.playerId].sprite = 0;
         if (control.isUp(this.playerId)) {
             this.changeState(FighterState.JUMP_START);
