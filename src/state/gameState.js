@@ -15,9 +15,9 @@ export const gameState = {
     ],
     rounds: 0,
     pause: false,
-    
+    slowFX: 1,
     pauseTimer: 0,
-    credits: 0,
+    credits: 10,
     pauseFrameMove: -30,
     stage: 'litex',
     flash: false,

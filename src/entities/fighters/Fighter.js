@@ -888,7 +888,7 @@ export class Fighter {
         const[, frameDelay] = animation[this.animationFrame];
 
         if(time.previous <= this.animationTimer + frameDelay) return;
-            this.animationTimer = time.previous;
+            this.animationTimer = time.previous*gameState.slowFX;
                 
             if(frameDelay <= FrameDelay.FREEZE) return;
             this.animationFrame++;

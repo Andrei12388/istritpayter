@@ -18,14 +18,15 @@ import { boholStage } from "../entities/stage/boholStage.js";
 
 
 import { EntityList } from "../EntityList.js";
-import { unregisterKeyboardEvents } from "../inputHandler.js";
-import { playSound } from "../soundHandler.js";
+import { registerKeyboardEvents, registerScreenButtonEvents, unregisterKeyboardEvents } from "../inputHandler.js";
+import { playSound, stopSound } from "../soundHandler.js";
 import { gameState } from "../state/gameState.js";
 import { EnemyAI } from "../entities/fighters/EnemyAI.js";
 import { HEALTH_MAX_HIT_POINTS } from "../constants/battle.js";
 import { Golem } from "../entities/fighters/Golem.js";
 import { createDefaultFighterState } from "../state/fighterState.js";
 import { SlashHitSplash } from "../entities/fighters/shared/SlashHitSplash.js";
+import { CharacterSelect } from "./CharacterSelect.js";
 
 
 
@@ -37,7 +38,7 @@ export class BattleScene {
     fighterDrawOrder = [0, 1];
     enemyAI = undefined; 
     paused = false;
-    timeScale = 1;
+    timeScale = gameState.slowFX;
 
     constructor(game, selectedCharacters){
         this.game = game;
@@ -284,9 +285,22 @@ export class BattleScene {
         this.updateOverlays(scaledTime, context);
         if(this.statsBar.fightOverTimer === 9 && this.statsBar.fightOver){
             this.statsBar.fightOver = false;
+             this.timeScale= 1;
+            if(gameState.fighters[0].wins === 2 || gameState.fighters[1].wins === 2){
+                registerKeyboardEvents();
+                registerScreenButtonEvents();
+                
+                gameState.slowFX = 1;
+                gameState.fighters[0].wins = 0;
+                gameState.fighters[1].wins = 0;
+                this.resetBattle();
+                gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;
+                gameState.fighters[1].hitPoints = HEALTH_MAX_HIT_POINTS;
+                this.game.setScene(new CharacterSelect(this.game));
+            }
              gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;
              gameState.fighters[1].hitPoints = HEALTH_MAX_HIT_POINTS;
-           // this.game.setScene(new BattleScene(this.game, this.selectedCharacters));
+           
            this.resetBattle();
         }
     }
@@ -348,7 +362,16 @@ drawHyperSkillBG(context){
    }
 }
 
+winFinish(){
+    if(gameState.fighters[0].wins === 2 || gameState.fighters[1].wins === 2){
+        this.timeScale = 0.3;
+        this.statsBar.music.pause();
+        gameState.slowFX = 1.03;
+    }
+}
+
     WinCondition(){
+        this.winFinish();
     if (gameState.fighters[1].hitPoints <= 0 && !this.fightOver && !this.statsBar.fightOver) {
         
         this.statsBar.fightOverTimer = 0;

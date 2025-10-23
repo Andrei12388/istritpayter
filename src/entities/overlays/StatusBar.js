@@ -4,7 +4,7 @@ import { disableScreenButtons, enableScreenButtons, registerKeyboardEvents, regi
 import { BattleScene } from "../../scenes/Battlescene.js";
 import { CharacterSelect } from "../../scenes/CharacterSelect.js";
 import { Intro } from "../../scenes/Intro.js";
-import { playSound } from "../../soundHandler.js";
+import { playSound, stopSound } from "../../soundHandler.js";
 import { gameState } from "../../state/gameState.js";
 import { drawFrame } from "../../utils/context.js";
 
@@ -25,6 +25,10 @@ export class StatusBar {
         this.soundRound9 = document.querySelector('audio#sound-round9');
         this.soundRound10 = document.querySelector('audio#sound-round10');
 
+        gameState.fighters[0].wins = 0;
+        gameState.fighters[1].wins = 0;
+        gameState.rounds = 0;
+        this.music.currentTime = 0;
 
         this.soundWin = document.querySelector('audio#sound-win');
         this.soundLose = document.querySelector('audio#sound-lose');
