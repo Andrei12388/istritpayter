@@ -156,6 +156,8 @@ export class BattleScene {
                 return HeavyHitSplash;
             case FighterAttackStrength.SUPER1:
                 return GreenHitSplash;
+            case FighterAttackStrength.SUPER2:
+                return GreenHitSplash;
             case FighterAttackStrength.BLOCK:
                 return BlockHitSplash;
             case FighterAttackStrength.SLASH:
@@ -228,8 +230,6 @@ export class BattleScene {
             gameState.fighters[1].hyperSprite = 0;
         }
         
-
-      
         
     }
 
@@ -240,8 +240,8 @@ export class BattleScene {
         }
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
-      //  this.enemyAI.update(time);
-        // this.enemyAI2.update(time);
+       // this.enemyAI.update(time);
+       //  this.enemyAI2.update(time);
     }
    
 

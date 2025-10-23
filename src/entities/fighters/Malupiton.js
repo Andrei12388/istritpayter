@@ -488,7 +488,7 @@ export class Malupiton extends Fighter {
         }
         this.states[FighterState.HYPERSKILL_1] = {
             attackType: FighterAttackType.PUNCH,
-            attackStrength: FighterAttackStrength.SUPER1,
+            attackStrength: FighterAttackStrength.SUPER2,
             init: this.handleHyperSkill1Init.bind(this),
             update: this.handleHyperSkill1State.bind(this),
             shadow: [1.6, 1, -40, 0],
@@ -706,9 +706,6 @@ handleHyperSkill2Init(_, strength){
         if(Math.floor(gameState.fighters[this.playerId].skillNumber) > 0 ) {
         // if(gameState.fighters[this.playerId].skillNumber < 1)this.changeState(FighterState.IDLE);
         if (!this.fireball.fired && this.animationFrame === 3){
-            
-            
-            
              
             this.entityList.add.call(this.entityList, Fireball, time, this, this.fireball.strength);
             this.fireball.fired = true;

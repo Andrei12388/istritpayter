@@ -20,6 +20,7 @@ export const FighterAttackStrength = {
    LIGHT: 'light',
    HEAVY: 'heavy',
    SUPER1: 'super1',
+   SUPER2: 'super2',
    SLASH: 'slash',
    BLOCK: 'block',
 };
@@ -35,6 +36,11 @@ export const FighterAttackBaseData = {
     score: 100,
     skill: 5,
     damage: 4,
+    knockup: false,
+    thrust: {
+        x: 0,
+        y: 0,
+    },
     slide: {
         velocity: -10 * FRAME_TIME,
         friction: 300,
@@ -44,6 +50,10 @@ export const FighterAttackBaseData = {
     score: 500,
     skill: 10,
     knockup: true,
+    thrust: {
+        x: -50,
+        y: -200,
+    },
     damage: 10,
     slide: {
         velocity: -16 * FRAME_TIME,
@@ -54,7 +64,25 @@ export const FighterAttackBaseData = {
     score: 1000,
     skill: 5,
     knockup: true,
-    damage: 8,
+    thrust: {
+        x: -500,
+        y: -400,
+    },
+    damage: 30,
+    slide: {
+        velocity: -16 * FRAME_TIME,
+        friction: 500,
+    },
+ },
+ [FighterAttackStrength.SUPER2]: {
+    score: 1000,
+    skill: 5,
+    knockup: true,
+    thrust: {
+        x: -500,
+        y: -400,
+    },
+    damage: 7,
     slide: {
         velocity: -16 * FRAME_TIME,
         friction: 500,
@@ -64,6 +92,10 @@ export const FighterAttackBaseData = {
     score: 100,
     skill: 5,
     knockup: true,
+    thrust: {
+        x: -100,
+        y: -200,
+    },
     damage: 7,
     slide: {
         velocity: -16 * FRAME_TIME,

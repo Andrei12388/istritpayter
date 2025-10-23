@@ -7,10 +7,12 @@ import { getContext } from './utils/context.js';
 import { BattleScene } from './scenes/Battlescene.js';
 import { Intro } from './scenes/Intro.js';
 import { CharacterSelect } from './scenes/CharacterSelect.js';
+import { PrePostMatch } from './scenes/PrePostMatch.js';
 
 const selectedCharacters = [
     { 
         name: "Malupiton", 
+        namePos: 5,
         color: "gray", 
         imageSml: 'malupitonSmall', 
         imageBig: 'malupitonBig' 
@@ -18,6 +20,7 @@ const selectedCharacters = [
     { 
         name: "Malupiton", 
         color: "gray", 
+        namePos: 5,
         imageSml: 'malupitonSmall', 
         imageBig: 'malupitonBig' 
     }
@@ -34,8 +37,9 @@ export class StreetFighterGame{
     constructor(){
         
  //this.scene = new Intro(this);
-this.scene = new BattleScene(this, selectedCharacters);
-// this.scene = new CharacterSelect(this);
+// this.scene = new BattleScene(this, selectedCharacters);
+ this.scene = new CharacterSelect(this);
+ //this.scene = new PrePostMatch(this, selectedCharacters);
     }
 
     setScene(newScene) {

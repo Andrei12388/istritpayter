@@ -8,11 +8,10 @@ import { state as controlHold } from '../index.js';
 import { playSound, stopSound } from '../soundHandler.js';
 import { gameState } from '../state/gameState.js';
 import { createDefaultFighterState } from '../state/fighterState.js';
-import { PrePostMatch } from './PrePostMatch.js';
 
 
 
-export class CharacterSelect {
+export class PrePostMatch {
     entities = [];
 
     cols = 5;
@@ -33,16 +32,16 @@ export class CharacterSelect {
     ];
 
     characters = [
-        { name: "Malupiton", color: "gray", imageSml: 'malupitonSmall', imageBig: 'malupitonBig', namePos: 5, },
-        { name: "Babygiant", color: "gray",  imageSml: 'babygiantSmall', imageBig: 'babygiantBig', namePos: 5 },
-        { name: "Unknown1", color: "gray", imageSml: 'unknownSmall', imageBig: 'unknownBig', namePos: 5 },
-        { name: "Otlum", color: "gray", imageSml: 'otlumSmall', imageBig: 'otlumBig', namePos: 20 },
-        { name: "Golem", color: "gray", imageSml: 'golemSmall', imageBig: 'golemBig', namePos: 20 },
-        { name: "Lamok", color: "gray",  imageSml: 'lamokSmall', imageBig: 'lamokBig', namePos: 20 },
-        { name: "Pinuno", color: "gray",  imageSml: 'pinunoSmall', imageBig: 'pinunoBig', namePos: 5 },
-        { name: "Toni", color: "gray",  imageSml: 'toniSmall', imageBig: 'toniBig', namePos: 20 },
-        { name: "Tyga", color: "gray",  imageSml: 'tygaSmall', imageBig: 'tygaBig', namePos: 20 },
-        { name: "Unknown6", color: "gray",  imageSml: 'unknownSmall', imageBig: 'unknownBig', namePos: 5 },
+        { name: "Malupiton", color: "gray", imageSml: 'malupitonSmall', imageBig: 'malupitonBig' },
+        { name: "Babygiant", color: "gray",  imageSml: 'babygiantSmall', imageBig: 'babygiantBig'},
+        { name: "Unknown1", color: "gray", imageSml: 'unknownSmall', imageBig: 'unknownBig' },
+        { name: "Otlum", color: "gray", imageSml: 'otlumSmall', imageBig: 'otlumBig' },
+        { name: "Golem", color: "gray", imageSml: 'golemSmall', imageBig: 'golemBig' },
+        { name: "Lamok", color: "gray",  imageSml: 'lamokSmall', imageBig: 'lamokBig' },
+        { name: "Pinuno", color: "gray",  imageSml: 'pinunoSmall', imageBig: 'pinunoBig' },
+        { name: "Toni", color: "gray",  imageSml: 'toniSmall', imageBig: 'toniBig' },
+        { name: "Tyga", color: "gray",  imageSml: 'tygaSmall', imageBig: 'tygaBig' },
+        { name: "Unknown6", color: "gray",  imageSml: 'unknownSmall', imageBig: 'unknownBig' },
     ];
 
     stage = [
@@ -54,12 +53,22 @@ export class CharacterSelect {
     cursorIndices = [0, 4]; // P1 and P2 starting positions
     selectedCharacters = [null, null];
 
-    constructor(game) {
-        this.musicCharSelect = document.querySelector('audio#music-character-select');
+    constructor(game, selectedCharacters) {
+        
         this.soundChoose = document.querySelector('audio#sound-choose');
         this.soundSelect = document.querySelector('audio#sound-select');
         this.soundChooseFighter = document.querySelector('audio#choose-fighter');
         this.game = game;
+
+        this.selectedCharacters = selectedCharacters;
+        this.selectedCharacterP1 = selectedCharacters[0].name;
+        this.selectedCharacterP2 = selectedCharacters[1].name;
+        this.selectedCharacterP1NamePos = selectedCharacters[0].namePos;
+        this.selectedCharacterP2NamePos = selectedCharacters[1].namePos;
+        console.log(this.selectedCharacterP1, this.selectedCharacterP2);
+        console.log(this.selectedCharacterP1NamePos, this.selectedCharacterP2NamePos);
+        gameState.fighters = [createDefaultFighterState(this.selectedCharacterP1),createDefaultFighterState(this.selectedCharacterP2)];
+
         this.indexImg = 0;
         this.flashAlpha = 0;
         this.screenTimer = 0;
@@ -78,7 +87,7 @@ export class CharacterSelect {
         this.pointerTimer = 0;
         this.stageSelectEnable = false;
 
-        playSound(this.musicCharSelect, 0.7);
+        
 
         this.screenanim = 
             {
@@ -90,8 +99,8 @@ export class CharacterSelect {
             };
          
         this.imageBigP = [
-            this.characters[this.cursorIndices[0]].imageBig,
-            this.characters[this.cursorIndices[1]].imageBig
+            this.selectedCharacters[0].imageBig,
+            this.selectedCharacters[1].imageBig,
            ];
 
         this.selectEnable = [
@@ -140,6 +149,9 @@ export class CharacterSelect {
                     ['LITEX', [23, 952, 183, 98]],
                     ['CUBAO', [65, 1061, 183, 98]],
                     ['BOHOL', [250, 1061, 183, 98]],
+
+                    //Vs Screen
+                    ['vs-screen', [799, 2530, 384, 224]],
                      
 
                                
@@ -210,10 +222,24 @@ export class CharacterSelect {
                     ['score-@', [17,113, 10, 10]], 
                     ['score-.', [172,87, 10, 10]], 
                     ['score- ', [105,54, 18, 12]], 
+
+                    //Name tags Alphabet
+                    ['name-A', [27,56, 8, 9]],
+                    ['name-E', [44,206, 8, 9]],
+                    ['name-G', [17,206, 9, 9]],
+                    ['name-I', [64,56, 5, 9]],
+                    ['name-L', [35,206, 8, 9]],
+                    ['name-M', [53,206, 11, 9]],
+                    ['name-N', [89,56, 9, 9]],
+                    ['name-O', [26,206, 8, 9]],
+                    ['name-P', [54,56, 9, 9]],
+                    ['name-T', [70,56, 9, 9]],
+                    ['name-U', [44,56, 9, 9]],
         
                     //Character Names
                     ['tag-malupiton', [15,56,83,9]],
                  ]);
+        
         this.characterSelectScreen = new CharacterSelectScreen(this.game, this.characters);
         this.entities = [new CharSelBG(), this.characterSelectScreen];
     }
@@ -230,107 +256,6 @@ export class CharacterSelect {
         this.flash = true;
     }
 
-    handleInput(playerId) {
-        const total = this.characters.length;
-        const cols = this.cols;
-        let index = this.cursorIndices[playerId];
-        
-
-        
-
-        // Movement
-        if (control.isControlPressed(playerId, Control.UP) && this.selectEnable[playerId] === true && controlHold.tapped === true){
-            if (index - cols >= 0) index -= cols;
-             this.imageBigP[playerId] = this.characters[index].imageBig;
-            
-             controlHold.tapped = false;
-             playSound(this.soundChoose, 0.6);
-            
-        }
-
-        if (control.isControlPressed(playerId, Control.DOWN)&& this.selectEnable[playerId] === true && controlHold.tapped === true) {
-            if (index + cols < total) index += cols;
-             this.imageBigP[playerId] = this.characters[index].imageBig;
-             
-             controlHold.tapped = false;
-             playSound(this.soundChoose, 0.6);
-            
-        }
-
-        if (control.isControlPressed(playerId, Control.LEFT) && controlHold.tapped === true) {
-           if(this.selectEnable[playerId] === true){
-                if (index % cols !== 0) index -= 1;
-             this.imageBigP[playerId] = this.characters[index].imageBig;
-              
-             controlHold.tapped = false;
-             playSound(this.soundChoose, 0.6);
-           }
-            
-
-             if (this.stageSelect) {
-                
-             if(this.selectStagePrev){
-                this.stageIndexs -= 1;
-                this.selectStageNext = true;
-             } 
-             if(this.stageIndexs === 0) this.selectStagePrev = false;
-
-             playSound(this.soundChoose, 0.6);
-            controlHold.tapped = false;
-            
-            
-        }
-            
-        }
-
-        if (control.isControlPressed(playerId, Control.RIGHT) && controlHold.tapped === true) {
-            if(this.selectEnable[playerId] === true){
-                if ((index + 1) % cols !== 0 && index + 1 < total) index += 1;
-            this.imageBigP[playerId] = this.characters[index].imageBig;
-            
-             controlHold.tapped = false;
-             playSound(this.soundChoose, 1);
-            }
-            
-
-             if (this.stageSelect) {
-             if(this.selectStageNext){
-                this.stageIndexs += 1;
-                this.selectStagePrev = true;
-             }
-             if(this.stageIndexs === this.stage.length-1) this.selectStageNext = false;
-             playSound(this.soundChoose, 0.6);
-            controlHold.tapped = false;
-             
-             
-        }
-             
-        }
-
-        this.cursorIndices[playerId] = index;
-
-        // Confirm selection
-        if (control.isControlPressed(playerId, Control.LIGHT_PUNCH)) {
-            if(this.selectEnable[playerId]){
-                const selectedChar = this.characters[index];
-                this.selectEnable[playerId] = false;
-                gameState.credits -= 1;
-           
-             playSound(this.soundSelect, 1);
-
-            this.selectCharacter(playerId, selectedChar);
-            }
-              if (this.stageSelect && this.stageSelectEnable) {
-                
-                gameState.stage = this.stage[this.stageIndexs].name.toLowerCase();
-                console.log(gameState.stage);
-                playSound(this.soundSelect, 1);
-                stopSound(this.musicCharSelect);
-                this.game.setScene(new PrePostMatch(this.game, this.selectedCharacters));
-              }
-          
-        }
-    }
 
     selectCharacter(playerId, character) {
         if (!this.selectedCharacters[playerId]) {
@@ -384,9 +309,6 @@ export class CharacterSelect {
     }
 
     screenAnimation(){
-       
-       // console.log(this.screenTimer);
-     //   console.log(this.flashAlpha);
 
         if(this.screenanim.trigger === true){
             this.screenanim.y += this.screenanim.speed;
@@ -412,11 +334,8 @@ export class CharacterSelect {
       
 
     update(time, context) {
-       // control.pollGamepads();
         this.blinkTime += 1;
-        this.handleInput(0);
-        this.handleInput(1);
-        
+       
         this.updateEntities(time, context);
         this.updateImports();
         this.screenAnimation();
@@ -431,91 +350,7 @@ export class CharacterSelect {
         }
     }
     
-drawCharacterGrid(context) {
-    const gridOffsetX = this.screenanim.x + 60; 
-    const gridOffsetY = this.screenanim.y; 
 
-    let p1Pos = null;
-    let p2Pos = null;
-
-    this.characters.forEach((char, index) => {
-        const col = index % this.cols;
-        const row = Math.floor(index / this.cols);
-        const x = gridOffsetX + col * (this.boxSize + this.padding);
-        const y = gridOffsetY + row * (this.boxSize + this.padding);
-
-        // Background
-        context.fillStyle = char.color;
-        context.fillRect(x, y, this.boxSize, this.boxSize);
-
-        // Character image
-        this.drawFrame(context, char.imageSml, x, y);
-
-        // Overlay if selected
-        if (this.selectedCharacters[0]?.name === char.name){
-                context.fillStyle = "rgba(0, 0, 0, 0.7)";
-                context.fillRect(x, y, this.boxSize, this.boxSize);
-                //this.drawFrame(context, 'p1Text', x + 13, y + 30);
-                this.p1Select = true;
-              
-            }  if (this.selectedCharacters[1]?.name === char.name) {
-             context.fillStyle = "rgba(0, 0, 0, 0.7)";
-                context.fillRect(x, y, this.boxSize, this.boxSize);
-               // this.drawFrame(context, 'p2Text', x + 13, y + 30);
-                this.p2Select = true;
-                
-           }
-
-
-        // Save cursor positions for later
-        if (index === this.cursorIndices[0]) {
-            p1Pos = { x, y };
-        }
-        if (index === this.cursorIndices[1]) {
-            p2Pos = { x, y };
-        }
-    });
-
-   
-    if (p1Pos) {
-    if (this.blinkTime >= 5) {
-        this.blinkSelect = !this.blinkSelect; 
-        this.blinkTime = 0; 
-    }
-    if (this.blinkSelect && !this.p1Select) {
-       this.drawFrame(context, 'p1boxEmpty', p1Pos.x - 5, p1Pos.y - 10);
-    } else {
-        
-         this.drawFrame(context, 'p1box', p1Pos.x - 5, p1Pos.y - 10);
-    }
-}
-
-    if (p2Pos) {
-    if (this.blinkSelect && !this.p2Select) {
-       this.drawFrame(context, 'p2boxEmpty', p2Pos.x - 5, p2Pos.y - 5);
-    } else {
-        
-         this.drawFrame(context, 'p2box', p2Pos.x - 5, p2Pos.y - 5);
-    }
-}
-}
-
-
-
-drawBlankCharacterGrid(context) {
-    const gridOffsetX = this.screenanim.x + 60; 
-    const gridOffsetY = this.screenanim.y; 
-
-    this.characterss.forEach((char, index) => {
-        const col = index % this.cols;
-        const row = Math.floor(index / this.cols);
-        const x = gridOffsetX + col * (this.boxSize + this.padding);
-        const y = gridOffsetY + row * (this.boxSize + this.padding);
-
-       
-        this.drawFrame(context, char.imageSml, x, y, 1, 1, 0.3);
-    });
-}
 
   drawFlash(context){
     if (this.flash === true){
@@ -563,23 +398,36 @@ drawFrame(context, frameKey, x, y, direction = 1, scale = 1, alpha = 1) {
     context.restore();
 }
 
-drawStageSelect(context){
-     const y = this.stageDropY;
-     const stageIndex = this.stageIndexs;
-     const stagePointerX = this.stage[stageIndex].pointerX;
-     const stagePointerY = this.stage[stageIndex].pointerY;
-     const pointerAnim = this.pointerTimer;
+//Name Tags Draw
+drawNameTags(context){
+        const nameP1 = gameState.fighters[0].id;
+        const nameP2 = gameState.fighters[1].id;
 
-     //pointerX: 130, pointerY: 25
+         this.drawP1NameTag(context, nameP1, 8);
+         this.drawP2NameTag(context,nameP2, 384);
+    }
 
-     this.drawFrame(context, `${this.stage[stageIndex].name}`, 100, y);
-     this.drawTextLabel(context, `${this.stage[stageIndex].name}`, stagePointerX - 11, stagePointerY + 25, 1, 0.8);
-     this.drawFrame(context, 'stage-pointer', stagePointerX, stagePointerY - pointerAnim);
+     drawP1NameTag(context, nameP2, x){
+        const name = nameP2.toUpperCase();
+        const strValue = String(name);
+        const buffer = this.selectedCharacterP1NamePos;
+
+        for(let i = 0; i < strValue.length; i++){
+            this.drawFrame(context, `name-${strValue[i]}`, x + buffer + i * 9, 158);
+        }
+    }
+
+    drawP2NameTag(context, nameP2, x) {
+    const name = nameP2.toUpperCase();
+    const strValue = String(name);
+    const buffer = this.selectedCharacterP2NamePos + 15;
+
+    for (let i = strValue.length - 1; i >= 0; i--) {
+        this.drawFrame(context, `name-${strValue[i]}`, x - buffer - (strValue.length - 1 - i) * 9, 158);
+    }
 }
 
-drawScreen(context){
-    this.drawFrame(context, 'player-select', 130, 5);
-}
+
  drawCredits(context){
         this.drawTextLabel(context, 'CREDITS' + ' ' + `${gameState.credits}`, 270,10, 1, 0.7);
     }
@@ -591,27 +439,24 @@ drawImageBig(context){
         this.drawFrame(context,  this.imageBigP[1], x + 384, y, -1);
 }
 
+drawVsScreen(context){
+        this.drawFrame(context, 'vs-screen', 0, 0);
+}
+
     draw(context) {
-        this.drawEntities(context);
-        
-       
-        this.drawBlankCharacterGrid(context);
-        if(this.stageSelect)this.drawStageSelect(context);
-        
+        this.drawVsScreen(context);
+        this.drawNameTags(context);
          if(this.screenanim2.trigger === true){
         this.drawImageBig(context);
-        this.drawCharacterGrid(context);
-        this.drawScreen(context);
+       
+      
         this.drawCredits(context);
          }
          if(this.flashScreen)this.drawFlash(context);
          
-         
-        
-       
     }
 }
 
 control.registerKeyboardEvents();
 control.registerScreenButtonEvents();
-//control.registerGamepadEvents();
+
