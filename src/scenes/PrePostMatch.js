@@ -69,6 +69,9 @@ export class PrePostMatch {
         this.selectedCharacterP2 = selectedCharacters[1].name;
         this.selectedCharacterP1NamePos = selectedCharacters[0].namePos;
         this.selectedCharacterP2NamePos = selectedCharacters[1].namePos;
+        this.selectedCharacterP1Saying = selectedCharacters[0].sayings;
+        this.selectedCharacterP2Saying = selectedCharacters[1].sayings;
+
         console.log(this.selectedCharacterP1, this.selectedCharacterP2);
         console.log(this.selectedCharacterP1NamePos, this.selectedCharacterP2NamePos);
         gameState.fighters = [createDefaultFighterState(this.selectedCharacterP1),createDefaultFighterState(this.selectedCharacterP2)];
@@ -160,6 +163,7 @@ export class PrePostMatch {
 
                     //Vs Screen
                     ['vs-screen', [799, 2530, 384, 224]],
+                    ['post-screen', [799, 2756, 384, 224]],
                      
 
                                
@@ -419,6 +423,24 @@ drawFrame(context, frameKey, x, y, direction = 1, scale = 1, alpha = 1) {
     context.restore();
 }
 
+//draw sayings
+drawSayings(context){
+     const player1Saying = this.selectedCharacterP1Saying;
+     const player2Saying = this.selectedCharacterP2Saying;
+
+        if(gameState.gamePlayerWinned === 'P1') this.drawPlayerSaying(context, player1Saying, 40);
+        else if(gameState.gamePlayerWinned === 'P2') this.drawPlayerSaying(context, player2Saying, 40);
+}
+
+drawPlayerSaying(context, sayings, x){
+        const saying = sayings.toUpperCase();
+        const strValue = String(saying);
+        
+        for(let i = 0; i < strValue.length; i++){
+            this.drawFrame(context, `score-${strValue[i]}`, x + i * 9, 178);
+        }
+}
+
 //Name Tags Draw
 drawNameTags(context){
         const nameP1 = gameState.fighters[0].id;
@@ -461,14 +483,17 @@ drawImageBig(context){
 }
 
 drawVsScreen(context){
-        this.drawFrame(context, 'vs-screen', 0, 0);
+    if(gameState.gameScene === 'prematch')this.drawFrame(context, 'vs-screen', 0, 0);
+    else if(gameState.gameScene === 'postmatch')this.drawFrame(context, 'post-screen', 0, 0);
 }
 
     draw(context) {
         this.drawVsScreen(context);
-        this.drawNameTags(context);
+        
          if(this.screenanim2.trigger === true){
         this.drawImageBig(context);
+        if(gameState.gameScene === 'prematch') this.drawNameTags(context);
+        if(gameState.gameScene === 'postmatch') this.drawSayings(context);
        
       
         this.drawCredits(context);

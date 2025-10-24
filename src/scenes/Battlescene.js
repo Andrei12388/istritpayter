@@ -53,6 +53,10 @@ export class BattleScene {
         console.log(this.selectedCharacterP1, this.selectedCharacterP2);
         gameState.fighters = [createDefaultFighterState(this.selectedCharacterP1),createDefaultFighterState(this.selectedCharacterP2)];
         gameState.gameScene = 'postmatch';
+        gameState.flash = false;
+        gameState.rounds = 0;
+        gameState.hyperSkill = false;
+        gameState.pauseTimer = 0;
 
         this.entities = new EntityList();
         this.stage = this.getStageMap();
@@ -242,7 +246,7 @@ export class BattleScene {
         }
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
-       // this.enemyAI.update(time);
+     //  this.enemyAI.update(time);
        //  this.enemyAI2.update(time);
     }
    
@@ -291,6 +295,8 @@ export class BattleScene {
             if(gameState.fighters[0].wins === 2 || gameState.fighters[1].wins === 2){
                 registerKeyboardEvents();
                 registerScreenButtonEvents();
+                if(gameState.fighters[0].wins === 2) gameState.gamePlayerWinned = 'P1';
+                else if(gameState.fighters[1].wins === 2) gameState.gamePlayerWinned = 'P2';
                 
                 gameState.slowFX = 1;
                 gameState.fighters[0].wins = 0;
@@ -368,7 +374,7 @@ winFinish(){
     if(gameState.fighters[0].wins === 2 || gameState.fighters[1].wins === 2){
         this.timeScale = 0.3;
         this.statsBar.music.pause();
-        gameState.slowFX = 1.03;
+        gameState.slowFX = 1.007;
     }
 }
 

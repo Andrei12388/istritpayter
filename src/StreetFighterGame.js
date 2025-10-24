@@ -13,6 +13,7 @@ const selectedCharacters = [
     { 
         name: "Malupiton", 
         namePos: 5,
+        sayings: 'Sabi ko naman sayo burger ka saken',
         color: "gray", 
         imageSml: 'malupitonSmall', 
         imageBig: 'malupitonBig' 
@@ -21,6 +22,7 @@ const selectedCharacters = [
         name: "Malupiton", 
         color: "gray", 
         namePos: 5,
+        sayings: 'Sabi ko naman sayo burger ka saken',
         imageSml: 'malupitonSmall', 
         imageBig: 'malupitonBig' 
     }
@@ -36,10 +38,10 @@ export class StreetFighterGame{
 
     constructor(){
         
- //this.scene = new Intro(this);
-// this.scene = new BattleScene(this, selectedCharacters);
+ this.scene = new Intro(this);
+//this.scene = new BattleScene(this, selectedCharacters);
  //this.scene = new CharacterSelect(this);
- this.scene = new PrePostMatch(this, selectedCharacters);
+// this.scene = new PrePostMatch(this, selectedCharacters);
     }
 
     setScene(newScene) {

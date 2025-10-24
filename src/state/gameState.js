@@ -14,6 +14,7 @@ export const gameState = {
     //  createDefaultFighterState(FighterId.GOLEM),
     ],
     gameScene: 'prematch',
+    gamePlayerWinned: 'P1',
     rounds: 0,
     pause: false,
     slowFX: 1,

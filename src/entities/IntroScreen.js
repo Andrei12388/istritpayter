@@ -272,9 +272,6 @@ export class IntroScreen {
            // this.useFlashFrames = !this.useFlashFrames;
             this.timeFlashTimer = time.previous;
         }
-      
-        
-
     }
 
     updateScreenScene(){
