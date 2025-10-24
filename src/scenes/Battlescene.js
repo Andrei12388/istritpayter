@@ -27,6 +27,7 @@ import { Golem } from "../entities/fighters/Golem.js";
 import { createDefaultFighterState } from "../state/fighterState.js";
 import { SlashHitSplash } from "../entities/fighters/shared/SlashHitSplash.js";
 import { CharacterSelect } from "./CharacterSelect.js";
+import { PrePostMatch } from "./PrePostMatch.js";
 
 
 
@@ -51,6 +52,7 @@ export class BattleScene {
         this.selectedCharacterP2 = selectedCharacters[1].name;
         console.log(this.selectedCharacterP1, this.selectedCharacterP2);
         gameState.fighters = [createDefaultFighterState(this.selectedCharacterP1),createDefaultFighterState(this.selectedCharacterP2)];
+        gameState.gameScene = 'postmatch';
 
         this.entities = new EntityList();
         this.stage = this.getStageMap();
@@ -296,7 +298,7 @@ export class BattleScene {
                 this.resetBattle();
                 gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;
                 gameState.fighters[1].hitPoints = HEALTH_MAX_HIT_POINTS;
-                this.game.setScene(new CharacterSelect(this.game));
+                this.game.setScene(new PrePostMatch(this.game, this.selectedCharacters));
             }
              gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;
              gameState.fighters[1].hitPoints = HEALTH_MAX_HIT_POINTS;

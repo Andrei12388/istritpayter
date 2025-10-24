@@ -13,6 +13,7 @@ export const gameState = {
       // createDefaultFighterState(FighterId.MALUPITON),
     //  createDefaultFighterState(FighterId.GOLEM),
     ],
+    gameScene: 'prematch',
     rounds: 0,
     pause: false,
     slowFX: 1,

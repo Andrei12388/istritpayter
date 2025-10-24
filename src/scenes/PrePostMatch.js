@@ -8,6 +8,7 @@ import { state as controlHold } from '../index.js';
 import { playSound, stopSound } from '../soundHandler.js';
 import { gameState } from '../state/gameState.js';
 import { createDefaultFighterState } from '../state/fighterState.js';
+import { CharacterSelect } from './CharacterSelect.js';
 
 
 
@@ -54,11 +55,14 @@ export class PrePostMatch {
     selectedCharacters = [null, null];
 
     constructor(game, selectedCharacters) {
-        
+        this.musicVS = document.querySelector('audio#music-vs');
+        this.musicWin = document.querySelector('audio#music-win');
+
         this.soundChoose = document.querySelector('audio#sound-choose');
         this.soundSelect = document.querySelector('audio#sound-select');
         this.soundChooseFighter = document.querySelector('audio#choose-fighter');
         this.game = game;
+        
 
         this.selectedCharacters = selectedCharacters;
         this.selectedCharacterP1 = selectedCharacters[0].name;
@@ -68,6 +72,9 @@ export class PrePostMatch {
         console.log(this.selectedCharacterP1, this.selectedCharacterP2);
         console.log(this.selectedCharacterP1NamePos, this.selectedCharacterP2NamePos);
         gameState.fighters = [createDefaultFighterState(this.selectedCharacterP1),createDefaultFighterState(this.selectedCharacterP2)];
+
+        this.time = 0;
+        this.timeTimer = 0;
 
         this.indexImg = 0;
         this.flashAlpha = 0;
@@ -86,7 +93,8 @@ export class PrePostMatch {
         this.stageDropY = -100;
         this.pointerTimer = 0;
         this.stageSelectEnable = false;
-
+        if(gameState.gameScene === 'prematch') playSound(this.musicVS, 1);
+        else if(gameState.gameScene === 'postmatch') playSound(this.musicWin, 1);
         
 
         this.screenanim = 
@@ -257,23 +265,7 @@ export class PrePostMatch {
     }
 
 
-    selectCharacter(playerId, character) {
-        if (!this.selectedCharacters[playerId]) {
-            this.selectedCharacters[playerId] = character;
-            this.characterSelectScreen.selectCharacter?.(playerId, character); // Optional hook
-            console.log(`Player ${playerId + 1} selected ${character.name}`);
-        }
-
-        if (this.selectedCharacters[0] && this.selectedCharacters[1]) {
-            console.log("Both players selected. Transitioning to Select Stage.");
-            console.log(this.selectedCharacters);
-            gameState.fighters = [createDefaultFighterState(this.selectedCharacters[0].name),createDefaultFighterState(this.selectedCharacters[1].name)];
-             this.stageAnim = true;
-             this.stageSelect = true;
-           // stopSound(this.musicCharSelect);
-         //  this.game.setScene(new BattleScene(this.game, this.selectedCharacters));
-        }
-    }
+    
 
     updateImports(){
         control.pressedKeys.clear();
@@ -288,7 +280,6 @@ export class PrePostMatch {
             this.flashAlpha = 1;
             this.flash = false;
             this.screenFlashTrigger = false;
-            this.soundChooseFighter.play();
           
            }
     }
@@ -332,10 +323,40 @@ export class PrePostMatch {
         
         }
       
+        updateTime(time){
+         if(this.time === 8 && gameState.gameScene === 'prematch') {
+            this.game.setScene(new BattleScene(this.game, this.selectedCharacters));
+         }else if(this.time === 8 && gameState.gameScene === 'postmatch'){
+            this.game.setScene(new CharacterSelect(this.game));
+         }
+
+        if(time.previous > this.timeTimer + TIME_DELAY){
+            this.time +=1;
+            console.log('time', this.time);
+            this.timeTimer = time.previous;
+            this.stopwatch += 1;
+            
+            if (this.alphaSet <= 0.1) {
+                this.alphaSet = 0
+
+            }else if (this.alphaSet >= 1){
+                this.alphaSet = 1;
+            };
+          
+        }
+
+        if(
+            this.time < 15 && this.time > -1 
+            && time.previous > this.timeFlashTimer + TIME_FLASH_DELAY
+        ) {
+             
+            this.timeFlashTimer = time.previous;
+        }
+    }
 
     update(time, context) {
         this.blinkTime += 1;
-       
+        this.updateTime(time);
         this.updateEntities(time, context);
         this.updateImports();
         this.screenAnimation();

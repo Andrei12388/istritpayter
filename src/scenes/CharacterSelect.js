@@ -78,6 +78,8 @@ export class CharacterSelect {
         this.pointerTimer = 0;
         this.stageSelectEnable = false;
 
+        gameState.gameScene = 'prematch';
+
         playSound(this.musicCharSelect, 0.7);
 
         this.screenanim = 
