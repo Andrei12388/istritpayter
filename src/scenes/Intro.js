@@ -33,35 +33,40 @@ export class Intro {
     }
 
     
-    startTimer(){
-    if (this.screenFlashTrigger === true ){
+    startTimer() {
+    if (this.screenFlashTrigger === true && gameState.gameStarted) {
         this.flashScreen = true;
         this.screenTimer = Math.min(this.screenTimer + 1, this.screenTimerMax);
-         if(this.screenTimer >= this.screenTimerMax){
+
+        if (this.screenTimer >= this.screenTimerMax) {
             this.flashAlpha = 1;
-            
-                 this.game.setScene(new CharacterSelect(this.game));
-            
-           
+
+            // SAFETY CHECK: only go to CharacterSelect if a valid start was made
+            if (this.introScreen.gameStart) {
+                this.game.setScene(new CharacterSelect(this.game));
+            } else {
+                console.warn("Prevented scene switch — no valid credit/game start flag.");
+            }
+
             this.flash = false;
             this.screenFlashTrigger = false;
             console.log('exit');
-           }
+        }
     }
-    if (this.screenFlashTrigger === false ) {
+
+    // Reset flash gradually if trigger is false
+    if (this.screenFlashTrigger === false) {
         this.screenTimer = Math.max(this.screenTimer - 1, 0);
-        if(this.screenTimer <= 0){
+        if (this.screenTimer <= 0) {
             this.flash = false;
             this.screenFlashTrigger = false;
             this.flashScreen = false;
             this.flashAlpha = 1;
-            
             console.log('False');
-           }
+        }
     }
+}
 
-   
-    }
 
     updateEntities(time, context) {
         for (const entity of this.entities) {
@@ -69,44 +74,69 @@ export class Intro {
         }
     }
 
-    handleFlash(){
-        this.screenFlashTrigger = true;
-        this.flashScreen = true
-        this.flash = true;
-        
-    }
+    handleFlash() {
+    if (!gameState.gameStarted) return; // ✅ ignore if not started
+    this.screenFlashTrigger = true;
+    this.flashScreen = true;
+    this.flash = true;
+}
+
 
     
         handleInput(playerId) {
-            
-            if (control.isControlPressed(playerId, Control.START) && gameState.kapeCom && gameState.credits>=1){
-              
-                 playSound(this.soundSelect, 1);
-                 this.introScreen.stopwatch = 11;
-                 this.introScreen.time = 0;
-                 this.introScreen.gameStart = true;
-                 this.introScreen.insertCoin = false;
-                 this.introScreen.timeDraw = true;
-                 this.introScreen.kapecomPresent = false;
-                 gameState.credits -= 1;
-                 
-                 
-                 stopSound(this.musicIntro);
-                 
-            } 
-            if (control.isControlPressed(playerId, Control.SELECT) && gameState.kapeCom ){
-                
-                gameState.credits += 1;
-                this.introScreen.stopwatch = 11;
-                 this.introScreen.time = 10;
-                 this.introScreen.gameStart = true;
-                 this.introScreen.insertCoin = false;
-                 this.introScreen.timeDraw = true;
-                 this.introScreen.kapecomPresent = false;
-                playSound(this.soundSelect, 1);
-                stopSound(this.musicIntro);
-            } 
-        }
+    // Use a static map to track if START or SELECT were already pressed
+    if (!this.keyPressed) this.keyPressed = { start: false, select: false };
+
+    const startPressed = control.isControlPressed(playerId, Control.START);
+    const selectPressed = control.isControlPressed(playerId, Control.SELECT);
+
+    // --- START button (only if credits >= 1) ---
+    if (startPressed && !this.keyPressed.start && gameState.kapeCom) {
+    this.keyPressed.start = true;
+
+    if (gameState.credits >= 1) {
+    gameState.credits -= 1;
+    gameState.gameStarted = true; // ✅ mark game as properly started
+    playSound(this.soundSelect, 1);
+    this.introScreen.stopwatch = 11;
+    this.introScreen.time = 0;
+    this.introScreen.gameStart = true;
+    this.introScreen.insertCoin = false;
+    this.introScreen.timeDraw = true;
+    this.introScreen.kapecomPresent = false;
+    stopSound(this.musicIntro);
+}
+ else {
+        // no credits, don’t trigger flash or scene
+        playSound(this.soundChoose, 1);
+        console.warn("No credits available, cannot start game!");
+        return; // <--- stops here safely
+    }
+}
+
+    // --- SELECT button (add credit once per press) ---
+    if (selectPressed && !this.keyPressed.select && gameState.kapeCom) {
+        this.keyPressed.select = true;
+        gameState.credits += 1;
+
+        playSound(this.soundSelect, 1);
+
+        // optional visual feedback for coin insert
+        this.introScreen.stopwatch = 11;
+        this.introScreen.time = 10;
+        this.introScreen.gameStart = true;
+        this.introScreen.insertCoin = false;
+        this.introScreen.timeDraw = true;
+        this.introScreen.kapecomPresent = false;
+
+        stopSound(this.musicIntro);
+    }
+
+    // --- Reset flags when buttons are released ---
+    if (!startPressed) this.keyPressed.start = false;
+    if (!selectPressed) this.keyPressed.select = false;
+}
+
 
     update(time, context) {
          this.handleInput(0);
@@ -115,14 +145,19 @@ export class Intro {
          if(this.flashScreen)this.startTimer();
 
         // Check if time reached -1
-        if (this.introScreen.time <= -1 && !this.nextScene) {
-            console.log('times up!');
-           this.handleFlash();
-           playSound(this.soundStart, 1);
-           stopSound(this.musicIntro);
-           this.nextScene = true;
-         //  this.game.setScene(new BattleScene(this.game));
-        }
+       if (this.introScreen.time <= -1 && !this.nextScene) {
+    if (gameState.gameStarted) { // ✅ only if game actually started
+        console.log('times up!');
+        this.handleFlash();
+        playSound(this.soundStart, 1);
+        stopSound(this.musicIntro);
+        this.nextScene = true;
+    } else {
+        console.log('Cannot transition — no credits or game not started!');
+    }
+}
+
+
         
     }
 

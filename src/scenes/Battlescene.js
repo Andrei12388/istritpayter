@@ -28,6 +28,7 @@ import { createDefaultFighterState } from "../state/fighterState.js";
 import { SlashHitSplash } from "../entities/fighters/shared/SlashHitSplash.js";
 import { CharacterSelect } from "./CharacterSelect.js";
 import { PrePostMatch } from "./PrePostMatch.js";
+import { FadeEffect } from "./utils/FadeEffect.js";
 
 
 
@@ -57,6 +58,7 @@ export class BattleScene {
         gameState.rounds = 0;
         gameState.hyperSkill = false;
         gameState.pauseTimer = 0;
+        this.fade = new FadeEffect({ color: 'white', speed: 0.005 });
 
         this.entities = new EntityList();
         this.stage = this.getStageMap();
@@ -191,6 +193,10 @@ export class BattleScene {
     controlHistory[1].time = 0;
 }
 
+handleFlash() {
+        this.fade.fadeIn(); 
+    }
+
 
     handleAttackHit(time, playerId, opponentId, position, strength){
         gameState.fighters[playerId].score += FighterAttackBaseData[strength].score;
@@ -246,8 +252,8 @@ export class BattleScene {
         }
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
-     //  this.enemyAI.update(time);
-       //  this.enemyAI2.update(time);
+       this.enemyAI.update(time);
+        // this.enemyAI2.update(time);
     }
    
 
@@ -277,7 +283,8 @@ export class BattleScene {
     
 
     update(time, context){
-
+        
+        this.fade.update();
         const scaledTime = {
             ...time,
             secondsPassed: time.secondsPassed * this.timeScale
@@ -289,12 +296,16 @@ export class BattleScene {
         this.entities.update(scaledTime, context, this.camera);
         this.camera.update(scaledTime, context);
         this.updateOverlays(scaledTime, context);
+        if(this.statsBar.fightOverTimer === 2 && this.statsBar.fightOver){
+            if(gameState.fighters[0].wins === 2 || gameState.fighters[1].wins === 2)this.handleFlash();
+        }
         if(this.statsBar.fightOverTimer === 9 && this.statsBar.fightOver){
             this.statsBar.fightOver = false;
              this.timeScale= 1;
             if(gameState.fighters[0].wins === 2 || gameState.fighters[1].wins === 2){
                 registerKeyboardEvents();
                 registerScreenButtonEvents();
+                this.handleFlash();
                 if(gameState.fighters[0].wins === 2) gameState.gamePlayerWinned = 'P1';
                 else if(gameState.fighters[1].wins === 2) gameState.gamePlayerWinned = 'P2';
                 
@@ -490,7 +501,7 @@ winFinish(){
         this.stage.drawForeground(context, this.camera);
 
         this.drawOverlays(context);
-        
+        this.fade.draw(context, 400, 400);
         this.WinCondition();
     }
 }

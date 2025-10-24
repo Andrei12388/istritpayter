@@ -45,20 +45,26 @@ export class Fireball {
     state = FireballState.ACTIVE;
 
     constructor(args, time, entityList) {
-        const [fighter, strength] = args;
-        this.canDealDamage = true;
+  const [fighter, strength] = args;
+  this.canDealDamage = true;
 
-        this.fighter = fighter;
-        this.entityList = entityList;
-        this.velocity = fireballVelocity[strength];
-        this.direction = this.fighter.direction;
-        this.directionY = 0;
-        this.position = {
-            x: this.fighter.position.x + (76 * this.direction),
-            y: this.fighter.position.y - 57,
-        };
-        this.animationTimer = time.previous;
-    }
+  this.fighter = fighter;
+  this.entityList = entityList;
+  this.velocity = fireballVelocity[strength] || 200; // Default speed
+  this.direction = this.fighter?.direction ?? 1;
+  this.directionY = 0;
+
+  // ✅ Defensive spawn position
+  const baseX = this.fighter?.position?.x ?? 0;
+  const baseY = this.fighter?.position?.y ?? 0;
+
+  this.position = {
+    x: baseX + (76 * this.direction),
+    y: baseY - 57,
+  };
+
+  this.animationTimer = time.previous ?? 0;
+}
 
     hasCollidedWithOpponent(hitBox){
             for (const [, hurtBox] of Object.entries(this.fighter.opponent.boxes.hurt)) {

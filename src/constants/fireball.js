@@ -12,6 +12,6 @@ export const FireballCollidedState = {
 };
 
 export const fireballVelocity = {
-    [Control.LIGHT_PUNCH]: 150,
+    [Control.LIGHT_PUNCH]: 300,
     [Control.HEAVY_PUNCH]: 300,
 };

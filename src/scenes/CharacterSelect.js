@@ -316,7 +316,7 @@ export class CharacterSelect {
             if(this.selectEnable[playerId]){
                 const selectedChar = this.characters[index];
                 this.selectEnable[playerId] = false;
-                gameState.credits -= 1;
+                
            
              playSound(this.soundSelect, 1);
 

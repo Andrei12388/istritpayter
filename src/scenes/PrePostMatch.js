@@ -9,6 +9,7 @@ import { playSound, stopSound } from '../soundHandler.js';
 import { gameState } from '../state/gameState.js';
 import { createDefaultFighterState } from '../state/fighterState.js';
 import { CharacterSelect } from './CharacterSelect.js';
+import { FadeEffect } from './utils/FadeEffect.js';
 
 
 
@@ -62,6 +63,7 @@ export class PrePostMatch {
         this.soundSelect = document.querySelector('audio#sound-select');
         this.soundChooseFighter = document.querySelector('audio#choose-fighter');
         this.game = game;
+        this.fade = new FadeEffect({ color: 'black', speed: 0.05 });
         
 
         this.selectedCharacters = selectedCharacters;
@@ -262,10 +264,8 @@ export class PrePostMatch {
         }
     }
 
-    handleFlash(){
-        this.screenFlashTrigger = true;
-        this.flashScreen = true
-        this.flash = true;
+    handleFlash() {
+        this.fade.fadeIn(); 
     }
 
 
@@ -328,9 +328,10 @@ export class PrePostMatch {
         }
       
         updateTime(time){
-         if(this.time === 8 && gameState.gameScene === 'prematch') {
+            if(this.time === 8)this.handleFlash();
+         if(this.time === 10 && gameState.gameScene === 'prematch') {
             this.game.setScene(new BattleScene(this.game, this.selectedCharacters));
-         }else if(this.time === 8 && gameState.gameScene === 'postmatch'){
+         }else if(this.time === 10 && gameState.gameScene === 'postmatch'){
             this.game.setScene(new CharacterSelect(this.game));
          }
 
@@ -363,6 +364,7 @@ export class PrePostMatch {
         this.updateTime(time);
         this.updateEntities(time, context);
         this.updateImports();
+        this.fade.update();
         this.screenAnimation();
         if(this.flashScreen)this.startTimer();
 
@@ -488,6 +490,7 @@ drawVsScreen(context){
 }
 
     draw(context) {
+        
         this.drawVsScreen(context);
         
          if(this.screenanim2.trigger === true){
@@ -495,11 +498,12 @@ drawVsScreen(context){
         if(gameState.gameScene === 'prematch') this.drawNameTags(context);
         if(gameState.gameScene === 'postmatch') this.drawSayings(context);
        
-      
+        this.fade.draw(context, 400, 400);
         this.drawCredits(context);
+        
          }
          if(this.flashScreen)this.drawFlash(context);
-         
+        
     }
 }
 

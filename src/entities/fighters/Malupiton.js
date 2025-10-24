@@ -702,6 +702,22 @@ handleHyperSkill2Init(_, strength){
         
     }
 
+    spawnFireball(time) {
+  if (!this.position || !this.entityList) {
+    console.warn("⚠️ Malupiton position or entityList undefined");
+    return;
+  }
+
+  if (!this.fireball.fired && this.canFireball(time)) {
+    const strength = Control.HEAVY_PUNCH;
+    this.entityList.add(Fireball, [this, strength], time, this.entityList);
+    this.fireball.fired = true;
+    this.fireball.lastFired = time.now || performance.now();
+    console.log("🔥 Fireball launched by AI");
+  }
+}
+
+
     handleSpecial1State(time) {
         if(Math.floor(gameState.fighters[this.playerId].skillNumber) > 0 ) {
         // if(gameState.fighters[this.playerId].skillNumber < 1)this.changeState(FighterState.IDLE);
