@@ -53,11 +53,17 @@ export class BattleScene {
         this.selectedCharacterP2 = selectedCharacters[1].name;
         console.log(this.selectedCharacterP1, this.selectedCharacterP2);
         gameState.fighters = [createDefaultFighterState(this.selectedCharacterP1),createDefaultFighterState(this.selectedCharacterP2)];
+
         gameState.gameScene = 'postmatch';
         gameState.flash = false;
         gameState.rounds = 0;
         gameState.hyperSkill = false;
         gameState.pauseTimer = 0;
+        gameState.fighters[0].wins = 0;
+        gameState.fighters[1].wins = 0;
+        gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;
+        gameState.fighters[1].hitPoints = HEALTH_MAX_HIT_POINTS;
+
         this.fade = new FadeEffect({ color: 'white', speed: 0.005 });
 
         this.entities = new EntityList();
@@ -253,7 +259,7 @@ handleFlash() {
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
        this.enemyAI.update(time);
-        // this.enemyAI2.update(time);
+         this.enemyAI2.update(time);
     }
    
 
@@ -310,11 +316,9 @@ handleFlash() {
                 else if(gameState.fighters[1].wins === 2) gameState.gamePlayerWinned = 'P2';
                 
                 gameState.slowFX = 1;
-                gameState.fighters[0].wins = 0;
-                gameState.fighters[1].wins = 0;
+               
                 this.resetBattle();
-                gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;
-                gameState.fighters[1].hitPoints = HEALTH_MAX_HIT_POINTS;
+                
                 this.game.setScene(new PrePostMatch(this.game, this.selectedCharacters));
             }
              gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;

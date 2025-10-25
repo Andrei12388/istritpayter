@@ -195,7 +195,7 @@ export const HitBox ={
 
 export const hurtStateValidFrom = [
     FighterState.IDLE, FighterState.WALK_BACKWARD,FighterState.WALK_FORWARD,
-    FighterState.JUMP_LAND, FighterState.JUMP_START, FighterState.IDLE_TURN,
+    FighterState.JUMP_LAND, FighterState.JUMP_START, FighterState.IDLE_TURN, FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD,
     FighterState.LIGHT_PUNCH, FighterState.HEAVY_PUNCH,
     FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
     FighterState.HURT_HEAD_LIGHT, FighterState.HURT_HEAD_HEAVY,
@@ -208,7 +208,7 @@ export const hurtStateValidFrom = [
 
 export const knockUpStateValidFrom = [
     FighterState.IDLE, FighterState.WALK_BACKWARD,FighterState.WALK_FORWARD,
-    FighterState.JUMP_LAND, FighterState.JUMP_START, FighterState.IDLE_TURN,
+    FighterState.JUMP_LAND, FighterState.JUMP_START, FighterState.IDLE_TURN, FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD,
     FighterState.LIGHT_PUNCH, FighterState.HEAVY_PUNCH,
     FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
     FighterState.HURT_HEAD_LIGHT, FighterState.HURT_HEAD_HEAVY,
