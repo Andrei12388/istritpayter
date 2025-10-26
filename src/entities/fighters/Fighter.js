@@ -82,7 +82,7 @@ export class Fighter {
                     FighterState.HURT_BODY_LIGHT, FighterState.HURT_BODY_HEAVY,
                     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
                     FighterState.SPECIAL_1, FighterState.DODGE, FighterState.SPECIAL_2, FighterState.BLOCK, FighterState.CROUCH_BLOCK,
-                    FighterState.DODGE_FORWARD, FighterState.DODGE_BACKWARD, FighterState.DEATH, FighterState.KNOCKUP, FighterState.GETUP,
+                    FighterState.DODGE_FORWARD, FighterState.DODGE_BACKWARD, FighterState.DEATH, FighterState.GETUP,
                     FighterState.DIE,
                 ],
             },
@@ -636,6 +636,7 @@ export class Fighter {
         this.velocity.x = 0;
         this.velocity.y = 0;
          console.log("Dead Init !");
+         playSound(this.deathSound);
        
     }
 
@@ -666,7 +667,7 @@ export class Fighter {
     handleKnockUpInit(){
          console.log("Knock Up Init !");
         if(gameState.fighters[this.playerId].hitPoints <= 0) {
-           
+           playSound(this.deathSound);
             gameState.fighters[this.playerId].dead = "die";
             
         };
@@ -705,7 +706,7 @@ export class Fighter {
     }
 
     handleIdleState(time){
-        
+        gameState.fighters[this.playerId].dead = "breathing";
         gameState.fighters[this.playerId].sprite = 0;
         if (control.isUp(this.playerId)) {
             this.changeState(FighterState.JUMP_START);
