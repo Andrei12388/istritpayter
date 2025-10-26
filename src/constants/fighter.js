@@ -171,6 +171,7 @@ export const PushBox = {
 };
 
 export const HurtBox = {
+ NULL: [[0, 0, 0, 0],[0, 0, 0, 0], [0, 0, 0, 0]],
  IDLE: [[-8, -88, 24, 16],[-26, -74, 48, 42], [-26, -31, 45, 32]],
  BACKWARD: [[-19, -88, 24, 16],[-26, -74, 48, 42], [-26, -31, 40, 32]],
  FORWARD: [[-3, -88, 24, 16],[-26, -74, 48, 42], [-26, -31, 40, 32]],
@@ -181,13 +182,14 @@ export const HurtBox = {
 };
 
 export const HitBox ={
+    NULL: [[0, 0, 0, 0],[0, 0, 0, 0], [0, 0, 0, 0]],
     LIGHT_PUNCH: [3,-70,50,18],
     HEAVY_PUNCH: [0,-70,90,30],
     LIGHT_KICK: [8,-60,50,18],
     HEAVY_KICK: [8,-55,75,15],
     CROUCH_LIGHTKICK: [8,-20,40,18],
     CROUCH_HEAVYKICK: [10,-25,55,18],
-    JUMP_HEAVYKICKK: [8,-60,40,18],
+    JUMP_HEAVYKICK: [8,-60,40,18],
     JUMP_LIGHTKICK: [8,-60,50,18],
     HYPERSKILL_1: [0,-100,400,250],
     SLASH: [3,-40,50,18],

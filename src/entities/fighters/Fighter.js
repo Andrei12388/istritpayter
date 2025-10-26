@@ -627,7 +627,7 @@ export class Fighter {
         }
             return;
         }
-        if(gameState.fighters[this.playerId].dead === "breathing") this.changeState(newState);
+        if(gameState.fighters[this.playerId].dead === "breathing" && gameState.fighters[this.playerId].hitPoints > 0) this.changeState(newState);
          
 
         console.log(`${gameState.fighters[this.playerId].id} has hit ${gameState.fighters[this.opponent.playerId].id}'s ${hurtLocation} with a ${attackStrength} attacks`);
@@ -651,8 +651,7 @@ export class Fighter {
 
     //Die
     handleDieInit(){
-        this.velocity.x = 0;
-        this.velocity.y = 0;
+       
         console.log("Die Init !");
         playSound(this.deathSound);
     }
@@ -669,6 +668,8 @@ export class Fighter {
     handleKnockUpInit(){
        
          if(this.position.y >= STAGE_FLOOR){
+             this.velocity.x = 0;
+             this.velocity.y = 0;
             playSound(this.soundHits.BLOCK);
          }
     }

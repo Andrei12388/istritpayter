@@ -116,26 +116,26 @@ export class Malupiton extends Fighter {
             ['crouch-heavykick-3', [[[696, 241, 114, 74], [57,64]], PushBox.CROUCH, HurtBox.CROUCH, HitBox.CROUCH_HEAVYKICK ]],
 
             //Jump-attack
-            ['jump-attack-1', [[[555, 42, 94, 54], [46,52]], PushBox.LIGHT_KICK, HurtBox.LIGHT_KICK, HitBox.JUMP_HEAVYKICKK]],
+            ['jump-attack-1', [[[555, 42, 94, 54], [46,52]], PushBox.LIGHT_KICK, HurtBox.LIGHT_KICK, HitBox.JUMP_HEAVYKICK]],
 
             //lIGHT Punch
-            ['light-punch-1', [[[70, 124, 55, 88], [27,86]], PushBox.IDLE, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
+            ['light-punch-1', [[[70, 124, 55, 88], [27,86]], PushBox.IDLE, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]], HitBox.NULL]],
             ['light-punch-2', [[[136, 127, 82, 70], [27,78]], PushBox.BEND, [[3, -76, 30, 18],[-3, -69, 50, 20], [-2, -52, 44, 58]], HitBox.LIGHT_PUNCH]],
-            ['light-punch-3', [[[136, 127, 82, 70], [27,78]], PushBox.BEND, [[3, -76, 30, 18],[-3, -69, 50, 20], [-2, -52, 44, 58]]]],
+            ['light-punch-3', [[[136, 127, 82, 70], [27,78]], PushBox.BEND, [[3, -76, 30, 18],[-3, -69, 50, 20], [-2, -52, 44, 58]], HitBox.NULL]],
 
              //Heavy Punch
             ['heavy-punch-1', [[[230, 140, 91, 49], [1,77]], PushBox.BEND, [[3, -76, 30, 18],[3, -69, 84, 30], [-2, -52, 44, 58]], HitBox.HEAVY_PUNCH]],
 
              //lIGHT kick
-            ['light-kick-1', [[[81, 34, 57, 69], [27,86]], PushBox.IDLE,  [[3, -76, 30, 18],[-3, -59, 64, 20], [-32, -52, 44, 58]]]],
+            ['light-kick-1', [[[81, 34, 57, 69], [27,86]], PushBox.IDLE,  [[3, -76, 30, 18],[-3, -59, 64, 20], [-32, -52, 44, 58]], HitBox.NULL]],
             ['light-kick-2', [[[560, 26, 84, 71], [27,78]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 64, 20], [-32, -52, 44, 58]], HitBox.LIGHT_KICK]],
 
              //Heavy kick
-            ['heavy-kick-1', [[[153, 44, 59, 60], [30,58]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
-            ['heavy-kick-2', [[[660, 29, 58, 87], [19,85]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
+            ['heavy-kick-1', [[[153, 44, 59, 60], [30,58]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]], HitBox.NULL]],
+            ['heavy-kick-2', [[[660, 29, 58, 87], [19,85]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]], HitBox.NULL]],
             ['heavy-kick-3', [[[560, 26, 84, 71], [1,78]], PushBox.BEND, [[3, -76, 30, 18],[8, -58, 75, 20], [-2, -52, 44, 58]], HitBox.HEAVY_KICK]],
-            ['heavy-kick-4', [[[269, 256, 51, 91], [16,89]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
-            ['heavy-kick-5', [[[206, 259, 51, 87], [15,85]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
+            ['heavy-kick-4', [[[269, 256, 51, 91], [16,89]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]], HitBox.NULL]],
+            ['heavy-kick-5', [[[206, 259, 51, 87], [15,85]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]], HitBox.NULL]],
 
             //Hit Face
             ['hurt-face-4', [[[71, 253, 50, 90],[24,88]], PushBox.IDLE, HurtBox.IDLE]],
@@ -180,18 +180,18 @@ export class Malupiton extends Fighter {
             ['hyperskill2-8', [[[181, 605, 58, 111], [29,109]], PushBox.IDLE, HurtBox.IDLE, PushBox.IDLE, HurtBox.IDLE, HitBox.SLASH]],
 
             //Death State
-            ['death-1', [[[9, 838, 53, 91], [27,89]], PushBox.IDLE, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
-            ['death-2', [[[84, 836, 48, 98], [24,96]], PushBox.BEND, [[3, -76, 30, 18],[-3, -69, 50, 20], [-2, -52, 44, 58]]]],
-            ['death-3', [[[150, 840, 69, 97], [34,95]], PushBox.BEND, [[3, -76, 30, 18],[3, -69, 84, 30], [-2, -52, 44, 58]]]],
-            ['death-4', [[[234, 852, 77, 76], [38,74]], PushBox.BEND, [[3, -76, 30, 18],[3, -69, 84, 30], [-2, -52, 44, 58]]]],
-            ['death-5', [[[321, 855, 101, 51], [50,49]], PushBox.BEND, [[3, -76, 30, 18],[3, -69, 84, 30], [-2, -52, 44, 58]]]],
-            ['death-6', [[[433, 870, 99, 37], [49,35]], PushBox.BEND, [[3, -76, 30, 18],[3, -69, 84, 30], [-2, -52, 44, 58]]]],
-            ['death-7', [[[540, 873, 101, 27], [50,25]], PushBox.BEND, [[3, -76, 30, 18],[3, -69, 84, 30], [-2, -52, 44, 58]]]],
+            ['death-1', [[[9, 838, 53, 91], [27,89]], PushBox.IDLE, HurtBox.IDLE]],
+            ['death-2', [[[84, 836, 48, 98], [24,96]],PushBox.IDLE, HurtBox.IDLE]],
+            ['death-3', [[[150, 840, 69, 97], [34,95]],PushBox.IDLE, HurtBox.IDLE]],
+            ['death-4', [[[234, 852, 77, 76], [38,74]],PushBox.IDLE, HurtBox.IDLE]],
+            ['death-5', [[[321, 855, 101, 51], [50,49]],PushBox.IDLE, HurtBox.IDLE]],
+            ['death-6', [[[433, 870, 99, 37], [49,35]],PushBox.IDLE, HurtBox.IDLE]],
+            ['death-7', [[[540, 873, 101, 27], [50,25]],PushBox.IDLE, HurtBox.IDLE]],
             
             //GetUp State
-             ['getUp-1', [[[11, 955, 53, 55], [27,53]], PushBox.IDLE, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
-             ['getUp-2', [[[82, 959, 63, 50], [31,48]], PushBox.IDLE, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
-             ['getUp-3', [[[160, 959, 60, 59], [30,57]], PushBox.IDLE, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
+             ['getUp-1', [[[11, 955, 53, 55], [27,53]], PushBox.IDLE, HurtBox.IDLE]],
+             ['getUp-2', [[[82, 959, 63, 50], [31,48]], PushBox.IDLE, HurtBox.IDLE]],
+             ['getUp-3', [[[160, 959, 60, 59], [30,57]], PushBox.IDLE, HurtBox.IDLE]],
         ]);
 
                   
