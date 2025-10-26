@@ -125,6 +125,16 @@ export class EnemyAI {
     const now = time.now || performance.now();
     const delta = (time.secondsPassed || 0) * 1000;
 
+      // 🔹 Check for death
+  if (this.fighter.hitPoints <= 0 && this.fighter.dead !== "die" && this.fighter.dead !== "dead") {
+    this.fighter.dead = "die";
+    this.fighter.changeState(FighterState.DEATH, time);
+    return; // stop AI logic when dead
+  }
+
+  // Safety: don't act while fighter is in locked/uninterruptible states
+  if (this.isInLockedState()) return;
+
     // Safety: don't act while fighter is in locked/uninterruptible states
     if (this.isInLockedState()) return;
 

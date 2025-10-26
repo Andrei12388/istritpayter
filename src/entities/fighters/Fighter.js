@@ -598,8 +598,8 @@ export class Fighter {
          if(gameState.fighters[this.playerId].hitPoints <= 0 || gameState.fighters[this.playerId].dead === "die" || gameState.fighters[this.playerId].dead === "dead"){
            
             gameState.fighters[this.playerId].dead = "invulnerable";
-             playSound(this.deathSound);
-                this.changeState(FighterState.DEATH);
+            // playSound(this.deathSound);
+                
                 return;
          } 
         const newState = this.getHitState(attackStrength, hurtLocation);
@@ -923,7 +923,10 @@ export class Fighter {
     }
 
     updateAttackBoxCollided(time) {
-       
+       if(gameState.fighters[this.opponent.playerId].dead === "invulnerable"){
+            console.log("cannot be attacked");
+            return;
+        } 
     const { attackStrength, attackType } = this.states[this.currentState];
     if (!attackType || this.attackStruck) return;
     if (!this.boxes?.hit || !this.opponent?.boxes?.hurt) return;
@@ -955,6 +958,16 @@ export class Fighter {
         };
         hitPosition.x += (Math.random() - 0.5) * 8;
         hitPosition.y += (Math.random() - 0.5) * 8;
+
+        
+         if(gameState.fighters[this.opponent.playerId].hitPoints <= 0 || gameState.fighters[this.opponent.playerId].dead === "die" || gameState.fighters[this.opponent.playerId].dead === "dead"){
+           
+            gameState.fighters[this.opponent.playerId].dead = "invulnerable";
+                 playSound(this.deathSound);
+                this.opponent.changeState(FighterState.DEATH);
+                return;
+         } 
+
          if (this.opponent.currentState === FighterState.WALK_BACKWARD || this.opponent.currentState === FighterState.BLOCK) {
         
         this.opponent.changeState(FighterState.BLOCK, time, hitPosition);

@@ -710,7 +710,9 @@ handleHyperSkill2Init(_, strength){
 
   if (!this.fireball.fired && this.canFireball(time)) {
     const strength = Control.HEAVY_PUNCH;
-    this.entityList.add(Fireball, [this, strength], time, this.entityList);
+        // Correct argument order: (EntityClass, time, ...args)
+        // pass fighter and strength as separate args so the Entity constructor receives them in the expected shape
+        this.entityList.add(Fireball, time, this, strength);
     this.fireball.fired = true;
     this.fireball.lastFired = time.now || performance.now();
     console.log("🔥 Fireball launched by AI");

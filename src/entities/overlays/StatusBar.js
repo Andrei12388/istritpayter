@@ -722,7 +722,7 @@ drawCredits(context){
         }
 
         
-         if(this.time <this.timeCount-5 && !this.inputRegistered){
+        if(this.time <this.timeCount-5 && !this.inputRegistered){
             registerKeyboardEvents();
             registerScreenButtonEvents();
             enableScreenButtons();
@@ -730,27 +730,26 @@ drawCredits(context){
            
             }
 
-            if(this.time < 0 && this.inputRegistered){
-                // optional: disable inputs here if you have unregister methods
-                unregisterKeyboardEvents();
-                unregisterScreenButtonEvents();
-                disableScreenButtons();
-               
-                this.inputRegistered = false;
-            }
+                        if(this.time < 0 && this.inputRegistered){
+                                // disable inputs when time runs out
+                               // unregisterKeyboardEvents();
+                              //  unregisterScreenButtonEvents();
+                              //  disableScreenButtons();
+                             //   this.inputRegistered = false;
+                                console.log('unregister inputs');
+                        }
         if(this.time>0){
             
-            if(this.time>this.timeCount - 4){
-                unregisterKeyboardEvents();
-                unregisterScreenButtonEvents();
-                disableScreenButtons();
-                
-                this.inputRegistered = false;
-                this.drawFrame(context, 'round', 150,103);
-                this.drawRound(context, gameState.rounds, 217,104);
+                        if(this.time>this.timeCount - 4){
+                             // unregisterKeyboardEvents();
+                            //  unregisterScreenButtonEvents();
+                            //  disableScreenButtons();
+                                // no-op: keep input registration state until explicit unregister
+                                this.drawFrame(context, 'round', 150,103);
+                                this.drawRound(context, gameState.rounds, 217,104);
                
 
-            }
+                        }
             if(this.time=== this.timeCount - 5){
                 this.drawFrame(context, 'fight', 156,103);
             }
@@ -760,8 +759,13 @@ drawCredits(context){
           // registerScreenButtonEvents();
            // this.drawScores(context);
            if(this.gameIn === true){
-            registerKeyboardEvents();
-            registerScreenButtonEvents();
+            // ensure registration happens only once (handled above), but double-check
+            if(!this.inputRegistered){
+                registerKeyboardEvents();
+                registerScreenButtonEvents();
+                enableScreenButtons();
+                this.inputRegistered = true;
+            }
              this.drawHealthBars(context);
              this.updateSkill = true;
             this.drawSkillBars(context);
@@ -774,8 +778,13 @@ drawCredits(context){
              
             } else if(this.gameIn === false){
                 this.enemyStart = false;
-                unregisterKeyboardEvents();
-                unregisterScreenButtonEvents();
+               // unregister only if previously registered
+               if(this.inputRegistered){
+                  // unregisterKeyboardEvents();
+                   //unregisterScreenButtonEvents();
+                  // disableScreenButtons();
+                   //this.inputRegistered = false;
+               }
             }
         }
         }
