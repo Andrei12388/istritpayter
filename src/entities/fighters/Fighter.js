@@ -312,6 +312,7 @@ export class Fighter {
 
 
     isAnimationCompleted = () => this.animations[this.currentState][this.animationFrame][1] === FrameDelay.TRANSITION;
+    isAnimationKnockUp = () => this.animations[this.currentState][this.animationFrame][1] === 130;
     isHyperSkillEnabled = (frameActivation) => this.animations[this.currentState][this.animationFrame][1] === frameActivation;
 
     hasCollidedWithOpponent = () => rectsOverlap(
@@ -589,9 +590,9 @@ export class Fighter {
     }
 
     handleAttackHit(time, attackStrength, attackType, hitPosition, hurtLocation){
-         if(gameState.fighters[this.playerId].hitPoints < 0){
+         if(gameState.fighters[this.playerId].hitPoints <= 0){
             gameState.fighters[this.playerId].dead === "invulnerable";
-                this.changeState(FighterState.DEATH);
+                this.changeState(FighterState.KNOCKUP);
                 return;
          } 
         if(gameState.fighters[this.playerId].dead === "invulnerable"){
@@ -615,16 +616,10 @@ export class Fighter {
         this.onAttackHit?.(time, this.opponent.playerId, this.playerId, hitPosition, attackStrength);
         
         if(FighterAttackBaseData[attackStrength].knockup){
-            if(gameState.fighters[this.playerId].hitPoints < 0){
-                gameState.fighters[this.playerId].dead === "invulnerable";
-                this.changeState(FighterState.DEATH);
-            }
+            
             console.log("Knock up hit activate");
             this.changeState(FighterState.KNOCKUP);
-            if(gameState.fighters[this.playerId].hitPoints < 0){
-            playSound(this.deathSound);
-            return;
-        }
+            
             return;
         }
         if(gameState.fighters[this.playerId].dead === "breathing" && gameState.fighters[this.playerId].hitPoints > 0) this.changeState(newState);
@@ -645,7 +640,7 @@ export class Fighter {
        
         if (!this.isAnimationCompleted()) return;
         gameState.fighters[this.playerId].dead = "die";
-        if(gameState.fighters[this.playerId].hitPoints < 0) return;
+        if(gameState.fighters[this.playerId].hitPoints <= 0) return;
         this.changeState(FighterState.GETUP);
     }
 
@@ -660,27 +655,31 @@ export class Fighter {
         
        // if (!this.isAnimationCompleted()) return;
         if (gameState.fighters[this.playerId].dead === "die") return;
-        if(gameState.fighters[this.playerId].hitPoints < 0) return;
+        if(gameState.fighters[this.playerId].hitPoints <= 0) return;
         this.changeState(FighterState.GETUP);
     }
 
     //Knock Up States and Init
     handleKnockUpInit(){
-       
+        if(gameState.fighters[this.playerId].hitPoints <= 0) {
+            gameState.fighters[this.playerId].dead === "die";
+            playSound(this.deathSound);
+        };
          if(this.position.y >= STAGE_FLOOR){
              this.velocity.x = 0;
              this.velocity.y = 0;
+            
             playSound(this.soundHits.BLOCK);
          }
     }
 
      handleKnockUpState(){
-        
+        if(this.isAnimationKnockUp()) gameState.fighters[this.playerId].dead = "invulnerable";
         if (!this.isAnimationCompleted()) return;
          if(this.position.y >= STAGE_FLOOR){
-            playSound(this.soundHits.BLOCK);
+            
          gameState.fighters[this.playerId].dead = "invulnerable";
-         if(gameState.fighters[this.playerId].hitPoints < 0) return;
+         if(gameState.fighters[this.playerId].hitPoints <= 0) return;
         this.changeState(FighterState.GETUP);
          }
     }
@@ -696,7 +695,7 @@ export class Fighter {
        
         if (!this.isAnimationCompleted()) return;
         gameState.fighters[this.playerId].dead = "breathing";
-        if(gameState.fighters[this.playerId].hitPoints < 0) return;
+        if(gameState.fighters[this.playerId].hitPoints <= 0) return;
         this.changeState(FighterState.IDLE);
     }
 

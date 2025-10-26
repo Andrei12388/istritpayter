@@ -206,15 +206,15 @@ export class Malupiton extends Fighter {
                 ['forwards-2',75],['forwards-1',75],
             ],
             [FighterState.DODGE_BACKWARD]:[ 
-                ['dodge-1', 75], ['dodge-2', 75],
-                ['dodge-3', 75], ['dodge-4', 200],
-                ['dodge-3', 75], ['dodge-2', 75],
+                ['dodge-1', 40], ['dodge-2', 40],
+                ['dodge-3', 40], ['dodge-4', 150],
+                ['dodge-3', 40], ['dodge-2', 40],
                 ['dodge-1',FrameDelay.TRANSITION],
             ],
             [FighterState.DODGE_FORWARD]:[ 
-                ['dodge-1', 75], ['dodge-2', 75],
-                ['dodge-3', 75], ['dodge-4', 200],
-                ['dodge-3', 75], ['dodge-2', 75],
+                ['dodge-1', 40], ['dodge-2', 40],
+                ['dodge-3', 40], ['dodge-4', 150],
+                ['dodge-3', 40], ['dodge-2', 40],
                 ['dodge-1',FrameDelay.TRANSITION],
             ],
 
@@ -390,7 +390,7 @@ export class Malupiton extends Fighter {
             ],
             [FighterState.KNOCKUP]:[
                 ['death-1', 100], ['death-2', 120], ['death-3', 120], 
-                ['death-4', 120], ['death-5', 120], ['death-6', 120], 
+                ['death-4', 120], ['death-5', 120], ['death-6', 130], 
                 ['death-7', 300],
                 ['death-7', FrameDelay.TRANSITION],
             ],
