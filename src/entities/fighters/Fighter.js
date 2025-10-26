@@ -590,15 +590,18 @@ export class Fighter {
     }
 
     handleAttackHit(time, attackStrength, attackType, hitPosition, hurtLocation){
-         if(gameState.fighters[this.playerId].hitPoints <= 0){
-            gameState.fighters[this.playerId].dead === "invulnerable";
-                this.changeState(FighterState.KNOCKUP);
-                return;
-         } 
+        
         if(gameState.fighters[this.playerId].dead === "invulnerable"){
             console.log("cannot be attacked");
             return;
         } 
+         if(gameState.fighters[this.playerId].hitPoints <= 0 || gameState.fighters[this.playerId].dead === "die" || gameState.fighters[this.playerId].dead === "dead"){
+           
+            gameState.fighters[this.playerId].dead = "invulnerable";
+             playSound(this.deathSound);
+                this.changeState(FighterState.DEATH);
+                return;
+         } 
         const newState = this.getHitState(attackStrength, hurtLocation);
         const { velocity, friction } = FighterAttackBaseData[attackStrength].slide;
 
@@ -615,7 +618,7 @@ export class Fighter {
         }
         this.onAttackHit?.(time, this.opponent.playerId, this.playerId, hitPosition, attackStrength);
         
-        if(FighterAttackBaseData[attackStrength].knockup){
+        if(FighterAttackBaseData[attackStrength].knockup && gameState.fighters[this.playerId].hitPoints > 0){
             
             console.log("Knock up hit activate");
             this.changeState(FighterState.KNOCKUP);
@@ -632,8 +635,8 @@ export class Fighter {
     handleDeathInit(){
         this.velocity.x = 0;
         this.velocity.y = 0;
-        
-        playSound(this.deathSound);
+         console.log("Dead Init !");
+       
     }
 
      handleDeathState(){
@@ -648,7 +651,7 @@ export class Fighter {
     handleDieInit(){
        
         console.log("Die Init !");
-        playSound(this.deathSound);
+       
     }
 
      handleDieState(){
@@ -661,9 +664,11 @@ export class Fighter {
 
     //Knock Up States and Init
     handleKnockUpInit(){
+         console.log("Knock Up Init !");
         if(gameState.fighters[this.playerId].hitPoints <= 0) {
-            gameState.fighters[this.playerId].dead === "die";
-            playSound(this.deathSound);
+           
+            gameState.fighters[this.playerId].dead = "die";
+            
         };
          if(this.position.y >= STAGE_FLOOR){
              this.velocity.x = 0;
@@ -688,7 +693,7 @@ export class Fighter {
     handleGetUpInit(){
         this.velocity.x = 0;
         this.velocity.y = 0;
-        console.log("GetUp activated!");
+        console.log("GetUp Init!");
     }
 
      handleGetUpState(){
