@@ -982,6 +982,8 @@ export class Fighter {
 
 
     updateWinCondition(){
+      //  if(gameState.fighters[this.playerId].skillNumber <= 0) gameState.fighters[this.playerId].skillConsumed = true;
+       // if(gameState.fighters[this.opponent.playerId].skillNumber <= 0) gameState.fighters[this.opponent.playerId].skillConsumed = true;
         // Centralized win/death handling: switch to DEATH state (don't return to IDLE)
         // Opponent KO
         if (this.opponent && gameState.fighters[this.opponent.playerId].hitPoints <= 0 && this.opponent.currentState !== FighterState.DEATH) {

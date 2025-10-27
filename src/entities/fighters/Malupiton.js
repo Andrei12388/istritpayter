@@ -185,13 +185,13 @@ export class Malupiton extends Fighter {
             ['death-3', [[[150, 840, 69, 97], [34,95]],PushBox.IDLE, HurtBox.IDLE]],
             ['death-4', [[[234, 852, 77, 76], [38,74]],PushBox.IDLE, HurtBox.IDLE]],
             ['death-5', [[[321, 855, 101, 51], [50,49]],PushBox.IDLE, HurtBox.IDLE]],
-            ['death-6', [[[433, 870, 99, 37], [49,35]],PushBox.IDLE, HurtBox.IDLE]],
-            ['death-7', [[[540, 873, 101, 27], [50,25]],PushBox.IDLE, HurtBox.IDLE]],
+            ['death-6', [[[433, 870, 99, 37], [49,35]],PushBox.IDLE, HurtBox.NULL]],
+            ['death-7', [[[540, 873, 101, 27], [50,25]],PushBox.IDLE, HurtBox.NULL]],
             
             //GetUp State
-             ['getUp-1', [[[11, 955, 53, 55], [27,53]], PushBox.IDLE, HurtBox.IDLE]],
-             ['getUp-2', [[[82, 959, 63, 50], [31,48]], PushBox.IDLE, HurtBox.IDLE]],
-             ['getUp-3', [[[160, 959, 60, 59], [30,57]], PushBox.IDLE, HurtBox.IDLE]],
+             ['getUp-1', [[[11, 955, 53, 55], [27,53]], PushBox.IDLE, HurtBox.NULL]],
+             ['getUp-2', [[[82, 959, 63, 50], [31,48]], PushBox.IDLE, HurtBox.NULL]],
+             ['getUp-3', [[[160, 959, 60, 59], [30,57]], PushBox.IDLE, HurtBox.NULL]],
         ]);
 
                   

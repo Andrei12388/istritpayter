@@ -1,4 +1,5 @@
 import { TIME_DELAY, TIME_FLASH_DELAY, TIME_FRAME_KEYS } from "../constants/battle.js";
+import { enableScreenButtons, registerKeyboardEvents, registerScreenButtonEvents } from "../inputHandler.js";
 
 export class CharSelBG {
     constructor(){
@@ -153,6 +154,9 @@ export class CharacterSelectScreen {
 
 
     update(time){
+         registerKeyboardEvents();
+        registerScreenButtonEvents();
+        enableScreenButtons();
         this.updateTime(time);
     }
 

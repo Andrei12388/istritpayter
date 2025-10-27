@@ -53,7 +53,8 @@ export class BattleScene {
         this.selectedCharacterP2 = selectedCharacters[1].name;
         console.log(this.selectedCharacterP1, this.selectedCharacterP2);
         gameState.fighters = [createDefaultFighterState(this.selectedCharacterP1),createDefaultFighterState(this.selectedCharacterP2)];
-
+        gameState.fighters[0].skillConsumed = true;
+        gameState.fighters[1].skillConsumed = true;
         gameState.gameScene = 'postmatch';
         gameState.flash = false;
         gameState.rounds = 0;
@@ -193,6 +194,8 @@ export class BattleScene {
    // this.overlays = [new FpsCounter(), this.statsBar];
     this.fightOver = false;
     this.inGame = true;
+    gameState.fighters[0].skillConsumed = true;
+    gameState.fighters[1].skillConsumed = true;
     console.log('Reset Battle');
     this.statsBar.resetBattle();
     controlHistory[0].time = 0;
@@ -268,7 +271,7 @@ handleFlash() {
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
        this.enemyAI.update(time);
-        // this.enemyAI2.update(time);
+       //  this.enemyAI2.update(time);
     }
    
 

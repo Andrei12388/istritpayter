@@ -50,7 +50,7 @@ export class Fireball {
 
   this.fighter = fighter;
   this.entityList = entityList;
-  this.velocity = fireballVelocity[strength] || 200; // Default speed
+  this.velocity = fireballVelocity[strength] || 300; // Default speed
   this.direction = this.fighter?.direction ?? 1;
   this.directionY = 0;
 

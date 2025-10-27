@@ -111,13 +111,13 @@ main{
           }
 
           .move1{
-            opacity: 100%;
+            opacity: 20%;
             font-family: Arial, Helvetica, sans-serif;
-            width: 120px;
+            width: 130px;
             font-weight: bold;
             border-radius: 100%;
             border: 2px solid black;
-            height: 120px;
+            height: 130px;
             
             align-content: center;
             justify-content: center;
@@ -217,9 +217,10 @@ main{
           }
 
           .movebtnsP1{
-            top: -20vh;
+            top: -33vh;
             display: flex;
             position: relative;
+            transform: rotate(-45deg);
             gap: 5vh;
             right: -125vh;
             flex-wrap: wrap;           /* allow items to wrap to new rows */
@@ -243,10 +244,10 @@ main{
   background: rgba(255,255,255,0.2);
   border: 2px solid white;
   border-radius: 50%;
-  opacity: 100%;
+  opacity: 20%;
   position: fixed;
-  bottom: 20vh;
-  left: 20vw;
+  bottom: 25vh;
+  left: 15vw;
   z-index: 200;
   touch-action: none;
   background-image: url("./images/joystick/placer.png");
@@ -310,11 +311,11 @@ main{
 <label>
    P1 Control
   <br>
-  <input type="radio" name="joystickToggle" value="on" checked > On
+  <input type="radio" name="joystickToggle" value="on" > On
 </label>
 <br>
 <label>
-  <input type="radio" name="joystickToggle" value="off" > Off
+  <input type="radio" name="joystickToggle" value="off" checked> Off
 </label>
     </div>
 
@@ -338,11 +339,11 @@ main{
     <img src="./arcade.png" alt="arcade" class="arcade"/>
   </main>
  
-<div id="joystick" style="display: block;">
+<div id="joystick" style="display: none;">
   <div id="knob"></div>
 </div>
   
-  <div class="scrninput" style="display:block">
+  <div class="scrninput" style="display:none">
   <div class="moveLists">
     <div class="moveTitle"> </div>
     <div class="movePlayer">
