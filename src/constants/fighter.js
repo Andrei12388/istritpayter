@@ -62,7 +62,7 @@ export const FighterAttackBaseData = {
  },
   [FighterAttackStrength.SUPER1]: {
     score: 1000,
-    skill: 5,
+    skill: 3,
     knockup: true,
     thrust: {
         x: -500,
@@ -76,7 +76,7 @@ export const FighterAttackBaseData = {
  },
  [FighterAttackStrength.SUPER2]: {
     score: 1000,
-    skill: 5,
+    skill: 3,
     knockup: true,
     thrust: {
         x: -500,
@@ -90,7 +90,7 @@ export const FighterAttackBaseData = {
  },
  [FighterAttackStrength.SLASH]: {
     score: 100,
-    skill: 5,
+    skill: 3,
     knockup: true,
     thrust: {
         x: -100,

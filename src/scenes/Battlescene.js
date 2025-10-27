@@ -18,7 +18,7 @@ import { boholStage } from "../entities/stage/boholStage.js";
 
 
 import { EntityList } from "../EntityList.js";
-import { registerKeyboardEvents, registerScreenButtonEvents, unregisterKeyboardEvents } from "../inputHandler.js";
+import { registerKeyboardEvents, registerScreenButtonEvents, unregisterKeyboardEvents, unregisterScreenButtonEvents, heldKeys, pressedKeys } from "../inputHandler.js";
 import { playSound, stopSound } from "../soundHandler.js";
 import { gameState } from "../state/gameState.js";
 import { EnemyAI } from "../entities/fighters/EnemyAI.js";
@@ -197,6 +197,15 @@ export class BattleScene {
     this.statsBar.resetBattle();
     controlHistory[0].time = 0;
     controlHistory[1].time = 0;
+    // Clear any lingering held inputs (safeguard in case inputs were left active)
+    try {
+        heldKeys.clear();
+        pressedKeys.clear();
+    } catch (e) {
+        // ignore
+    }
+    if (this.enemyAI && typeof this.enemyAI.resetInputs === 'function') this.enemyAI.resetInputs();
+    if (this.enemyAI2 && typeof this.enemyAI2.resetInputs === 'function') this.enemyAI2.resetInputs();
 }
 
 handleFlash() {
@@ -258,7 +267,7 @@ handleFlash() {
         }
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
-       //this.enemyAI.update(time);
+       this.enemyAI.update(time);
         // this.enemyAI2.update(time);
     }
    
@@ -314,11 +323,23 @@ handleFlash() {
                 this.handleFlash();
                 if(gameState.fighters[0].wins === 2) gameState.gamePlayerWinned = 'P1';
                 else if(gameState.fighters[1].wins === 2) gameState.gamePlayerWinned = 'P2';
-                
+                this.statsBar.enemyStart = false;
                 gameState.slowFX = 1;
                
+                // Ensure any held inputs (keyboard, touch, or AI-driven) are cleared so
+                // controls won't remain active after the match finishes.
+                try {
+                    heldKeys.clear();
+                    pressedKeys.clear();
+                } catch (e) {
+                    // heldKeys/pressedKeys may be undefined in some test contexts; ignore
+                }
+
+                if (this.enemyAI && typeof this.enemyAI.resetInputs === 'function') this.enemyAI.resetInputs();
+                if (this.enemyAI2 && typeof this.enemyAI2.resetInputs === 'function') this.enemyAI2.resetInputs();
+
                 this.resetBattle();
-                
+
                 this.game.setScene(new PrePostMatch(this.game, this.selectedCharacters));
             }
              gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;

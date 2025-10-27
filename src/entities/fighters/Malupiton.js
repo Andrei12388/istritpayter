@@ -579,10 +579,10 @@ export class Malupiton extends Fighter {
   // Hyper Skill 1 - Ultimate Blast
   handleHyperSkill1Init(_, strength) {
     const fighter = gameState.fighters[this.playerId];
-
+    
     // ✅ Ensure enough skill points & prevent double use
     if (fighter.skillNumber < 3 || fighter.skillUsedThisFrame) return;
-
+    fighter.skillConsumed = false;
     fighter.skillUsedThisFrame = true; // guard
     fighter.skillNumber -= 3; // 🛡️ immediately spend skill
     fighter.resetSkillBar = true;
@@ -605,7 +605,7 @@ export class Malupiton extends Fighter {
     const frameActivation = 130;
     const fighter = gameState.fighters[this.playerId];
 
-    if (fighter.skillNumber >= 0) {
+    if (fighter.skillNumber >= 0 && !fighter.skillConsumed) {
       this.gravity = 0;
       this.position.y -= 0.8;
       this.changeState(FighterState.HYPERSKILL_1);
@@ -616,7 +616,7 @@ export class Malupiton extends Fighter {
       }
 
       if (!this.isAnimationCompleted()) return;
-
+      fighter.skillConsumed = true;
       // ✅ Reset guard and state after animation
       gameState.flash = false;
       fighter.superAcivated = false;
@@ -632,9 +632,9 @@ export class Malupiton extends Fighter {
   // ==============================
   handleHyperSkill2Init(_, strength) {
     const fighter = gameState.fighters[this.playerId];
-
+    
     if (fighter.skillNumber < 3 || fighter.skillUsedThisFrame) return;
-
+    fighter.skillConsumed = false;
     fighter.skillUsedThisFrame = true;
     fighter.skillNumber -= 3;
     fighter.resetSkillBar = true;
@@ -657,7 +657,7 @@ export class Malupiton extends Fighter {
     const frameDeactivation = 60;
     const fighter = gameState.fighters[this.playerId];
 
-    if (fighter.skillNumber >= 0) {
+    if (fighter.skillNumber >= 0 && !fighter.skillConsumed) {
       if (!this.fireball.fired && this.animationFrame === 3) {
         this.fireball.fired = true;
         this.changeState(FighterState.HYPERSKILL_2);
@@ -672,7 +672,7 @@ export class Malupiton extends Fighter {
       }
 
       if (!this.isAnimationCompleted()) return;
-
+      fighter.skillConsumed = true;
       // ✅ Reset guard and flags
       fighter.superAcivated = false;
       fighter.skillUsedThisFrame = false;
@@ -690,6 +690,7 @@ export class Malupiton extends Fighter {
     if (fighter.skillNumber < 1 || fighter.skillUsedThisFrame) return;
 
     fighter.skillUsedThisFrame = true;
+    fighter.skillConsumed = false;
     fighter.skillNumber -= 1; // 🛡️ spend skill immediately
 
     if (fighter.skillNumber === 2) fighter.resetSkillBar = true;
@@ -713,7 +714,7 @@ export class Malupiton extends Fighter {
   handleSpecial1State(time) {
     const fighter = gameState.fighters[this.playerId];
 
-    if (fighter.skillNumber >= 0) {
+    if (fighter.skillNumber >= 0 && !fighter.skillConsumed) {
       if (!this.fireball.fired && this.animationFrame === 3) {
         this.entityList.add.call(this.entityList, Fireball, time, this, this.fireball.strength);
         this.fireball.fired = true;
@@ -721,7 +722,7 @@ export class Malupiton extends Fighter {
       }
 
       if (!this.isAnimationCompleted()) return;
-
+        fighter.skillConsumed = true;
       fighter.superAcivated = false;
       fighter.skillUsedThisFrame = false; // reset guard
     }
@@ -738,6 +739,7 @@ export class Malupiton extends Fighter {
     if (fighter.skillNumber < 1 || fighter.skillUsedThisFrame) return;
 
     fighter.skillUsedThisFrame = true;
+    fighter.skillConsumed = false;
     fighter.skillNumber -= 1;
 
     if (fighter.skillNumber === 2) fighter.resetSkillBar = true;
@@ -761,7 +763,7 @@ export class Malupiton extends Fighter {
   handleSpecial2State(time) {
     const fighter = gameState.fighters[this.playerId];
 
-    if (fighter.skillNumber >= 0) {
+    if (fighter.skillNumber >= 0 && !fighter.skillConsumed) {
       if (!this.fireball.fired && this.animationFrame === 3) {
         this.fireball.fired = true;
         this.changeState(FighterState.SPECIAL_2);
@@ -769,7 +771,7 @@ export class Malupiton extends Fighter {
       }
 
       if (!this.isAnimationCompleted()) return;
-
+      fighter.skillConsumed = true;
       fighter.superAcivated = false;
       fighter.skillUsedThisFrame = false;
     }
