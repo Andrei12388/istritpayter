@@ -732,18 +732,18 @@ drawCredits(context){
 
                         if(this.time < 0 && this.inputRegistered){
                                 // disable inputs when time runs out
-                               // unregisterKeyboardEvents();
-                              //  unregisterScreenButtonEvents();
-                              //  disableScreenButtons();
-                             //   this.inputRegistered = false;
+                                unregisterKeyboardEvents();
+                                unregisterScreenButtonEvents();
+                                disableScreenButtons();
+                                this.inputRegistered = false;
                                 console.log('unregister inputs');
                         }
         if(this.time>0){
             
                         if(this.time>this.timeCount - 4){
-                             // unregisterKeyboardEvents();
-                            //  unregisterScreenButtonEvents();
-                            //  disableScreenButtons();
+                              unregisterKeyboardEvents();
+                              unregisterScreenButtonEvents();
+                              disableScreenButtons();
                                 // no-op: keep input registration state until explicit unregister
                                 this.drawFrame(context, 'round', 150,103);
                                 this.drawRound(context, gameState.rounds, 217,104);
@@ -755,9 +755,9 @@ drawCredits(context){
             }
             
             if(this.time< this.timeCount - 5){
-          // registerKeyboardEvents();
-          // registerScreenButtonEvents();
-           // this.drawScores(context);
+           registerKeyboardEvents();
+           registerScreenButtonEvents();
+          //  this.drawScores(context);
            if(this.gameIn === true){
             // ensure registration happens only once (handled above), but double-check
             if(!this.inputRegistered){
@@ -780,10 +780,10 @@ drawCredits(context){
                 this.enemyStart = false;
                // unregister only if previously registered
                if(this.inputRegistered){
-                  // unregisterKeyboardEvents();
-                   //unregisterScreenButtonEvents();
-                  // disableScreenButtons();
-                   //this.inputRegistered = false;
+                   unregisterKeyboardEvents();
+                   unregisterScreenButtonEvents();
+                   disableScreenButtons();
+                   this.inputRegistered = false;
                }
             }
         }

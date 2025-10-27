@@ -83,7 +83,7 @@ export class Fighter {
                     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
                     FighterState.SPECIAL_1, FighterState.DODGE, FighterState.SPECIAL_2, FighterState.BLOCK, FighterState.CROUCH_BLOCK,
                     FighterState.DODGE_FORWARD, FighterState.DODGE_BACKWARD, FighterState.DEATH, FighterState.GETUP,
-                    FighterState.DIE,
+                    FighterState.DIE, 
                 ],
             },
             [FighterState.WALK_FORWARD]:{
@@ -596,11 +596,9 @@ export class Fighter {
             return;
         } 
          if(gameState.fighters[this.playerId].hitPoints <= 0 || gameState.fighters[this.playerId].dead === "die" || gameState.fighters[this.playerId].dead === "dead"){
-           
-            gameState.fighters[this.playerId].dead = "invulnerable";
-            // playSound(this.deathSound);
-                
-                return;
+            // Delegate win/death handling to centralized method
+            this.updateWinCondition();
+            return;
          } 
         const newState = this.getHitState(attackStrength, hurtLocation);
         const { velocity, friction } = FighterAttackBaseData[attackStrength].slide;
@@ -961,13 +959,11 @@ export class Fighter {
         hitPosition.y += (Math.random() - 0.5) * 8;
 
         
-         if(gameState.fighters[this.opponent.playerId].hitPoints <= 0 || gameState.fighters[this.opponent.playerId].dead === "die" || gameState.fighters[this.opponent.playerId].dead === "dead"){
-           
-            gameState.fighters[this.opponent.playerId].dead = "invulnerable";
-                 playSound(this.deathSound);
-                this.opponent.changeState(FighterState.DEATH);
+            if(gameState.fighters[this.opponent.playerId].hitPoints <= 0 || gameState.fighters[this.opponent.playerId].dead === "die" || gameState.fighters[this.opponent.playerId].dead === "dead"){
+                // Delegate win/death handling to centralized method
+                this.updateWinCondition();
                 return;
-         } 
+            } 
 
          if (this.opponent.currentState === FighterState.WALK_BACKWARD || this.opponent.currentState === FighterState.BLOCK) {
         
@@ -986,18 +982,24 @@ export class Fighter {
 
 
     updateWinCondition(){
-         // Force idle state if KO to Opponent
-    if (gameState.fighters[this.opponent.playerId].hitPoints <= 0 && this.opponent.currentState !== FighterState.IDLE) {
-        this.opponent.changeState(FighterState.IDLE);
-        this.opponent.resetVelocities();
-        // Optionally, you can add more KO logic here
-    }  
-      // Force idle state if KO to Self
-    if (gameState.fighters[this.playerId].hitPoints <= 0 && this.currentState !== FighterState.IDLE) {
-        this.changeState(FighterState.IDLE);
-        this.resetVelocities();
-        // Optionally, you can add more KO logic here
-    }
+        // Centralized win/death handling: switch to DEATH state (don't return to IDLE)
+        // Opponent KO
+        if (this.opponent && gameState.fighters[this.opponent.playerId].hitPoints <= 0 && this.opponent.currentState !== FighterState.DEATH) {
+            // mark invulnerable to avoid double triggers
+            gameState.fighters[this.opponent.playerId].dead = "invulnerable";
+            // play opponent's death sound if available, otherwise fallback to this.deathSound
+            try { playSound(this.opponent.deathSound ?? this.deathSound); } catch (e) {}
+            this.opponent.resetVelocities();
+            this.opponent.changeState(FighterState.DEATH);
+        }
+
+        // Self KO
+        if (gameState.fighters[this.playerId].hitPoints <= 0 && this.currentState !== FighterState.DEATH) {
+            gameState.fighters[this.playerId].dead = "invulnerable";
+            try { playSound(this.deathSound); } catch (e) {}
+            this.resetVelocities();
+            this.changeState(FighterState.DEATH);
+        }
     }
 
     updateHurtShake(time, delay) {
@@ -1034,13 +1036,15 @@ export class Fighter {
 
     update(time, context, camera){
         this.states[this.currentState].update(time, context);
-        //this.updateWinCondition();
+        // Check win/death conditions after state updates and collisions
+        // centralized handler ensures dying fighters go to DEATH state (not IDLE)
         this.updateSlide(time);
         this.updatePosition(time);
         this.updateSpecialMoves(time);
         this.updateAnimation(time);
         this.updateStageConstraints(time, context, camera);
         this.updateAttackBoxCollided(time);
+        this.updateWinCondition();
         this.velocity.y += this.gravity * time.secondsPassed;
 
        // console.log('Velocity',this.velocity.y);

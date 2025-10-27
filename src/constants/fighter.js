@@ -204,8 +204,8 @@ export const hurtStateValidFrom = [
     FighterState.HURT_BODY_LIGHT, FighterState.HURT_BODY_HEAVY,
     FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
-    FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.DODGE_FORWARD,
-    FighterState.DODGE_BACKWARD, FighterState.HYPERSKILL_2, FighterState.DIE, FighterState.DEATH,
+    FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.HYPERSKILL_2, 
+    FighterState.DIE, FighterState.DEATH, FighterState.KNOCKUP
 ];
 
 export const knockUpStateValidFrom = [
@@ -217,8 +217,7 @@ export const knockUpStateValidFrom = [
     FighterState.HURT_BODY_LIGHT, FighterState.HURT_BODY_HEAVY,
     FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
-    FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.DODGE_FORWARD,
-    FighterState.DODGE_BACKWARD, FighterState.HYPERSKILL_2, FighterState.KNOCKUP,
+    FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.HYPERSKILL_2, FighterState.KNOCKUP,
 ];
 
 export const SpecialMoveDirection = {
