@@ -575,207 +575,223 @@ export class Malupiton extends Fighter {
         this.changeState(FighterState.IDLE);
     }
 
-     handleHyperSkill1Init(_, strength){
-      if(Math.floor(gameState.fighters[this.playerId].skillNumber) > 2 ) {
-            if(gameState.fighters[this.playerId].skillNumber > 0){
-             //this.resetVelocities();
-              if(gameState.fighters[this.playerId].skillNumber === 3){
-                gameState.fighters[this.playerId].resetSkillBar = true;
-            }
-            this.voiceHyperSkill1.play();
-            this.fireball = {fired: false, strength};
-            this.soundSuperLaunch.play();
-            gameState.fighters[this.playerId].superAcivated = true;
-            gameState.pauseTimer = 1;
-            gameState.pauseFrameMove = -100;
-            gameState.pause = true;
-            gameState.hyperSkill = true;
-            gameState.fighters[this.playerId].hyperSprite += 1;
-            
-            console.log('Hyper Skill activated!');
-            
-        }
-            }
-    }
-    //HyperSkill2 - Berserker Barage
-handleHyperSkill2Init(_, strength){
-   
-        if(Math.floor(gameState.fighters[this.playerId].skillNumber) > 2 ) {
-            if(gameState.fighters[this.playerId].skillNumber > 0){
-             //this.resetVelocities();
-              if(gameState.fighters[this.playerId].skillNumber === 3){
-                gameState.fighters[this.playerId].resetSkillBar = true;
-            }
-            this.voiceSpecial1.play();
-           
-            this.soundSuperLaunch.play();
-            gameState.fighters[this.playerId].superAcivated = true;
-            gameState.pauseTimer = 1;
-            gameState.pauseFrameMove = -100;
-            gameState.pause = true;
-            gameState.hyperSkill = true;
-           
-            
-             gameState.fighters[this.playerId].hyperSprite += 1;
-            
-           
-            
-        }
-            }
-    }
-
-
-     handleHyperSkill1State(){
-        const frameActivation = 130;
-        if(Math.floor(gameState.fighters[this.playerId].skillNumber) > 2 ) {
-        // if(gameState.fighters[this.playerId].skillNumber < 1)this.changeState(FighterState.IDLE);
-       console.log('Hyper1');
-        this.gravity = 0;
-         this.position.y -= 0.8;
-         this.changeState(FighterState.HYPERSKILL_1);
-        if (this.isHyperSkillEnabled(frameActivation)) {
-            gameState.flash = true;
-            console.log('Hyper Attack Activated!');
-        }
-        if (!this.isAnimationCompleted()) return;
-            gameState.flash = false;
-            gameState.fighters[this.playerId].skillNumber -= 3 ;
-            gameState.fighters[this.playerId].superAcivated = false;
-             this.gravity = 1000;
-       
-    }
-     this.changeState(FighterState.JUMP_BACKWARD);
-
-
-    }
- //State Berserker Barage
-    handleHyperSkill2State() {
-         const frameActivation = 140;
-         const frameDeactivation = 60;
-        if(Math.floor(gameState.fighters[this.playerId].skillNumber) > 2 ) {
-        // if(gameState.fighters[this.playerId].skillNumber < 1)this.changeState(FighterState.IDLE);
-        if (!this.fireball.fired && this.animationFrame === 3){
-            this.fireball.fired = true;
-             
-            this.changeState(FighterState.HYPERSKILL_2);
-           
-        }
-         if (this.isHyperSkillEnabled(frameActivation)) {
-            this.velocity.x  = +500;
-            console.log('Hyper Attack Activated!');
-            } else if (this.isHyperSkillEnabled(frameDeactivation)){
-                this.velocity.x = 0;
-                console.log('Hyper Attack Deactivated!');
-            }
-
-        
-        
-        if (!this.isAnimationCompleted()) return;
-            
-            gameState.fighters[this.playerId].skillNumber -= 3 ;
-            gameState.fighters[this.playerId].superAcivated = false;
-    }
-         this.changeState(FighterState.IDLE);
     
-}
+  // Hyper Skill 1 - Ultimate Blast
+  handleHyperSkill1Init(_, strength) {
+    const fighter = gameState.fighters[this.playerId];
 
-    
+    // ✅ Ensure enough skill points & prevent double use
+    if (fighter.skillNumber < 3 || fighter.skillUsedThisFrame) return;
 
-    handleSpecial1Init(_, strength){
-            if(gameState.fighters[this.playerId].skillNumber > 0){
-             //this.resetVelocities();
-              if(gameState.fighters[this.playerId].skillNumber === 3){
-                gameState.fighters[this.playerId].resetSkillBar = true;
-            }
-            this.voiceSpecial3.play();
-            this.fireball = {fired: false, strength};
-            this.soundSuperLaunch.play();
-            gameState.fighters[this.playerId].superAcivated = true;
-            gameState.pauseTimer = 1;
-            gameState.pauseFrameMove = -100;
-            gameState.pause = true;
-            this.velocity.x  = -300;
-            this.velocity.y = -100;
-            gameState.fighters[this.playerId].sprite += 1;
-            
-            }
-        
-    }
+    fighter.skillUsedThisFrame = true; // guard
+    fighter.skillNumber -= 3; // 🛡️ immediately spend skill
+    fighter.resetSkillBar = true;
 
-    spawnFireball(time) {
-  if (!this.position || !this.entityList) {
-    console.warn("⚠️ Malupiton position or entityList undefined");
-    return;
+    this.voiceHyperSkill1.play();
+    this.fireball = { fired: false, strength };
+    this.soundSuperLaunch.play();
+
+    fighter.superAcivated = true;
+    gameState.pauseTimer = 1;
+    gameState.pauseFrameMove = -100;
+    gameState.pause = true;
+    gameState.hyperSkill = true;
+    fighter.hyperSprite += 1;
+
+    console.log('🔥 Hyper Skill 1 initiated — skill points spent immediately');
   }
 
-  if (!this.fireball.fired && this.canFireball(time)) {
-    const strength = Control.HEAVY_PUNCH;
-    this.entityList.add(Fireball, [this, strength], time, this.entityList);
-    this.fireball.fired = true;
-    this.fireball.lastFired = time.now || performance.now();
-    console.log("🔥 Fireball launched by AI");
+  handleHyperSkill1State() {
+    const frameActivation = 130;
+    const fighter = gameState.fighters[this.playerId];
+
+    if (fighter.skillNumber >= 0) {
+      this.gravity = 0;
+      this.position.y -= 0.8;
+      this.changeState(FighterState.HYPERSKILL_1);
+
+      if (this.isHyperSkillEnabled(frameActivation)) {
+        gameState.flash = true;
+        console.log('⚡ Hyper Attack Activated!');
+      }
+
+      if (!this.isAnimationCompleted()) return;
+
+      // ✅ Reset guard and state after animation
+      gameState.flash = false;
+      fighter.superAcivated = false;
+      fighter.skillUsedThisFrame = false;
+      this.gravity = 1000;
+    }
+
+    this.changeState(FighterState.JUMP_BACKWARD);
   }
-}
 
+  // ==============================
+  // Hyper Skill 2 - Berserker Barrage
+  // ==============================
+  handleHyperSkill2Init(_, strength) {
+    const fighter = gameState.fighters[this.playerId];
 
-    handleSpecial1State(time) {
-        if(Math.floor(gameState.fighters[this.playerId].skillNumber) > 0 ) {
-        // if(gameState.fighters[this.playerId].skillNumber < 1)this.changeState(FighterState.IDLE);
-        if (!this.fireball.fired && this.animationFrame === 3){
-             
-            this.entityList.add.call(this.entityList, Fireball, time, this, this.fireball.strength);
-            this.fireball.fired = true;
-            console.log('Fireball launched');
-            
-        }
-    
-        if (!this.isAnimationCompleted()) return;
-         gameState.fighters[this.playerId].skillNumber -=1 ;
-              gameState.fighters[this.playerId].superAcivated = false;
+    if (fighter.skillNumber < 3 || fighter.skillUsedThisFrame) return;
+
+    fighter.skillUsedThisFrame = true;
+    fighter.skillNumber -= 3;
+    fighter.resetSkillBar = true;
+
+    this.voiceSpecial1.play();
+    this.soundSuperLaunch.play();
+
+    fighter.superAcivated = true;
+    gameState.pauseTimer = 1;
+    gameState.pauseFrameMove = -100;
+    gameState.pause = true;
+    gameState.hyperSkill = true;
+    fighter.hyperSprite += 1;
+
+    console.log('🔥 Hyper Skill 2 initiated — skill points spent immediately');
+  }
+
+  handleHyperSkill2State() {
+    const frameActivation = 140;
+    const frameDeactivation = 60;
+    const fighter = gameState.fighters[this.playerId];
+
+    if (fighter.skillNumber >= 0) {
+      if (!this.fireball.fired && this.animationFrame === 3) {
+        this.fireball.fired = true;
+        this.changeState(FighterState.HYPERSKILL_2);
+      }
+
+      if (this.isHyperSkillEnabled(frameActivation)) {
+        this.velocity.x = +500;
+        console.log('⚡ Berserker Barrage Activated!');
+      } else if (this.isHyperSkillEnabled(frameDeactivation)) {
+        this.velocity.x = 0;
+        console.log('🛑 Berserker Barrage Deactivated!');
+      }
+
+      if (!this.isAnimationCompleted()) return;
+
+      // ✅ Reset guard and flags
+      fighter.superAcivated = false;
+      fighter.skillUsedThisFrame = false;
     }
-         this.changeState(FighterState.IDLE);
-    
-}
 
-//Special 2 - Roll attack
-handleSpecial2Init(_, strength){
-        if(Math.floor(gameState.fighters[this.playerId].skillNumber) > 0 ) {
-            if(gameState.fighters[this.playerId].skillNumber > 0){
-             //this.resetVelocities();
-              if(gameState.fighters[this.playerId].skillNumber === 3){
-                gameState.fighters[this.playerId].resetSkillBar = true;
-            }
-            this.voiceSpecial2.play();
-            this.fireball = {fired: false, strength};
-            this.soundSuperLaunch.play();
-            gameState.fighters[this.playerId].superAcivated = true;
-            gameState.pauseTimer = 1;
-            gameState.pauseFrameMove = -100;
-            gameState.pause = true;
-           // gameState.hyperSkill = true;
-            this.velocity.x  = +300;
-            this.velocity.y = -100;
-            gameState.fighters[this.playerId].sprite += 1;
-            
-        }
-            }
+    this.changeState(FighterState.IDLE);
+  }
+
+  // ==============================
+  // Special Skill 1 - Fireball
+  // ==============================
+  handleSpecial1Init(_, strength) {
+    const fighter = gameState.fighters[this.playerId];
+
+    if (fighter.skillNumber < 1 || fighter.skillUsedThisFrame) return;
+
+    fighter.skillUsedThisFrame = true;
+    fighter.skillNumber -= 1; // 🛡️ spend skill immediately
+
+    if (fighter.skillNumber === 2) fighter.resetSkillBar = true;
+
+    this.voiceSpecial3.play();
+    this.fireball = { fired: false, strength };
+    this.soundSuperLaunch.play();
+
+    fighter.superAcivated = true;
+    gameState.pauseTimer = 1;
+    gameState.pauseFrameMove = -100;
+    gameState.pause = true;
+
+    this.velocity.x = -300;
+    this.velocity.y = -100;
+    fighter.sprite += 1;
+
+    console.log('🔥 Special 1 (Fireball) started — skill spent instantly');
+  }
+
+  handleSpecial1State(time) {
+    const fighter = gameState.fighters[this.playerId];
+
+    if (fighter.skillNumber >= 0) {
+      if (!this.fireball.fired && this.animationFrame === 3) {
+        this.entityList.add.call(this.entityList, Fireball, time, this, this.fireball.strength);
+        this.fireball.fired = true;
+        console.log('🔥 Fireball launched!');
+      }
+
+      if (!this.isAnimationCompleted()) return;
+
+      fighter.superAcivated = false;
+      fighter.skillUsedThisFrame = false; // reset guard
     }
 
-    handleSpecial2State(time) {
-        if(Math.floor(gameState.fighters[this.playerId].skillNumber) > 0 ) {
-        // if(gameState.fighters[this.playerId].skillNumber < 1)this.changeState(FighterState.IDLE);
-        if (!this.fireball.fired && this.animationFrame === 3){
-            this.fireball.fired = true;
-            this.changeState(FighterState.SPECIAL_2);
-            console.log('Rolling');
-        }
-        
-        if (!this.isAnimationCompleted()) return;
-    
-            gameState.fighters[this.playerId].skillNumber -= 1 ;
-            gameState.fighters[this.playerId].superAcivated = false;
+    this.changeState(FighterState.IDLE);
+  }
+
+  // ==============================
+  // Special Skill 2 - Roll Attack
+  // ==============================
+  handleSpecial2Init(_, strength) {
+    const fighter = gameState.fighters[this.playerId];
+
+    if (fighter.skillNumber < 1 || fighter.skillUsedThisFrame) return;
+
+    fighter.skillUsedThisFrame = true;
+    fighter.skillNumber -= 1;
+
+    if (fighter.skillNumber === 2) fighter.resetSkillBar = true;
+
+    this.voiceSpecial2.play();
+    this.fireball = { fired: false, strength };
+    this.soundSuperLaunch.play();
+
+    fighter.superAcivated = true;
+    gameState.pauseTimer = 1;
+    gameState.pauseFrameMove = -100;
+    gameState.pause = true;
+
+    this.velocity.x = +300;
+    this.velocity.y = -100;
+    fighter.sprite += 1;
+
+    console.log('🔥 Special 2 (Roll Attack) started — skill spent instantly');
+  }
+
+  handleSpecial2State(time) {
+    const fighter = gameState.fighters[this.playerId];
+
+    if (fighter.skillNumber >= 0) {
+      if (!this.fireball.fired && this.animationFrame === 3) {
+        this.fireball.fired = true;
+        this.changeState(FighterState.SPECIAL_2);
+        console.log('⚡ Rolling Attack in motion');
+      }
+
+      if (!this.isAnimationCompleted()) return;
+
+      fighter.superAcivated = false;
+      fighter.skillUsedThisFrame = false;
     }
-         this.changeState(FighterState.HEAVY_PUNCH);
-    
-}
+
+    this.changeState(FighterState.HEAVY_PUNCH);
+  }
+
+  // ==============================
+  // Fireball Spawn (unchanged)
+  // ==============================
+  spawnFireball(time) {
+    if (!this.position || !this.entityList) {
+      console.warn("⚠️ Missing position or entityList in spawnFireball");
+      return;
+    }
+
+    if (!this.fireball.fired && this.canFireball(time)) {
+      const strength = Control.HEAVY_PUNCH;
+      this.entityList.add(Fireball, [this, strength], time, this.entityList);
+      this.fireball.fired = true;
+      this.fireball.lastFired = time.now || performance.now();
+      console.log("🔥 Fireball launched by AI");
+    }
+  }
 }
