@@ -1,12 +1,13 @@
 import { FRAME_TIME } from "../../constants/game.js";
 import { playSound } from "../../soundHandler.js";
+import { gameState } from "../../state/gameState.js";
 import { drawFrame } from "../../utils/context.js";
 import { BackgroundAnimation } from "./shared/BackgroundAnimation.js";
 
-export class cubaoStage {
+export class pasayStage {
     constructor(){
-        this.image = document.querySelector('img[alt="payatas-stage"]');
-       
+        this.image = document.querySelector('img[alt="moa-stage"]');
+       gameState.stageMusic = 'audio#stage-pasay';
        console.log('Cubao Stage created');
     
         this.frames = new Map([
@@ -74,7 +75,7 @@ export class cubaoStage {
     }
 
     drawForeground(context, camera){
-        this.drawFrame(context, 'trash', Math.floor(650 - (camera.position.x/ 1.61445)), 160 -camera.position.y);
-this.traffic.draw(context,  Math.floor(220 - (camera.position.x/ 1.61445)), 10 -camera.position.y);
+        //this.drawFrame(context, 'trash', Math.floor(650 - (camera.position.x/ 1.61445)), 160 -camera.position.y);
+//this.traffic.draw(context,  Math.floor(220 - (camera.position.x/ 1.61445)), 10 -camera.position.y);
     }
 }

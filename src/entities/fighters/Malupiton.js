@@ -44,10 +44,10 @@ export class Malupiton extends Fighter {
             ['forwards-14', [[[140, 253,52,88],[26,90]], PushBox.IDLE, HurtBox.IDLE]],
 
             //Dodge
-             ['dodge-1', [[[730, 25, 55, 92],[27,90]], PushBox.IDLE, HurtBox.IDLE]],
-             ['dodge-2', [[[790, 23, 52, 93],[26,91]], PushBox.IDLE, HurtBox.IDLE]],
-             ['dodge-3', [[[847, 23, 55, 92],[27,90]], PushBox.IDLE, HurtBox.IDLE]],
-             ['dodge-4', [[[911, 23, 52, 92],[26,90]], PushBox.IDLE, HurtBox.IDLE]],
+             ['dodge-1', [[[730, 25, 55, 92],[27,90]], PushBox.NULL, HurtBox.IDLE]],
+             ['dodge-2', [[[790, 23, 52, 93],[26,91]], PushBox.NULL, HurtBox.IDLE]],
+             ['dodge-3', [[[847, 23, 55, 92],[27,90]], PushBox.NULL, HurtBox.IDLE]],
+             ['dodge-4', [[[911, 23, 52, 92],[26,90]], PushBox.NULL, HurtBox.IDLE]],
            
             
             //Jump Up
@@ -154,30 +154,30 @@ export class Malupiton extends Fighter {
             ['special-3', [[[230, 140, 91, 49], [1,77]], PushBox.BEND, [[3, -76, 30, 18],[3, -69, 84, 30], [-2, -52, 44, 58]]]],
 
             //HyperSkill1
-            ['hyperskill1-1', [[[533, 419, 58, 114], [29,112]], PushBox.IDLE, HurtBox.IDLE,]],
-            ['hyperskill1-2', [[[592, 438, 53, 90], [26,88]], PushBox.IDLE, HurtBox.IDLE]],
-            ['hyperskill1-3', [[[650, 415, 52, 116], [26,114]], PushBox.IDLE, HurtBox.IDLE]],
-            ['hyperskill1-4', [[[707, 381, 130, 150], [65,148]], PushBox.IDLE, HurtBox.IDLE, HitBox.HYPERSKILL_1]],
-            ['hyperskill1-5', [[[845, 386, 151, 146], [75,144]], PushBox.IDLE, HurtBox.IDLE, HitBox.HYPERSKILL_1]],
-            ['hyperskill1-6', [[[445, 535, 145, 138], [72,136]], PushBox.IDLE, HurtBox.IDLE, HitBox.HYPERSKILL_1]],
-            ['hyperskill1-7', [[[597, 535, 131, 136], [65,134]], PushBox.IDLE, HurtBox.IDLE, HitBox.HYPERSKILL_1]],
-            ['hyperskill1-8', [[[745, 534, 119, 160], [64,158]], PushBox.IDLE, HurtBox.IDLE,]],
-            ['hyperskill1-9', [[[887, 554, 95, 140], [47,138]], PushBox.IDLE, HurtBox.IDLE,]],
+            ['hyperskill1-1', [[[533, 419, 58, 114], [29,112]], PushBox.IDLE, HurtBox.NULL,]],
+            ['hyperskill1-2', [[[592, 438, 53, 90], [26,88]], PushBox.IDLE, HurtBox.NULL]],
+            ['hyperskill1-3', [[[650, 415, 52, 116], [26,114]], PushBox.IDLE, HurtBox.NULL]],
+            ['hyperskill1-4', [[[707, 381, 130, 150], [65,148]], PushBox.IDLE, HurtBox.NULL, HitBox.HYPERSKILL_1]],
+            ['hyperskill1-5', [[[845, 386, 151, 146], [75,144]], PushBox.IDLE, HurtBox.NULL, HitBox.HYPERSKILL_1]],
+            ['hyperskill1-6', [[[445, 535, 145, 138], [72,136]], PushBox.IDLE, HurtBox.NULL, HitBox.HYPERSKILL_1]],
+            ['hyperskill1-7', [[[597, 535, 131, 136], [65,134]], PushBox.IDLE, HurtBox.NULL, HitBox.HYPERSKILL_1]],
+            ['hyperskill1-8', [[[745, 534, 119, 160], [64,158]], PushBox.IDLE, HurtBox.NULL,]],
+            ['hyperskill1-9', [[[887, 554, 95, 140], [47,138]], PushBox.IDLE, HurtBox.NULL,]],
 
             //HyperSkill2
-            ['hyperskill2--4', [[[335, 720, 55, 92], [27,90]], PushBox.IDLE, HurtBox.IDLE,]],
-            ['hyperskill2--3', [[[271, 720, 54, 92], [27,90]], PushBox.IDLE, HurtBox.IDLE,]],
-            ['hyperskill2--2', [[[376, 613, 41, 92], [20,90]], PushBox.IDLE, HurtBox.IDLE,]],
-            ['hyperskill2--1', [[[329, 608, 33, 102], [16,100]], PushBox.IDLE, HurtBox.IDLE,]],
-            ['hyperskill2-0', [[[268, 608, 47, 102], [23,100]], PushBox.IDLE, HurtBox.IDLE,]],
-            ['hyperskill2-1', [[[70, 482, 43, 100], [22,98]], PushBox.IDLE, HurtBox.IDLE,]],
-            ['hyperskill2-2', [[[18, 506, 39, 72], [19,70]], PushBox.CROUCH, HurtBox.CROUCH]],
-            ['hyperskill2-3', [[[124, 463, 66, 127], [33,125]], PushBox.IDLE, HurtBox.IDLE, HitBox.SLASH]],
-            ['hyperskill2-4', [[[199, 501, 59, 90], [29,88]], PushBox.IDLE, HurtBox.IDLE, HitBox.SLASH]],
-            ['hyperskill2-5', [[[266, 498, 101, 103], [50,101]], PushBox.IDLE, HurtBox.IDLE, HitBox.SLASH]],
-            ['hyperskill2-6', [[[8, 606, 59, 70], [30,68]], PushBox.IDLE, HurtBox.IDLE, HitBox.SLASH]],
-            ['hyperskill2-7', [[[91, 604, 67, 71], [33,69]], PushBox.IDLE, HurtBox.IDLE, HitBox.SLASH]],
-            ['hyperskill2-8', [[[181, 605, 58, 111], [29,109]], PushBox.IDLE, HurtBox.IDLE, PushBox.IDLE, HurtBox.IDLE, HitBox.SLASH]],
+            ['hyperskill2--4', [[[335, 720, 55, 92], [27,90]], PushBox.IDLE, HurtBox.NULL,]],
+            ['hyperskill2--3', [[[271, 720, 54, 92], [27,90]], PushBox.IDLE, HurtBox.NULL,]],
+            ['hyperskill2--2', [[[376, 613, 41, 92], [20,90]], PushBox.IDLE, HurtBox.NULL,]],
+            ['hyperskill2--1', [[[329, 608, 33, 102], [16,100]], PushBox.IDLE, HurtBox.NULL,]],
+            ['hyperskill2-0', [[[268, 608, 47, 102], [23,100]], PushBox.IDLE, HurtBox.NULL,]],
+            ['hyperskill2-1', [[[70, 482, 43, 100], [22,98]], PushBox.IDLE, HurtBox.NULL,]],
+            ['hyperskill2-2', [[[18, 506, 39, 72], [19,70]], PushBox.CROUCH, HurtBox.NULL]],
+            ['hyperskill2-3', [[[124, 463, 66, 127], [33,125]], PushBox.IDLE, HurtBox.NULL, HitBox.SLASH]],
+            ['hyperskill2-4', [[[199, 501, 59, 90], [29,88]], PushBox.IDLE, HurtBox.NULL, HitBox.SLASH]],
+            ['hyperskill2-5', [[[266, 498, 101, 103], [50,101]], PushBox.IDLE, HurtBox.NULL, HitBox.SLASH]],
+            ['hyperskill2-6', [[[8, 606, 59, 70], [30,68]], PushBox.IDLE, HurtBox.NULL, HitBox.SLASH]],
+            ['hyperskill2-7', [[[91, 604, 67, 71], [33,69]], PushBox.IDLE, HurtBox.NULL, HitBox.SLASH]],
+            ['hyperskill2-8', [[[181, 605, 58, 111], [29,109]], PushBox.IDLE, HurtBox.NULL, PushBox.IDLE, HurtBox.IDLE, HitBox.SLASH]],
 
             //Death State
             ['death-1', [[[9, 838, 53, 91], [27,89]], PushBox.IDLE, HurtBox.IDLE]],
@@ -415,14 +415,14 @@ export class Malupiton extends Fighter {
             {
                 state: FighterState.DODGE_FORWARD,
                 sequence: 
-                [SpecialMoveDirection.FORWARD, SpecialMoveButton.BC,
+                [SpecialMoveDirection.FORWARD, SpecialMoveDirection.FORWARD, SpecialMoveButton.BC,
                 ],
                 cursor: 0,
             },
             {
                 state: FighterState.DODGE_BACKWARD,
                 sequence: 
-                [SpecialMoveDirection.BACKWARD, SpecialMoveButton.BC,
+                [SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveButton.BC,
                 ],
                 cursor: 0,
             },
@@ -546,7 +546,7 @@ export class Malupiton extends Fighter {
     }
 
     handleDodgeForwardInit(distance, playerId){
-        distance = 80;
+        distance = 100;
         this.position.x -= distance;
 
        // gameState.fighters[this.playerId].sprite += 1;
@@ -558,7 +558,7 @@ export class Malupiton extends Fighter {
     }
 
      handleDodgeBackwardInit(distance, playerId){
-        distance = 80;
+        distance = 100;
         this.position.x += distance;
 
       //  gameState.fighters[this.playerId].sprite += 1;

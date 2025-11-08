@@ -6,9 +6,10 @@
     return context;
     }
  
- export function drawFrame(context, image, dimensions, x, y, direction = 1){
+ export function drawFrame(context, image, dimensions, x, y, direction = 1, alpha = 1){
         const [sourceX, sourceY, sourceWidth, sourceHeight] = dimensions;
 
+        context.globalAlpha = alpha;
         context.scale(direction,1);
         context.drawImage(
             image,
@@ -16,4 +17,5 @@
             x*direction, y, sourceWidth, sourceHeight,
         );
         context.setTransform(1,0,0,1,0,0);
+        context.globalAlpha = 1;
     }

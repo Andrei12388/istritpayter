@@ -1,80 +1,96 @@
 import { FRAME_TIME } from "../../constants/game.js";
 import { playSound } from "../../soundHandler.js";
+import { gameState } from "../../state/gameState.js";
 import { drawFrame } from "../../utils/context.js";
 import { BackgroundAnimation } from "./shared/BackgroundAnimation.js";
 
 export class boholStage {
     constructor(){
-        this.image = document.querySelector('img[alt="payatas-stage"]');
-       
+        this.image = document.querySelector('img[alt="bohol-stage"]');
+       gameState.stageMusic = 'audio#stage-bohol';
        console.log('Bohol Stage created');
     
         this.frames = new Map([
-            ['stage-background', [58, 221, 759, 332]],
-            ['trash', [787, 572, 71, 115]],
-            ['traffic-light', [858, 417, 55, 153]],
-            ['boat', [787, 572, 71, 115]],
+            ['stage-background', [58, 221, 769, 335]],
+            ['grass', [59, 578, 768, 234]],
+            ['carabaoShadow', [26, 928, 127, 10]],
+            ['carabaoPoo', [176, 915, 44, 22]],
         ]);
 
-
-        this.traffic = new BackgroundAnimation(
+        this.carabaoPosition = {x: -30, y: 90};
+        this.carabaoDirection = true;
+        this.carabaoFlip = 1;
+        this.carabao = new BackgroundAnimation(
             this.image,
             [
-                ['traffic-1', [829, 274, 55, 292]],
-                ['traffic-2', [885, 278, 54, 292]],
-                ['traffic-3', [945, 278, 55, 292]],
+                ['carabao-1', [13, 827, 136, 76]],
+                ['carabao-2', [172, 827, 136, 76]],
+                ['carabao-3', [321, 827, 136, 76]],
+                ['carabao-4', [476, 827, 136, 76]],
+                ['carabao-5', [625, 827, 136, 76]],
+                ['carabao-6', [774, 827, 136, 76]],
             ],
-            [['traffic-1', 666], ['traffic-2', 766],['traffic-3', 1064]],
+            [['carabao-1', 200], ['carabao-2', 200], ['carabao-3', 200], ['carabao-4', 200], ['carabao-5', 200], ['carabao-6', 200]],
         );
+         this.pooSmoke = new BackgroundAnimation(
+            this.image,
+            [
+                ['pooSmoke-1', [68, 988, 40, 81]],
+                ['pooSmoke-2', [122, 988, 40, 81]],
+                ['pooSmoke-3', [178, 980, 40, 81]],
+                ['pooSmoke-4', [244, 986, 40, 81]],
+                ['pooSmoke-5', [308, 988, 40, 81]],
+                ['pooSmoke-6', [385, 989, 40, 81]],
+                ['pooSmoke-7', [452, 987, 40, 81]],
+                ['pooSmoke-8', [518, 987, 40, 81]],
+               
+            ],
+            [['pooSmoke-1', 200], ['pooSmoke-2', 200], ['pooSmoke-3', 200], ['pooSmoke-4', 200], ['pooSmoke-5', 200], ['pooSmoke-6', 200],['pooSmoke-7', 200],['pooSmoke-8', 200]],
+        );
+    }
 
-        this.boat = {
-            animationFrame: 0,
-            animationTimer: 0,
-            animationDelay: 22,
-            animation: [0, -1, -2, -3, -4, -3, -2, -1],
+    updateCarabao(time){
+        if(this.carabaoDirection){
+            this.carabaoPosition.x += 1;
+            this.carabaoFlip = 1;
+        } else {
+            this.carabaoPosition.x -= 1
+            this.carabaoFlip = -1;
         };
-    }
-
-
-    updateBoat(time){
-        if (time.previous > this.boat.animationTimer + this.boat.animationDelay * FRAME_TIME) {
-            this.boat.animationTimer = time.previous;
-            this.boat.animationFrame += 1;
-            this.boat.animationDelay = 22 + (Math.random() * 16 - 8);
-        }
-        if (this.boat.animationFrame >= this.boat.animation.length) {
-            this.boat.animationFrame = 0;
-        }
-    }
-    update(time){
-        this.updateBoat(time);
-        this.traffic.update(time);
-    }
-
-     drawFrame(context, frameKey, x, y){
-       drawFrame(context, this.image, this.frames.get(frameKey), x, y);       
-    }
-
-    drawBoat(context, camera){
-        this.boat.position = {
-            x: Math.floor(150 - (camera.position.x / 1.613445)),
-            y: Math.floor(-camera.position.y + this.boat.animation[this.boat.animationFrame]),
-        };
-
-        //this.drawFrame(context, 'boat', this.boat.position.x, this.boat.position.y);
         
+        if (this.carabaoPosition.x > 1200){
+            this.carabaoDirection = !this.carabaoDirection;
+        }
+        if (this.carabaoPosition.x < -40){
+            this.carabaoDirection = !this.carabaoDirection;
+        }
     }
+  
+    update(time){
+        if(gameState.pause) return;
+        this.carabao.update(time);
+        this.pooSmoke.update(time);
+        this.updateCarabao(time);
+    }
+
+     drawFrame(context, frameKey, x, y, direction, alpha){
+       drawFrame(context, this.image, this.frames.get(frameKey), x, y, direction, alpha);       
+    }
+
+ 
 
     drawBackground(context, camera){
         this.drawFrame(context, 'stage-background', Math.floor(-20 - (camera.position.x/ 2.157303)), -70 -camera.position.y);
-        this.drawBoat(context, camera);
+         this.drawFrame(context, 'carabaoShadow', Math.floor(this.carabaoPosition.x - (camera.position.x/ 2.157303)), 180 -camera.position.y, this.carabaoFlip, 0.5);
         
-        
-        //this.drawFrame(context, 'traffic-light', Math.floor(350 - (camera.position.x)), 100 -camera.position.y);
+         this.carabao.draw(context,  Math.floor(this.carabaoPosition.x - (camera.position.x/ 2.157303)), 110 -camera.position.y, this.carabaoFlip);
+          this.drawFrame(context, 'carabaoPoo', Math.floor(400 - (camera.position.x/ 2.157303)), 180 -camera.position.y, 1, 1);
+          this.pooSmoke.draw(context,  Math.floor(403 - (camera.position.x/ 2.157303)), 99 -camera.position.y, 1);
+         
     }
 
     drawForeground(context, camera){
-        this.drawFrame(context, 'trash', Math.floor(650 - (camera.position.x/ 1.61445)), 160 -camera.position.y);
-this.traffic.draw(context,  Math.floor(220 - (camera.position.x/ 1.61445)), 10 -camera.position.y);
+        this.drawFrame(context, 'grass', Math.floor(15 - (camera.position.x/ 1.61445)), 130 -camera.position.y);
+   
     }
 }

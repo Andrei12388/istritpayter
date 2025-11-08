@@ -12,7 +12,7 @@ import { drawFrame } from "../../utils/context.js";
 export class StatusBar {
     constructor(game){
         this.game = game; 
-        this.music = document.querySelector('audio#theme-guile');
+        this.music = document.querySelector(gameState.stageMusic);
         this.soundFight = document.querySelector('audio#sound-fight');
         this.soundRound1 = document.querySelector('audio#sound-round1');
         this.soundRound2 = document.querySelector('audio#sound-round2');
@@ -322,14 +322,17 @@ export class StatusBar {
             if(this.fightOver) this.fightOverTimer += 1;
             this.timeTimer = time.previous;
         }
-
+        if(time.previous > this.timeFlashTimer + TIME_FLASH_DELAY){
+            this.blinkMax = !this.blinkMax;
+             this.timeFlashTimer = time.previous;
+        }
         if(
             this.time < 10 && this.time > -1 
             && time.previous > this.timeFlashTimer + TIME_FLASH_DELAY
         ) {
             
             this.useFlashFrames = !this.useFlashFrames;
-             this.blinkMax = !this.blinkMax;
+             
             this.timeFlashTimer = time.previous;
         }
 

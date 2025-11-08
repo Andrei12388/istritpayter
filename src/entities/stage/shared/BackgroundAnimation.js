@@ -21,14 +21,15 @@ export class BackgroundAnimation {
         }
     }
 
-    draw(context, x, y) {
+    draw(context, x, y, direction = 1) {
         const [frameKey] = this.animation[this.animationFrame];
         const [frameX, frameY, frameWidth, frameHeight] = this.frames.get(frameKey);
-
+        context.scale(direction,1);
         context.drawImage(
             this.image,
             frameX, frameY, frameWidth, frameHeight,
-            x, y, frameWidth, frameHeight,
+            x*direction, y, frameWidth, frameHeight,
         );
+        context.setTransform(1,0,0,1,0,0);
     }
 }

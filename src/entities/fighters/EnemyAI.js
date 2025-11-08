@@ -34,7 +34,7 @@ const DIFFICULTY_PRESETS = {
   },
   expert: {
     blockChance: 0.9,
-    dodgeChance: 0.5,
+    dodgeChance: 0.05,
     attackCooldown: 300,
     reactionDelay: [20, 70],
     engageDistance: 100,
@@ -176,7 +176,8 @@ export class EnemyAI {
       s.includes("DIE") ||
       s.includes("HURT") ||
       // If special animation still running don't interrupt
-      (s.includes("SPECIAL") && !this.fighter.isAnimationCompleted())
+      (s.includes("SPECIAL") && !this.fighter.isAnimationCompleted()) ||
+      (s.includes("HYPERSKILL") && !this.fighter.isAnimationCompleted())
     );
   }
 
@@ -192,20 +193,14 @@ export class EnemyAI {
     if (this.fighter.currentState.includes("HURT") || this.fighter.currentState.includes("DEAD")) return;
 
     // Reactive: block if opponent attacking nearby
-    if (this.opponentIsAttacking() && distance < Math.max(this.engageDistance, 90) && Math.random() < this.blockChance) {
+    if (this.opponentIsAttacking() && distance < Math.max(this.engageDistance, 900) && Math.random() < this.blockChance) {
       this.fighter.changeState(FighterState.BLOCK, time);
       this.isBlocking = true;
       this.blockUntil = now + 400;
       return;
     }
 
-    // Reactive: dodge if projectile or attack and in dodge distance
-    // (simple heuristic: if opponent is performing a special/hyperskill, try dodge)
-    if ((this.opponent.currentState.includes("SPECIAL") || this.opponent.currentState.includes("HYPERSKILL"))
-        && distance < this.dodgeDistance && Math.random() < this.dodgeChance) {
-      this.performDodge(dx);
-      return;
-    }
+   
 
     // Attack logic
     if (this.attackCooldown <= 0 && distance < this.engageDistance) {
@@ -220,13 +215,34 @@ export class EnemyAI {
       }
     }
 
+     // Reactive: dodge if projectile or attack and in dodge distance
+    // (simple heuristic: if opponent is performing a special/hyperskill, try dodge)
+    if (distance < this.dodgeDistance && Math.random() < this.dodgeChance) {
+      this.performDodge(dx);
+      return;
+    }
+
     // Move toward opponent
     this.chaseOrIdle(dx);
+    
   }
 
   chaseOrIdle(dx) {
     if (Math.random() < 0.05) return;
     this.press(dx > 0 ? Control.RIGHT : Control.LEFT);
+  }
+
+  jumpOrIdle(dx) {
+    if (Math.random() < 0.05) return;
+
+    if (this.attackCooldown <= 0) {
+      if (Math.random() < 0.7) {
+         this.press(dx > 0 ? Control.UP : Control.DOWN);
+        return;
+      }
+    }
+
+   
   }
 
   opponentIsAttacking() {
@@ -342,6 +358,7 @@ export class EnemyAI {
   }
 
   performDodge(dx) {
+    this.jumpOrIdle(dx);
     const forward = Math.random() < 0.5;
     this.fighter.changeState(forward ? FighterState.DODGE_FORWARD : FighterState.DODGE_BACKWARD);
   }

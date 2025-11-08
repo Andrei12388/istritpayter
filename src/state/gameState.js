@@ -22,9 +22,10 @@ export const gameState = {
     pauseTimer: 0,
     credits: 0,
     pauseFrameMove: -30,
-    stage: 'litex',
+    stage: 'bohol',
     flash: false,
     characterSelectMode: true,
     hyperSkill: false,
     kapeCom: false,
+    stageMusic: 'audio#stage-payatas',
 };

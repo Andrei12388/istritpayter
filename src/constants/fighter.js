@@ -79,8 +79,8 @@ export const FighterAttackBaseData = {
     skill: 3,
     knockup: true,
     thrust: {
-        x: -500,
-        y: -400,
+        x: -1000,
+        y: -200,
     },
     damage: 7,
     slide: {
@@ -168,6 +168,7 @@ export const PushBox = {
     JUMP: [-16, -91, 32, 66],
     BEND: [-16, -58, 32, 58],
     CROUCH: [-16, -50, 32, 50],
+    NULL: [0,0,0,0],
 };
 
 export const HurtBox = {

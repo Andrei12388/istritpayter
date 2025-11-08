@@ -1,12 +1,13 @@
 import { FRAME_TIME } from "../../constants/game.js";
 import { playSound } from "../../soundHandler.js";
+import { gameState } from "../../state/gameState.js";
 import { drawFrame } from "../../utils/context.js";
 import { BackgroundAnimation } from "./shared/BackgroundAnimation.js";
 
 export class payatasStage {
     constructor(){
         this.image = document.querySelector('img[alt="payatas-stage"]');
-       
+       gameState.stageMusic = 'audio#stage-payatas';
        console.log('Payatas Stage created');
     
         this.frames = new Map([
