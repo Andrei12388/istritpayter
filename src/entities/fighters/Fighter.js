@@ -255,21 +255,25 @@ export class Fighter {
             [FighterState.DEATH]:{
                 init: this.handleDeathInit.bind(this),
                 update: this.handleDeathState.bind(this),
+                shadow: [1.7, 1, 0, 0],
                 validFrom: hurtStateValidFrom,
             },
             [FighterState.DIE]:{
                 init: this.handleDieInit.bind(this),
                 update: this.handleDieState.bind(this),
+                shadow: [1.7, 1, 0, 0],
                 validFrom: hurtStateValidFrom,
             },
             [FighterState.KNOCKUP]:{
                 init: this.handleKnockUpInit.bind(this),
                 update: this.handleKnockUpState.bind(this),
+                shadow: [1.7, 1, 0, 0],
                 validFrom: knockUpStateValidFrom,
             },
             [FighterState.GETUP]:{
                 init: this.handleGetUpInit.bind(this),
                 update: this.handleGetUpState.bind(this),
+                shadow: [1.3, 1, 0, 0],
                 validFrom: [FighterState.KNOCKUP,FighterState.DIE, FighterState.DEATH],
             },
         }
@@ -804,6 +808,7 @@ handleKnockUpState() {
         
 
          this.direction = this.getDirection();
+         
     }
 
     handleWalkBackwardsState(){
@@ -1166,7 +1171,7 @@ handleKnockUpState() {
     );
     context.setTransform(1,0,0,1,0,0);
 
-// this.drawDebug(context, camera);
+ //this.drawDebug(context, camera);
 }
 
 }

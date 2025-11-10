@@ -20,6 +20,8 @@ export class boholStage {
         this.carabaoPosition = {x: -30, y: 90};
         this.carabaoDirection = true;
         this.carabaoFlip = 1;
+        this.carabaoSound = document.querySelector('audio#stage-entity-carabao');
+        this.carabaoMoo = true;
         this.carabao = new BackgroundAnimation(
             this.image,
             [
@@ -60,9 +62,18 @@ export class boholStage {
         
         if (this.carabaoPosition.x > 1200){
             this.carabaoDirection = !this.carabaoDirection;
+            this.carabaoMoo = true;
         }
         if (this.carabaoPosition.x < -40){
             this.carabaoDirection = !this.carabaoDirection;
+            this.carabaoMoo = true;
+        }
+
+        //Carabao Moo Sound Effect
+        if (this.carabaoPosition.x < 300 && this.carabaoPosition.x > 200 && this.carabaoMoo){
+            this.carabaoSound.play();
+            this.carabaoMoo = false;
+            console.log('Carabao Moo');
         }
     }
   
