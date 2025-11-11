@@ -75,7 +75,7 @@ export class Rock {
 
         this.position = {
             x: baseX + (40 * this.direction),
-            y: baseY + 60,
+            y: baseY + 120,
         };
 
         this.animationTimer = time.previous ?? 0;
@@ -128,7 +128,7 @@ export class Rock {
 
     // 🚀 Update movement and handle collisions
     updateMovement(time, camera) {
-        this.position.y -= 450 * this.directionY * time.secondsPassed;
+        this.position.y -= 600 * this.directionY * time.secondsPassed;
 
         if (this.position.y <= 210) this.directionY = 0;
 
