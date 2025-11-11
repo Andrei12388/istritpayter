@@ -3,6 +3,7 @@ import { Control } from "./control.js";
 export const FireballState = {
     ACTIVE: 'active',
     COLLIDED: 'collided',
+    CRACK: 'crack',
 };
 
 export const FireballCollidedState = {

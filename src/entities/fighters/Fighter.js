@@ -255,25 +255,21 @@ export class Fighter {
             [FighterState.DEATH]:{
                 init: this.handleDeathInit.bind(this),
                 update: this.handleDeathState.bind(this),
-                shadow: [1.7, 1, 0, 0],
                 validFrom: hurtStateValidFrom,
             },
             [FighterState.DIE]:{
                 init: this.handleDieInit.bind(this),
                 update: this.handleDieState.bind(this),
-                shadow: [1.7, 1, 0, 0],
                 validFrom: hurtStateValidFrom,
             },
             [FighterState.KNOCKUP]:{
                 init: this.handleKnockUpInit.bind(this),
                 update: this.handleKnockUpState.bind(this),
-                shadow: [1.7, 1, 0, 0],
                 validFrom: knockUpStateValidFrom,
             },
             [FighterState.GETUP]:{
                 init: this.handleGetUpInit.bind(this),
                 update: this.handleGetUpState.bind(this),
-                shadow: [1.3, 1, 0, 0],
                 validFrom: [FighterState.KNOCKUP,FighterState.DIE, FighterState.DEATH],
             },
         }
@@ -643,11 +639,7 @@ export class Fighter {
     }
 
      handleDeathState(){
-       if(this.isAnimationKnockUp()){
-                playSound(this.soundLand);
-                console.log("Knock Up Init on ground!");
-                this.knockUpSound = true;
-            }
+       
         if (!this.isAnimationCompleted()) return;
         gameState.fighters[this.playerId].dead = "die";
         if(gameState.fighters[this.playerId].hitPoints <= 0) return;
@@ -670,64 +662,38 @@ export class Fighter {
     }
 
     //Knock Up States and Init
-   // Knock Up Init
-handleKnockUpInit() {
-    console.log("Knock Up Init!");
-    this.knockUpSound = false;
-
-    // If HP <= 0, mark as dead and play death sound
-    if (gameState.fighters[this.playerId].hitPoints <= 0) {
-        playSound(this.deathSound);
-        gameState.fighters[this.playerId].dead = "die";
-    }
-
-    // Reset velocity if already on ground
-    if (this.position.y >= STAGE_FLOOR) {
+    handleKnockUpInit(){
+         console.log("Knock Up Init !");
+        if(gameState.fighters[this.playerId].hitPoints <= 0) {
+           playSound(this.deathSound);
+           playSound(this.soundHits.BLOCK);
+            gameState.fighters[this.playerId].dead = "die";
+        };
+        if(this.position.y >= STAGE_FLOOR ){
          this.velocity.x = 0;
+         this.velocity.y = 0;
+         }
     }
-}
 
-// Knock Up State
-handleKnockUpState() {
-    // Check if fighter reached or passed the ground
-    if (this.position.y >= STAGE_FLOOR) {
-        this.position.y = STAGE_FLOOR; // Prevent sinking below ground
-        
-       
-        
-        if(this.isAnimationKnockUp()){
-                playSound(this.soundLand);
-                console.log("Knock Up Init on ground!");
-                this.knockUpSound = true;
-            }
-        // Play impact sound only once
-        if (!this.knockUpSound) {
-            playSound(this.soundLand);
-            console.log("Body hit the ground!");
-            this.knockUpSound = true;
-
-            // If still alive, mark as landed
-            if (gameState.fighters[this.playerId].hitPoints > 0) {
-                this.landed = true;
-            } else {
-                gameState.fighters[this.playerId].dead = "die";
-            }
-        }
-
-        // Once landed and sound played, allow transition to GETUP
-        if (this.landed && this.isAnimationCompleted()) {
-            this.landed = false; // reset flag
-            this.changeState(FighterState.GETUP);
-        }
+     handleKnockUpState(){
+        if(this.isAnimationKnockUp()) gameState.fighters[this.playerId].dead = "invulnerable";
+         
+        if (!this.isAnimationCompleted()) return;
+         if(this.position.y >= STAGE_FLOOR){
+            
+         
+         console.log("Knock Up Init on ground!");
+           playSound(this.soundHits.BLOCK);
+         if(gameState.fighters[this.playerId].hitPoints <= 0) return;
+        this.changeState(FighterState.GETUP);
+         }
     }
-}
-
 
     //Get Up States and Init
     handleGetUpInit(){
         this.velocity.x = 0;
         this.velocity.y = 0;
-       
+        gameState.fighters[this.playerId].dead = "invulnerable";
         this.knockUpSound = false;
         console.log("GetUp Init!");
     }
@@ -808,7 +774,6 @@ handleKnockUpState() {
         
 
          this.direction = this.getDirection();
-         
     }
 
     handleWalkBackwardsState(){
@@ -1091,7 +1056,7 @@ handleKnockUpState() {
         
         if(this.position.y >= STAGE_FLOOR){
             this.position.y = STAGE_FLOOR;
-            this.velocity.y = 0;
+           // this.velocity.y = 0;
           //  console.log("Gravity falling");
         }
     }
@@ -1171,7 +1136,7 @@ handleKnockUpState() {
     );
     context.setTransform(1,0,0,1,0,0);
 
- //this.drawDebug(context, camera);
+// this.drawDebug(context, camera);
 }
 
 }

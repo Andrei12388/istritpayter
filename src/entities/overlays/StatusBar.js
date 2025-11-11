@@ -71,7 +71,7 @@ export class StatusBar {
         this.timeFlashTimer = 0;
         this.useFlashFrames = false;
         this.music.loop = true;
-        this.music.volume = 1;
+        this.music.volume = 0.6;
         
 
         this.healthBars = [{
@@ -299,7 +299,7 @@ export class StatusBar {
         this.timeFlashTimer = 0;
         this.useFlashFrames = false;
         this.music.loop = true;
-        this.music.volume = 1;
+        this.music.volume = 0.6;
         console.log('Statsbar reset');
     }
 

@@ -6,6 +6,7 @@ import { gameState } from '../../state/gameState.js';
 
 import { Fighter, AnimationFrame } from './Fighter.js';
 import { Fireball } from './special/Fireball.js';
+import { Rock } from './special/Rock.js';
 
 export class Golem extends Fighter {
     constructor(playerId, onAttackHit, entityList){
@@ -14,18 +15,28 @@ export class Golem extends Fighter {
         this.entityList = entityList;
 
         this.image = document.querySelector('img[alt="golem"]');
-        this.voiceSpecial1 = document.querySelector('audio#sound-malupiton-special-1');
-        this.voiceSpecial1.volume = 0.5;
+        this.voiceSpecial3 = document.querySelector('audio#sound-malupiton-special-3');
+        this.voiceSpecial2 = document.querySelector('audio#sound-malupiton-special-2');
+        this.voiceSpecial1 = document.querySelector('audio#sound-golem-special-1');
+        this.voiceHyperSkill1 = document.querySelector('audio#sound-malupiton-hyperskill-1');
+        this.soundGroundCrash = document.querySelector('audio#sound-groundCrash');
+        this.soundGroundCrash.volume = 1;
+        this.voiceSpecial1.volume = 1;
+        this.voiceSpecial2.volume = 0.9;
+        this.voiceSpecial3.volume = 0.9;
+        this.voiceHyperSkill1.volume = 0.9;
+        this.deathSound = document.querySelector('audio#sound-malupiton-death');
+        this.deathSound.volume = 0.9;
         this.soundSuperLaunch = document.querySelector('audio#super-launch');
         this.frames = new Map([
            
            //Forwards or Idle
-            ['forwards-1', [[[81, 233, 53, 90],[26,88]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-2', [[[145, 233,53,90],[26,88]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-3', [[[211, 232,50,92],[25,90]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-4', [[[267, 232,55,94],[27,92]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-5', [[[330, 232,51,94],[25,92]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-6', [[[400, 233,59,92],[30,90]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-1', [[[330,346, 55, 99],[27,97]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-2', [[[404, 346,55,99],[27,97]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-3', [[[472, 346,55,99],[27,97]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-4', [[[543, 346,55,99],[27,97]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-5', [[[613, 346,55,99],[27,97]], PushBox.IDLE, HurtBox.IDLE]],
+            
             
             //Jump Up
             ['jumpup-1', [[[71, 110,54,97],[27,95]], PushBox.JUMP, HurtBox.JUMP]],
@@ -112,10 +123,6 @@ export class Golem extends Fighter {
             ['hurt-body-2', [[[81, 32, 57, 67], [28,65]], PushBox.CROUCH, [[7, -60, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
             ['hurt-body-3', [[[492, 34, 46, 67], [23,65]], PushBox.CROUCH, [[-26, -61, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
 
-             //Special 1 - Roll
-            ['special-1', [[[71, 109, 56, 99], [28,97]], PushBox.IDLE, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
-            ['special-2', [[[83, 361, 104, 71], [52,79]], PushBox.BEND, [[3, -76, 30, 18],[-3, -69, 50, 20], [-2, -52, 44, 58]]]],
-            ['special-3', [[[222, 133, 109, 55], [18,97]], PushBox.BEND, [[3, -76, 30, 18],[3, -69, 84, 30], [-2, -52, 44, 58]]]],
 
             //Dodge Anim
              ['dodge-1', [[[95, 464, 55, 99], [28,97]], PushBox.NULL, HurtBox.NULL]],
@@ -128,6 +135,16 @@ export class Golem extends Fighter {
              ['dodge2-2', [[[171, 576, 55, 102], [23,100]], PushBox.NULL, HurtBox.NULL]],
              ['dodge2-3', [[[244, 579, 68, 104], [34,102]], PushBox.NULL,HurtBox.NULL]],
              ['dodge2-4', [[[337, 590, 88, 91], [44,89]], PushBox.NULL,HurtBox.NULL]],
+
+             //Special 1 Death Impact
+             ['special1-1', [[[473, 12, 55, 99], [28,97]], PushBox.NULL, HurtBox.NULL]],
+             ['special1-2', [[[537, 12, 55, 99], [28,97]], PushBox.NULL, HurtBox.NULL]],
+             ['special1-3', [[[601, 12, 55, 99], [28,97]], PushBox.NULL, HurtBox.NULL]],
+             ['special1-4', [[[676, 12, 55, 99], [28,97]], PushBox.NULL, HurtBox.NULL]],
+             ['special1-5', [[[751, 12, 55, 99], [28,97]], PushBox.NULL, HurtBox.NULL]],
+             ['special1-6', [[[815, 18, 55, 99], [28,67]], PushBox.NULL, HurtBox.NULL]],
+             ['special1-7', [[[880, 18, 55, 99], [28,67]], PushBox.NULL, HurtBox.NULL]],
+            
         ]);
 
                   
@@ -135,9 +152,9 @@ export class Golem extends Fighter {
             //Golem ok
             [FighterState.IDLE]:[ 
                 ['forwards-1', 85],['forwards-2',85],
-                ['forwards-3',85],['forwards-4',85]
-               ,['forwards-4',85],
-                ['forwards-3',85],['forwards-2',85],
+                ['forwards-3',85],['forwards-2',85]
+               ,['forwards-1',85],
+                ['forwards-4',85],['forwards-5',85],['forwards-4',85]
             ],
             [FighterState.DODGE_BACKWARD]:[ 
                ['dodge-1', 40],['dodge-2', 40], 
@@ -149,14 +166,12 @@ export class Golem extends Fighter {
                         ],          
              //Golem ok
             [FighterState.WALK_FORWARD]: [
-                ['forwards-1', 65],['forwards-2',65],
-                ['forwards-3',65],['forwards-4',65],
+                ['forwards-4',85],['forwards-5',85],['forwards-4',85], ['forwards-3',85],['forwards-2',85],['forwards-1',85]
                         
             ],
              //Golem ok
             [FighterState.WALK_BACKWARD]:[
-                ['forwards-4', 65],['forwards-3',65],
-                ['forwards-2',65],['forwards-1',65],
+                ['forwards-4',85],['forwards-5',85],['forwards-4',85], ['forwards-3',85],['forwards-2',85],['forwards-1',85]
         ],
          //Golem ok
             [FighterState.JUMP_START]:[
@@ -252,8 +267,9 @@ export class Golem extends Fighter {
                 ['hurt-body-3', 40],['hurt-body-3', 40],['hurt-body-3', 90],['hurt-body-3', FrameDelay.TRANSITION],
             ],
             [FighterState.SPECIAL_1]:[
-                ['special-1', 20],['special-2', 80],['special-3', 20],['special-3', 400],
-                ['special-3', FrameDelay.TRANSITION],
+                ['special1-1', 100],['special1-2', 100],['special1-3', 100],['special1-4', 100],['special1-5', 100],['special1-6', 100],['special1-7', 100],
+                ['special1-6', 60], ['special1-5', 60], ['special1-4', 60], ['special1-3', 90], ['special1-2', 60], ['special1-1', 60],
+                ['special1-1', FrameDelay.TRANSITION],
             ],
           
 
@@ -265,8 +281,8 @@ export class Golem extends Fighter {
                 [FighterState.WALK_BACKWARD]: -(2 * 60),
                 [FighterState.JUMP_FORWARD]: ((48 * 3) + (12 * 2)),
                 [FighterState.JUMP_BACKWARD]: -((45 * 4) + (15 * 3)),
-                [FighterState.DODGE_FORWARD]: ((100 * 4) + (12 * 2)),
-                [FighterState.DODGE_BACKWARD]: -((100 * 4) + (15 * 3)),
+                [FighterState.DODGE_FORWARD]: ((80 * 4) + (12 * 2)),
+                [FighterState.DODGE_BACKWARD]: -((80 * 4) + (12 * 3)),
             },
             jump: -420,
         };
@@ -302,7 +318,7 @@ export class Golem extends Fighter {
         this.states[FighterState.SPECIAL_1] = {
             init: this.handleSpecial1Init.bind(this),
             update: this.handleSpecial1State.bind(this),
-            shadow: [1.6, 1, -40, 0],
+            shadow: [1.6, 1, 0, 0],
             validFrom: [
                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, 
                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
@@ -369,52 +385,54 @@ export class Golem extends Fighter {
          
 
         // ==============================
-          // Special Skill 1 - Fireball
-          // ==============================
-          handleSpecial1Init(_, strength) {
-            const fighter = gameState.fighters[this.playerId];
-        
-            if (fighter.skillNumber < 1 || fighter.skillUsedThisFrame) return;
-        
-            fighter.skillUsedThisFrame = true;
-            fighter.skillConsumed = false;
-            fighter.skillNumber -= 1; // 🛡️ spend skill immediately
-        
-            if (fighter.skillNumber === 2) fighter.resetSkillBar = true;
-        
-            this.voiceSpecial3.play();
-            this.fireball = { fired: false, strength };
-            this.soundSuperLaunch.play();
-        
-            fighter.superAcivated = true;
-            gameState.pauseTimer = 1;
-            gameState.pauseFrameMove = -100;
-            gameState.pause = true;
-        
-            this.velocity.x = -300;
-            this.velocity.y = -100;
-            fighter.sprite += 1;
-        
-            console.log('🔥 Special 1 (Fireball) started — skill spent instantly');
-          }
-        
-          handleSpecial1State(time) {
-            const fighter = gameState.fighters[this.playerId];
-        
-            if (fighter.skillNumber >= 0 && !fighter.skillConsumed) {
-              if (!this.fireball.fired && this.animationFrame === 3) {
-                this.entityList.add.call(this.entityList, Fireball, time, this, this.fireball.strength);
-                this.fireball.fired = true;
-                console.log('🔥 Fireball launched!');
-              }
-        
-              if (!this.isAnimationCompleted()) return;
-                fighter.skillConsumed = true;
-              fighter.superAcivated = false;
-              fighter.skillUsedThisFrame = false; // reset guard
-            }
-        
-            this.changeState(FighterState.IDLE);
-          }
+  // Special Skill 1 - Fireball
+  // ==============================
+  handleSpecial1Init(_, strength) {
+    const fighter = gameState.fighters[this.playerId];
+
+    if (fighter.skillNumber < 1 || fighter.skillUsedThisFrame) return;
+
+    fighter.skillUsedThisFrame = true;
+    fighter.skillConsumed = false;
+    fighter.skillNumber -= 1; // 🛡️ spend skill immediately
+
+    if (fighter.skillNumber === 2) fighter.resetSkillBar = true;
+
+    this.voiceSpecial1.play();
+    this.fireball = { fired: false, strength };
+    this.soundSuperLaunch.play();
+
+    fighter.superAcivated = true;
+    gameState.pauseTimer = 1;
+    gameState.pauseFrameMove = -100;
+    gameState.pause = true;
+
+    this.velocity.x = 330;
+    this.velocity.y = -420;
+    fighter.sprite += 1;
+
+    console.log('🔥 Special 1 (Fireball) started — skill spent instantly');
+  }
+
+  handleSpecial1State(time) {
+    const fighter = gameState.fighters[this.playerId];
+    
+    if (fighter.skillNumber >= 0 && !fighter.skillConsumed) {
+      if (!this.fireball.fired && this.animationFrame === 7) {
+        this.soundGroundCrash.play();
+        this.entityList.add.call(this.entityList, Rock, time, this, this.fireball.strength);
+        this.fireball.fired = true;
+        this.velocity.x = 0;
+        console.log('🔥 Fireball launched!');
+      }
+
+      if (!this.isAnimationCompleted()) return;
+        fighter.skillConsumed = true;
+      fighter.superAcivated = false;
+      fighter.skillUsedThisFrame = false; // reset guard
+    }
+
+    this.changeState(FighterState.IDLE);
+  }
         
 }
