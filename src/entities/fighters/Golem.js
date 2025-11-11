@@ -136,6 +136,20 @@ export class Golem extends Fighter {
              ['dodge2-3', [[[244, 579, 68, 104], [34,102]], PushBox.NULL,HurtBox.NULL]],
              ['dodge2-4', [[[337, 590, 88, 91], [44,89]], PushBox.NULL,HurtBox.NULL]],
 
+             //Death State
+                 ['death-1', [[[379, 461, 67, 97], [33,95]], PushBox.IDLE, HurtBox.IDLE]],
+                 ['death-2', [[[462, 463, 58, 99], [29,97]],PushBox.IDLE, HurtBox.IDLE]],
+                 ['death-3', [[[538, 464, 78, 84], [39,82]],PushBox.IDLE, HurtBox.IDLE]],
+                ['death-4', [[[624, 469, 97, 70], [48,68]],PushBox.IDLE, HurtBox.IDLE]],
+                ['death-5', [[[731, 476, 102, 55], [51,53]],PushBox.IDLE, HurtBox.IDLE]],
+                ['death-6', [[[492, 585, 102, 39], [51,37]],PushBox.IDLE, HurtBox.IDLE]],
+                ['death-7', [[[608, 585, 92, 28], [46,26]],PushBox.IDLE, HurtBox.IDLE]],
+
+                //GetUp State
+                 ['getUp-1', [[[392, 678, 94, 64], [47,62]], PushBox.IDLE, HurtBox.NULL]],
+                ['getUp-2', [[[491, 670, 81, 72], [40,70]], PushBox.IDLE, HurtBox.NULL]],
+                 ['getUp-3', [[[601, 653, 59, 95], [29,93]], PushBox.IDLE, HurtBox.NULL]],
+
              //Special 1 Death Impact
              ['special1-1', [[[473, 12, 55, 99], [28,97]], PushBox.NULL, HurtBox.NULL]],
              ['special1-2', [[[537, 12, 55, 99], [28,97]], PushBox.NULL, HurtBox.NULL]],
@@ -271,6 +285,27 @@ export class Golem extends Fighter {
                 ['special1-6', 60], ['special1-5', 60], ['special1-4', 60], ['special1-3', 90], ['special1-2', 60], ['special1-1', 60],
                 ['special1-1', FrameDelay.TRANSITION],
             ],
+
+             [FighterState.DEATH]:[
+                            ['death-1', 300], ['death-2', 120], ['death-3', 120], 
+                            ['death-4', 120], ['death-5', 120], ['death-6', 120], 
+                            ['death-7', 120],
+                            ['death-7', FrameDelay.TRANSITION],
+                        ],
+                        [FighterState.DIE]:[
+                            ['death-7', 7000],
+                            ['death-7', FrameDelay.TRANSITION],
+                        ],
+                        [FighterState.KNOCKUP]:[
+                            ['death-1', 100], ['death-2', 120], ['death-3', 120], 
+                            ['death-4', 120], ['death-5', 120], ['death-6', 130], 
+                            ['death-7', 120],
+                            ['death-7', FrameDelay.TRANSITION],
+                        ],
+                         [FighterState.GETUP]:[
+                            ['death-7', 300], ['getUp-1', 120], ['getUp-2', 100], ['getUp-3', 100],['forwards-5',85],
+                            ['forwards-5', FrameDelay.TRANSITION],
+                        ],
           
 
         };

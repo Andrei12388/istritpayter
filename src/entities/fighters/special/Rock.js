@@ -163,7 +163,7 @@ export class Rock {
            // this.direction *= -1;
            // this.directionY = 1;
             //opponent.position.y -= 30 * time.secondsPassed;
-            return;
+            
         }
 
         if (collisionState === FireballCollidedState.OPPONENT && this.canDealDamage) {

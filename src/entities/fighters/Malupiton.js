@@ -607,6 +607,8 @@ export class Malupiton extends Fighter {
 
     if (fighter.skillNumber >= 0 && !fighter.skillConsumed) {
       this.gravity = 0;
+      this.velocity.y = 0;
+     // this.opponent.velocity.y = 0;
       this.position.y -= 0.8;
       this.changeState(FighterState.HYPERSKILL_1);
 
