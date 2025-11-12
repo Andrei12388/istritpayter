@@ -616,9 +616,6 @@ export class Fighter {
     this.slideFriction = friction;
     this.attackStruck = true;
 
-    this.velocity.x = FighterAttackBaseData[attackStrength].thrust.x;
-    this.velocity.y = FighterAttackBaseData[attackStrength].thrust.y;
-
     if (this.soundHits?.[attackStrength]?.[attackType]) {
         playSound(this.soundHits[attackStrength][attackType]);
     }
@@ -635,11 +632,17 @@ export class Fighter {
     // Knockup logic
     if (FighterAttackBaseData[attackStrength].knockup) {
         this.changeState(FighterState.KNOCKUP);
+        // set thrust after state init so it isn't cleared
+        this.velocity.x = FighterAttackBaseData[attackStrength].thrust.x;
+        this.velocity.y = FighterAttackBaseData[attackStrength].thrust.y;
         return;
     }
 
     // Regular hurt
     this.changeState(newState);
+    // set thrust after state init so it isn't cleared
+    this.velocity.x = FighterAttackBaseData[attackStrength].thrust.x;
+    this.velocity.y = FighterAttackBaseData[attackStrength].thrust.y;
 }
 
 

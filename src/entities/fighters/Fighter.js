@@ -606,9 +606,6 @@ export class Fighter {
         this.slideVelocity = velocity;
         this.slideFriction = friction;
         this.attackStruck = true;
-
-        this.velocity.x = FighterAttackBaseData[attackStrength].thrust.x;
-        this.velocity.y = FighterAttackBaseData[attackStrength].thrust.y;
         
 
         if (this.soundHits?.[attackStrength]?.[attackType]) {
@@ -620,10 +617,17 @@ export class Fighter {
             
             console.log("Knock up hit activate");
             this.changeState(FighterState.KNOCKUP);
-            
+            // set thrust after the state init so it isn't cleared by resetVelocities
+            this.velocity.x = FighterAttackBaseData[attackStrength].thrust.x;
+            this.velocity.y = FighterAttackBaseData[attackStrength].thrust.y;
             return;
         }
-        if(gameState.fighters[this.playerId].dead === "breathing" && gameState.fighters[this.playerId].hitPoints > 0) this.changeState(newState);
+        if(gameState.fighters[this.playerId].dead === "breathing" && gameState.fighters[this.playerId].hitPoints > 0) {
+            this.changeState(newState);
+            // set thrust after the state init so it isn't cleared by resetVelocities
+            this.velocity.x = FighterAttackBaseData[attackStrength].thrust.x;
+            this.velocity.y = FighterAttackBaseData[attackStrength].thrust.y;
+        }
          
 
         console.log(`${gameState.fighters[this.playerId].id} has hit ${gameState.fighters[this.opponent.playerId].id}'s ${hurtLocation} with a ${attackStrength} attacks`);
