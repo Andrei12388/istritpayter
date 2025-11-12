@@ -302,6 +302,19 @@ handleFlash() {
 
     update(time, context){
         
+        //camera shake
+        // trigger a camera shake based on attack strength
+        try {
+            if (this.camera && typeof this.camera.shake === 'function') {
+                if(gameState.cameraShake.enable){
+                    this.camera.shake(gameState.cameraShake.intensity, gameState.cameraShake.duration);
+                    gameState.cameraShake.enable = false;
+                }
+            }
+        } catch (e) {
+            // fail silently if camera or shake isn't available
+        }
+
         this.fade.update();
         const scaledTime = {
             ...time,

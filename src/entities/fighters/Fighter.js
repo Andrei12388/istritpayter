@@ -874,11 +874,13 @@ export class Fighter {
     updateStageConstraints(time, context, camera){
         if (this.position.x > camera.position.x + context.canvas.width - this.boxes.push.width) {
             this.position.x = camera.position.x + context.canvas.width - this.boxes.push.width;
+            
             this.resetSlide(true);
         }
 
         if (this.position.x < camera.position.x + this.boxes.push.width){
             this.position.x = camera.position.x + this.boxes.push.width;
+             
              this.resetSlide(true);
         }
 
@@ -1140,7 +1142,7 @@ export class Fighter {
     );
     context.setTransform(1,0,0,1,0,0);
 
-// this.drawDebug(context, camera);
+ this.drawDebug(context, camera);
 }
 
 }

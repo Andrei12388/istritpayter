@@ -172,11 +172,11 @@ export class Golem extends Fighter {
             ],
             [FighterState.DODGE_BACKWARD]:[ 
                ['dodge-1', 40],['dodge-2', 40], 
-               ['dodge-3', 100], ['dodge-4', 100],['dodge-3', 40],['dodge-2', 40],['dodge-1', 40], ['dodge-1',FrameDelay.TRANSITION],
+               ['dodge-3', 50], ['dodge-4', 300],['dodge-3', 40],['dodge-2', 40],['dodge-1', 40], ['dodge-1',FrameDelay.TRANSITION],
                         ],
               [FighterState.DODGE_FORWARD]:[ 
                ['dodge2-1', 40],['dodge2-2', 40], 
-               ['dodge2-3', 100], ['dodge2-4', 100],['dodge2-3', 40],['dodge2-2', 40],['dodge2-1', 40], ['dodge2-1',FrameDelay.TRANSITION],
+               ['dodge2-3', 50], ['dodge2-4', 300],['dodge2-3', 40],['dodge2-2', 40],['dodge2-1', 40], ['dodge2-1',FrameDelay.TRANSITION],
                         ],          
              //Golem ok
             [FighterState.WALK_FORWARD]: [
@@ -392,7 +392,10 @@ export class Golem extends Fighter {
 
      handleDodgeInit(distance, playerId){
        // playSound(this.soundTeleport);
-          
+         if(!control.isForward(this.playerId, this.direction) && !control.isBackward(this.playerId, this.direction)){
+             this.changeState(FighterState.IDLE);
+             return;
+         }
            if (control.isForward(this.playerId, this.direction)) {
                        console.log('Dodge Forward Init');
                         this.velocity.x = -this.initialVelocity.x[this.currentState] ?? 0;
@@ -442,6 +445,7 @@ export class Golem extends Fighter {
     gameState.pauseFrameMove = -100;
     gameState.pause = true;
 
+    
     this.velocity.x = 330;
     this.velocity.y = -420;
     fighter.sprite += 1;
@@ -450,11 +454,17 @@ export class Golem extends Fighter {
   }
 
   handleSpecial1State(time) {
+    
     const fighter = gameState.fighters[this.playerId];
     
     if (fighter.skillNumber >= 0 && !fighter.skillConsumed) {
       if (!this.fireball.fired && this.animationFrame === 7) {
         this.soundGroundCrash.play();
+
+        gameState.cameraShake.enable = true;
+        gameState.cameraShake.duration = 0.5;
+        gameState.cameraShake.intensity = 15;
+
         this.entityList.add.call(this.entityList, Rock, time, this, this.fireball.strength);
         this.fireball.fired = true;
         this.velocity.x = 0;

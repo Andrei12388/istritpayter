@@ -75,7 +75,7 @@ export class Rock {
 
         this.position = {
             x: baseX + (40 * this.direction),
-            y: baseY + 120,
+            y: baseY + 130,
         };
 
         this.animationTimer = time.previous ?? 0;
@@ -130,7 +130,7 @@ export class Rock {
     updateMovement(time, camera) {
         this.position.y -= 600 * this.directionY * time.secondsPassed;
 
-        if (this.position.y <= 210) this.directionY = 0;
+        if (this.position.y <= 220) this.directionY = 0;
 
         const screenX = this.position.x - camera.position.x;
         if (screenX > 384 + 56 || screenX < -56) {

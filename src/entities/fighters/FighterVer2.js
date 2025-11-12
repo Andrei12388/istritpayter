@@ -941,11 +941,15 @@ handleDieState() {
     updateStageConstraints(time, context, camera){
         if (this.position.x > camera.position.x + context.canvas.width - this.boxes.push.width) {
             this.position.x = camera.position.x + context.canvas.width - this.boxes.push.width;
+            // Clamp horizontal position to camera edge and reset any horizontal motion
+            this.velocity.x = 0;
             this.resetSlide(true);
         }
 
         if (this.position.x < camera.position.x + this.boxes.push.width){
             this.position.x = camera.position.x + this.boxes.push.width;
+             // Clamp horizontal position to camera edge and reset any horizontal motion
+             this.velocity.x = 0;
              this.resetSlide(true);
         }
 

@@ -28,4 +28,9 @@ export const gameState = {
     hyperSkill: false,
     kapeCom: false,
     stageMusic: 'audio#stage-payatas',
+    cameraShake: {
+        enable: false,
+        duration: 0,
+        intensity: 0,
+    },
 };
