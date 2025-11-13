@@ -47,7 +47,8 @@ export class Fireball {
     constructor(args, time, entityList) {
   const [fighter, strength] = args;
   this.canDealDamage = true;
-
+  this.fryingPanSound = document.querySelector('audio#sound-frying-pan-hit');
+  this.fryingPanSound.volume = 0.7;
   this.fighter = fighter;
   this.entityList = entityList;
   this.velocity = fireballVelocity[strength] || 300; // Default speed
@@ -122,8 +123,10 @@ this.animationFrame = 0;
 this.animationTimer = time.previous + animations[this.state][this.animationFrame][1] * FRAME_TIME;
 
 // ✅ Only deal damage if you actually want to
-if (this.fighter.opponent.currentState === FighterState.WALK_BACKWARD || this.fighter.opponent.currentState === FighterState.BLOCK) {
+if (this.fighter.opponent.currentState === FighterState.WALK_BACKWARD || this.fighter.opponent.currentState === FighterState.BLOCK && hasCollided === FireballCollidedState.OPPONENT && this.canDealDamage) {
         this.entityList.add(BlockHitSplash, time, this.fighter.opponent.position.x, this.fighter.opponent.position.y - 40, 1);
+         this.fryingPanSound.play();
+        this.canDealDamage = false;
         this.fighter.opponent.changeState(FighterState.BLOCK, time);
         this.direction *= -1;
         this.directionY = 1;
@@ -136,6 +139,7 @@ if (hasCollided === FireballCollidedState.OPPONENT && this.canDealDamage) {
     this.fighter.opponent.position.y -= 100 * time.secondsPassed;
     this.direction *= -1;
     this.directionY = 1;
+    this.fryingPanSound.play();
     this.entityList.add(GreenHitSplash, time, this.fighter.opponent.position.x, this.fighter.opponent.position.y - 40, 1);
    // gameState.fighters[1].hitPoints -= 40;
     this.fighter.opponent.handleAttackHit(

@@ -26,8 +26,8 @@ export class Golem extends Fighter {
         this.voiceSpecial2.volume = 0.9;
         this.voiceSpecial3.volume = 0.9;
         this.voiceHyperSkill1.volume = 0.9;
-        this.deathSound = document.querySelector('audio#sound-malupiton-death');
-        this.deathSound.volume = 0.9;
+        this.deathSound = document.querySelector('audio#sound-golem-death');
+        this.deathSound.volume = 1;
         this.soundSuperLaunch = document.querySelector('audio#super-launch');
         this.frames = new Map([
            
