@@ -164,6 +164,10 @@ export class Golem extends Fighter {
                 ['getUp-2', [[[491, 670, 81, 72], [40,70]], PushBox.IDLE, HurtBox.NULL]],
                  ['getUp-3', [[[601, 653, 59, 95], [29,93]], PushBox.IDLE, HurtBox.NULL]],
 
+                ['getUp2-1', [[[519, 770, 73, 69], [36,67]], PushBox.IDLE, HurtBox.NULL]],
+                ['getUp2-2', [[[607, 769, 77, 65], [38,63]], PushBox.IDLE, HurtBox.NULL]],
+                ['getUp2-3', [[[431, 863, 61, 80], [30,78]], PushBox.IDLE, HurtBox.NULL]],
+
              //Special 1 Death Impact
              ['special1-1', [[[473, 12, 55, 99], [28,97]], PushBox.NULL, HurtBox.NULL]],
              ['special1-2', [[[537, 12, 55, 99], [28,97]], PushBox.NULL, HurtBox.NULL]],
@@ -325,8 +329,8 @@ export class Golem extends Fighter {
                             ['death-7', FrameDelay.TRANSITION],
                         ],
                          [FighterState.GETUP]:[
-                            ['death-7', 300], ['getUp-1', 120], ['getUp-2', 100], ['getUp-3', 100],['forwards-5',85],
-                            ['forwards-5', FrameDelay.TRANSITION],
+                            ['death-7', 300], ['getUp2-1', 120], ['getUp2-2', 120], ['getUp2-3', 100],['getUp-3', 100],
+                            ['getUp-3', FrameDelay.TRANSITION],
                         ],
           
 

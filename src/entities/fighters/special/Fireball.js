@@ -48,7 +48,7 @@ export class Fireball {
   const [fighter, strength] = args;
   this.canDealDamage = true;
   this.fryingPanSound = document.querySelector('audio#sound-frying-pan-hit');
-  this.fryingPanSound.volume = 0.7;
+  this.fryingPanSound.volume = 0.5;
   this.fighter = fighter;
   this.entityList = entityList;
   this.velocity = fireballVelocity[strength] || 300; // Default speed

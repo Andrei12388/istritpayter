@@ -75,7 +75,7 @@ export class BlockRock {
         const baseY = this.fighter?.position?.y ?? 0;
 
         this.position = {
-            x: baseX + 20*(this.direction),
+            x: baseX + 25*(this.direction),
             y: baseY - 30,
         };
 

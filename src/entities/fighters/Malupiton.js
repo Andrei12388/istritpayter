@@ -192,6 +192,8 @@ export class Malupiton extends Fighter {
              ['getUp-1', [[[11, 955, 53, 55], [27,53]], PushBox.IDLE, HurtBox.NULL]],
              ['getUp-2', [[[82, 959, 63, 50], [31,48]], PushBox.IDLE, HurtBox.NULL]],
              ['getUp-3', [[[160, 959, 60, 59], [30,57]], PushBox.IDLE, HurtBox.NULL]],
+
+            
         ]);
 
                   
