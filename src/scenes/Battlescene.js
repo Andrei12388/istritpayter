@@ -29,6 +29,7 @@ import { SlashHitSplash } from "../entities/fighters/shared/SlashHitSplash.js";
 import { CharacterSelect } from "./CharacterSelect.js";
 import { PrePostMatch } from "./PrePostMatch.js";
 import { FadeEffect } from "./utils/FadeEffect.js";
+import { finalStage } from "../entities/stage/finalStage.js";
 
 
 
@@ -142,8 +143,10 @@ export class BattleScene {
                 return new payatasStage;
             case 'cubao':
                 return new pasayStage;
-                case 'bohol':
-                    return new boholStage;
+            case 'bohol':
+                return new boholStage;
+            case 'final':
+                return new finalStage;
             default:
                 throw new Error('Unimplemented Map entity request!');
         }

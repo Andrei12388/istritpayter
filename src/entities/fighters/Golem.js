@@ -498,7 +498,12 @@ export class Golem extends Fighter {
   handleSpecial1State(time) {
     
     const fighter = gameState.fighters[this.playerId];
-    
+    if (control.isForward(this.playerId, this.direction)) {
+        this.velocity.x = 330;
+    }
+    if (control.isBackward(this.playerId, this.direction)) {
+        this.velocity.x = -330;
+    }
     if (fighter.skillNumber >= 0 && !fighter.skillConsumed) {
       if (!this.fireball.fired && this.animationFrame === 7) {
         this.soundGroundCrash.play();

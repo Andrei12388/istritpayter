@@ -203,6 +203,7 @@ if (this.opponentIsAttacking() && distance < Math.max(this.engageDistance, 900) 
   const backwardControl = this.fighter.direction === 1 ? Control.LEFT : Control.RIGHT;
 
   // Hold backward movement for a short "defensive" duration
+  // this.fighter.changeState(FighterState.IDLE, time);
   this.press(backwardControl);
   this.isBlocking = true; // still use this flag to time release
   this.blockUntil = now + 400; // same duration as before

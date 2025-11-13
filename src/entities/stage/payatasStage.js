@@ -8,6 +8,7 @@ export class payatasStage {
     constructor(){
         this.image = document.querySelector('img[alt="payatas-stage"]');
        gameState.stageMusic = 'audio#stage-payatas';
+      
        console.log('Payatas Stage created');
     
         this.frames = new Map([
