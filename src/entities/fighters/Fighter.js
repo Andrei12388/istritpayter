@@ -398,11 +398,26 @@ export class Fighter {
     }
 
     changeState(newState, time, args) {
-        if(!this.states[newState].validFrom.includes(this.currentState)) return;
-    this.currentState = newState;
-    this.animationFrame = 0;
+        // Safety: ensure the target state exists
+        const stateDef = this.states?.[newState];
+        if (!stateDef) return false;
 
-    this.states[this.currentState].init(time, args);
+        const validFrom = stateDef.validFrom || [];
+        // If currentState isn't listed as a valid origin, reject the transition
+        if (!validFrom.includes(this.currentState)) return false;
+
+        this.currentState = newState;
+        this.animationFrame = 0;
+
+        // Call the state's init handler (if any)
+        try {
+            this.states[this.currentState].init(time, args);
+        } catch (e) {
+            // Swallow errors from init to avoid breaking game loop; log in dev
+            if (typeof console !== 'undefined' && console.error) console.error('changeState init error', e);
+        }
+
+        return true;
     }
     
     //Idle
@@ -1142,7 +1157,7 @@ export class Fighter {
     );
     context.setTransform(1,0,0,1,0,0);
 
- this.drawDebug(context, camera);
+// this.drawDebug(context, camera);
 }
 
 }

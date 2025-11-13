@@ -23,16 +23,16 @@ import { GreenHitSplash } from "../shared/GreenHitSplash.js";
 
 // Frame data
 const frames = new Map([
-    ['special1-1', [[[850, 142, 85, 115], [42, 113]], [-42, -112, 85, 113], [-42, -112, 85, 113]]],
-    ['special1-2', [[[850, 258, 85, 115], [42, 113]], [0, 0, 0, 0], [0, 0, 0, 0]]],
-    ['special1-3', [[[850, 379, 85, 115], [42, 113]], [0, 0, 0, 0], [0, 0, 0, 0]]],
-    ['special1-4', [[[850, 496, 85, 115], [42, 113]], [0, 0, 0, 0], [0, 0, 0, 0]]],
-    ['special1-5', [[[850, 616, 85, 115], [42, 113]], [0, 0, 0, 0], [0, 0, 0, 0]]],
+   
+    ['special1-1', [[[156, 691, 9, 66], [4,64]], [0, 0, 0, 0], [0, 0, 0, 0]]],
+    ['special1-2', [[[181, 691, 11, 77], [5,64]], [0, 0, 0, 0], [0, 0, 0, 0]]],
+    ['special1-3', [[[204, 691, 20, 78], [10,64]], [0, 0, 0, 0], [0, 0, 0, 0]]],
+    ['special1-4', [[[233, 693, 38, 86], [19,64]], [0, 0, 0, 0], [0, 0, 0, 0]]],
+    ['special1-5', [[[272, 693, 74, 92], [37,64]], [0, 0, 0, 0], [0, 0, 0, 0]]],
+    ['special1-6', [[[126, 817, 82, 89], [41,64]], [0, 0, 0, 0], [0, 0, 0, 0]]],
+    ['special1-7', [[[228, 806, 87, 116], [43,64]], [0, 0, 0, 0], [0, 0, 0, 0]]],
+    ['special1-8', [[[326, 817, 82, 89], [41,64]], [0, 0, 0, 0], [0, 0, 0, 0]]],
 
-    ['crack-1', [[[546, 135, 80, 30], [40, 28]], [-42, -112, 85, 113], [-42, -112, 85, 113]]],
-    ['crack-2', [[[640, 129, 128, 43], [64, 28]], [-42, -112, 85, 113], [-42, -112, 85, 113]]],
-    ['crack-3', [[[546, 186, 185, 53], [92, 28]], [-42, -112, 85, 113], [-42, -112, 85, 113]]],
-    ['crack-4', [[[555, 244, 249, 81], [124, 40]], [-42, -112, 85, 113], [-42, -112, 85, 113]]],
 
     // Collision frames
     ['special1-collide-1', [[[22, 450, 10, 11], [3, 10]], [0, 0, 0, 0]]],
@@ -44,9 +44,10 @@ const frames = new Map([
 // Animation sequences
 const animations = {
     [FireballState.ACTIVE]: [
-        ['special1-1', 10],['special1-1', 110],['special1-2', 10],
-        ['special1-3', 10],['special1-4', 10],
-        ['special1-5', 10],['special1-5', 1]
+        ['special1-1', 4], ['special1-1', 4],['special1-2', 4],['special1-3', 4],
+        ['special1-4', 4], ['special1-5', 4],['special1-6', 4],['special1-7', 4],
+        ['special1-8', 4],
+        
     ],
     [FireballState.COLLIDED]: [['special1-4', 4]],
     [FireballState.CRACK]: [
@@ -54,7 +55,7 @@ const animations = {
 ],
 };
 
-export class Rock {
+export class BlockRock {
     image = document.querySelector('img[alt="golem"]');
     animationFrame = 0;
     crackAnimationFrame = 0;
@@ -74,125 +75,40 @@ export class Rock {
         const baseY = this.fighter?.position?.y ?? 0;
 
         this.position = {
-            x: baseX + (60 * this.direction),
-            y: baseY + 130,
+            x: baseX + 20*(this.direction),
+            y: baseY - 30,
         };
 
         this.animationTimer = time.previous ?? 0;
         this.crackAnimationTimer = time.previous ?? 0;
     }
 
-    // 🧩 Check collision with opponent
-    hasCollidedWithOpponent(hitBox) {
-        for (const [, hurtBox] of Object.entries(this.fighter.opponent.boxes.hurt)) {
-            const [x, y, width, height] = hurtBox;
-            const actualHurtBox = getActualBoxDimensions(
-                this.fighter.opponent.position,
-                this.fighter.opponent.direction,
-                { x, y, width, height }
-            );
-
-            if (boxOverlap(hitBox, actualHurtBox)) {
-                return FireballCollidedState.OPPONENT;
-            }
-        }
-        return null;
-    }
-
-    // 🧩 Check collision with other fireballs
-    hasCollidedWithOtherFireball(hitBox) {
-        const others = this.entityList.entities.filter(
-            (entity) => entity instanceof Rock && entity !== this
-        );
-        for (const other of others) {
-            const [x, y, width, height] = frames.get(
-                animations[other.state][other.animationFrame][0]
-            )[1];
-            const otherHitBox = getActualBoxDimensions(other.position, other.direction, { x, y, width, height });
-            if (boxOverlap(hitBox, otherHitBox)) {
-                return FireballCollidedState.OPPONENT;
-            }
-        }
-        return null;
-    }
-
-    // 🧩 Determine collision type
-    hasCollided() {
-        const [x, y, width, height] = frames.get(
-            animations[FireballState.ACTIVE][this.animationFrame][0]
-        )[1];
-        const hitBox = getActualBoxDimensions(this.position, this.direction, { x, y, width, height });
-
-        return this.hasCollidedWithOpponent(hitBox) || this.hasCollidedWithOtherFireball(hitBox);
-    }
-
     // 🚀 Update movement and handle collisions
     updateMovement(time, camera) {
-        this.position.y -= 600 * this.directionY * time.secondsPassed;
-
-        if (this.position.y <= 220) this.directionY = 0;
-
+       this.position.x += (this.direction) * time.secondsPassed;
+       if(this.animationFrame >= 4)  this.position.y += 1.8;
+       
         const screenX = this.position.x - camera.position.x;
         if (screenX > 384 + 56 || screenX < -56) {
             this.entityList.remove(this);
             return;
         }
 
-        const collided = this.hasCollided();
-        if (!collided) return;
-
-       // FireballState.ACTIVE = FireballState.COLLIDED;
-        
-
-        this.handleCollisionEffects(time, collided);
+       
     }
 
-    // 💥 Handle collision results
-    handleCollisionEffects(time, collisionState) {
-        if (collisionState === FireballCollidedState.FIREBALL) {
-          // this.direction *= -1;
-           // this.directionY = 1;
-            return;
-        }
-
-        const opponent = this.fighter.opponent;
-
-        
-
-        if (collisionState === FireballCollidedState.OPPONENT && this.canDealDamage) {
-            this.canDealDamage = false;
-            opponent.position.y -= 150 * time.secondsPassed;
-           // this.direction *= -1;
-           // this.directionY = 1;
-            this.entityList.add(GreenHitSplash, time, opponent.position.x, opponent.position.y - 40, 1);
-
-            opponent.handleAttackHit(
-                time,
-                FighterAttackStrength.SUPER1,
-                FighterAttackType.PUNCH,
-                undefined,
-                FighterHurtBox.BODY
-            );
-        }
-    }
 
     // 🎞️ Update animation frames
     updateAnimation(time) {
         if (time.previous < this.animationTimer) return;
-         if(this.animationFrame === 6)  this.entityList.remove(this);
+         if(this.animationFrame === 8)  this.entityList.remove(this);
         this.animationFrame = (this.animationFrame + 1) % animations[FireballState.ACTIVE].length;
         this.animationTimer = time.previous + animations[FireballState.ACTIVE][this.animationFrame][1] * FRAME_TIME;
       
          // this.animationTimer = time.previous + animations[FireballState.ACTIVE][0][1] * FRAME_TIME;
     }
 
-    // 🎞️ Update animation frames
-    updateCrackAnimation(time) {
-        if (time.previous < this.crackAnimationTimer) return;
-       
-        this.crackAnimationFrame = (this.crackAnimationFrame + 1) % animations[FireballState.CRACK].length;
-        this.crackAnimationTimer = time.previous + animations[FireballState.CRACK][this.crackAnimationFrame][1] * FRAME_TIME;
-    }
+    
 
     // 🧭 Draw individual debug boxes
     drawDebugBox(context, camera, dimensions, baseColor) {
@@ -243,34 +159,10 @@ export class Rock {
         context.stroke();
     }
 
-    // 🖼️ Draw fireball sprite
-    drawCrack(context, camera) {
-        if (!this.image || !this.image.complete) return;
-
-        const [frameKey] = animations[FireballState.CRACK][this.crackAnimationFrame];
-        const [[[frameX, frameY, frameWidth, frameHeight], [originX, originY]]] = frames.get(frameKey);
-
-        context.save();
-        context.scale(this.direction, 1);
-
-        context.drawImage(
-            this.image,
-            frameX,
-            frameY,
-            frameWidth,
-            frameHeight,
-            Math.floor((this.position.x - camera.position.x) * this.direction - originX),
-            Math.floor(this.position.y - camera.position.y - originY+10),
-            frameWidth,
-            frameHeight
-        );
-
-        context.restore();
-       // this.drawDebug(context, camera);
-    }
+   
 
     draw(context, camera) {
-         this.drawCrack(context, camera);
+        
         if (!this.image || !this.image.complete) return;
 
         const [frameKey] = animations[FireballState.ACTIVE][this.animationFrame];
@@ -300,6 +192,6 @@ export class Rock {
     update(time, _, camera) {
         this.updateMovement(time, camera);
         this.updateAnimation(time);
-         this.updateCrackAnimation(time);
+        
     }
 }

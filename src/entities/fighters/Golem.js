@@ -1,5 +1,5 @@
 import * as control from '../../inputHandler.js'
-import { FIGHTER_HURT_DELAY, FighterState, FrameDelay, HitBox, HurtBox, PushBox, SpecialMoveButton, SpecialMoveDirection } from '../../constants/fighter.js';
+import { FIGHTER_HURT_DELAY, FighterAttackStrength, FighterState, FrameDelay, HitBox, HurtBox, PushBox, SpecialMoveButton, SpecialMoveDirection } from '../../constants/fighter.js';
 import { playSound } from '../../soundHandler.js';
 import { gameState } from '../../state/gameState.js';
 //import { FighterState, PushBox, AnimationFrame } from '../../constants/fighter.js';
@@ -7,6 +7,7 @@ import { gameState } from '../../state/gameState.js';
 import { Fighter, AnimationFrame } from './Fighter.js';
 import { Fireball } from './special/Fireball.js';
 import { Rock } from './special/Rock.js';
+import { BlockRock } from './special/BlockRock.js';
 
 export class Golem extends Fighter {
     constructor(playerId, onAttackHit, entityList){
@@ -123,6 +124,19 @@ export class Golem extends Fighter {
             ['hurt-body-2', [[[81, 32, 57, 67], [28,65]], PushBox.CROUCH, [[7, -60, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
             ['hurt-body-3', [[[492, 34, 46, 67], [23,65]], PushBox.CROUCH, [[-26, -61, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
 
+            //Standing Block
+            ['stand-block-1', [[[87, 692, 60, 99], [30,97]], PushBox.IDLE, HurtBox.IDLE,]],
+
+            //Rock on Block entity
+            ['rock-1', [[[265, 765, 15, 42], [7,40]], PushBox.IDLE, HurtBox.IDLE,]],
+            ['rock-2', [[[238, 741, 17, 64], [7,40]], PushBox.IDLE, HurtBox.IDLE,]],
+            ['rock-3', [[[211, 708, 18, 97], [9,95]], PushBox.IDLE, HurtBox.IDLE,]],
+            ['rock-2', [[[184, 686, 18, 119], [9,117]], PushBox.IDLE, HurtBox.IDLE,]],
+            
+            //Crouch Block
+            ['crouch-block-1', [[[162, 32, 62, 70], [31,68]], PushBox.CROUCH, HurtBox.CROUCH]], 
+            
+
 
             //Dodge Anim
              ['dodge-1', [[[95, 464, 55, 99], [28,97]], PushBox.NULL, HurtBox.NULL]],
@@ -175,9 +189,17 @@ export class Golem extends Fighter {
                ['dodge-3', 50], ['dodge-4', 300],['dodge-3', 40],['dodge-2', 40],['dodge-1', 40], ['dodge-1',FrameDelay.TRANSITION],
                         ],
               [FighterState.DODGE_FORWARD]:[ 
-               ['dodge2-1', 40],['dodge2-2', 40], 
-               ['dodge2-3', 50], ['dodge2-4', 300],['dodge2-3', 40],['dodge2-2', 40],['dodge2-1', 40], ['dodge2-1',FrameDelay.TRANSITION],
-                        ],          
+               ['dodge-1', 40],['dodge-2', 40], 
+               ['dodge-3', 50], ['dodge-4', 300],['dodge-3', 40],['dodge-2', 40],['dodge-1', 40], ['dodge-1',FrameDelay.TRANSITION],
+                        ],
+                [FighterState.BLOCK]:[
+                ['stand-block-1', 60],
+                ['stand-block-1', FrameDelay.TRANSITION],
+                ],          
+                [FighterState.CROUCH_BLOCK]:[
+                ['crouch-block-1', 60],
+                ['crouch-block-1', FrameDelay.TRANSITION],
+            ],
              //Golem ok
             [FighterState.WALK_FORWARD]: [
                 ['forwards-4',85],['forwards-5',85],['forwards-4',85], ['forwards-3',85],['forwards-2',85],['forwards-1',85]
@@ -421,6 +443,26 @@ export class Golem extends Fighter {
             this.changeState(FighterState.IDLE);
         }
          
+
+       handleBlockInit(time, hitPosition){
+         this.entityList.add.call(this.entityList, BlockRock, time, this, this.fireball.strength);
+              this.onAttackHit?.(time, this.opponent.playerId, this.playerId, hitPosition, FighterAttackStrength.BLOCK);
+               
+                playSound(this.soundHits.BLOCK);
+             //  this.EntityList.add(SuperHitSplash, time, this.opponent.position.x, this.opponent.position.y - 30, this.opponent.playerId);
+               this.handleMoveInit();
+           }
+
+           handleCrouchBlockInit(time, hitPosition){
+            this.entityList.add.call(this.entityList, BlockRock, time, this, this.fireball.strength);
+                  this.onAttackHit?.(time, this.opponent.playerId, this.playerId, hitPosition, FighterAttackStrength.BLOCK);
+                 
+                   playSound(this.soundHits.BLOCK);
+                 
+                   this.handleMoveInit();
+               }
+        
+       
 
         // ==============================
   // Special Skill 1 - Fireball

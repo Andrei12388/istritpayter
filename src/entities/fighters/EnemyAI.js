@@ -148,12 +148,14 @@ export class EnemyAI {
     }
 
     if (this.isBlocking) {
-      if (now >= this.blockUntil || !this.opponentIsAttacking()) {
-        this.fighter.changeState(FighterState.IDLE, time);
-        this.isBlocking = false;
-      }
-      return;
-    }
+  if (now >= this.blockUntil || !this.opponentIsAttacking()) {
+    this.resetInputs(); // stop moving backward
+   // this.fighter.changeState(FighterState.IDLE, time);
+    this.isBlocking = false;
+  }
+  return;
+}
+
 
     if (!this.nextDecisionTime || now >= this.nextDecisionTime) {
       this.nextDecisionTime = now + randomBetween(this.reactionDelay[0], this.reactionDelay[1]);
@@ -193,12 +195,20 @@ export class EnemyAI {
     if (this.fighter.currentState.includes("HURT") || this.fighter.currentState.includes("DEAD")) return;
 
     // Reactive: block if opponent attacking nearby
-    if (this.opponentIsAttacking() && distance < Math.max(this.engageDistance, 900) && Math.random() < this.blockChance) {
-      this.fighter.changeState(FighterState.BLOCK, time);
-      this.isBlocking = true;
-      this.blockUntil = now + 400;
-      return;
-    }
+   // Reactive: move backward instead of blocking when opponent attacks
+if (this.opponentIsAttacking() && distance < Math.max(this.engageDistance, 900) && Math.random() < this.blockChance) {
+  this.resetInputs();
+
+  // Determine which direction is backward
+  const backwardControl = this.fighter.direction === 1 ? Control.LEFT : Control.RIGHT;
+
+  // Hold backward movement for a short "defensive" duration
+  this.press(backwardControl);
+  this.isBlocking = true; // still use this flag to time release
+  this.blockUntil = now + 400; // same duration as before
+  return;
+}
+
 
    
 

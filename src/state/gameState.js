@@ -22,7 +22,7 @@ export const gameState = {
     pauseTimer: 0,
     credits: 0,
     pauseFrameMove: -30,
-    stage: 'bohol',
+    stage: 'litex',
     flash: false,
     characterSelectMode: true,
     hyperSkill: false,
