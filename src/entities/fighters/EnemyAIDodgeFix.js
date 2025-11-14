@@ -8,44 +8,8 @@ function randomBetween(min, max) {
 }
 
 const DIFFICULTY_PRESETS = {
-  easy: {
-    blockChance: 0.15,
-    dodgeChance: 0.10,
-    attackCooldown: 1500,
-    reactionDelay: [300, 600],
-    engageDistance: 50,
-    dodgeDistance: 120,
-    superChance: 0.15,
-  },
-  normal: {
-    blockChance: 0.3,
-    dodgeChance: 0.25,
-    attackCooldown: 1000,
-    reactionDelay: [150, 350],
-    engageDistance: 70,
-    dodgeDistance: 150,
-    superChance: 0.3,
-  },
-  hard: {
-    blockChance: 0.65,
-    dodgeChance: 0.45,
-    attackCooldown: 600,
-    reactionDelay: [50, 150],
-    engageDistance: 100,
-    dodgeDistance: 180,
-    superChance: 0.55,
-  },
-  expert: {
-    blockChance: 0.9,
-    dodgeChance: 0.05,
-    attackCooldown: 300,
-    reactionDelay: [20, 70],
-    engageDistance: 100,
-    dodgeDistance: 200,
-    superChance: 0.8,
-  },
   insane: {
-    blockChance: 1,
+    blockChance: 0.99,
     dodgeChance: 0.1,
     attackCooldown: 50,       
     reactionDelay: [2, 15],   

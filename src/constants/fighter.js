@@ -49,12 +49,12 @@ export const FighterAttackBaseData = {
  [FighterAttackStrength.HEAVY]: {
     score: 500,
     skill: 10,
-    knockup: true,
+    knockup: false,
     thrust: {
-        x: -50,
-        y: -200,
+        x: 0,
+        y: 0,
     },
-    damage: 10,
+    damage: 8,
     slide: {
         velocity: -16 * FRAME_TIME,
         friction: 500,

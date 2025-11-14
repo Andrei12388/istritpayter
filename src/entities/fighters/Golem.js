@@ -114,15 +114,14 @@ export class Golem extends Fighter {
             ['heavy-kick-5', [[[206, 259, 51, 87], [15,85]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
 
             //Hit Face
-            ['hurt-face-4', [[[71, 253, 50, 90],[24,88]], PushBox.IDLE, HurtBox.IDLE]],
-            ['hurt-face-3', [[[140, 253,52,88],[26,90]], PushBox.IDLE, HurtBox.IDLE]],
-            ['hurt-face-2', [[[205, 255,52,88],[26,86]], PushBox.IDLE, HurtBox.IDLE]],
-            ['hurt-face-1', [[[269, 254,50,90],[25,88]], PushBox.IDLE, HurtBox.IDLE]],
+            ['hurt-face-3', [[[886, 774,73,84],[26,90]], PushBox.IDLE, HurtBox.IDLE]],
+            ['hurt-face-2', [[[811, 772,65,92],[32,90]], PushBox.IDLE, HurtBox.IDLE]],
+            ['hurt-face-1', [[[741, 767,58,99],[29,97]], PushBox.IDLE, HurtBox.IDLE]],
 
             //Hurt Body
-            ['hurt-body-1', [[[154, 42, 58, 58], [29,56]], PushBox.CROUCH, [[7, -60, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
-            ['hurt-body-2', [[[81, 32, 57, 67], [28,65]], PushBox.CROUCH, [[7, -60, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
-            ['hurt-body-3', [[[492, 34, 46, 67], [23,65]], PushBox.CROUCH, [[-26, -61, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
+            ['hurt-body-1', [[[602, 653, 58, 95], [29,93]], PushBox.CROUCH, [[7, -60, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
+            ['hurt-body-2', [[[678, 659, 70, 89], [35,87]], PushBox.CROUCH, [[7, -60, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
+            ['hurt-body-3', [[[749, 666, 83, 75], [41,73]], PushBox.CROUCH, [[-26, -61, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
 
             //Standing Block
             ['stand-block-1', [[[87, 692, 60, 99], [30,97]], PushBox.IDLE, HurtBox.IDLE,]],
@@ -290,21 +289,22 @@ export class Golem extends Fighter {
                  // ['jump-attack-1',FrameDelay.TRANSITION],
             ],
             
-            [FighterState.HURT_HEAD_LIGHT]:[
+             [FighterState.HURT_HEAD_LIGHT]:[
                 ['hurt-face-1', FIGHTER_HURT_DELAY],['hurt-face-1', 30],
-                ['hurt-face-2', 40],['hurt-face-3', 90],['hurt-face-3', FrameDelay.TRANSITION],
+                ['hurt-face-2', 40],['hurt-face-3', 40], ['hurt-face-2', 20], ['hurt-face-1', 20],
+                ['hurt-face-1', FrameDelay.TRANSITION],
             ],
             [FighterState.HURT_HEAD_HEAVY]:[
-                ['hurt-face-3', FIGHTER_HURT_DELAY],['hurt-face-3', 70],
-                ['hurt-face-4', 40],['hurt-face-3', 90],['hurt-face-3', FrameDelay.TRANSITION],
+                ['hurt-face-3', FIGHTER_HURT_DELAY],['hurt-face-3', 80],
+                ['hurt-face-2', 50],['hurt-face-1', 70],['hurt-face-1', FrameDelay.TRANSITION],
             ],
             [FighterState.HURT_BODY_LIGHT]:[
-                ['hurt-body-1', FIGHTER_HURT_DELAY],['hurt-body-1', 70],
-                ['hurt-body-2', 90],['hurt-body-2', FrameDelay.TRANSITION],
+                ['hurt-body-1', FIGHTER_HURT_DELAY],['hurt-body-1', 30],
+                ['hurt-body-2', 60], ['hurt-body-1', 60], ['hurt-body-1', FrameDelay.TRANSITION],
             ],
             [FighterState.HURT_BODY_HEAVY]:[
-                ['hurt-body-1', FIGHTER_HURT_DELAY],['hurt-body-2', 30],
-                ['hurt-body-3', 40],['hurt-body-3', 40],['hurt-body-3', 90],['hurt-body-3', FrameDelay.TRANSITION],
+                ['hurt-body-1', FIGHTER_HURT_DELAY],['hurt-body-2', 80],
+                ['hurt-body-3', 120],['hurt-body-2', 90],['hurt-body-1', 90],['hurt-body-1', FrameDelay.TRANSITION],
             ],
             [FighterState.SPECIAL_1]:[
                 ['special1-1', 100],['special1-2', 100],['special1-3', 100],['special1-4', 100],['special1-5', 100],['special1-6', 100],['special1-7', 100],

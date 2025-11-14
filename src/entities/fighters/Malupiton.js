@@ -138,15 +138,14 @@ export class Malupiton extends Fighter {
             ['heavy-kick-5', [[[206, 259, 51, 87], [15,85]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]], HitBox.NULL]],
 
             //Hit Face
-            ['hurt-face-4', [[[71, 253, 50, 90],[24,88]], PushBox.IDLE, HurtBox.IDLE]],
-            ['hurt-face-3', [[[140, 253,52,88],[26,90]], PushBox.IDLE, HurtBox.IDLE]],
-            ['hurt-face-2', [[[205, 255,52,88],[26,86]], PushBox.IDLE, HurtBox.IDLE]],
-            ['hurt-face-1', [[[269, 254,50,90],[25,88]], PushBox.IDLE, HurtBox.IDLE]],
+            ['hurt-face-3', [[[91, 1158,75,93],[37,91]], PushBox.IDLE, HurtBox.IDLE]],
+            ['hurt-face-2', [[[21, 1153,60,101],[30,99]], PushBox.IDLE, HurtBox.IDLE]],
+            ['hurt-face-1', [[[20, 1042,51,90],[25,88]], PushBox.IDLE, HurtBox.IDLE]],
 
             //Hurt Body
-            ['hurt-body-1', [[[154, 42, 58, 58], [29,56]], PushBox.CROUCH, [[7, -60, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
-            ['hurt-body-2', [[[81, 32, 57, 67], [28,65]], PushBox.CROUCH, [[7, -60, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
-            ['hurt-body-3', [[[492, 34, 46, 67], [23,65]], PushBox.CROUCH, [[-26, -61, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
+            ['hurt-body-1', [[[20, 1042, 51, 90], [25,88]], PushBox.CROUCH, [[7, -60, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
+            ['hurt-body-2', [[[82, 1049, 68, 83], [34,81]], PushBox.CROUCH, [[7, -60, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
+            ['hurt-body-3', [[[159, 1051, 74, 80], [37,78]], PushBox.CROUCH, [[-26, -61, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
 
              //Special 1 - Roll
             ['special-1', [[[70, 124, 55, 88], [27,86]], PushBox.IDLE, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
@@ -273,11 +272,11 @@ export class Malupiton extends Fighter {
                 ['crouch-turn-1', 33],['crouch-turn-1', FrameDelay.TRANSITION],
             ],
              [FighterState.LIGHT_PUNCH]:[
-                ['light-punch-1', 33],['light-punch-2', 66],
+                ['light-punch-1', 33],['light-punch-1', 33],['light-punch-2', 66],
                 ['light-punch-1', 66],['light-punch-1', FrameDelay.TRANSITION],
             ],
             [FighterState.HEAVY_PUNCH]:[
-                ['light-punch-1', 50],['light-punch-3', 33],['heavy-punch-1', 100],
+                ['light-punch-1', 50],['light-punch-1', 50],['light-punch-3', 33],['heavy-punch-1', 100],
                 ['light-punch-3', 166],['light-punch-1', 199],['light-punch-1', FrameDelay.TRANSITION],
             ],
              [FighterState.LIGHT_KICK]:[
@@ -285,7 +284,7 @@ export class Malupiton extends Fighter {
                 ['light-kick-1', 66],['light-kick-1', FrameDelay.TRANSITION],
             ],
              [FighterState.CROUCH_LIGHTKICK]:[
-                ['crouch-lightkick-1', 33],['crouch-lightkick-2', 106],
+                ['crouch-lightkick-1', 33],['crouch-lightkick-1', 33],['crouch-lightkick-2', 106],
                 ['crouch-lightkick-1', 66],['crouch-lightkick-1', FrameDelay.TRANSITION],
             ],
            [FighterState.CROUCH_HEAVYKICK]:[
@@ -309,19 +308,20 @@ export class Malupiton extends Fighter {
             
             [FighterState.HURT_HEAD_LIGHT]:[
                 ['hurt-face-1', FIGHTER_HURT_DELAY],['hurt-face-1', 30],
-                ['hurt-face-2', 40],['hurt-face-3', 90],['hurt-face-3', FrameDelay.TRANSITION],
+                ['hurt-face-2', 40],['hurt-face-3', 40], ['hurt-face-2', 20], ['hurt-face-1', 20],
+                ['hurt-face-1', FrameDelay.TRANSITION],
             ],
             [FighterState.HURT_HEAD_HEAVY]:[
-                ['hurt-face-3', FIGHTER_HURT_DELAY],['hurt-face-3', 70],
-                ['hurt-face-4', 40],['hurt-face-3', 90],['hurt-face-3', FrameDelay.TRANSITION],
+                ['hurt-face-3', FIGHTER_HURT_DELAY],['hurt-face-3', 80],
+                ['hurt-face-2', 50],['hurt-face-1', 70],['hurt-face-1', FrameDelay.TRANSITION],
             ],
             [FighterState.HURT_BODY_LIGHT]:[
-                ['hurt-body-1', FIGHTER_HURT_DELAY],['hurt-body-1', 70],
-                ['hurt-body-2', 90],['hurt-body-2', FrameDelay.TRANSITION],
+                ['hurt-body-1', FIGHTER_HURT_DELAY],['hurt-body-1', 30],
+                ['hurt-body-2', 60], ['hurt-body-1', 60], ['hurt-body-1', FrameDelay.TRANSITION],
             ],
             [FighterState.HURT_BODY_HEAVY]:[
-                ['hurt-body-1', FIGHTER_HURT_DELAY],['hurt-body-2', 30],
-                ['hurt-body-3', 40],['hurt-body-3', 40],['hurt-body-3', 90],['hurt-body-3', FrameDelay.TRANSITION],
+                ['hurt-body-1', FIGHTER_HURT_DELAY],['hurt-body-2', 80],
+                ['hurt-body-3', 120],['hurt-body-2', 90],['hurt-body-1', 90],['hurt-body-1', FrameDelay.TRANSITION],
             ],
             [FighterState.SPECIAL_1]:[
                 ['special-1', 20],['special-2', 80],['special-3', 20],['special-3', 400],
