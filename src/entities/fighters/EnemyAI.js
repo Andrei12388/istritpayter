@@ -56,8 +56,9 @@ const DIFFICULTY_PRESETS = {
 };
 
 export class EnemyAI {
-  constructor(fighter, opponent, difficulty = "insane") {
+  constructor(fighter, opponent, difficulty) {
     this.settings = DIFFICULTY_PRESETS[difficulty] || DIFFICULTY_PRESETS.normal;
+    console.log(`EnemyAI initialized with difficulty: ${difficulty}`);
     this.fighter = fighter;
     this.opponent = opponent;
 

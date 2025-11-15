@@ -14,7 +14,7 @@ export class Golem extends Fighter {
         super(playerId, onAttackHit); //Change Direction of the player
 
         this.entityList = entityList;
-
+        
         this.image = document.querySelector('img[alt="golem"]');
         this.voiceSpecial3 = document.querySelector('audio#sound-malupiton-special-3');
         this.voiceSpecial2 = document.querySelector('audio#sound-malupiton-special-2');
@@ -37,6 +37,16 @@ export class Golem extends Fighter {
             ['forwards-3', [[[472, 346,55,99],[27,97]], PushBox.IDLE, HurtBox.IDLE]],
             ['forwards-4', [[[543, 346,55,99],[27,97]], PushBox.IDLE, HurtBox.IDLE]],
             ['forwards-5', [[[613, 346,55,99],[27,97]], PushBox.IDLE, HurtBox.IDLE]],
+
+            ['forwards2-1', [[[45,968, 87, 109],[43,105]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards2-2', [[[148,968, 84, 106],[42,102]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards2-3', [[[244,972, 90, 99],[45,95]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards2-4', [[[347,971, 71, 105],[35,101]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards2-5', [[[446,970, 76, 111],[37,107]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards2-6', [[[536,971, 57, 109],[28,105]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards2-7', [[[610,972, 78, 109],[39,105]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards2-8', [[[693,971, 81, 116],[40,112]], PushBox.IDLE, HurtBox.IDLE]],
+            
             
             
             //Jump Up
@@ -138,7 +148,7 @@ export class Golem extends Fighter {
 
 
             //Dodge Anim
-             ['dodge-1', [[[95, 464, 55, 99], [28,97]], PushBox.NULL, HurtBox.NULL]],
+             ['dodge-1', [[[95, 464, 55, 99], [28,97]], PushBox.NULL, HurtBox.IDLE]],
              ['dodge-2', [[[170, 463, 55, 102], [23,100]], PushBox.NULL, HurtBox.NULL]],
              ['dodge-3', [[[235, 462, 55, 103], [27,101]], PushBox.NULL,HurtBox.NULL]],
              ['dodge-4', [[[300, 462, 55, 103], [27,101]], PushBox.NULL,HurtBox.NULL]],
@@ -183,17 +193,17 @@ export class Golem extends Fighter {
             //Golem ok
             [FighterState.IDLE]:[ 
                 ['forwards-1', 85],['forwards-2',85],
-                ['forwards-3',85],['forwards-2',85]
-               ,['forwards-1',85],
+                ['forwards-3',85],['forwards-2',85],
+                ['forwards-1',85],
                 ['forwards-4',85],['forwards-5',85],['forwards-4',85]
             ],
             [FighterState.DODGE_BACKWARD]:[ 
                ['dodge-1', 40],['dodge-2', 40], 
-               ['dodge-3', 50], ['dodge-4', 300],['dodge-3', 40],['dodge-2', 40],['dodge-1', 40], ['dodge-1',FrameDelay.TRANSITION],
+               ['dodge-3', 50], ['dodge-4', 100],['dodge-3', 40],['dodge-2', 40],['dodge-1', 40], ['dodge-1',FrameDelay.TRANSITION],
                         ],
               [FighterState.DODGE_FORWARD]:[ 
                ['dodge-1', 40],['dodge-2', 40], 
-               ['dodge-3', 50], ['dodge-4', 300],['dodge-3', 40],['dodge-2', 40],['dodge-1', 40], ['dodge-1',FrameDelay.TRANSITION],
+               ['dodge-3', 50], ['dodge-4', 100],['dodge-3', 40],['dodge-2', 40],['dodge-1', 40], ['dodge-1',FrameDelay.TRANSITION],
                         ],
                 [FighterState.BLOCK]:[
                 ['stand-block-1', 60],
@@ -205,12 +215,12 @@ export class Golem extends Fighter {
             ],
              //Golem ok
             [FighterState.WALK_FORWARD]: [
-                ['forwards-4',85],['forwards-5',85],['forwards-4',85], ['forwards-3',85],['forwards-2',85],['forwards-1',85]
+                ['forwards2-1',85],['forwards2-2',85],['forwards2-3',85], ['forwards2-4',85],['forwards2-5',85],['forwards2-6',85],['forwards2-7',85],['forwards2-8',85],
                         
             ],
              //Golem ok
             [FighterState.WALK_BACKWARD]:[
-                ['forwards-4',85],['forwards-5',85],['forwards-4',85], ['forwards-3',85],['forwards-2',85],['forwards-1',85]
+                ['forwards2-8',85],['forwards2-7',85],['forwards2-6',85], ['forwards2-5',85],['forwards2-4',85],['forwards2-3',85],['forwards2-2',85],['forwards2-1',85],
         ],
          //Golem ok
             [FighterState.JUMP_START]:[
@@ -432,8 +442,7 @@ export class Golem extends Fighter {
     }
     
          handleDodgeState(){
-        
-           
+           gameState.dodging = true;
            if (control.isForward(this.playerId, this.direction)) {
                        console.log('Dodge Forward State');
                         this.changeState(FighterState.DODGE_FORWARD);
@@ -443,6 +452,7 @@ export class Golem extends Fighter {
         }
             
             if (!this.isAnimationCompleted()) return;
+             gameState.dodging = false;
               this.direction = this.getDirection();
             this.changeState(FighterState.IDLE);
         }

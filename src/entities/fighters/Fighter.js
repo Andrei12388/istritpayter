@@ -883,7 +883,7 @@ export class Fighter {
              
              this.resetSlide(true);
         }
-
+     if(gameState.dodging) return;
         if (this.hasCollidedWithOpponent()) {
             if (this.position.x <= this.opponent.position.x){
                 this.position.x = Math.max(

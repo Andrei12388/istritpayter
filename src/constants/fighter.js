@@ -56,7 +56,7 @@ export const FighterAttackBaseData = {
     },
     damage: 8,
     slide: {
-        velocity: -16 * FRAME_TIME,
+        velocity: -23 * FRAME_TIME,
         friction: 500,
     },
  },

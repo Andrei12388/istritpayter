@@ -8,6 +8,8 @@ export class finalStage {
     constructor(){
         this.image = document.querySelector('img[alt="final-stage"]');
        gameState.stageMusic = 'audio#stage-boss';
+       this.lightningStruckSound = document.getElementById('sound-lightning-struck');
+       this.lightningStruckSound.volume = 0.7;
        console.log('Final Stage created');
     
         this.frames = new Map([
@@ -26,8 +28,8 @@ export class finalStage {
             ],
             [
                 ['stage-background', 20],['stage-background', 2000], ['stage-background2', 100], ['stage-background', 60], ['stage-background2', 100],['stage-background', 5000],
-                ['stage-background', 20],['stage-background', 2000], ['stage-background3', 100], ['stage-background', 60], ['stage-background3', 100],['stage-background', 5000],
-                ['stage-background', 20],['stage-background', 2000], ['stage-background4', 100], ['stage-background', 60], ['stage-background4', 100],['stage-background', 5000],
+                ['stage-background', 20],['stage-background', 2000], ['stage-background3', 100], ['stage-background', 60], ['stage-background3', 100],['stage-background', 8000],
+                ['stage-background', 20],['stage-background', 2000], ['stage-background4', 100], ['stage-background', 60], ['stage-background4', 100],['stage-background', 11000],
         ],
         )
         
@@ -35,15 +37,26 @@ export class finalStage {
     }
 
    
-
+ updateLightningStrike(time){
+        if(this.stageBackground.animationFrame == 2){
+            this.lightningStruckSound.volume = 0.5;
+           this.lightningStruckSound.play();
+        }
+        if(this.stageBackground.animationFrame == 8){
+            this.lightningStruckSound.volume = 0.5;
+           this.lightningStruckSound.play();
+        }
+        if(this.stageBackground.animationFrame == 14){
+            this.lightningStruckSound.volume = 0.7;
+           this.lightningStruckSound.play();
+        }
+    }
    
   
     update(time){
         if(gameState.pause) return;
-       
+        this.updateLightningStrike(time);
         this.stageBackground.update(time);
-        
-        
     }
 
      drawFrame(context, frameKey, x, y, direction, alpha){

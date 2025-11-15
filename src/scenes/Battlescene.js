@@ -113,8 +113,8 @@ export class BattleScene {
 
         
         // Initialize AI to control player 2 (index 1)
-        this.enemyAI = new EnemyAI(this.fighters[1], this.fighters[0]);
-        this.enemyAI2 = new EnemyAI(this.fighters[0], this.fighters[1]);
+        this.enemyAI = new EnemyAI(this.fighters[1], this.fighters[0], gameState.difficulty);
+        this.enemyAI2 = new EnemyAI(this.fighters[0], this.fighters[1], gameState.difficulty);
             
         this.overlays = [
            // new StatusBar(this.game, this.fighters),
@@ -273,7 +273,7 @@ handleFlash() {
         }
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
-      this.enemyAI.update(time);
+     // this.enemyAI.update(time);
         // this.enemyAI2.update(time);
     }
    
