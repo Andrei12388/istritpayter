@@ -184,7 +184,7 @@ export class EnemyAI {
     }
 
     // Attack and super if opponent vulnerable
-    if (this.opponentIsVulnerable() && distance < this.engageDistance + 30 && this.attackCooldown <= 0) {
+    if (this.opponentIsVulnerable() && distance < this.engageDistance + 40 && this.attackCooldown <= 0) {
       this.performAttack();
       this.attackCooldown = this.attackCooldownBase;
       if (Math.random() < this.superChance) this.performSuper(time);
@@ -227,8 +227,8 @@ export class EnemyAI {
       [{ control: Control.HEAVY_PUNCH, duration: 40 }],
       [{ control: Control.LIGHT_KICK, duration: 40 }],
       [{ control: Control.HEAVY_KICK, duration: 40 }],
-      [{ control: Control.DOWN, duration: 40 },{ control: Control.LIGHT_KICK, duration: 40 }],
-      [{ control: Control.DOWN, duration: 40 },{ control: Control.HEAVY_KICK, duration: 40 }],
+      [{ control: Control.DOWN, duration: 20 },{ control: Control.DOWN, duration: 20 },{ control: Control.LIGHT_KICK, duration: 40 }],
+      [{ control: Control.DOWN, duration: 20 },{ control: Control.DOWN, duration: 20 },{ control: Control.HEAVY_KICK, duration: 40 }],
       [{ control: Control.LIGHT_PUNCH, duration: 40 }, { control: Control.HEAVY_PUNCH, duration: 40 }],
       [{ control: Control.LIGHT_KICK, duration: 40 }, { control: Control.HEAVY_KICK, duration: 40 }],
       [{ control: Control.DOWN, duration: 30 }, { control: [Control.LEFT, Control.DOWN], duration: 30 }, { control: Control.HEAVY_PUNCH, duration: 30 }],

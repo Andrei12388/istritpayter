@@ -288,7 +288,7 @@ export class Malupiton extends Fighter {
                 ['crouch-lightkick-1', 66],['crouch-lightkick-1', FrameDelay.TRANSITION],
             ],
            [FighterState.CROUCH_HEAVYKICK]:[
-                ['crouch-heavykick-1', 66],['crouch-heavykick-2', 88],['crouch-heavykick-3', 143],
+                ['crouch-heavykick-1', 40],['crouch-heavykick-2', 40],['crouch-heavykick-3', 143],
                 ['crouch-heavykick-2', 166],['crouch-heavykick-1', 196],['crouch-heavykick-1', FrameDelay.TRANSITION],
             ],
             [FighterState.HEAVY_KICK]:[
@@ -394,6 +394,11 @@ export class Malupiton extends Fighter {
                 ['death-1', 100], ['death-2', 120], ['death-3', 120], 
                 ['death-4', 120], ['death-5', 120], ['death-6', 130], 
                 ['death-7', 120],
+                ['death-7', FrameDelay.TRANSITION],
+            ],
+            [FighterState.FALL]:[
+                ['death-4', 100], ['death-5', 100], ['death-6', 100], 
+                ['death-7', 100],
                 ['death-7', FrameDelay.TRANSITION],
             ],
              [FighterState.GETUP]:[

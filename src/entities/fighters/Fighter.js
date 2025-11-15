@@ -83,7 +83,7 @@ export class Fighter {
                     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
                     FighterState.SPECIAL_1, FighterState.DODGE, FighterState.SPECIAL_2, FighterState.BLOCK, FighterState.CROUCH_BLOCK,
                     FighterState.DODGE_FORWARD, FighterState.DODGE_BACKWARD, FighterState.DEATH, FighterState.GETUP,
-                    FighterState.DIE, 
+                    FighterState.DIE, FighterState.FALL,
                 ],
             },
             [FighterState.WALK_FORWARD]:{
@@ -176,7 +176,7 @@ export class Fighter {
                 attackStrength: FighterAttackStrength.HEAVY,
                  init: this.handleAttackInit.bind(this),
                 update: this.handleHeavyPunchState.bind(this),
-                validFrom:[FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.WALK_BACKWARD, FighterState.SPECIAL_2],
+                validFrom:[FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.WALK_BACKWARD, FighterState.SPECIAL_2, FighterState.LIGHT_PUNCH],
             },
              [FighterState.LIGHT_KICK]:{
                 attackType: FighterAttackType.KICK,
@@ -190,14 +190,14 @@ export class Fighter {
                 attackStrength: FighterAttackStrength.LIGHT,
                  init: this.handleAttackInit.bind(this),
                 update: this.handleCrouchLightKickState.bind(this),
-                validFrom:[FighterState.CROUCH,FighterState.CROUCH_DOWN,FighterState.CROUCH_TURN,],
+                validFrom:[FighterState.CROUCH,FighterState.CROUCH_DOWN,FighterState.CROUCH_TURN, FighterState.LIGHT_KICK],
             },
             [FighterState.CROUCH_HEAVYKICK]:{
                 attackType: FighterAttackType.KICK,
-                attackStrength: FighterAttackStrength.HEAVY,
+                attackStrength: FighterAttackStrength.HEAVYKICK,
                  init: this.handleAttackInit.bind(this),
                 update: this.handleCrouchHeavyKickState.bind(this),
-                validFrom:[FighterState.CROUCH,FighterState.CROUCH_DOWN,FighterState.CROUCH_TURN,],
+                validFrom:[FighterState.CROUCH,FighterState.CROUCH_DOWN,FighterState.CROUCH_TURN, FighterState.CROUCH_LIGHTKICK],
             },
             [FighterState.JUMP_LIGHTKICK]:{
                 attackType: FighterAttackType.KICK,
@@ -267,10 +267,15 @@ export class Fighter {
                 update: this.handleKnockUpState.bind(this),
                 validFrom: knockUpStateValidFrom,
             },
+            [FighterState.FALL]:{
+                init: this.handleFallInit.bind(this),
+                update: this.handleFallState.bind(this),
+                validFrom: knockUpStateValidFrom,
+            },
             [FighterState.GETUP]:{
                 init: this.handleGetUpInit.bind(this),
                 update: this.handleGetUpState.bind(this),
-                validFrom: [FighterState.KNOCKUP,FighterState.DIE, FighterState.DEATH],
+                validFrom: [FighterState.KNOCKUP,FighterState.DIE, FighterState.DEATH, FighterState.FALL],
             },
         }
         this.changeState(FighterState.IDLE);
@@ -278,6 +283,7 @@ export class Fighter {
         this.soundAttacks = {
         [FighterAttackStrength.LIGHT]: document.querySelector('audio#sound-fighter-light-attack'),
         [FighterAttackStrength.HEAVY]: document.querySelector('audio#sound-fighter-heavy-attack'),
+        [FighterAttackStrength.HEAVYKICK]: document.querySelector('audio#sound-fighter-heavy-attack'),
         [FighterAttackStrength.SUPER1]: document.querySelector('audio#sound-fighter-heavy-attack'),
         [FighterAttackStrength.SUPER2]: document.querySelector('audio#sound-fighter-heavy-attack'),
         [FighterAttackStrength.SLASH]: document.querySelector('audio#sound-slash'),
@@ -289,6 +295,10 @@ export class Fighter {
             [FighterAttackType.KICK]: document.querySelector('audio#sound-fighter-light-kick-hit'),
         },
         [FighterAttackStrength.HEAVY]:{
+            [FighterAttackType.PUNCH]: document.querySelector('audio#sound-fighter-heavy-punch-hit'),
+            [FighterAttackType.KICK]: document.querySelector('audio#sound-fighter-heavy-kick-hit'),
+        },
+        [FighterAttackStrength.HEAVYKICK]:{
             [FighterAttackType.PUNCH]: document.querySelector('audio#sound-fighter-heavy-punch-hit'),
             [FighterAttackType.KICK]: document.querySelector('audio#sound-fighter-heavy-kick-hit'),
         },
@@ -614,7 +624,11 @@ export class Fighter {
         this.onAttackHit?.(time, this.opponent.playerId, this.playerId, hitPosition, attackStrength);
         
         if(FighterAttackBaseData[attackStrength].knockup && gameState.fighters[this.playerId].hitPoints > 0){
-            
+            if(attackStrength === FighterAttackStrength.HEAVYKICK){
+                this.changeState(FighterState.FALL);
+                
+                return;
+            } 
             console.log("Knock up hit activate");
             this.changeState(FighterState.KNOCKUP);
             // set thrust after the state init so it isn't cleared by resetVelocities
@@ -679,7 +693,35 @@ export class Fighter {
          }
     }
 
+    //Fall Init
+    handleFallInit(){
+         console.log("Knock Up Init !");
+        if(gameState.fighters[this.playerId].hitPoints <= 0) {
+           playSound(this.deathSound);
+           playSound(this.soundHits.BLOCK);
+            gameState.fighters[this.playerId].dead = "die";
+        };
+        if(this.position.y >= STAGE_FLOOR ){
+         this.velocity.x = 0;
+         this.velocity.y = 0;
+         }
+    }
+
      handleKnockUpState(){
+        if(this.isAnimationKnockUp()) gameState.fighters[this.playerId].dead = "invulnerable";
+         
+        if (!this.isAnimationCompleted()) return;
+         if(this.position.y >= STAGE_FLOOR){
+            
+         
+         console.log("Knock Up Init on ground!");
+           playSound(this.soundHits.BLOCK);
+         if(gameState.fighters[this.playerId].hitPoints <= 0) return;
+        this.changeState(FighterState.GETUP);
+         }
+    }
+
+    handleFallState(){
         if(this.isAnimationKnockUp()) gameState.fighters[this.playerId].dead = "invulnerable";
          
         if (!this.isAnimationCompleted()) return;

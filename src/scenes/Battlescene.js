@@ -172,6 +172,8 @@ export class BattleScene {
                 return LightHitSplash;
             case FighterAttackStrength.HEAVY:
                 return HeavyHitSplash;
+            case FighterAttackStrength.HEAVYKICK:
+                return HeavyHitSplash;
             case FighterAttackStrength.SUPER1:
                 return GreenHitSplash;
             case FighterAttackStrength.SUPER2:

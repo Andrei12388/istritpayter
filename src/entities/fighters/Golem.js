@@ -8,6 +8,8 @@ import { Fighter, AnimationFrame } from './Fighter.js';
 import { Fireball } from './special/Fireball.js';
 import { Rock } from './special/Rock.js';
 import { BlockRock } from './special/BlockRock.js';
+import { STAGE_FLOOR } from '../../constants/stage.js';
+import { HeavyRock } from './special/HeavyRock.js';
 
 export class Golem extends Fighter {
     constructor(playerId, onAttackHit, entityList){
@@ -16,16 +18,19 @@ export class Golem extends Fighter {
         this.entityList = entityList;
         
         this.image = document.querySelector('img[alt="golem"]');
-        this.voiceSpecial3 = document.querySelector('audio#sound-malupiton-special-3');
+
         this.voiceSpecial2 = document.querySelector('audio#sound-malupiton-special-2');
         this.voiceSpecial1 = document.querySelector('audio#sound-golem-special-1');
-        this.voiceHyperSkill1 = document.querySelector('audio#sound-malupiton-hyperskill-1');
+        this.voiceHyperSkill1 = document.querySelector('audio#sound-golem-hyperskill-1');
         this.soundGroundCrash = document.querySelector('audio#sound-groundCrash');
         this.soundGroundCrash.volume = 1;
         this.voiceSpecial1.volume = 1;
         this.voiceSpecial2.volume = 0.9;
-        this.voiceSpecial3.volume = 0.9;
         this.voiceHyperSkill1.volume = 0.9;
+
+        this.golemEnableMove = false;
+        this.quake = false;
+
         this.deathSound = document.querySelector('audio#sound-golem-death');
         this.deathSound.volume = 1;
         this.soundSuperLaunch = document.querySelector('audio#super-launch');
@@ -178,13 +183,27 @@ export class Golem extends Fighter {
                 ['getUp2-3', [[[431, 863, 61, 80], [30,78]], PushBox.IDLE, HurtBox.NULL]],
 
              //Special 1 Death Impact
-             ['special1-1', [[[473, 12, 55, 99], [28,97]], PushBox.NULL, HurtBox.NULL]],
-             ['special1-2', [[[537, 12, 55, 99], [28,97]], PushBox.NULL, HurtBox.NULL]],
-             ['special1-3', [[[601, 12, 55, 99], [28,97]], PushBox.NULL, HurtBox.NULL]],
-             ['special1-4', [[[676, 12, 55, 99], [28,97]], PushBox.NULL, HurtBox.NULL]],
-             ['special1-5', [[[751, 12, 55, 99], [28,97]], PushBox.NULL, HurtBox.NULL]],
-             ['special1-6', [[[815, 18, 55, 99], [28,67]], PushBox.NULL, HurtBox.NULL]],
-             ['special1-7', [[[880, 18, 55, 99], [28,67]], PushBox.NULL, HurtBox.NULL]],
+             ['special1-1', [[[473, 12, 55, 99], [28,97]], PushBox.IDLE, HurtBox.NULL]],
+             ['special1-2', [[[537, 12, 55, 99], [28,97]], PushBox.IDLE, HurtBox.NULL]],
+             ['special1-3', [[[601, 12, 55, 99], [28,97]], PushBox.IDLE, HurtBox.NULL]],
+             ['special1-4', [[[676, 12, 55, 99], [28,97]], PushBox.IDLE, HurtBox.NULL]],
+             ['special1-5', [[[751, 12, 55, 99], [28,97]], PushBox.IDLE, HurtBox.NULL]],
+             ['special1-6', [[[815, 18, 55, 99], [28,67]], PushBox.IDLE, HurtBox.NULL]],
+             ['special1-7', [[[880, 18, 55, 99], [28,67]], PushBox.IDLE, HurtBox.NULL]],
+
+             //Special 2 Rockman
+             ['special2-1', [[[240, 1119, 57, 99], [28,97]], PushBox.IDLE, HurtBox.NULL]],
+             ['special2-2', [[[317, 1119, 57, 99], [28,97]], PushBox.IDLE, HurtBox.NULL]],
+             ['special2-3', [[[395, 1121, 96, 95], [48,93]], PushBox.IDLE, HurtBox.NULL]],
+             ['special2-4', [[[500, 1132, 105, 92], [52,90]], PushBox.IDLE, HurtBox.NULL]],
+             ['special2-5', [[[607, 1145, 124, 76], [62,54]], PushBox.IDLE, HurtBox.NULL]],
+             ['special2-6', [[[740, 1157, 138, 67], [69,45]], PushBox.IDLE, HurtBox.NULL]],
+             ['special2-7', [[[12, 1306, 127, 74], [63,52]], PushBox.IDLE, HurtBox.NULL]],
+             ['special2-8', [[[150, 1298, 115, 89], [57,67]], PushBox.IDLE, HurtBox.NULL]],
+             ['special2-9', [[[283, 1289, 103, 114], [51,92]], PushBox.IDLE, HurtBox.NULL]],
+             ['special2-10', [[[414, 1284, 92, 107], [46,105]], PushBox.IDLE, HurtBox.IDLE]],
+             ['special2-11', [[[516, 1283, 89, 108], [45,106]], PushBox.IDLE, HurtBox.IDLE]],
+             ['special2-12', [[[615, 1285, 90, 109], [45,107]], PushBox.IDLE, HurtBox.IDLE]],
             
         ]);
 
@@ -281,7 +300,7 @@ export class Golem extends Fighter {
                 ['crouch-lightkick-1', 66],['crouch-lightkick-1', FrameDelay.TRANSITION],
             ],
            [FighterState.CROUCH_HEAVYKICK]:[
-                ['crouch-heavykick-1', 66],['crouch-heavykick-2', 88],['crouch-heavykick-3', 143],
+                ['crouch-heavykick-1', 40],['crouch-heavykick-2', 40],['crouch-heavykick-3', 143],
                 ['crouch-heavykick-2', 166],['crouch-heavykick-1', 196],['crouch-heavykick-1', FrameDelay.TRANSITION],
             ],
             [FighterState.HEAVY_KICK]:[
@@ -321,6 +340,13 @@ export class Golem extends Fighter {
                 ['special1-6', 60], ['special1-5', 60], ['special1-4', 60], ['special1-3', 90], ['special1-2', 60], ['special1-1', 60],
                 ['special1-1', FrameDelay.TRANSITION],
             ],
+            [FighterState.SPECIAL_2]:[
+                ['special2-1', 100],['special2-2', 100],['special2-3', 100],['special2-4', 100],['special2-5', 100],['special2-6', 100],['special2-7', 100],
+                ['special2-8', 60], ['special2-9', 60], ['special2-10', 60], ['special2-11', 90], ['special2-12', 90],['special2-12', FrameDelay.TRANSITION],
+            ],
+            [FighterState.SPECIAL_2_MOVEFIGHTER]:[
+                ['special2-10', 120], ['special2-11', 120],['special2-12', 120],['special2-11', 120],
+            ],
 
              [FighterState.DEATH]:[
                             ['death-1', 300], ['death-2', 120], ['death-3', 120], 
@@ -337,6 +363,11 @@ export class Golem extends Fighter {
                             ['death-4', 120], ['death-5', 120], ['death-6', 130], 
                             ['death-7', 120],
                             ['death-7', FrameDelay.TRANSITION],
+                        ],
+                        [FighterState.FALL]:[
+                        ['death-4', 100], ['death-5', 100], ['death-6', 100], 
+                        ['death-7', 100],
+                        ['death-7', FrameDelay.TRANSITION],
                         ],
                          [FighterState.GETUP]:[
                             ['death-7', 300], ['getUp2-1', 120], ['getUp2-2', 120], ['getUp2-3', 100],['getUp-3', 100],
@@ -366,18 +397,26 @@ export class Golem extends Fighter {
                             ],
                             cursor: 0,
                         },
-                        {
-                            state: FighterState.DODGE_FORWARD,
-                            sequence: 
-                            [SpecialMoveButton.BC,
-                            ],
-                            cursor: 0,
-                        },
+            {
+                state: FighterState.DODGE_FORWARD,
+                sequence: 
+                [SpecialMoveButton.BC,
+                ],
+                cursor: 0,
+            },
             {
                 state: FighterState.SPECIAL_1,
                 sequence: 
                 [SpecialMoveDirection.DOWN, SpecialMoveDirection.BACKWARD_DOWN, 
-                SpecialMoveDirection.BACKWARD, SpecialMoveButton.ANY_PUNCH
+                SpecialMoveDirection.BACKWARD, SpecialMoveButton.AB
+                ],
+                cursor: 0,
+            },
+            {
+                state: FighterState.SPECIAL_2,
+                sequence: 
+                [SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveDirection.FORWARD, 
+                SpecialMoveDirection.FORWARD, SpecialMoveButton.AD
                 ],
                 cursor: 0,
             }
@@ -396,6 +435,25 @@ export class Golem extends Fighter {
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
             ],
         }
+        this.states[FighterState.SPECIAL_2] = {
+                    init: this.handleSpecial2Init.bind(this),
+                    update: this.handleSpecial2State.bind(this),
+                    shadow: [1.6, 1, -40, 0],
+                    validFrom: [
+                        FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, 
+                        FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
+                        FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
+                        
+                    ],
+                }
+                this.states[FighterState.SPECIAL_2_MOVEFIGHTER] = {
+                    init: this.handleSpecial2MoveFighterInit.bind(this),
+                    update: this.handleSpecial2MoveFighterState.bind(this),
+                    shadow: [1.6, 1, -40, 0],
+                    validFrom: [
+                        FighterState.SPECIAL_2
+                    ],
+                }
         this.states[FighterState.DODGE_FORWARD] = {
              init: this.handleDodgeInit.bind(this),
              update: this.handleDodgeState.bind(this),
@@ -421,6 +479,8 @@ export class Golem extends Fighter {
             ],
         }
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_1];
+        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_2];
+        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_2_MOVEFIGHTER];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_FORWARD];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_BACKWARD];
     }
@@ -478,8 +538,8 @@ export class Golem extends Fighter {
         
        
 
-        // ==============================
-  // Special Skill 1 - Fireball
+    // ==============================
+  // Special Skill 1 - Death Impact
   // ==============================
   handleSpecial1Init(_, strength) {
     const fighter = gameState.fighters[this.playerId];
@@ -518,6 +578,7 @@ export class Golem extends Fighter {
     if (control.isBackward(this.playerId, this.direction)) {
         this.velocity.x = -330;
     }
+   
     if (fighter.skillNumber >= 0 && !fighter.skillConsumed) {
       if (!this.fireball.fired && this.animationFrame === 7) {
         this.soundGroundCrash.play();
@@ -540,5 +601,107 @@ export class Golem extends Fighter {
 
     this.changeState(FighterState.IDLE);
   }
+
+
+   // ==============================
+  // Special Skill 2 - Rockman
+  // ==============================
+  handleSpecial2Init(_, strength) {
+    const fighter = gameState.fighters[this.playerId];
+
+    if (fighter.skillNumber < 1 || fighter.skillUsedThisFrame) return;
+
+    fighter.skillUsedThisFrame = true;
+    fighter.skillConsumed = false;
+    fighter.skillNumber -= 1; // 🛡️ spend skill immediately
+
+    if (fighter.skillNumber === 2) fighter.resetSkillBar = true;
+
+    this.voiceHyperSkill1.play();
+    this.fireball = { fired: false, strength };
+    this.soundSuperLaunch.play();
+
+    fighter.superAcivated = true;
+    gameState.pauseTimer = 1;
+    gameState.pauseFrameMove = -100;
+    gameState.pause = true;
+    this.golemEnableMove = false;
+    this.gravity = 1300;
+    fighter.sprite += 1;
+
+    console.log('🔥 Special 1 (Fireball) started — skill spent instantly');
+  }
+
+  handleSpecial2MoveFighterInit(_, strength){
+
+  }
+
+  handleSpecial2State(time) {
+    this.getDirection();
+    const fighter = gameState.fighters[this.playerId];
+
+    
+    
+    if (fighter.skillNumber >= 0 && !fighter.skillConsumed) {
+      if (!this.fireball.fired && this.animationFrame === 6) {
+        this.soundGroundCrash.volume = 1;
+        this.soundGroundCrash.play();
+
+        gameState.cameraShake.enable = true;
+        gameState.cameraShake.duration = 0.2;
+        gameState.cameraShake.intensity = 7;
+
+      //  this.entityList.add.call(this.entityList, Rock, time, this, this.fireball.strength);
+        this.fireball.fired = true;
+        this.velocity.x = 0;
+        console.log('🔥 Fireball launched!');
+      }
+      
+    
+
+      if (!this.isAnimationCompleted()) return;
+        fighter.skillConsumed = true;
+      fighter.superAcivated = false;
+      fighter.skillUsedThisFrame = false; // reset guard
+    }
+
+    this.changeState(FighterState.SPECIAL_2_MOVEFIGHTER);
+  }
+
+   handleSpecial2MoveFighterState(time) {
+
+    if(this.position.y < STAGE_FLOOR)  this.quake = true;
+    if(this.quake && this.position.y >= STAGE_FLOOR){
+                this.soundGroundCrash.volume = 0.5;
+                 this.soundGroundCrash.play();
+                
+                gameState.cameraShake.enable = true;
+                gameState.cameraShake.duration = 0.4;
+                gameState.cameraShake.intensity = 7;
+                this.quake = false;
+            }
+    if (control.isUp(this.playerId, this.direction)) {
+         if(this.position.y >= STAGE_FLOOR){
+            this.velocity.y = -400;
+         }
+    }
+    if(control.isHeavyPunch(this.playerId, this.direction)){
+         this.entityList.add.call(this.entityList, HeavyRock, time, this, this.fireball.strength);
+         this.changeState(FighterState.IDLE);
+         this.gravity = 1000;
+    }
+    
+    if(!control.isForward(this.playerId, this.direction) && !control.isBackward(this.playerId, this.direction)){
+             this.velocity.x = 0;
+             return;
+         }
+    if (control.isForward(this.playerId, this.direction)) {
+        this.velocity.x = 70;
+    }
+    if (control.isBackward(this.playerId, this.direction)) {
+        this.velocity.x = -70;
+    }
+      
+   }
         
 }
