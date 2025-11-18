@@ -115,7 +115,7 @@ export class HeavyRock {
     // 🚀 Update movement and handle collisions
     updateMovement(time, camera) {
        this.position.x += (this.velocity * this.direction) * time.secondsPassed * 1.8;
-        this.position.y += 70 * time.secondsPassed* 1.8;
+        this.position.y += 70 * time.secondsPassed* 3.8;
 
        
 

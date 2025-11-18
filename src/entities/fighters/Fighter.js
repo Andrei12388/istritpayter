@@ -83,7 +83,7 @@ export class Fighter {
                     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
                     FighterState.SPECIAL_1, FighterState.DODGE, FighterState.SPECIAL_2, FighterState.BLOCK, FighterState.CROUCH_BLOCK,
                     FighterState.DODGE_FORWARD, FighterState.DODGE_BACKWARD, FighterState.DEATH, FighterState.GETUP,
-                    FighterState.DIE, FighterState.FALL,
+                    FighterState.DIE, FighterState.FALL, 
                 ],
             },
             [FighterState.WALK_FORWARD]:{

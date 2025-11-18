@@ -22,7 +22,7 @@ import { registerKeyboardEvents, registerScreenButtonEvents, unregisterKeyboardE
 import { playSound, stopSound } from "../soundHandler.js";
 import { gameState } from "../state/gameState.js";
 import { EnemyAI } from "../entities/fighters/EnemyAI.js";
-import { HEALTH_MAX_HIT_POINTS } from "../constants/battle.js";
+import { HEALTH_MAX_HIT_POINTS, TIME_FLASH_DELAY } from "../constants/battle.js";
 import { Golem } from "../entities/fighters/Golem.js";
 import { createDefaultFighterState } from "../state/fighterState.js";
 import { SlashHitSplash } from "../entities/fighters/shared/SlashHitSplash.js";
@@ -73,6 +73,10 @@ export class BattleScene {
         this.fightOver = false;
         this.statsBar = new StatusBar(this.game, this.fighters);
         this.inGame = true;
+        this.winFlashred = false;
+        this.timeFlashTimer = 0;
+        this.useFlashFrames = false;
+        this.winFlashStartTime = 0;
         this.names = gameState.fighters.map(({ id }) => `${id.toLowerCase()}Big`)
         this.frames = new Map([
         
@@ -275,7 +279,7 @@ handleFlash() {
         }
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
-     // this.enemyAI.update(time);
+      //this.enemyAI.update(time);
         // this.enemyAI2.update(time);
     }
    
@@ -435,10 +439,28 @@ winFinish(){
     }
 }
 
-    WinCondition(){
-        this.winFinish();
-    if (gameState.fighters[1].hitPoints <= 0 && !this.fightOver && !this.statsBar.fightOver) {
+winFlash(time){
+    if(this.winFlashred){
         
+        if(time.previous - this.winFlashStartTime > 1000) {
+            this.winFlashred = false;
+            return;
+        }
+        
+        if(time.previous > this.timeFlashTimer + TIME_FLASH_DELAY) {
+                    
+                    this.useFlashFrames = !this.useFlashFrames;
+                    this.timeFlashTimer = time.previous;
+                }
+    }
+}
+
+    WinCondition(time){
+        this.winFinish();
+        this.winFlash(time);
+    if (gameState.fighters[1].hitPoints <= 0 && !this.fightOver && !this.statsBar.fightOver) {
+        this.winFlashred = true;
+        this.winFlashStartTime = time.previous;
         this.statsBar.fightOverTimer = 0;
 
         this.statsBar.enemyStart = false;
@@ -454,7 +476,8 @@ winFinish(){
         return;
     }
     if (gameState.fighters[0].hitPoints <= 0 && !this.statsBar.fightOver && !this.fightOver) {
-        
+         this.winFlashred = true;
+         this.winFlashStartTime = time.previous;
        
         this.statsBar.fightOverTimer = 0;
         
@@ -541,14 +564,23 @@ winFinish(){
               context.fillRect(0, 0, 400, 400);
                
         }
+        if(this.winFlashred){
+            if(this.useFlashFrames){
+                context.fillStyle = 'rgba(255, 0, 0, 1)';
+            } else {
+                context.fillStyle = 'rgba(255, 255, 255, 1)';
+            }
+            context.fillRect(0, 0, 400, 400);
+        }
         this.drawFighters(context);
 
         this.entities.draw(context, this.camera);
         this.stage.drawForeground(context, this.camera);
 
         this.drawOverlays(context);
+         this.WinCondition({previous: performance.now()});
         this.fade.draw(context, 400, 400);
-        this.WinCondition();
+       
     }
 }
 

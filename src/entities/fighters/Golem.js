@@ -204,6 +204,14 @@ export class Golem extends Fighter {
              ['special2-10', [[[414, 1284, 92, 107], [46,105]], PushBox.IDLE, HurtBox.IDLE]],
              ['special2-11', [[[516, 1283, 89, 108], [45,106]], PushBox.IDLE, HurtBox.IDLE]],
              ['special2-12', [[[615, 1285, 90, 109], [45,107]], PushBox.IDLE, HurtBox.IDLE]],
+
+             //Release Rock anim
+             ['special2-13', [[[725, 1283, 90, 111], [45,109]], PushBox.IDLE, HurtBox.IDLE]],
+             ['special2-14', [[[823, 1283, 69, 111], [35,109]], PushBox.IDLE, HurtBox.IDLE]],
+             ['special2-15', [[[903, 1239, 74, 156], [37,154]], PushBox.IDLE, HurtBox.IDLE]],
+             ['special2-16', [[[1, 1398, 70, 151], [35,149]], PushBox.IDLE, HurtBox.IDLE]],
+             ['special2-17', [[[80, 1432, 67, 117], [33,115]], PushBox.IDLE, HurtBox.IDLE]],
+
             
         ]);
 
@@ -347,6 +355,9 @@ export class Golem extends Fighter {
             [FighterState.SPECIAL_2_MOVEFIGHTER]:[
                 ['special2-10', 120], ['special2-11', 120],['special2-12', 120],['special2-11', 120],
             ],
+             [FighterState.SPECIAL_2_ROCKRELEASE]:[
+                ['special2-13', 120], ['special2-14', 120],['special2-15', 120],['special2-16', 120],['special2-17', 120],['special2-17', FrameDelay.TRANSITION],
+            ],
 
              [FighterState.DEATH]:[
                             ['death-1', 300], ['death-2', 120], ['death-3', 120], 
@@ -454,6 +465,14 @@ export class Golem extends Fighter {
                         FighterState.SPECIAL_2
                     ],
                 }
+                 this.states[FighterState.SPECIAL_2_ROCKRELEASE] = {
+                    init: this.handleSpecial2RockReleaseInit.bind(this),
+                    update: this.handleSpecial2RockReleaseState.bind(this),
+                    shadow: [1, 1, 0, 0],
+                    validFrom: [
+                        FighterState.SPECIAL_2_MOVEFIGHTER
+                    ],
+                }
         this.states[FighterState.DODGE_FORWARD] = {
              init: this.handleDodgeInit.bind(this),
              update: this.handleDodgeState.bind(this),
@@ -481,6 +500,7 @@ export class Golem extends Fighter {
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_1];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_2];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_2_MOVEFIGHTER];
+        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_2_ROCKRELEASE];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_FORWARD];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_BACKWARD];
     }
@@ -597,7 +617,7 @@ export class Golem extends Fighter {
         fighter.skillConsumed = true;
       fighter.superAcivated = false;
       fighter.skillUsedThisFrame = false; // reset guard
-    }
+    }else this.changeState(FighterState.IDLE);
 
     this.changeState(FighterState.IDLE);
   }
@@ -618,7 +638,7 @@ export class Golem extends Fighter {
     if (fighter.skillNumber === 2) fighter.resetSkillBar = true;
 
     this.voiceHyperSkill1.play();
-    this.fireball = { fired: false, strength };
+   
     this.soundSuperLaunch.play();
 
     fighter.superAcivated = true;
@@ -633,17 +653,19 @@ export class Golem extends Fighter {
   }
 
   handleSpecial2MoveFighterInit(_, strength){
+    this.fireball = { fired: false, strength };
+  }
 
+  handleSpecial2RockReleaseInit(_, strength){
+     
   }
 
   handleSpecial2State(time) {
     this.getDirection();
     const fighter = gameState.fighters[this.playerId];
-
-    
     
     if (fighter.skillNumber >= 0 && !fighter.skillConsumed) {
-      if (!this.fireball.fired && this.animationFrame === 6) {
+      if (this.animationFrame === 6) {
         this.soundGroundCrash.volume = 1;
         this.soundGroundCrash.play();
 
@@ -651,8 +673,8 @@ export class Golem extends Fighter {
         gameState.cameraShake.duration = 0.2;
         gameState.cameraShake.intensity = 7;
 
-      //  this.entityList.add.call(this.entityList, Rock, time, this, this.fireball.strength);
-        this.fireball.fired = true;
+      
+      
         this.velocity.x = 0;
         console.log('🔥 Fireball launched!');
       }
@@ -663,9 +685,12 @@ export class Golem extends Fighter {
         fighter.skillConsumed = true;
       fighter.superAcivated = false;
       fighter.skillUsedThisFrame = false; // reset guard
-    }
+      this.changeState(FighterState.SPECIAL_2_MOVEFIGHTER);
+    } else this.changeState(FighterState.IDLE);
+     if (!this.isAnimationCompleted()) return;
+   
 
-    this.changeState(FighterState.SPECIAL_2_MOVEFIGHTER);
+   
   }
 
    handleSpecial2MoveFighterState(time) {
@@ -685,9 +710,9 @@ export class Golem extends Fighter {
             this.velocity.y = -400;
          }
     }
-    if(control.isHeavyPunch(this.playerId, this.direction)){
-         this.entityList.add.call(this.entityList, HeavyRock, time, this, this.fireball.strength);
-         this.changeState(FighterState.IDLE);
+    if(control.isHeavyPunch(this.playerId, this.direction) || control.isLightPunch(this.playerId, this.direction)){
+        
+         this.changeState(FighterState.SPECIAL_2_ROCKRELEASE);
          this.gravity = 1000;
     }
     
@@ -702,6 +727,44 @@ export class Golem extends Fighter {
         this.velocity.x = -70;
     }
       
+   }
+
+    handleSpecial2RockReleaseState(time) {
+
+    if(this.position.y < STAGE_FLOOR)  this.quake = true;
+    if(this.quake && this.position.y >= STAGE_FLOOR){
+                this.soundGroundCrash.volume = 0.5;
+                 this.soundGroundCrash.play();
+                
+                gameState.cameraShake.enable = true;
+                gameState.cameraShake.duration = 0.4;
+                gameState.cameraShake.intensity = 7;
+                this.quake = false;
+            }
+
+             if (control.isUp(this.playerId, this.direction)) {
+                if(this.position.y >= STAGE_FLOOR){
+                    this.velocity.y = -400;
+                }
+            }
+            
+            if (control.isForward(this.playerId, this.direction)) {
+                this.velocity.x = 70;
+            }
+            if (control.isBackward(this.playerId, this.direction)) {
+                this.velocity.x = -70;
+            }
+
+             if (!this.fireball.fired && this.animationFrame === 4) {
+
+            this.entityList.add.call(this.entityList, HeavyRock, time, this, this.fireball.strength);
+            this.fireball.fired = true;
+            
+      
+            }  
+            if (!this.isAnimationCompleted()) return;
+
+             this.changeState(FighterState.IDLE);
    }
         
 }

@@ -631,7 +631,7 @@ export class Malupiton extends Fighter {
       fighter.superAcivated = false;
       fighter.skillUsedThisFrame = false;
       this.gravity = 1000;
-    }
+    }else this.changeState(FighterState.IDLE);
 
     this.changeState(FighterState.JUMP_BACKWARD);
   }
@@ -685,7 +685,7 @@ export class Malupiton extends Fighter {
       // ✅ Reset guard and flags
       fighter.superAcivated = false;
       fighter.skillUsedThisFrame = false;
-    }
+    }else this.changeState(FighterState.IDLE);
 
     this.changeState(FighterState.IDLE);
   }
@@ -734,7 +734,7 @@ export class Malupiton extends Fighter {
         fighter.skillConsumed = true;
       fighter.superAcivated = false;
       fighter.skillUsedThisFrame = false; // reset guard
-    }
+    }else this.changeState(FighterState.IDLE);
 
     this.changeState(FighterState.IDLE);
   }
@@ -783,7 +783,7 @@ export class Malupiton extends Fighter {
       fighter.skillConsumed = true;
       fighter.superAcivated = false;
       fighter.skillUsedThisFrame = false;
-    }
+    }else this.changeState(FighterState.IDLE);
 
     this.changeState(FighterState.HEAVY_PUNCH);
   }
