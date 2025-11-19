@@ -22,6 +22,9 @@ export const gameState = {
     pauseTimer: 0,
     credits: 0,
     pauseFrameMove: -30,
+
+    fighterNotIdle: false,
+
     difficulty: 'insane',
     stage: 'final',
     flash: false,

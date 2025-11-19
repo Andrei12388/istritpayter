@@ -755,6 +755,8 @@ export class Fighter {
     handleIdleState(time){
         gameState.fighters[this.playerId].dead = "breathing";
         gameState.fighters[this.playerId].sprite = 0;
+
+        if(!gameState.fighterNotIdle) return;
         if (control.isUp(this.playerId)) {
             this.changeState(FighterState.JUMP_START);
         } else if (control.isDown(this.playerId)) {

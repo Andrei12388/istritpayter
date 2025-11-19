@@ -118,15 +118,15 @@ export class Golem extends Fighter {
             ['heavy-punch-1', [[[222, 133, 109, 55], [-8,77]], PushBox.BEND, [[3, -76, 30, 18],[3, -69, 84, 30], [-2, -52, 44, 58]], HitBox.HEAVY_PUNCH]],
 
              //lIGHT kick
-            ['light-kick-1', [[[81, 34, 57, 69], [27,86]], PushBox.IDLE,  [[3, -76, 30, 18],[-3, -59, 64, 20], [-32, -52, 44, 58]]]],
-            ['light-kick-2', [[[560, 26, 84, 71], [27,78]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 64, 20], [-32, -52, 44, 58]], HitBox.LIGHT_KICK]],
+            ['light-kick-1', [[[264, 1438, 59, 101], [29,99]], PushBox.IDLE,  [[3, -76, 30, 18],[-3, -59, 64, 20], [-32, -52, 44, 58]]]],
+            ['light-kick-2', [[[431, 1435, 124, 104], [62,102]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 64, 20], [-32, -52, 44, 58]], HitBox.LIGHT_KICK_LOW]],
 
              //Heavy kick
-            ['heavy-kick-1', [[[153, 44, 59, 60], [30,58]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
-            ['heavy-kick-2', [[[660, 29, 58, 87], [19,85]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
-            ['heavy-kick-3', [[[560, 26, 84, 71], [1,78]], PushBox.BEND, [[3, -76, 30, 18],[8, -58, 75, 20], [-2, -52, 44, 58]], HitBox.HEAVY_KICK]],
-            ['heavy-kick-4', [[[269, 256, 51, 91], [16,89]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
-            ['heavy-kick-5', [[[206, 259, 51, 87], [15,85]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
+            ['heavy-kick-1', [[[180, 1438, 59, 101], [29,99]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
+            ['heavy-kick-2', [[[264, 1438, 59, 101], [29,99]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
+            ['heavy-kick-3', [[[343, 1438, 75, 101], [37,99]], PushBox.BEND, [[3, -76, 30, 18],[8, -58, 75, 20], [-2, -52, 44, 58]]]],
+            ['heavy-kick-4', [[[572, 1435, 86, 104], [43,102]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
+            ['heavy-kick-5', [[[683, 1435, 150, 104], [75,102]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]],HitBox.HEAVY_KICK]],
 
             //Hit Face
             ['hurt-face-3', [[[886, 774,73,84],[26,90]], PushBox.IDLE, HurtBox.IDLE]],
@@ -312,17 +312,17 @@ export class Golem extends Fighter {
                 ['crouch-heavykick-2', 166],['crouch-heavykick-1', 196],['crouch-heavykick-1', FrameDelay.TRANSITION],
             ],
             [FighterState.HEAVY_KICK]:[
-                ['heavy-kick-1', 66],['heavy-kick-2', 78],['heavy-kick-3', 88],
-                ['heavy-kick-2', 106],['heavy-kick-1', 106],['heavy-kick-5', FrameDelay.TRANSITION],
+                ['heavy-kick-1', 66],['heavy-kick-2', 78],['heavy-kick-5', 88],
+                ['heavy-kick-4', 106],['heavy-kick-3', 106],['heavy-kick-2', FrameDelay.TRANSITION],
             ],
             [FighterState.JUMP_HEAVYKICK]:[
-                ['heavy-kick-1', 66],['heavy-kick-2', 78],['heavy-kick-3', 88],
-                ['heavy-kick-2', 106],['heavy-kick-1', 106],['heavy-kick-5', 5],
+                ['heavy-kick-1', 66],['heavy-kick-2', 78],['heavy-kick-5', 88],
+                ['heavy-kick-4', 106],['heavy-kick-3', 106],['heavy-kick-2', FrameDelay.TRANSITION],
                // ['jump-attack-1',FrameDelay.TRANSITION],
             ],
             [FighterState.JUMP_LIGHTKICK]:[
-                ['light-punch-1', 50],['light-kick-1', 50],['light-kick-2', 133],
-                ['light-kick-1', 66],['light-kick-1', 5],
+                ['light-kick-1', 50],['light-kick-2', 133],
+                ['light-kick-1', 66],['light-kick-1', FrameDelay.TRANSITION],
                  // ['jump-attack-1',FrameDelay.TRANSITION],
             ],
             
@@ -522,6 +522,7 @@ export class Golem extends Fighter {
     }
     
          handleDodgeState(){
+            
            gameState.dodging = true;
            if (control.isForward(this.playerId, this.direction)) {
                        console.log('Dodge Forward State');
@@ -657,7 +658,7 @@ export class Golem extends Fighter {
   }
 
   handleSpecial2RockReleaseInit(_, strength){
-     
+     this.velocity.y = -300;
   }
 
   handleSpecial2State(time) {

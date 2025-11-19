@@ -52,7 +52,7 @@ export class HeavyRock {
 
         this.fighter = fighter;
         this.entityList = entityList;
-        this.velocity = fireballVelocity[strength] || 330;
+        this.velocity = fireballVelocity[strength] || 400;
         this.direction = this.fighter?.direction ?? 1;
         this.directionY = 1;
 
@@ -115,7 +115,7 @@ export class HeavyRock {
     // 🚀 Update movement and handle collisions
     updateMovement(time, camera) {
        this.position.x += (this.velocity * this.direction) * time.secondsPassed * 1.8;
-        this.position.y += 70 * time.secondsPassed* 3.8;
+        this.position.y += 70 * time.secondsPassed* 1.8;
 
        
 
@@ -249,7 +249,7 @@ export class HeavyRock {
 
         context.restore();
        
-        this.drawDebug(context, camera);
+      //  this.drawDebug(context, camera);
     }
 
     // ⏱️ Main update loop

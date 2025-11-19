@@ -205,6 +205,7 @@ export const HitBox ={
     LIGHT_PUNCH: [3,-70,50,18],
     HEAVY_PUNCH: [0,-70,90,30],
     LIGHT_KICK: [8,-60,50,18],
+    LIGHT_KICK_LOW: [8,-10,50,18],
     HEAVY_KICK: [8,-55,75,15],
     CROUCH_LIGHTKICK: [8,-20,40,18],
     CROUCH_HEAVYKICK: [10,-25,55,18],

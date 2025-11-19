@@ -279,8 +279,8 @@ handleFlash() {
         }
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
-      //this.enemyAI.update(time);
-        // this.enemyAI2.update(time);
+      this.enemyAI.update(time);
+    // this.enemyAI2.update(time);
     }
    
 
@@ -433,8 +433,10 @@ drawHyperSkillBG(context){
 
 winFinish(){
     if(gameState.fighters[0].wins === 2 || gameState.fighters[1].wins === 2){
+         this.statsBar.music.pause();
+
+         if(this.statsBar.time < 0) return;
         this.timeScale = 0.3;
-        this.statsBar.music.pause();
         gameState.slowFX = 1.007;
     }
 }
@@ -548,7 +550,7 @@ winFlash(time){
             this.paused = true;
 
                // this.timeScale = 0.3;
-                context.fillStyle = 'rgba(0, 0, 0, 0.40)';
+                context.fillStyle = 'rgba(0, 0, 0, 0.60)';
               context.fillRect(0, 0, 400, 400);
                console.log('paused');
             } else {

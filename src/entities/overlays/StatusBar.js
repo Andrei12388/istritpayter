@@ -1,6 +1,5 @@
 import { HEALTH_CRITICAL_HIT_POINTS, HEALTH_DAMAGE_COLOR, HEALTH_MAX_HIT_POINTS, KO_ANIMATION, KO_FLASH_DELAY, SKILL_MAX_POINTS, SKILL_POINTS, SKILL_POINTS1_COLOR, SKILL_POINTS2_COLOR, SKILL_POINTS3_COLOR, SKILL_POINTSMAX_COLOR, TIME_DELAY, TIME_FLASH_DELAY, TIME_FRAME_KEYS } from "../../constants/battle.js";
 import { FPS } from "../../constants/game.js";
-import { disableScreenButtons, enableScreenButtons, registerKeyboardEvents, registerScreenButtonEvents, unregisterKeyboardEvents, unregisterScreenButtonEvents } from "../../inputHandler.js";
 import { BattleScene } from "../../scenes/Battlescene.js";
 import { CharacterSelect } from "../../scenes/CharacterSelect.js";
 import { Intro } from "../../scenes/Intro.js";
@@ -28,6 +27,7 @@ export class StatusBar {
         gameState.fighters[0].wins = 0;
         gameState.fighters[1].wins = 0;
         gameState.rounds = 0;
+        gameState.fighterNotIdle = false;
         this.music.currentTime = 0;
 
         this.soundWin = document.querySelector('audio#sound-win');
@@ -42,7 +42,6 @@ export class StatusBar {
         this.soundEnable = true;
         this.blinkMax = false;
         this.updateSkill = false;
-        this.inputRegistered = false;
         this.enemyStart = false;
         this.skillReady = [{
             player1: {
@@ -92,7 +91,7 @@ export class StatusBar {
 
         this.koFrame = 0;
         this.koAnimationTimer = 0;
-
+        
         this.frames = new Map([
 
             ['health-bar', [16,18, 145, 11]],
@@ -725,71 +724,39 @@ drawCredits(context){
         }
 
         
-        if(this.time <this.timeCount-5 && !this.inputRegistered){
-            registerKeyboardEvents();
-            registerScreenButtonEvents();
-            enableScreenButtons();
-            this.inputRegistered = true;
-           
-            }
-
-                        if(this.time < 0 && this.inputRegistered){
-                                // disable inputs when time runs out
-                                unregisterKeyboardEvents();
-                                unregisterScreenButtonEvents();
-                                disableScreenButtons();
-                                this.inputRegistered = false;
-                                console.log('unregister inputs');
-                        }
-        if(this.time>0){
-            
-                        if(this.time>this.timeCount - 4){
-                              unregisterKeyboardEvents();
-                              unregisterScreenButtonEvents();
-                              disableScreenButtons();
-                                // no-op: keep input registration state until explicit unregister
-                                this.drawFrame(context, 'round', 150,103);
-                                this.drawRound(context, gameState.rounds, 217,104);
-               
-
-                        }
-            if(this.time=== this.timeCount - 5){
-                this.drawFrame(context, 'fight', 156,103);
-            }
-            
-            if(this.time< this.timeCount - 5){
-           registerKeyboardEvents();
-           registerScreenButtonEvents();
-          //  this.drawScores(context);
-           if(this.gameIn === true){
-            // ensure registration happens only once (handled above), but double-check
-            if(!this.inputRegistered){
-                registerKeyboardEvents();
-                registerScreenButtonEvents();
-                enableScreenButtons();
-                this.inputRegistered = true;
-            }
-             this.drawHealthBars(context);
-             this.updateSkill = true;
-            this.drawSkillBars(context);
-            this.drawWins(context);
-            
-           
-            this.drawNameTags(context);
-            this.drawTime(context);
-             this.enemyStart = true;
-             
-            } else if(this.gameIn === false){
-                this.enemyStart = false;
-               // unregister only if previously registered
-               if(this.inputRegistered){
-                   unregisterKeyboardEvents();
-                   unregisterScreenButtonEvents();
-                   disableScreenButtons();
-                   this.inputRegistered = false;
-               }
-            }
+        // Control input state based on game time
+        if (this.time < 0) {
+            // Time ran out - disable input
+            gameState.fighterNotIdle = false;
+        } else if (this.time > this.timeCount - 4) {
+            // Before fight starts - disable input during countdown
+            gameState.fighterNotIdle = false;
+        } else if (this.time < this.timeCount - 5) {
+            // Fight is active - enable input
+            gameState.fighterNotIdle = true;
         }
+
+        if (this.time > 0) {
+            if (this.time === this.timeCount - 5) {
+                this.drawFrame(context, 'fight', 156, 103);
+            }
+            
+            if (this.time < this.timeCount - 5) {
+                if (this.gameIn === true) {
+                    this.drawHealthBars(context);
+                    this.updateSkill = true;
+                    this.drawSkillBars(context);
+                    this.drawWins(context);
+                    this.drawNameTags(context);
+                    this.drawTime(context);
+                    this.enemyStart = true;
+                } else if (this.gameIn === false) {
+                    this.enemyStart = false;
+                }
+            } else if (this.time > this.timeCount - 4) {
+                this.drawFrame(context, 'round', 150, 103);
+                this.drawRound(context, gameState.rounds, 217, 104);
+            }
         }
        
         if(!this.fightStart){
