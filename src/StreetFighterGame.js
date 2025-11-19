@@ -40,7 +40,7 @@ export class StreetFighterGame{
         
 this.scene = new Intro(this);
 //this.scene = new BattleScene(this, selectedCharacters);
- //this.scene = new CharacterSelect(this);
+// this.scene = new CharacterSelect(this);
 // this.scene = new PrePostMatch(this, selectedCharacters);
     }
 
@@ -63,6 +63,8 @@ frame(time){
 
 start(){
     control.registerGamepadEvents();
+    control.registerKeyboardEvents();
+    control.registerScreenButtonEvents();
     //document.addEventListener('submit', this.handleFormSubmit.bind(this));
     window.requestAnimationFrame(this.frame.bind(this));
 }

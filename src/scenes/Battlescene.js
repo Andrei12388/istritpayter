@@ -343,8 +343,7 @@ handleFlash() {
             this.statsBar.fightOver = false;
              this.timeScale= 1;
             if(gameState.fighters[0].wins === 2 || gameState.fighters[1].wins === 2){
-                registerKeyboardEvents();
-                registerScreenButtonEvents();
+                
                 this.handleFlash();
                 if(gameState.fighters[0].wins === 2) gameState.gamePlayerWinned = 'P1';
                 else if(gameState.fighters[1].wins === 2) gameState.gamePlayerWinned = 'P2';

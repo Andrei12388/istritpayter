@@ -614,6 +614,5 @@ drawImageBig(context){
     }
 }
 
-control.registerKeyboardEvents();
-control.registerScreenButtonEvents();
-//control.registerGamepadEvents();
+
+

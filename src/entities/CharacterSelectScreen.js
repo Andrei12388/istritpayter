@@ -154,9 +154,9 @@ export class CharacterSelectScreen {
 
 
     update(time){
-         registerKeyboardEvents();
-        registerScreenButtonEvents();
-        enableScreenButtons();
+      //   registerKeyboardEvents();
+      //  registerScreenButtonEvents();
+      //  enableScreenButtons();
         this.updateTime(time);
     }
 

@@ -3,6 +3,7 @@ import { BattleScene } from './Battlescene.js';
 import { TIME_DELAY, TIME_FLASH_DELAY, TIME_FRAME_KEYS } from "../constants/battle.js";
 
 import * as control from '../inputHandler.js'; 
+import { unregisterKeyboardEvents, unregisterScreenButtonEvents } from '../inputHandler.js';
 import { Control, controls } from '../constants/control.js';
 import { state as controlHold } from '../index.js';
 import { playSound, stopSound } from '../soundHandler.js';
@@ -330,8 +331,10 @@ export class PrePostMatch {
         updateTime(time){
             if(this.time === 8)this.handleFlash();
          if(this.time === 10 && gameState.gameScene === 'prematch') {
+           
             this.game.setScene(new BattleScene(this.game, this.selectedCharacters));
          }else if(this.time === 10 && gameState.gameScene === 'postmatch'){
+           
             this.game.setScene(new CharacterSelect(this.game));
          }
 
@@ -506,7 +509,4 @@ drawVsScreen(context){
         
     }
 }
-
-control.registerKeyboardEvents();
-control.registerScreenButtonEvents();
 
