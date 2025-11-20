@@ -280,7 +280,7 @@ handleFlash() {
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
       this.enemyAI.update(time);
-    // this.enemyAI2.update(time);
+     this.enemyAI2.update(time);
     }
    
 
@@ -416,6 +416,7 @@ handleFlash() {
         const [name1, name2] = this.names;
 
    if(gameState.pause) {
+   
     if(gameState.fighters[0].superAcivated)this.drawFrame(context,  name1, x, 20, 1, 1.5);
     if(gameState.fighters[1].superAcivated)this.drawFrame(context,  name2, x2 + 360, 20, -1, 1.5);
    }
@@ -543,17 +544,19 @@ winFlash(time){
 }
 
     draw(context){
+        console.log(this.statsBar.timerDelay);
         this.stage.drawBackground(context, this.camera);
         //When Super Activates
          if (gameState.pause) { // P or ESC to pause
             this.paused = true;
-
+            this.statsBar.timerDelay = 0;
                // this.timeScale = 0.3;
                 context.fillStyle = 'rgba(0, 0, 0, 0.60)';
               context.fillRect(0, 0, 400, 400);
                console.log('paused');
             } else {
                 this.paused = false;
+                 
                // this.timeScale = 1;
             }
             if(gameState.hyperSkill) this.drawHyperSkillBG(context);

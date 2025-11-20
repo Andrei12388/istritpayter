@@ -39,7 +39,7 @@ export class Fighter {
         this.initialVelocity = {};
         this.direction = playerId === 0 ? FighterDirection.RIGHT : FighterDirection.LEFT;
         this.gravity = 0;
-
+        this.status = 'normal';
         this.attackStruck = false;
         this.knockUpSound = false;
         this.hurtShake = 0;
@@ -218,7 +218,7 @@ export class Fighter {
                 attackStrength: FighterAttackStrength.HEAVY,
                  init: this.handleAttackInit.bind(this),
                 update: this.handleHeavyKickState.bind(this),
-                validFrom:[FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.WALK_BACKWARD],
+                validFrom:[FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.WALK_BACKWARD, FighterState.LIGHT_KICK],
             },
             [FighterState.HURT_HEAD_HEAVY]:{
                 init: this.handleHurtInit.bind(this),
@@ -547,6 +547,7 @@ export class Fighter {
     handleLightPunchState(){
         if (this.animationFrame <2) return;
         if (control.isLightPunch(this.playerId)) return;
+        if (control.isHeavyPunch(this.playerId)) this.changeState(FighterState.HEAVY_PUNCH);
 
         if (!this.isAnimationCompleted()) return;
         this.changeState(FighterState.IDLE);
@@ -560,7 +561,7 @@ export class Fighter {
     handleLightKickState(){
         if (this.animationFrame < 2) return;
         if (control.isLightKick(this.playerId)) return;
-
+         if (control.isHeavyKick(this.playerId)) this.changeState(FighterState.HEAVY_KICK);
         if (!this.isAnimationCompleted()) return;
         this.changeState(FighterState.IDLE);
     }
@@ -622,6 +623,21 @@ export class Fighter {
             playSound(this.soundHits[attackStrength][attackType]);
         }
         this.onAttackHit?.(time, this.opponent.playerId, this.playerId, hitPosition, attackStrength);
+        // apply any effect specified on the attack data (e.g., burned, stunned)
+        try {
+            const attackData = FighterAttackBaseData[attackStrength];
+            if (attackData && attackData.effect && gameState.fighters[this.playerId]) {
+                const effect = attackData.effect;
+                const now = (time && time.previous) || performance.now();
+                const expiresAt = now + (effect.duration || 0);
+                gameState.fighters[this.playerId].status = effect.type;
+                gameState.fighters[this.playerId].statusExpiresAt = expiresAt;
+                this.status = effect.type;
+            }
+        } catch (e) {
+            // defensive: don't break game if something unexpected
+            console.warn('Failed to apply attack effect', e);
+        }
         
         if(FighterAttackBaseData[attackStrength].knockup && gameState.fighters[this.playerId].hitPoints > 0){
             if(attackStrength === FighterAttackStrength.HEAVYKICK){
@@ -756,6 +772,13 @@ export class Fighter {
         gameState.fighters[this.playerId].dead = "breathing";
         gameState.fighters[this.playerId].sprite = 0;
 
+        const newDirection = this.getDirection();
+
+        if(newDirection !== this.direction){
+            this.direction = newDirection;
+            this.changeState(FighterState.IDLE_TURN);
+        }
+        
         if(!gameState.fighterNotIdle) return;
         if (control.isUp(this.playerId)) {
             this.changeState(FighterState.JUMP_START);
@@ -792,12 +815,7 @@ export class Fighter {
         
         
 
-        const newDirection = this.getDirection();
-
-        if(newDirection !== this.direction){
-            this.direction = newDirection;
-            this.changeState(FighterState.IDLE_TURN);
-        }
+        
     }
 
     handleWalkForwardState(){
@@ -1065,6 +1083,18 @@ export class Fighter {
         this.hurtShakeTimer = time.previous + FRAME_TIME;
     }
 
+    updateStatus(time) {
+        const stateEntry = gameState.fighters[this.playerId];
+        if (!stateEntry) return;
+        if (!stateEntry.status || stateEntry.status === 'normal') return;
+        if (!stateEntry.statusExpiresAt) return;
+        if ((time && time.previous) >= stateEntry.statusExpiresAt) {
+            stateEntry.status = 'normal';
+            stateEntry.statusExpiresAt = 0;
+            this.status = 'normal';
+        }
+    }
+
     updateSlide(time){
         if (this.slideVelocity >= 0) return;
 
@@ -1090,6 +1120,7 @@ export class Fighter {
    
 
     update(time, context, camera){
+        this.updateStatus(time);
         this.states[this.currentState].update(time, context);
         // Check win/death conditions after state updates and collisions
         // centralized handler ensures dying fighters go to DEATH state (not IDLE)
@@ -1165,28 +1196,95 @@ export class Fighter {
 
     draw(context, camera) {
         const [frameKey] = this.animations[this.currentState][this.animationFrame];
-           
+
         const [[
             [x, y, width, height], 
             [originX, originY]
         ]] = this.frames.get(frameKey);
 
+        const status = this.status ?? (gameState.fighters[this.playerId] && gameState.fighters[this.playerId].status);
 
-    context.scale(this.direction, 1);
-    context.drawImage(
-        this.image,
-        x,
-        y,
-        width,
-        height,
-        Math.floor((this.position.x - this.hurtShake - camera.position.x) * this.direction) - originX,
-        Math.floor((this.position.y - camera.position.y) - originY),
-        width,
-        height,
-    );
-    context.setTransform(1,0,0,1,0,0);
+        context.save();
 
-// this.drawDebug(context, camera);
+       if (status) {
+
+    const flicker = Math.random() > 0.5 
+        ? 'brightness(1.4)' 
+        : 'brightness(1.1)';
+
+    switch (status) {
+
+        case 'burned': {
+            context.filter =
+                `saturate(200%) hue-rotate(-10deg) ${flicker}`;
+            break;
+        }
+
+        case 'frozen': {
+            context.filter =
+                `grayscale(80%) contrast(1.05) ${flicker}`;
+            break;
+        }
+
+        case 'shocked':
+        case 'stunned': {
+            const glow = `
+                drop-shadow(0 0 8px rgba(0,150,255,0.9))
+                drop-shadow(0 0 16px rgba(200,220,255,0.7))
+            `;
+    context.filter = `${glow} invert(60%) sepia(60%) hue-rotate(200deg) ${flicker}`;
+    break;
 }
+
+
+        case 'poisoned': {
+            context.filter =
+                `hue-rotate(100deg) saturate(200%) ${flicker}`;
+            break;
+        }
+
+        case 'rage': {
+            context.filter =
+                `saturate(250%) hue-rotate(-30deg) ${flicker}`;
+            break;
+        }
+
+        case 'shadow': {
+            context.filter =
+                `contrast(150%) grayscale(80%) ${flicker}`;
+            break;
+        }
+
+        case 'bleeding': {
+            context.filter =
+                `hue-rotate(-10deg) saturate(160%) ${flicker}`;
+            break;
+        }
+
+        default:
+            context.filter = 'none';
+    }
+}
+
+
+
+        context.scale(this.direction, 1);
+        context.drawImage(
+            this.image,
+            x,
+            y,
+            width,
+            height,
+            Math.floor((this.position.x - this.hurtShake - camera.position.x) * this.direction) - originX,
+            Math.floor((this.position.y - camera.position.y) - originY),
+            width,
+            height,
+        );
+
+        // Restore context (resets filter and transform)
+        context.restore();
+
+        // this.drawDebug(context, camera);
+    }
 
 }

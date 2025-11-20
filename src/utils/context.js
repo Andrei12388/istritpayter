@@ -8,6 +8,7 @@
  
  export function drawFrame(context, image, dimensions, x, y, direction = 1, alpha = 1){
         const [sourceX, sourceY, sourceWidth, sourceHeight] = dimensions;
+        
 
         context.globalAlpha = alpha;
         context.scale(direction,1);

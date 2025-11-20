@@ -65,6 +65,8 @@ export class StatusBar {
 
         this.hyperskillframe = 1;
 
+        this.timerDelay = 0;
+
         this.winSituation = '';
         
         this.timeFlashTimer = 0;
@@ -308,13 +310,14 @@ export class StatusBar {
         this.hyperskillframe += 1;
         if(this.hyperskillframe === 19) this.hyperskillframe = 1;
        // console.log(gameState.pauseFrameMove);
-        if(time.previous > this.timeTimer + TIME_DELAY){
-            this.time -=1;
+        if(time.previous > this.timeTimer + TIME_DELAY + this.timerDelay){
+            if(!gameState.pause)this.time -=1;
            // console.log(gameState.pause, gameState.pauseTimer);
             gameState.pauseTimer = Math.max(gameState.pauseTimer - 0.7, 0);
             
             if(gameState.pause && gameState.pauseTimer <= 0){
                 gameState.pause = false;
+                this.timerDelay = 500;
                 gameState.hyperSkill = false;
             } 
            
@@ -604,7 +607,7 @@ drawSkillNum(context, label, x, y){
 
     drawFightOver(context){
        // this.fightOverTimer = -1 * this.time;
-        console.log(this.fightOverTimer);
+    
         if(this.fightOverTimer <= 2 && this.time < 0){
              this.drawFrame(context, 'time-over', 158,103);
         }
@@ -739,10 +742,12 @@ drawCredits(context){
         if (this.time > 0) {
             if (this.time === this.timeCount - 5) {
                 this.drawFrame(context, 'fight', 156, 103);
+                this.timerDelay = 500;
             }
             
             if (this.time < this.timeCount - 5) {
                 if (this.gameIn === true) {
+                    
                     this.drawHealthBars(context);
                     this.updateSkill = true;
                     this.drawSkillBars(context);
@@ -764,6 +769,7 @@ drawCredits(context){
             this.fightStart = !this.fightStart;
         }
          if(this.fightOver){
+             this.timerDelay = 0;
             this.drawFightOver(context);
         }
         if(this.flashScreen)this.drawFlash(context);

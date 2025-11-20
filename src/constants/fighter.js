@@ -46,6 +46,7 @@ export const FighterAttackBaseData = {
         velocity: -10 * FRAME_TIME,
         friction: 300,
     },
+   
  },
  [FighterAttackStrength.HEAVY]: {
     score: 500,
@@ -60,6 +61,7 @@ export const FighterAttackBaseData = {
         velocity: -23 * FRAME_TIME,
         friction: 500,
     },
+   
  },
  [FighterAttackStrength.HEAVYKICK]: {
     score: 500,
@@ -74,10 +76,12 @@ export const FighterAttackBaseData = {
         velocity: -13 * FRAME_TIME,
         friction: 500,
     },
+  
  },
   [FighterAttackStrength.SUPER1]: {
     score: 1000,
     skill: 3,
+  
     knockup: true,
     thrust: {
         x: -500,
@@ -88,10 +92,12 @@ export const FighterAttackBaseData = {
         velocity: -16 * FRAME_TIME,
         friction: 500,
     },
+    effect: { type: 'stunned', duration: 1500 },
  },
  [FighterAttackStrength.SUPER2]: {
     score: 1000,
     skill: 3,
+   
     knockup: true,
     thrust: {
         x: -1000,
@@ -102,10 +108,12 @@ export const FighterAttackBaseData = {
         velocity: -16 * FRAME_TIME,
         friction: 500,
     },
+    effect: { type: 'burned', duration: 1500 },
  },
  [FighterAttackStrength.SLASH]: {
     score: 100,
     skill: 3,
+   
     knockup: true,
     thrust: {
         x: -100,
@@ -116,6 +124,7 @@ export const FighterAttackBaseData = {
         velocity: -16 * FRAME_TIME,
         friction: 300,
     },
+    effect: { type: 'bleeding', duration: 1500 },
  },
  [FighterAttackStrength.BLOCK]: {
     score: 5,
