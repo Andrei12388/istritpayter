@@ -1212,61 +1212,102 @@ export class Fighter {
         ? 'brightness(1.4)' 
         : 'brightness(1.1)';
 
+        const glow = `
+        drop-shadow(0 0 8px rgba(0,150,255,0.9))
+        drop-shadow(0 0 16px rgba(200,220,255,0.7))
+    `;
+
+    
+
+    const burnGlow = `
+    drop-shadow(0 0 6px rgba(255,140,0,0.9))
+    drop-shadow(0 0 14px rgba(255,90,0,0.75))
+    drop-shadow(0 0 24px rgba(255,50,0,0.55))
+`;
+
     switch (status) {
 
-        case 'burned': {
-            context.filter =
-                `saturate(200%) hue-rotate(-10deg) ${flicker}`;
-            break;
-        }
+    case 'burn': {
+        const t = performance.now() * 0.008;
+        const flicker = 1.1 + Math.sin(t * 2) * 0.25;
+        context.filter =
+            `brightness(${flicker}) saturate(300%) hue-rotate(-10deg)`;
+        break;
+    }
 
-        case 'frozen': {
-            context.filter =
-                `grayscale(80%) contrast(1.05) ${flicker}`;
-            break;
-        }
+  case 'frozen': {
+    const t = performance.now() * 0.02;
 
-        case 'shocked':
-        case 'stunned': {
-            const glow = `
-                drop-shadow(0 0 8px rgba(0,150,255,0.9))
-                drop-shadow(0 0 16px rgba(200,220,255,0.7))
-            `;
-    context.filter = `${glow} invert(60%) sepia(60%) hue-rotate(200deg) ${flicker}`;
+    // Base flicker for icy shimmer
+    const flicker = 0.85 + Math.sin(t * 4) * 0.15; 
+
+    // Subtle extra pulse for frost sparkle
+    const pulse = 0.95 + Math.sin(t * 6) * 0.05;
+
+    // Apply combined filter
+    context.filter =
+        `grayscale(30%) contrast(1.1) brightness(${flicker}) hue-rotate(200deg) saturate(180%)`;
+
+    // Optional: extra overlay for icy sparkle
+    context.globalAlpha = pulse; // pulsating overlay
+
     break;
 }
 
 
-        case 'poisoned': {
-            context.filter =
-                `hue-rotate(100deg) saturate(200%) ${flicker}`;
-            break;
-        }
 
-        case 'rage': {
-            context.filter =
-                `saturate(250%) hue-rotate(-30deg) ${flicker}`;
-            break;
-        }
-
-        case 'shadow': {
-            context.filter =
-                `contrast(150%) grayscale(80%) ${flicker}`;
-            break;
-        }
-
-        case 'bleeding': {
-            context.filter =
-                `hue-rotate(-10deg) saturate(160%) ${flicker}`;
-            break;
-        }
-
-        default:
-            context.filter = 'none';
+    case 'shock':
+    case 'stun': {
+        const t = performance.now() * 0.02;
+        const flicker = 0.8 + Math.sin(t * 5) * 0.4; // electric flicker
+        context.filter =
+            `invert(60%) sepia(60%) hue-rotate(200deg) brightness(${flicker})`;
+        break;
     }
+
+    case 'poison': {
+        const t = performance.now() * 0.01;
+        const flicker = 1.0 + Math.sin(t * 3) * 0.3;
+        context.filter =
+            `brightness(${flicker}) saturate(300%) hue-rotate(230deg)`;
+        break;
+    }
+
+    case 'poisonGreen': {
+        const t = performance.now() * 0.01;
+        const flicker = 0.95 + Math.sin(t * 2) * 0.2;
+        context.filter =
+            `brightness(${flicker}) hue-rotate(100deg) saturate(200%)`;
+        break;
+    }
+
+    case 'rage': {
+        const t = performance.now() * 0.01;
+        const flicker = 1.2 + Math.sin(t * 4) * 0.25;
+        context.filter =
+            `saturate(250%) hue-rotate(-30deg) brightness(${flicker})`;
+        break;
+    }
+
+    case 'shadow': {
+        const t = performance.now() * 0.01;
+        const flicker = 0.7 + Math.sin(t * 3) * 0.15;
+        context.filter =
+            `contrast(150%) grayscale(80%) brightness(${flicker})`;
+        break;
+    }
+
+    case 'bleed': {
+        const t = performance.now() * 0.01;
+        const flicker = 0.85 + Math.sin(t * 2) * 0.15;
+        context.filter =
+            `hue-rotate(-10deg) saturate(160%) brightness(${flicker})`;
+        break;
+    }
+
+    default:
+        context.filter = 'none';
 }
-
-
 
         context.scale(this.direction, 1);
         context.drawImage(
@@ -1286,5 +1327,5 @@ export class Fighter {
 
         // this.drawDebug(context, camera);
     }
-
+    }
 }
