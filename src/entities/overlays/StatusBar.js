@@ -317,7 +317,7 @@ export class StatusBar {
             
             if(gameState.pause && gameState.pauseTimer <= 0){
                 gameState.pause = false;
-                this.timerDelay = 500;
+                this.timerDelay = 400;
                 gameState.hyperSkill = false;
             } 
            
@@ -742,7 +742,7 @@ drawCredits(context){
         if (this.time > 0) {
             if (this.time === this.timeCount - 5) {
                 this.drawFrame(context, 'fight', 156, 103);
-                this.timerDelay = 500;
+                this.timerDelay = 400;
             }
             
             if (this.time < this.timeCount - 5) {

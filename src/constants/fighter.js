@@ -108,7 +108,7 @@ export const FighterAttackBaseData = {
         velocity: -16 * FRAME_TIME,
         friction: 500,
     },
-    effect: { type: 'burn', duration: 1500 },
+    effect: { type: 'burn', duration: 1200 },
  },
  [FighterAttackStrength.SLASH]: {
     score: 100,

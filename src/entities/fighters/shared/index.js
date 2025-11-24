@@ -5,3 +5,4 @@ export { HyperHitSplash } from './HyperHitSplash.js';
 export { BlockHitSplash } from './BlockHitSplash.js';
 export { SlashHitSplash } from './SlashHitSplash.js';
 export { GreenHitSplash } from './GreenHitSplash.js';
+export { FlameHitSplash } from './FlameHitSplash.js';

@@ -1228,10 +1228,15 @@ export class Fighter {
     switch (status) {
 
     case 'burn': {
-        const t = performance.now() * 0.008;
-        const flicker = 1.1 + Math.sin(t * 2) * 0.25;
-        context.filter =
-            `brightness(${flicker}) saturate(300%) hue-rotate(-10deg)`;
+        const t = performance.now() * 0.01;
+        // warm flicker brightness
+        const flick = 1.4 + Math.sin(t * 6) * 0.5;
+        // subtle pulse for shadow blur and sepia amount
+        const sep = 90 + Math.sin(t * 4) * 8;
+        context.filter = `brightness(${flick}) sepia(${sep}%) saturate(1200%) hue-rotate(-10deg)`;
+        // use shadow to create an orange glow around the sprite (restored by context.restore())
+        context.shadowColor = 'rgba(255, 89, 0, 0.92)';
+        context.shadowBlur = 12 + Math.abs(Math.sin(t * 6)) * 10;
         break;
     }
 
@@ -1306,7 +1311,9 @@ export class Fighter {
     }
 
     default:
-        context.filter = 'none';
+        
+        context.filter =
+            `none`;
 }
 
         context.scale(this.direction, 1);

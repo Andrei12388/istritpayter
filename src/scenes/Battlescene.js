@@ -6,7 +6,7 @@ import { controlHistory, pollControl } from "../controlHistory.js";
 import { Malupiton } from "../entities/fighters/Malupiton.js";
 import { Shadow } from "../entities/fighters/Shadow.js";
 
-import { LightHitSplash, HeavyHitSplash, SuperHitSplash, BlockHitSplash, GreenHitSplash, HyperHitSplash } from "../entities/fighters/shared/index.js";
+import { LightHitSplash, HeavyHitSplash, SuperHitSplash, BlockHitSplash, GreenHitSplash, HyperHitSplash, FlameHitSplash } from "../entities/fighters/shared/index.js";
 
 import { FpsCounter } from "../entities/FpsCounter.js";
 import { StatusBar } from "../entities/overlays/StatusBar.js";
@@ -181,7 +181,7 @@ export class BattleScene {
             case FighterAttackStrength.SUPER1:
                 return GreenHitSplash;
             case FighterAttackStrength.SUPER2:
-                return GreenHitSplash;
+                return FlameHitSplash;
             case FighterAttackStrength.BLOCK:
                 return BlockHitSplash;
             case FighterAttackStrength.SLASH:
@@ -279,7 +279,7 @@ handleFlash() {
         }
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
-      this.enemyAI.update(time);
+     // this.enemyAI.update(time);
     // this.enemyAI2.update(time);
     }
    

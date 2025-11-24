@@ -11,7 +11,7 @@ import { PrePostMatch } from './scenes/PrePostMatch.js';
 
 const selectedCharacters = [
     { 
-        name: "Golem", 
+        name: "Malupiton", 
         namePos: 5,
         sayings: 'Sabi ko naman sayo burger ka saken',
         color: "gray", 
@@ -38,8 +38,8 @@ export class StreetFighterGame{
 
     constructor(){
         
-this.scene = new Intro(this);
-//this.scene = new BattleScene(this, selectedCharacters);
+//this.scene = new Intro(this);
+this.scene = new BattleScene(this, selectedCharacters);
 // this.scene = new CharacterSelect(this);
 // this.scene = new PrePostMatch(this, selectedCharacters);
     }
