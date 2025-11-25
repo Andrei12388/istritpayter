@@ -603,9 +603,10 @@ export class Fighter {
     handleAttackHit(time, attackStrength, attackType, hitPosition, hurtLocation) {
     const fighter = gameState.fighters[this.playerId];
 
-    // Ignore hits if already dead
-    if (fighter.dead === "invulnerable" || fighter.dead === "dead") {
-        console.log("Attack ignored: fighter invulnerable or dead");
+    // Ignore hits if explicitly invulnerable — but allow hits to affect
+    // already-dead fighters (they should still be pushed by thrusts).
+    if (fighter.dead === "invulnerable") {
+        console.log("Attack ignored: fighter invulnerable");
         return;
     }
 
@@ -626,8 +627,9 @@ export class Fighter {
     // Trigger hit callback
     this.onAttackHit?.(time, this.opponent.playerId, this.playerId, hitPosition, attackStrength);
 
-    // Check for death before knockup
-    if (this.checkDeathCondition()) return;
+    // Check for death before knockup — we still continue so dead bodies
+    // receive thrust/slide velocities (do not return early).
+    this.checkDeathCondition();
 
     // Knockup logic
     if (FighterAttackBaseData[attackStrength].knockup) {
@@ -648,9 +650,10 @@ export class Fighter {
 
     //Death init and States
    handleDeathInit() {
-    this.velocity.x = 0;
-    this.velocity.y = 0;
-    playSound(this.deathSound); // Play death sound here
+    // Keep currently-applied velocity so the dead body can be pushed
+    // (thrust applied when they were hit). Play the death sound and
+    // start the death animation.
+    playSound(this.deathSound);
     console.log("Death animation started");
 }
 
@@ -668,8 +671,7 @@ handleDeathState() {
 
 
 handleDieInit() {
-    this.velocity.x = 0;
-    this.velocity.y = 0;
+    // Allow velocity to persist — do not forcibly zero so corpse can move
     console.log("DIE animation started");
     // no sound here, death sound already played
 }
@@ -684,8 +686,7 @@ handleDieState() {
     console.log("Fighter permanently dead (DIE state).");
 
     // Optionally freeze the animation frame or disable inputs
-    this.velocity.x = 0;
-    this.velocity.y = 0;
+    // keep velocities so body movement from thrust/slide continues
 }
 
 

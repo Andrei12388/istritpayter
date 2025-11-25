@@ -10,12 +10,14 @@ import { Rock } from './special/Rock.js';
 import { BlockRock } from './special/BlockRock.js';
 import { STAGE_FLOOR } from '../../constants/stage.js';
 import { HeavyRock } from './special/HeavyRock.js';
+import { RockSplash } from './special/RockSplash.js';
 
 export class Golem extends Fighter {
-    constructor(playerId, onAttackHit, entityList){
-        super(playerId, onAttackHit); //Change Direction of the player
+    constructor(playerId, onAttackHit, effectSplash, entityList, entityListForeground) {
+        super(playerId, onAttackHit, effectSplash); //Change Direction of the player
 
         this.entityList = entityList;
+        this.entityListForeground = entityListForeground;
         
         this.image = document.querySelector('img[alt="golem"]');
 
@@ -146,6 +148,7 @@ export class Golem extends Fighter {
             ['rock-2', [[[238, 741, 17, 64], [7,40]], PushBox.IDLE, HurtBox.IDLE,]],
             ['rock-3', [[[211, 708, 18, 97], [9,95]], PushBox.IDLE, HurtBox.IDLE,]],
             ['rock-2', [[[184, 686, 18, 119], [9,117]], PushBox.IDLE, HurtBox.IDLE,]],
+
             
             //Crouch Block
             ['crouch-block-1', [[[162, 32, 62, 70], [31,68]], PushBox.CROUCH, HurtBox.CROUCH]], 
@@ -356,7 +359,7 @@ export class Golem extends Fighter {
                 ['special2-10', 120], ['special2-11', 120],['special2-12', 120],['special2-11', 120],
             ],
              [FighterState.SPECIAL_2_ROCKRELEASE]:[
-                ['special2-13', 120], ['special2-14', 120],['special2-15', 120],['special2-16', 120],['special2-17', 120],['special2-17', FrameDelay.TRANSITION],
+                ['special2-13', 70], ['special2-14', 70],['special2-15', 70],['special2-16', 70],['special2-17', 70],['special2-17', FrameDelay.TRANSITION],
             ],
 
              [FighterState.DEATH]:[
@@ -669,6 +672,7 @@ export class Golem extends Fighter {
       if (this.animationFrame === 6) {
         this.soundGroundCrash.volume = 1;
         this.soundGroundCrash.play();
+        this.entityList.add.call(this.entityList, RockSplash, time, this, this.fireball.strength);
 
         gameState.cameraShake.enable = true;
         gameState.cameraShake.duration = 0.2;
@@ -699,8 +703,9 @@ export class Golem extends Fighter {
     if(this.position.y < STAGE_FLOOR)  this.quake = true;
     if(this.quake && this.position.y >= STAGE_FLOOR){
                 this.soundGroundCrash.volume = 0.5;
+                this.soundGroundCrash.currentTime = 0;
                  this.soundGroundCrash.play();
-                
+                 if(this.opponent.position.y >= STAGE_FLOOR)this.opponent.changeState(FighterState.HURT_BODY_HEAVY);
                 gameState.cameraShake.enable = true;
                 gameState.cameraShake.duration = 0.4;
                 gameState.cameraShake.intensity = 7;

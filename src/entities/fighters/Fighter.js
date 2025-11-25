@@ -30,7 +30,7 @@ export const AnimationFrame = {
 };
 
 export class Fighter {
-    constructor(playerId, onAttackHit){
+    constructor(playerId, onAttackHit, effectSplash){
         this.playerId = playerId;
         this.position = {
              x: STAGE_MID_POINT + STAGE_PADDING + (playerId === 0 ? -FIGHTER_START_DISTANCE : FIGHTER_START_DISTANCE), 
@@ -42,6 +42,8 @@ export class Fighter {
         this.status = 'normal';
         this.attackStruck = false;
         this.knockUpSound = false;
+        // guard to ensure we trigger landing logic (sound/invulnerability/bounce) only once
+        this._knockLanded = false;
         this.hurtShake = 0;
         this.hurtShakeTimer = 0;
         this.slideVelocity = 0;
@@ -56,6 +58,7 @@ export class Fighter {
         
         this.opponent;
         this.onAttackHit = onAttackHit;
+        this.effectSplash = effectSplash;
         this.EntityList = new EntityList();
 
         this.boxes = {
@@ -602,30 +605,38 @@ export class Fighter {
 
     handleAttackHit(time, attackStrength, attackType, hitPosition, hurtLocation){
         
-        if(gameState.fighters[this.playerId].dead === "invulnerable"){
-            console.log("cannot be attacked");
-            return;
-        } 
+       
          if(gameState.fighters[this.playerId].hitPoints <= 0 || gameState.fighters[this.playerId].dead === "die" || gameState.fighters[this.playerId].dead === "dead"){
             // Delegate win/death handling to centralized method
+            this.velocity.x = FighterAttackBaseData[attackStrength].thrust.x;
+            this.velocity.y = FighterAttackBaseData[attackStrength].thrust.y;
             this.updateWinCondition();
             return;
          } 
-        const newState = this.getHitState(attackStrength, hurtLocation);
-        const { velocity, friction } = FighterAttackBaseData[attackStrength].slide;
-
-        this.slideVelocity = velocity;
-        this.slideFriction = friction;
-        this.attackStruck = true;
         
+                const newState = this.getHitState(attackStrength, hurtLocation);
+                const attackData = FighterAttackBaseData[attackStrength] || {};
+                const { velocity: slideVel = 0, friction = 0 } = attackData.slide || {};
+
+                // Always set slide and mark the attack as struck — even if the fighter
+                // is already KO'd we still want the corpse to be pushed by the hit.
+                this.slideVelocity = slideVel;
+                this.slideFriction = friction;
+                this.attackStruck = true;
+
+                // honor invulnerability (explicit temporary invulnerable state)
+                if (gameState.fighters[this.playerId].dead === "invulnerable") {
+                        console.log("cannot be attacked");
+                        return;
+                }
 
         if (this.soundHits?.[attackStrength]?.[attackType]) {
             playSound(this.soundHits[attackStrength][attackType]);
         }
         this.onAttackHit?.(time, this.opponent.playerId, this.playerId, hitPosition, attackStrength);
+       
         // apply any effect specified on the attack data (e.g., burned, stunned)
         try {
-            const attackData = FighterAttackBaseData[attackStrength];
             if (attackData && attackData.effect && gameState.fighters[this.playerId]) {
                 const effect = attackData.effect;
                 const now = (time && time.previous) || performance.now();
@@ -639,7 +650,10 @@ export class Fighter {
             console.warn('Failed to apply attack effect', e);
         }
         
-        if(FighterAttackBaseData[attackStrength].knockup && gameState.fighters[this.playerId].hitPoints > 0){
+        // If the target is already knocked out / dead we still want to apply
+        // thrust slide so the body moves. However knockup / airborne logic
+        // should only trigger when the target still has positive HP.
+        if (attackData.knockup && gameState.fighters[this.playerId].hitPoints > 0) {
             if(attackStrength === FighterAttackStrength.HEAVYKICK){
                 this.changeState(FighterState.FALL);
                 
@@ -648,15 +662,30 @@ export class Fighter {
             console.log("Knock up hit activate");
             this.changeState(FighterState.KNOCKUP);
             // set thrust after the state init so it isn't cleared by resetVelocities
-            this.velocity.x = FighterAttackBaseData[attackStrength].thrust.x;
-            this.velocity.y = FighterAttackBaseData[attackStrength].thrust.y;
+            this.velocity.x = attackData.thrust?.x ?? 0;
+            this.velocity.y = attackData.thrust?.y ?? 0;
             return;
         }
-        if(gameState.fighters[this.playerId].dead === "breathing" && gameState.fighters[this.playerId].hitPoints > 0) {
+        // Even if the fighter is KO'd (dead/die) we still want the hit thrust
+        // to affect their body. If they're still alive and breathing change
+        // to the appropriate hurt state so animations/sounds show.
+        if (gameState.fighters[this.playerId].hitPoints <= 0 ||
+            gameState.fighters[this.playerId].dead === "die" ||
+            gameState.fighters[this.playerId].dead === "dead") {
+            // apply thrust so even dead bodies get moved by the hit
+            this.velocity.x = attackData.thrust?.x ?? 0;
+            this.velocity.y = attackData.thrust?.y ?? 0;
+
+            // Centralized win/death handling (may change state to DEATH)
+            this.updateWinCondition();
+            // continue — do not return so we still apply effects / sounds / logging
+        }
+
+        if (gameState.fighters[this.playerId].dead === "breathing" && gameState.fighters[this.playerId].hitPoints > 0) {
             this.changeState(newState);
             // set thrust after the state init so it isn't cleared by resetVelocities
-            this.velocity.x = FighterAttackBaseData[attackStrength].thrust.x;
-            this.velocity.y = FighterAttackBaseData[attackStrength].thrust.y;
+            this.velocity.x = attackData.thrust?.x ?? 0;
+            this.velocity.y = attackData.thrust?.y ?? 0;
         }
          
 
@@ -665,8 +694,7 @@ export class Fighter {
 
     //Death init and States
     handleDeathInit(){
-        this.velocity.x = 0;
-        this.velocity.y = 0;
+       
          console.log("Dead Init !");
          playSound(this.deathSound);
        
@@ -700,13 +728,15 @@ export class Fighter {
          console.log("Knock Up Init !");
         if(gameState.fighters[this.playerId].hitPoints <= 0) {
            playSound(this.deathSound);
-           playSound(this.soundHits.BLOCK);
+          // playSound(this.soundHits.BLOCK);
             gameState.fighters[this.playerId].dead = "die";
         };
-        if(this.position.y >= STAGE_FLOOR ){
-         this.velocity.x = 0;
-         this.velocity.y = 0;
-         }
+        // prepare knock-up physics: enable gravity so the fighter will fall back down
+        // and reset the one-shot landing guard and sound flag
+        this.gravity = 1200; // tuned for a strong, but controllable fall
+        this._bounceCount = 0;
+        this._knockLanded = false;
+        this.knockUpSound = false;
     }
 
     //Fall Init
@@ -714,28 +744,83 @@ export class Fighter {
          console.log("Knock Up Init !");
         if(gameState.fighters[this.playerId].hitPoints <= 0) {
            playSound(this.deathSound);
-           playSound(this.soundHits.BLOCK);
+           //playSound(this.soundHits.BLOCK);
             gameState.fighters[this.playerId].dead = "die";
         };
-        if(this.position.y >= STAGE_FLOOR ){
-         this.velocity.x = 0;
-         this.velocity.y = 0;
-         }
+       
     }
 
-     handleKnockUpState(){
-        if(this.isAnimationKnockUp()) gameState.fighters[this.playerId].dead = "invulnerable";
-         
-        if (!this.isAnimationCompleted()) return;
-         if(this.position.y >= STAGE_FLOOR){
-            
-         
-         console.log("Knock Up Init on ground!");
-           playSound(this.soundHits.BLOCK);
-         if(gameState.fighters[this.playerId].hitPoints <= 0) return;
-        this.changeState(FighterState.GETUP);
-         }
+   handleKnockUpState(time) {
+   
+    
+        const hitPosition = {
+            x: this.position.x,
+            y: 0,
+        };
+
+    // if dead then ignore
+    if (gameState.fighters[this.playerId].hitPoints <= 0) return;
+    if(this.animationFrame >= 1) {
+    // HIT FLOOR?
+    const isLanding = this.position.y >= STAGE_FLOOR;
+
+    if (isLanding) {
+
+        // Initialize bounce count if undefined
+       
+
+        // Detect a NEW bounce (only when hitting floor from above)
+        if (!this._bounceActive && this._bounceCount < 2) {
+            this._bounceActive = true;
+            this._bounceCount++;
+
+            // ✔ Play sound on EVERY bounce
+            playSound(this.soundLand);
+            this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundShake");
+
+            // ✔ fighter becomes invulnerable during knock-up crash
+            gameState.fighters[this.playerId].dead = "invulnerable";
+
+            // BOUNCE effect
+            const bounceFactor = 0.22;
+            if (this.velocity.y > 0) {
+                this.velocity.y = -Math.max(120, Math.abs(this.velocity.y) * bounceFactor);
+            } else {
+                this.velocity.y = -140;
+            }
+        } 
+        else {
+            // PAST LANDING: velocity damping
+            this.velocity.y *= 0.5;
+            if (Math.abs(this.velocity.y) < 12) this.velocity.y = 0;
+
+            this.velocity.x *= 0.8;
+
+            // After 3 bounces, stop bouncing and go to GETUP
+            if (this._bounceCount >= 2 && this.isAnimationCompleted()) {
+                gameState.fighters[this.playerId].dead = "breathing";
+                this.changeState(FighterState.GETUP);
+            }
+        }
+
+        return;
     }
+
+    // --- AIRBORNE ---
+    // Reset bounce trigger so a new bounce can happen later
+    this._bounceActive = false;
+
+    // airborne: remove invulnerability
+    if (gameState.fighters[this.playerId].dead === "invulnerable") {
+        gameState.fighters[this.playerId].dead = "breathing";
+    }
+
+    // let animation play while mid-air
+    if (!this.isAnimationCompleted()) return;
+}
+}
+
+
 
     handleFallState(){
         if(this.isAnimationKnockUp()) gameState.fighters[this.playerId].dead = "invulnerable";
@@ -1008,6 +1093,7 @@ export class Fighter {
         const actualOpponentHurtBox = getActualBoxDimensions(
             this.opponent.position, this.opponent.direction, {x, y, width, height}
         );
+        
         
 
         if (!boxOverlap(actualHitBox, actualOpponentHurtBox)) continue;
@@ -1332,7 +1418,7 @@ export class Fighter {
         // Restore context (resets filter and transform)
         context.restore();
 
-        // this.drawDebug(context, camera);
+         //this.drawDebug(context, camera);
     }
     }
 }

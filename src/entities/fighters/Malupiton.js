@@ -8,10 +8,11 @@ import { Fighter, AnimationFrame } from './Fighter.js';
 import { Fireball } from './special/Fireball.js';
 
 export class Malupiton extends Fighter {
-    constructor(playerId, onAttackHit, entityList){
-        super(playerId, onAttackHit); //Change Direction of the player
+    constructor(playerId, onAttackHit, effectSplash, entityList, entityListForeground) {
+        super(playerId, onAttackHit, effectSplash); //Change Direction of the player
 
         this.entityList = entityList;
+        this.entityListForeground = entityListForeground;
 
         this.image = document.querySelector('img[alt="malupiton"]');
         this.voiceSpecial3 = document.querySelector('audio#sound-malupiton-special-3');
@@ -367,7 +368,7 @@ export class Malupiton extends Fighter {
                 ['hyperskill1-1', FrameDelay.TRANSITION],
             ],
              [FighterState.HYPERSKILL_2]:[
-                ['hyperskill2-0', 1000], ['hyperskill2-1', 150], ['hyperskill2-2', 140],
+                ['hyperskill2-0', 700], ['hyperskill2-1', 50], ['hyperskill2-2', 140],
                 ['hyperskill2-3', 70], ['hyperskill2-4', 70],
                 ['hyperskill2-5', 70], ['hyperskill2-6', 70],
                 ['hyperskill2-7', 70], ['hyperskill2-8', 70],

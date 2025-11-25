@@ -308,12 +308,13 @@ export class StatusBar {
         //Move Big Image
         gameState.pauseFrameMove = Math.min(gameState.pauseFrameMove + 5, 10);
         this.hyperskillframe += 1;
+        gameState.pauseTimer = Math.max(gameState.pauseTimer - 0.20, 0);
         if(this.hyperskillframe === 19) this.hyperskillframe = 1;
        // console.log(gameState.pauseFrameMove);
         if(time.previous > this.timeTimer + TIME_DELAY + this.timerDelay){
             if(!gameState.pause)this.time -=1;
            // console.log(gameState.pause, gameState.pauseTimer);
-            gameState.pauseTimer = Math.max(gameState.pauseTimer - 0.7, 0);
+            
             
             if(gameState.pause && gameState.pauseTimer <= 0){
                 gameState.pause = false;

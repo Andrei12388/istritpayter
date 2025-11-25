@@ -1,12 +1,12 @@
 import { Camera } from "../Camera.js";
 import { FIGHTER_HURT_DELAY, FighterAttackBaseData, FighterAttackStrength, FighterDirection, FighterId } from "../constants/fighter.js";
 import { FRAME_TIME } from "../constants/game.js";
-import { STAGE_MID_POINT, STAGE_PADDING } from "../constants/stage.js";
+import { STAGE_FLOOR, STAGE_MID_POINT, STAGE_PADDING } from "../constants/stage.js";
 import { controlHistory, pollControl } from "../controlHistory.js";
 import { Malupiton } from "../entities/fighters/Malupiton.js";
 import { Shadow } from "../entities/fighters/Shadow.js";
 
-import { LightHitSplash, HeavyHitSplash, SuperHitSplash, BlockHitSplash, GreenHitSplash, HyperHitSplash, FlameHitSplash } from "../entities/fighters/shared/index.js";
+import { LightHitSplash, HeavyHitSplash, SuperHitSplash, BlockHitSplash, GreenHitSplash, HyperHitSplash, FlameHitSplash, GroundShakeSplash } from "../entities/fighters/shared/index.js";
 
 import { FpsCounter } from "../entities/FpsCounter.js";
 import { StatusBar } from "../entities/overlays/StatusBar.js";
@@ -69,6 +69,7 @@ export class BattleScene {
         this.fade = new FadeEffect({ color: 'white', speed: 0.005 });
 
         this.entities = new EntityList();
+        this.entitiesForeground = new EntityList();
         this.stage = this.getStageMap();
         this.fightOver = false;
         this.statsBar = new StatusBar(this.game, this.fighters);
@@ -159,7 +160,7 @@ export class BattleScene {
     getFighterEntity(fighterState, index){
         const FighterEntityClass = this.getFighterEntityClass(fighterState.id, this.game);
 
-        return new FighterEntityClass(index, this.handleAttackHit.bind(this), this.entities);
+        return new FighterEntityClass(index, this.handleAttackHit.bind(this), this.handleEffectSplash.bind(this), this.entities, this.entitiesForeground);
     }
 
     getFighterEntities(){
@@ -188,6 +189,16 @@ export class BattleScene {
                 return SlashHitSplash;
             default:
                 throw new Error('Unknown strength requested');
+
+        }
+    }
+
+    getEffectSplashClass(effect){
+        switch(effect){
+            case "groundShake":
+                return GroundShakeSplash;
+            default:
+                throw new Error('Unknown Effect requested');
 
         }
     }
@@ -237,6 +248,13 @@ handleFlash() {
         this.entities.add(this.getHitSplashClass(strength), time, position.x, position.y, playerId);
     }
 
+     handleEffectSplash(time, playerId, opponentId, position, effect){
+      
+        this.fighterDrawOrder = [opponentId, playerId];
+        if(!position) return;
+        this.entitiesForeground.add(this.getEffectSplashClass(effect), time, position.x, STAGE_FLOOR, playerId);
+    }
+
     updateSpriteEntity(time, context){
         const player1 = this.fighters[0];
         const player2 = this.fighters[1];
@@ -279,8 +297,8 @@ handleFlash() {
         }
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
-     // this.enemyAI.update(time);
-    // this.enemyAI2.update(time);
+      this.enemyAI.update(time);
+     this.enemyAI2.update(time);
     }
    
 
@@ -334,6 +352,11 @@ handleFlash() {
         this.updateShadows(scaledTime, context);
         this.stage.update(scaledTime);
         this.entities.update(scaledTime, context, this.camera);
+        // Ensure any foreground entities (effects such as camera shakes / ground splashes)
+        // are updated too — they were not being updated previously which caused
+        // EffectSplash-derived entities (e.g. GroundShakeSplash) to never advance
+        // their animationFrame and therefore not render correctly.
+        this.entitiesForeground.update(scaledTime, context, this.camera);
         this.camera.update(scaledTime, context);
         this.updateOverlays(scaledTime, context);
         if(this.statsBar.fightOverTimer === 2 && this.statsBar.fightOver){
@@ -544,7 +567,7 @@ winFlash(time){
 }
 
     draw(context){
-        console.log(this.statsBar.timerDelay);
+      //  console.log(this.statsBar.timerDelay);
         this.stage.drawBackground(context, this.camera);
         //When Super Activates
          if (gameState.pause) { // P or ESC to pause
@@ -576,8 +599,9 @@ winFlash(time){
             }
             context.fillRect(0, 0, 400, 400);
         }
+        this.entitiesForeground.draw(context, this.camera);
         this.drawFighters(context);
-
+        
         this.entities.draw(context, this.camera);
         this.stage.drawForeground(context, this.camera);
 

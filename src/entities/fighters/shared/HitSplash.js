@@ -23,6 +23,9 @@ export class HitSplash {
     }
 
     draw(context, camera) {
+    // guard against invalid animationFrame (can be -1 if update hasn't run yet)
+    if (this.animationFrame < 0 || this.animationFrame >= this.frames.length) return;
+
     const [
         [x, y, width, height], [originX, originY],
     ] = this.frames[this.animationFrame];
