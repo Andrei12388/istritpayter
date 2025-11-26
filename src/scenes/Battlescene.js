@@ -6,7 +6,7 @@ import { controlHistory, pollControl } from "../controlHistory.js";
 import { Malupiton } from "../entities/fighters/Malupiton.js";
 import { Shadow } from "../entities/fighters/Shadow.js";
 
-import { LightHitSplash, HeavyHitSplash, SuperHitSplash, BlockHitSplash, GreenHitSplash, HyperHitSplash, FlameHitSplash, GroundShakeSplash } from "../entities/fighters/shared/index.js";
+import { LightHitSplash, HeavyHitSplash, SuperHitSplash, BlockHitSplash, GreenHitSplash, HyperHitSplash, FlameHitSplash, GroundShakeSplash, GroundSmokeSplash } from "../entities/fighters/shared/index.js";
 
 import { FpsCounter } from "../entities/FpsCounter.js";
 import { StatusBar } from "../entities/overlays/StatusBar.js";
@@ -69,6 +69,7 @@ export class BattleScene {
         this.fade = new FadeEffect({ color: 'white', speed: 0.005 });
 
         this.entities = new EntityList();
+        this.entitiesBackground = new EntityList();
         this.entitiesForeground = new EntityList();
         this.stage = this.getStageMap();
         this.fightOver = false;
@@ -197,6 +198,8 @@ export class BattleScene {
         switch(effect){
             case "groundShake":
                 return GroundShakeSplash;
+            case "groundSmoke":
+                return GroundSmokeSplash;
             default:
                 throw new Error('Unknown Effect requested');
 
@@ -236,7 +239,8 @@ handleFlash() {
     }
 
 
-    handleAttackHit(time, playerId, opponentId, position, strength){
+    handleAttackHit(time, playerId, opponentId, position, strength, direction){
+         
         gameState.fighters[playerId].score += FighterAttackBaseData[strength].score;
         gameState.fighters[playerId].skillPoints += FighterAttackBaseData[strength].skill;
         gameState.fighters[opponentId].hitPoints -= FighterAttackBaseData[strength].damage;
@@ -245,14 +249,15 @@ handleFlash() {
         this.hurtTimer = time.previous + (FIGHTER_HURT_DELAY * FRAME_TIME);
         this.fighterDrawOrder = [opponentId, playerId];
         if(!position) return;
-        this.entities.add(this.getHitSplashClass(strength), time, position.x, position.y, playerId);
+        this.entities.add(this.getHitSplashClass(strength), time, position.x, position.y, playerId, direction);
     }
 
-     handleEffectSplash(time, playerId, opponentId, position, effect){
-      
+     handleEffectSplash(time, playerId, opponentId, position, effect, display, direction){
+       
         this.fighterDrawOrder = [opponentId, playerId];
         if(!position) return;
-        this.entitiesForeground.add(this.getEffectSplashClass(effect), time, position.x, STAGE_FLOOR, playerId);
+        if(display === "foreground") this.entitiesForeground.add(this.getEffectSplashClass(effect), time, position.x, STAGE_FLOOR, playerId, direction);
+        else if(display === "background") this.entitiesBackground.add(this.getEffectSplashClass(effect), time, position.x, STAGE_FLOOR, playerId, direction);
     }
 
     updateSpriteEntity(time, context){
@@ -297,8 +302,8 @@ handleFlash() {
         }
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
-      this.enemyAI.update(time);
-     this.enemyAI2.update(time);
+     // this.enemyAI.update(time);
+    // this.enemyAI2.update(time);
     }
    
 
@@ -356,6 +361,7 @@ handleFlash() {
         // are updated too — they were not being updated previously which caused
         // EffectSplash-derived entities (e.g. GroundShakeSplash) to never advance
         // their animationFrame and therefore not render correctly.
+        this.entitiesBackground.update(scaledTime, context, this.camera);
         this.entitiesForeground.update(scaledTime, context, this.camera);
         this.camera.update(scaledTime, context);
         this.updateOverlays(scaledTime, context);
@@ -599,9 +605,9 @@ winFlash(time){
             }
             context.fillRect(0, 0, 400, 400);
         }
-        this.entitiesForeground.draw(context, this.camera);
+        this.entitiesBackground.draw(context, this.camera);
         this.drawFighters(context);
-        
+        this.entitiesForeground.draw(context, this.camera);
         this.entities.draw(context, this.camera);
         this.stage.drawForeground(context, this.camera);
 

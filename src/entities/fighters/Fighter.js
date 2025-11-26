@@ -633,7 +633,7 @@ export class Fighter {
         if (this.soundHits?.[attackStrength]?.[attackType]) {
             playSound(this.soundHits[attackStrength][attackType]);
         }
-        this.onAttackHit?.(time, this.opponent.playerId, this.playerId, hitPosition, attackStrength);
+        this.onAttackHit?.(time, this.opponent.playerId, this.playerId, hitPosition, attackStrength,this.direction);
        
         // apply any effect specified on the attack data (e.g., burned, stunned)
         try {
@@ -776,7 +776,8 @@ export class Fighter {
 
             // ✔ Play sound on EVERY bounce
             playSound(this.soundLand);
-            this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundShake");
+            this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundShake", "background");
+            this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundSmoke", "foreground", this.direction);
 
             // ✔ fighter becomes invulnerable during knock-up crash
             gameState.fighters[this.playerId].dead = "invulnerable";

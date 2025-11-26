@@ -7,3 +7,4 @@ export { SlashHitSplash } from './SlashHitSplash.js';
 export { GreenHitSplash } from './GreenHitSplash.js';
 export { FlameHitSplash } from './FlameHitSplash.js';
 export { GroundShakeSplash } from './GroundShakeSplash.js';
+export { GroundSmokeSplash } from './GroundSmokeSplash.js';

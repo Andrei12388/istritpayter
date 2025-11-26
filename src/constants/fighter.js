@@ -100,7 +100,7 @@ export const FighterAttackBaseData = {
    
     knockup: true,
     thrust: {
-        x: -1000,
+        x: -500,
         y: -200,
     },
     damage: 7,
@@ -116,8 +116,8 @@ export const FighterAttackBaseData = {
    
     knockup: true,
     thrust: {
-        x: -100,
-        y: -200,
+        x: -50,
+        y: -120,
     },
     damage: 7,
     slide: {

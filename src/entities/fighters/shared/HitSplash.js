@@ -1,12 +1,35 @@
 import { FRAME_TIME } from '../../../constants/game.js';
+import { gameState } from '../../../state/gameState.js';
 
 export class HitSplash {
     constructor(args, time, entityList){
-        const [x, y, playerId] = args;
-
+         const [x, y, playerId, maybe4 = 1, maybe5] = args;
+       
         this.image = document.querySelector('img[alt="hitsplash"]');
         this.position = { x, y };
         this.playerId = playerId;
+
+         let scale = 1;
+        let explicitDirection = undefined;
+
+        if (maybe5 !== undefined) {
+            // two values provided: treat 4th as scale and 5th as direction
+            scale = Number.isFinite(maybe4) ? maybe4 : 1;
+            explicitDirection = maybe5;
+        } else {
+            // only one extra value passed - it might be a direction (-1/1) or a scale
+            if (maybe4 === -1 || maybe4 === 1) {
+                explicitDirection = maybe4;
+                scale = 1;
+            } else {
+                scale = Number.isFinite(maybe4) ? maybe4 : 1;
+            }
+        }
+
+        // derive direction from the explicit arg when supplied, otherwise fall back to the
+        // current fighter state (by playerId) or a sensible default
+        this.direction = explicitDirection ?? (gameState.fighters?.[playerId]?.direction) ?? (playerId === 0 ? 1 : -1);
+
         this.entityList = entityList;
 
         this.frames = [];
@@ -35,7 +58,7 @@ export class HitSplash {
 
     context.save();
 
-    if (this.playerId == 1) {
+    if (this.direction > 0) {
         // Flip horizontally around the sprite center
         context.scale(-1, 1);
         context.drawImage(
