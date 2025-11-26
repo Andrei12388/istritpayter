@@ -314,7 +314,7 @@ handleFlash() {
         }
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
-     // this.enemyAI.update(time);
+     // this.enemyAI.update(time);git 
     // this.enemyAI2.update(time);
     }
    
@@ -488,7 +488,7 @@ winFinish(){
         if (this.statsBar && this.statsBar.time < 0) return;
 
         // Apply short slow motion
-        this.timeScale = 0.3; // slow down updates/rendering by 70%
+        this.timeScale = 0.2; // slow down updates/rendering by 70%
         gameState.slowFX = 1.007; // keep global slowFX consistent for animations
 
         // Clear any existing timeout to be safe
@@ -496,12 +496,11 @@ winFinish(){
             clearTimeout(this.winSlowTimeoutId);
         }
 
-        // Restore to normal after a short delay (200ms gives a visible slowdown without being too long)
         this.winSlowTimeoutId = setTimeout(() => {
-           
-            gameState.slowFX = 1;
+            this.timeScale = 0.6;
+            gameState.slowFX = 1.004;
             this.winSlowTimeoutId = null;
-        }, 2500);
+        }, 800);
     }
 }
 

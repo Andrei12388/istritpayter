@@ -718,16 +718,17 @@ export class Fighter {
        
 
         // Detect a NEW bounce (only when hitting floor from above)
-        if(!this._bounceActive && this._bounceCount < 1) this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundSmoke", "foreground", this.direction);
+        if(!this._bounceActive && this._bounceCount < 1) this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundShake", "background");
+            
         if (!this._bounceActive && this._bounceCount < 2) {
             this._bounceActive = true;
             this._bounceCount++;
 
             // ✔ Play sound on EVERY bounce
             playSound(this.soundLand);
-            this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundShake", "background");
             
-
+            
+            this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundSmoke", "foreground", this.direction);
             // ✔ fighter becomes invulnerable during knock-up crash
             gameState.fighters[this.playerId].dead = "invulnerable";
 
