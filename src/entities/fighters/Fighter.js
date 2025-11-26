@@ -695,6 +695,8 @@ export class Fighter {
     //Death init and States
     handleDeathInit(){
        this.gravity = 1200; // tuned for a strong, but controllable fall
+       this.velocity.x = -100;
+       this.velocity.y = -300;
         this._bounceCount = 0;
         this._knockLanded = false;
         this.knockUpSound = false;
@@ -718,7 +720,8 @@ export class Fighter {
        
 
         // Detect a NEW bounce (only when hitting floor from above)
-        if(!this._bounceActive && this._bounceCount < 1) this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundShake", "background");
+        if(!this._bounceActive && this._bounceCount < 1) this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundSmoke", "foreground", this.direction);
+           
             
         if (!this._bounceActive && this._bounceCount < 2) {
             this._bounceActive = true;
@@ -727,8 +730,7 @@ export class Fighter {
             // ✔ Play sound on EVERY bounce
             playSound(this.soundLand);
             
-            
-            this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundSmoke", "foreground", this.direction);
+             this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundShake", "background");
             // ✔ fighter becomes invulnerable during knock-up crash
             gameState.fighters[this.playerId].dead = "invulnerable";
 
