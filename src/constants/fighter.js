@@ -54,7 +54,7 @@ export const FighterAttackBaseData = {
     knockup: true,
     thrust: {
        x: 0,
-        y: -400,
+        y: -300,
     },
     damage: 8,
     slide: {

@@ -694,13 +694,81 @@ export class Fighter {
 
     //Death init and States
     handleDeathInit(){
-       
+       this.gravity = 1200; // tuned for a strong, but controllable fall
+        this._bounceCount = 0;
+        this._knockLanded = false;
+        this.knockUpSound = false;
          console.log("Dead Init !");
          playSound(this.deathSound);
        
     }
 
-     handleDeathState(){
+     handleDeathState(time){
+         const hitPosition = {
+            x: this.position.x,
+            y: 0,
+        };
+        if(this.animationFrame >= 1) {
+    // HIT FLOOR?
+    const isLanding = this.position.y >= STAGE_FLOOR;
+
+    if (isLanding) {
+
+        // Initialize bounce count if undefined
+       
+
+        // Detect a NEW bounce (only when hitting floor from above)
+        if(!this._bounceActive && this._bounceCount < 1) this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundSmoke", "foreground", this.direction);
+        if (!this._bounceActive && this._bounceCount < 2) {
+            this._bounceActive = true;
+            this._bounceCount++;
+
+            // ✔ Play sound on EVERY bounce
+            playSound(this.soundLand);
+            this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundShake", "background");
+            
+
+            // ✔ fighter becomes invulnerable during knock-up crash
+            gameState.fighters[this.playerId].dead = "invulnerable";
+
+            // BOUNCE effect
+            const bounceFactor = 0.22;
+            if (this.velocity.y > 0) {
+                this.velocity.y = -Math.max(120, Math.abs(this.velocity.y) * bounceFactor);
+            } else {
+                this.velocity.y = -140;
+            }
+        } 
+        else {
+            // PAST LANDING: velocity damping
+            this.velocity.y *= 0.5;
+            if (Math.abs(this.velocity.y) < 12) this.velocity.y = 0;
+
+            this.velocity.x *= 0.8;
+
+            // After 3 bounces, stop bouncing and go to GETUP
+            if (this._bounceCount >= 2 && this.isAnimationCompleted()) {
+                gameState.fighters[this.playerId].dead = "die";
+                 if(gameState.fighters[this.playerId].hitPoints <= 0) return;
+                this.changeState(FighterState.GETUP);
+            }
+        }
+
+        return;
+    }
+
+    // --- AIRBORNE ---
+    // Reset bounce trigger so a new bounce can happen later
+    this._bounceActive = false;
+
+    // airborne: remove invulnerability
+    if (gameState.fighters[this.playerId].dead === "invulnerable") {
+        gameState.fighters[this.playerId].dead = "die";
+    }
+
+    // let animation play while mid-air
+    if (!this.isAnimationCompleted()) return;
+}
        
         if (!this.isAnimationCompleted()) return;
         gameState.fighters[this.playerId].dead = "die";
@@ -770,6 +838,7 @@ export class Fighter {
        
 
         // Detect a NEW bounce (only when hitting floor from above)
+        if(!this._bounceActive && this._bounceCount < 1) this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundSmoke", "foreground", this.direction);
         if (!this._bounceActive && this._bounceCount < 2) {
             this._bounceActive = true;
             this._bounceCount++;
@@ -777,7 +846,7 @@ export class Fighter {
             // ✔ Play sound on EVERY bounce
             playSound(this.soundLand);
             this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundShake", "background");
-            this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundSmoke", "foreground", this.direction);
+            
 
             // ✔ fighter becomes invulnerable during knock-up crash
             gameState.fighters[this.playerId].dead = "invulnerable";

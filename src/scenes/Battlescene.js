@@ -41,7 +41,7 @@ export class BattleScene {
     fighterDrawOrder = [0, 1];
     enemyAI = undefined; 
     paused = false;
-    timeScale = gameState.slowFX;
+    timeScale = 1;
 
     constructor(game, selectedCharacters){
         this.game = game;
@@ -79,6 +79,9 @@ export class BattleScene {
         this.timeFlashTimer = 0;
         this.useFlashFrames = false;
         this.winFlashStartTime = 0;
+        // win slow-motion effect guards
+        this.winSlowTimeoutId = null;
+        this.winFinishTriggered = false;
         this.names = gameState.fighters.map(({ id }) => `${id.toLowerCase()}Big`)
         this.frames = new Map([
         
@@ -232,6 +235,15 @@ export class BattleScene {
     }
     if (this.enemyAI && typeof this.enemyAI.resetInputs === 'function') this.enemyAI.resetInputs();
     if (this.enemyAI2 && typeof this.enemyAI2.resetInputs === 'function') this.enemyAI2.resetInputs();
+
+    // Ensure any pending slow-win timeout is cleared and timing state is restored
+    if (this.winSlowTimeoutId) {
+        clearTimeout(this.winSlowTimeoutId);
+        this.winSlowTimeoutId = null;
+    }
+    this.timeScale = 1;
+    gameState.slowFX = 1;
+    this.winFinishTriggered = false;
 }
 
 handleFlash() {
@@ -303,7 +315,7 @@ handleFlash() {
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
      // this.enemyAI.update(time);
-    // this.enemyAI2.update(time);
+     this.enemyAI2.update(time);
     }
    
 
@@ -461,12 +473,35 @@ drawHyperSkillBG(context){
 }
 
 winFinish(){
-    if(gameState.fighters[0].wins === 2 || gameState.fighters[1].wins === 2){
-         this.statsBar.music.pause();
+    // Trigger a one-shot slow-motion effect when the match winner reaches 2 wins.
+    // We guard so it only triggers once and restores back to normal after a short delay.
+    if ((gameState.fighters[0].wins === 2 || gameState.fighters[1].wins === 2) && !this.winFinishTriggered) {
+        // Mark that we've triggered the finish flow so we don't repeatedly restart timers
+        this.winFinishTriggered = true;
 
-         if(this.statsBar.time < 0) return;
-        this.timeScale = 0.3;
-        gameState.slowFX = 1.007;
+        // Pause music once for the finish
+        if (this.statsBar && this.statsBar.music && typeof this.statsBar.music.pause === 'function') {
+            this.statsBar.music.pause();
+        }
+
+        // If the statsBar time is still counting down, bail out and don't slow right now
+        if (this.statsBar && this.statsBar.time < 0) return;
+
+        // Apply short slow motion
+        this.timeScale = 0.3; // slow down updates/rendering by 70%
+        gameState.slowFX = 1.007; // keep global slowFX consistent for animations
+
+        // Clear any existing timeout to be safe
+        if (this.winSlowTimeoutId) {
+            clearTimeout(this.winSlowTimeoutId);
+        }
+
+        // Restore to normal after a short delay (200ms gives a visible slowdown without being too long)
+        this.winSlowTimeoutId = setTimeout(() => {
+            this.timeScale = 1;
+            gameState.slowFX = 1;
+            this.winSlowTimeoutId = null;
+        }, 2500);
     }
 }
 
