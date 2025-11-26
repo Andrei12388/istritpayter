@@ -315,7 +315,7 @@ handleFlash() {
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
      // this.enemyAI.update(time);
-     this.enemyAI2.update(time);
+    // this.enemyAI2.update(time);
     }
    
 
@@ -498,7 +498,7 @@ winFinish(){
 
         // Restore to normal after a short delay (200ms gives a visible slowdown without being too long)
         this.winSlowTimeoutId = setTimeout(() => {
-            this.timeScale = 1;
+           
             gameState.slowFX = 1;
             this.winSlowTimeoutId = null;
         }, 2500);
