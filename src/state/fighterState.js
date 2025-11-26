@@ -15,5 +15,12 @@ superAcivated: false,
 sprite: 0,
 dead: "alive",
 hyperSprite: 0,
- statusExpiresAt: 0,
+	statusExpiresAt: 0,
+    // combo tracking (used by overlays and the battle scene)
+    comboCount: 0,
+    // timestamp (ms) of the last registered hit the fighter landed
+    lastHitTime: 0,
+    // timestamp (ms) when the current combo expires (i.e. lastHitTime + cooldown)
+    comboExpiresAt: 0,
+    comboscale: 1,
 });

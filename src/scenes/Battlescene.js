@@ -10,6 +10,7 @@ import { LightHitSplash, HeavyHitSplash, SuperHitSplash, BlockHitSplash, GreenHi
 
 import { FpsCounter } from "../entities/FpsCounter.js";
 import { StatusBar } from "../entities/overlays/StatusBar.js";
+import { ComboOverlay } from "../entities/overlays/ComboOverlay.js";
 
 //stages import
 import { payatasStage } from "../entities/stage/payatasStage.js";
@@ -129,6 +130,8 @@ export class BattleScene {
            // new StatusBar(this.game, this.fighters),
             new FpsCounter(),
             this.statsBar,
+            // show player combos (left for P1, right for P2)
+            new ComboOverlay(this.fighters),
         ];
         this.resetBattle();
       
@@ -222,6 +225,13 @@ export class BattleScene {
     this.inGame = true;
     gameState.fighters[0].skillConsumed = true;
     gameState.fighters[1].skillConsumed = true;
+    // reset combo trackers
+    gameState.fighters[0].comboCount = 0;
+    gameState.fighters[0].lastHitTime = 0;
+    gameState.fighters[0].comboExpiresAt = 0;
+    gameState.fighters[1].comboCount = 0;
+    gameState.fighters[1].lastHitTime = 0;
+    gameState.fighters[1].comboExpiresAt = 0;
     console.log('Reset Battle');
     this.statsBar.resetBattle();
     controlHistory[0].time = 0;
@@ -260,8 +270,44 @@ handleFlash() {
 
         this.hurtTimer = time.previous + (FIGHTER_HURT_DELAY * FRAME_TIME);
         this.fighterDrawOrder = [opponentId, playerId];
-        if(!position) return;
-        this.entities.add(this.getHitSplashClass(strength), time, position.x, position.y, playerId, direction);
+        // update combo state for the player who landed the hit
+        try {
+            const now = time.previous;
+            const attacker = gameState.fighters[playerId];
+            // don't count BLOCK as a combo-increasing hit
+            if (strength !== FighterAttackStrength.BLOCK) {
+                if (!attacker.lastHitTime || (now - attacker.lastHitTime) > 3000) {
+                    attacker.comboCount = 1; // start a new combo
+                } else {
+                    attacker.comboCount = (attacker.comboCount || 0) + 1; // continue combo
+                }
+                attacker.lastHitTime = now;
+                attacker.comboExpiresAt = now + 3000; // 3 second cooldown
+            }
+        } catch (e) {
+            // fail silently if state is not available
+        }
+
+        // if position is missing (e.g. special entities), still proceed with combo update
+        if (position) {
+            this.entities.add(this.getHitSplashClass(strength), time, position.x, position.y, playerId, direction);
+        }
+        try {
+            const now = time.previous;
+            const attacker = gameState.fighters[playerId];
+            // don't count BLOCK as a combo-increasing hit
+            if (strength !== FighterAttackStrength.BLOCK) {
+                if (!attacker.lastHitTime || (now - attacker.lastHitTime) > 2000) {
+                    //attacker.comboCount = 1; // start a new combo
+                } else {
+                   // attacker.comboCount = (attacker.comboCount || 0) + 1; // continue combo
+                }
+                attacker.lastHitTime = now;
+                attacker.comboExpiresAt = now + 1500; // 3 second cooldown
+            }
+        } catch (e) {
+            // fail silently if state is not available
+        }
     }
 
      handleEffectSplash(time, playerId, opponentId, position, effect, display, direction){
