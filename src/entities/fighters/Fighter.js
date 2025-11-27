@@ -321,6 +321,9 @@ export class Fighter {
     }
     this.soundTeleport = document.querySelector('audio#sound-teleport');
     this.soundLand = document.querySelector('audio#sound-fighter-land');
+    this.soundLandKnockup = document.querySelector('audio#sound-fighter-landKnockup');
+    this.soundFlame = document.querySelector('audio#sound-flame');
+    this.soundBurn = document.querySelector('audio#sound-burn');
     }
 
 
@@ -639,6 +642,13 @@ export class Fighter {
         try {
             if (attackData && attackData.effect && gameState.fighters[this.playerId]) {
                 const effect = attackData.effect;
+
+                if(effect.type === "burn"){
+                
+                 playSound(this.soundBurn);
+                 playSound(this.soundFlame,0.5);
+                
+                }
                 const now = (time && time.previous) || performance.now();
                 const expiresAt = now + (effect.duration || 0);
                 gameState.fighters[this.playerId].status = effect.type;
@@ -728,7 +738,7 @@ export class Fighter {
             this._bounceCount++;
 
             // ✔ Play sound on EVERY bounce
-            playSound(this.soundLand);
+            playSound(this.soundLandKnockup, 0.6);
             
              this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundShake", "background");
             // ✔ fighter becomes invulnerable during knock-up crash
@@ -847,7 +857,7 @@ export class Fighter {
             this._bounceCount++;
 
             // ✔ Play sound on EVERY bounce
-            playSound(this.soundLand);
+            playSound(this.soundLandKnockup, 0.6);
             this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundShake", "background");
             
 
@@ -1394,6 +1404,7 @@ export class Fighter {
     switch (status) {
 
     case 'burn': {
+       
         const t = performance.now() * 0.01;
         // warm flicker brightness
         const flick = 1.4 + Math.sin(t * 6) * 0.5;
@@ -1403,6 +1414,7 @@ export class Fighter {
         // use shadow to create an orange glow around the sprite (restored by context.restore())
         context.shadowColor = 'rgba(255, 89, 0, 0.92)';
         context.shadowBlur = 12 + Math.abs(Math.sin(t * 6)) * 10;
+        
         break;
     }
 
@@ -1498,7 +1510,7 @@ export class Fighter {
         // Restore context (resets filter and transform)
         context.restore();
 
-        this.drawDebug(context, camera);
+      //  this.drawDebug(context, camera);
     }
     }
 }

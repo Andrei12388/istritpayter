@@ -23,6 +23,8 @@ export class StatusBar {
         this.soundRound8 = document.querySelector('audio#sound-round8');
         this.soundRound9 = document.querySelector('audio#sound-round9');
         this.soundRound10 = document.querySelector('audio#sound-round10');
+        this.soundSkillAdd = document.querySelector('audio#super-skill-add');
+        this.soundSkillMax = document.querySelector('audio#super-skill-max');
 
         gameState.fighters[0].wins = 0;
         gameState.fighters[1].wins = 0;
@@ -366,34 +368,41 @@ export class StatusBar {
         }
         
         if (gameState.fighters[i].skillNumber === 0 && this.SkillBars[i].skillPoints >= 67) {
+             playSound(this.soundSkillAdd, 0.7);
             this.SkillBars[i].skillPoints = 0;
             gameState.fighters[i].skillPoints = 0;
             this.skillReady[0][playerKey].skillColor = SKILL_POINTS2_COLOR;
             gameState.fighters[i].skillNumber += 1;
+            
            
         }
 
         // 2nd skill trigger
         if (gameState.fighters[i].skillNumber === 1 && this.SkillBars[i].skillPoints >= 67) {
+             playSound(this.soundSkillAdd, 0.7);
             this.SkillBars[i].skillPoints = 0;
             gameState.fighters[i].skillPoints = 0;
             this.skillReady[0][playerKey].skillColor = SKILL_POINTSMAX_COLOR;
             gameState.fighters[i].skillNumber += 1;
+            
           
         }
 
          // 3rd skill trigger
         if (gameState.fighters[i].skillNumber === 2 && this.SkillBars[i].skillPoints >= 67) {
+             playSound(this.soundSkillAdd, 0.7);
             this.SkillBars[i].skillPoints = 0;
             gameState.fighters[i].skillPoints = 0;
             this.skillReady[0][playerKey].skillColor = SKILL_POINTSMAX_COLOR;
             gameState.fighters[i].skillNumber += 1;
+            
            
         }
 
         
          // 3rd skill trigger
         if (gameState.fighters[i].skillNumber >= 3 && this.SkillBars[i].skillPoints >= 67) {
+           
             this.SkillBars[i].skillPoints = 66;
             gameState.fighters[i].skillPoints = 66;
             this.skillReady[0][playerKey].skillColor = SKILL_POINTSMAX_COLOR;
@@ -525,6 +534,8 @@ drawSkillNum(context, label, x, y){
         );
         if(gameState.fighters[0].skillNumber === 3){
            if(this.blinkMax){
+            this.soundSkillMax.volume = 0.15;
+                this.soundSkillMax.play();
                 context.fillStyle = SKILL_POINTS3_COLOR;
             }
             context.fillRect(
@@ -540,7 +551,10 @@ drawSkillNum(context, label, x, y){
             SKILL_POINTS - Math.floor(this.SkillBars[1].skillPoints) , 5,
         );
         if(gameState.fighters[1].skillNumber === 3){
+            
             if(this.blinkMax){
+                this.soundSkillMax.volume = 0.15;
+                this.soundSkillMax.play();
                 context.fillStyle = SKILL_POINTS3_COLOR;
             }
             context.fillRect(

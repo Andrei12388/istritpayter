@@ -674,7 +674,7 @@ export class Malupiton extends Fighter {
       }
 
       if (this.isHyperSkillEnabled(frameActivation)) {
-        this.velocity.x = +1000;
+        this.velocity.x = 800;
         console.log('⚡ Berserker Barrage Activated!');
       } else if (this.isHyperSkillEnabled(frameDeactivation)) {
         this.velocity.x = 0;
