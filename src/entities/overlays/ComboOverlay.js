@@ -81,7 +81,6 @@ export class ComboOverlay {
             grad.addColorStop(1, "#ffffff");
             context.fillStyle = grad;
 
-            // DRAW TEXT
             context.strokeText(text, x, screenY);
             context.fillText(text, x, screenY);
 

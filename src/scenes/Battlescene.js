@@ -360,7 +360,7 @@ handleFlash() {
         }
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
-     // this.enemyAI.update(time); 
+    //  this.enemyAI.update(time); 
    //  this.enemyAI2.update(time);
     }
    
@@ -573,7 +573,7 @@ winFlash(time){
         this.winFlashred = true;
         this.winFlashStartTime = time.previous;
         this.statsBar.fightOverTimer = 0;
-
+        gameState.fighterNotIdle = false;
         this.statsBar.enemyStart = false;
         this.statsBar.fightOver = true;
         this.fightOver = true;
@@ -591,7 +591,7 @@ winFlash(time){
          this.winFlashStartTime = time.previous;
        
         this.statsBar.fightOverTimer = 0;
-        
+        gameState.fighterNotIdle = false;
         this.statsBar.enemyStart = false;
         this.statsBar.fightOver = true;
         this.fightOver = true;
@@ -611,6 +611,8 @@ winFlash(time){
             this.fightOver = true;
             this.statsBar.enemyStart = false;
 
+            gameState.fighterNotIdle = false;
+
             console.log('draw');
             this.statsBar.winSituation = 'DRAW';
            
@@ -622,7 +624,7 @@ winFlash(time){
             gameState.fighters[0].wins += 1;
             this.statsBar.fightOver = true;
             this.fightOver = true;
-           
+           gameState.fighterNotIdle = false;
             this.statsBar.winSituation = 'P1WIN';
             this.statsBar.enemyStart = false;
              console.log('P1 win');
@@ -637,7 +639,7 @@ winFlash(time){
             gameState.fighters[1].wins += 1;
             this.statsBar.fightOver = true;
             this.fightOver = true;
-            
+            gameState.fighterNotIdle = false;
             //deadState
              gameState.fighters[0].dead = "dead";
 

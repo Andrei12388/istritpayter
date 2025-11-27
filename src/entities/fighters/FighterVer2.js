@@ -1008,11 +1008,14 @@ handleDieState() {
    
 
     const actualHitBox = getActualBoxDimensions(this.position, this.direction, this.boxes.hit);
+    // Guard: skip collision checks for zero-area hitboxes (frames without real attack hitboxes)
+    if (!actualHitBox || actualHitBox.width <= 0 || actualHitBox.height <= 0) return;
     for (const [hurtLocation, hurtBox] of Object.entries(this.opponent.boxes.hurt)) {
         const [x, y, width, height] = hurtBox;
         const actualOpponentHurtBox = getActualBoxDimensions(
             this.opponent.position, this.opponent.direction, {x, y, width, height}
         );
+        if (!actualOpponentHurtBox || actualOpponentHurtBox.width <= 0 || actualOpponentHurtBox.height <= 0) continue;
         
 
         if (!boxOverlap(actualHitBox, actualOpponentHurtBox)) continue;

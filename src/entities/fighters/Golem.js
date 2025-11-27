@@ -300,7 +300,7 @@ export class Golem extends Fighter {
             ],
             [FighterState.HEAVY_PUNCH]:[
                 ['light-punch-1', 50],['light-punch-3', 33],['heavy-punch-1', 100],
-                ['light-punch-3', 166],['light-punch-1', 199],['light-punch-1', FrameDelay.TRANSITION],
+                ['light-punch-3', 250],['light-punch-1', 199],['light-punch-1', FrameDelay.TRANSITION],
             ],
              [FighterState.LIGHT_KICK]:[
                 ['light-punch-1', 50],['light-kick-1', 50],['light-kick-2', 133],
@@ -315,8 +315,8 @@ export class Golem extends Fighter {
                 ['crouch-heavykick-2', 166],['crouch-heavykick-1', 196],['crouch-heavykick-1', FrameDelay.TRANSITION],
             ],
             [FighterState.HEAVY_KICK]:[
-                ['heavy-kick-1', 66],['heavy-kick-2', 78],['heavy-kick-5', 88],
-                ['heavy-kick-4', 106],['heavy-kick-3', 106],['heavy-kick-2', FrameDelay.TRANSITION],
+                ['heavy-kick-1', 66],['heavy-kick-2', 78],['heavy-kick-5', 100],
+                ['heavy-kick-4', 250],['heavy-kick-3', 106],['heavy-kick-2', FrameDelay.TRANSITION],
             ],
             [FighterState.JUMP_HEAVYKICK]:[
                 ['heavy-kick-1', 66],['heavy-kick-2', 78],['heavy-kick-5', 88],

@@ -611,6 +611,7 @@ drawSkillNum(context, label, x, y){
     
         if(this.fightOverTimer <= 2 && this.time < 0){
              this.drawFrame(context, 'time-over', 158,103);
+             gameState.fighterNotIdle = false;
         }
         if(this.fightOverTimer >= 4 && this.fightOverTimer <= 6){
              
@@ -620,6 +621,7 @@ drawSkillNum(context, label, x, y){
                 playSound(this.soundWin, 1);
                  this.soundEnable = true;
                  console.log('Sound on win');
+                 gameState.fighterNotIdle = false;
             }
                  this.drawScoreLabel(context, 'WINNER!', 4, 90);
               
@@ -627,6 +629,7 @@ drawSkillNum(context, label, x, y){
             if(this.winSituation === 'P2WIN'){
                 if(!this.soundEnable && this.fightOverTimer <=4){
                      console.log('Sound on lose');
+                     gameState.fighterNotIdle = false;
                     playSound(this.soundLose, 1);
                     this.soundEnable = true;
                 }
@@ -735,7 +738,7 @@ drawCredits(context){
         } else if (this.time > this.timeCount - 4) {
             // Before fight starts - disable input during countdown
             gameState.fighterNotIdle = false;
-        } else if (this.time < this.timeCount - 5) {
+        } else if (this.time === this.timeCount - 6) {
             // Fight is active - enable input
             gameState.fighterNotIdle = true;
         }

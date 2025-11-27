@@ -1161,11 +1161,18 @@ export class Fighter {
    
 
     const actualHitBox = getActualBoxDimensions(this.position, this.direction, this.boxes.hit);
+    // If the active frame doesn't have a real hitbox (zero area), skip collision checks.
+    if (!actualHitBox || actualHitBox.width <= 0 || actualHitBox.height <= 0) {
+        // Debug: sometimes an animation frame deliberately has no hitbox, avoid treating
+        // the fighter origin as a tiny hit region that can collide with the opponent.
+        return;
+    }
     for (const [hurtLocation, hurtBox] of Object.entries(this.opponent.boxes.hurt)) {
         const [x, y, width, height] = hurtBox;
         const actualOpponentHurtBox = getActualBoxDimensions(
             this.opponent.position, this.opponent.direction, {x, y, width, height}
         );
+        if (!actualOpponentHurtBox || actualOpponentHurtBox.width <= 0 || actualOpponentHurtBox.height <= 0) continue;
         
         
 
@@ -1491,7 +1498,7 @@ export class Fighter {
         // Restore context (resets filter and transform)
         context.restore();
 
-         //this.drawDebug(context, camera);
+        this.drawDebug(context, camera);
     }
     }
 }

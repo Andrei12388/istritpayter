@@ -120,23 +120,23 @@ export class Malupiton extends Fighter {
             ['jump-attack-1', [[[555, 42, 94, 54], [46,52]], PushBox.LIGHT_KICK, HurtBox.LIGHT_KICK, HitBox.JUMP_HEAVYKICK]],
 
             //lIGHT Punch
-            ['light-punch-1', [[[70, 124, 55, 88], [27,86]], PushBox.IDLE, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]], HitBox.NULL]],
+            ['light-punch-1', [[[70, 124, 55, 88], [27,86]], PushBox.IDLE, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
             ['light-punch-2', [[[136, 127, 82, 70], [27,78]], PushBox.BEND, [[3, -76, 30, 18],[-3, -69, 50, 20], [-2, -52, 44, 58]], HitBox.LIGHT_PUNCH]],
-            ['light-punch-3', [[[136, 127, 82, 70], [27,78]], PushBox.BEND, [[3, -76, 30, 18],[-3, -69, 50, 20], [-2, -52, 44, 58]], HitBox.NULL]],
+            ['light-punch-3', [[[136, 127, 82, 70], [27,78]], PushBox.BEND, [[3, -76, 30, 18],[-3, -69, 50, 20], [-2, -52, 44, 58]]]],
 
              //Heavy Punch
             ['heavy-punch-1', [[[230, 140, 91, 49], [1,77]], PushBox.BEND, [[3, -76, 30, 18],[3, -69, 84, 30], [-2, -52, 44, 58]], HitBox.HEAVY_PUNCH]],
 
              //lIGHT kick
-            ['light-kick-1', [[[81, 34, 57, 69], [27,86]], PushBox.IDLE,  [[3, -76, 30, 18],[-3, -59, 64, 20], [-32, -52, 44, 58]], HitBox.NULL]],
+            ['light-kick-1', [[[81, 34, 57, 69], [27,86]], PushBox.IDLE,  [[3, -76, 30, 18],[-3, -59, 64, 20], [-32, -52, 44, 58]]]],
             ['light-kick-2', [[[560, 26, 84, 71], [27,78]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 64, 20], [-32, -52, 44, 58]], HitBox.LIGHT_KICK]],
 
              //Heavy kick
-            ['heavy-kick-1', [[[153, 44, 59, 60], [30,58]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]], HitBox.NULL]],
-            ['heavy-kick-2', [[[660, 29, 58, 87], [19,85]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]], HitBox.NULL]],
+            ['heavy-kick-1', [[[153, 44, 59, 60], [30,58]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
+            ['heavy-kick-2', [[[660, 29, 58, 87], [19,85]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
             ['heavy-kick-3', [[[560, 26, 84, 71], [1,78]], PushBox.BEND, [[3, -76, 30, 18],[8, -58, 75, 20], [-2, -52, 44, 58]], HitBox.HEAVY_KICK]],
-            ['heavy-kick-4', [[[269, 256, 51, 91], [16,89]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]], HitBox.NULL]],
-            ['heavy-kick-5', [[[206, 259, 51, 87], [15,85]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]], HitBox.NULL]],
+            ['heavy-kick-4', [[[269, 256, 51, 91], [16,89]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
+            ['heavy-kick-5', [[[206, 259, 51, 87], [15,85]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
 
             //Hit Face
             ['hurt-face-3', [[[91, 1158,75,93],[37,91]], PushBox.IDLE, HurtBox.IDLE]],
@@ -171,13 +171,13 @@ export class Malupiton extends Fighter {
             ['hyperskill2--1', [[[329, 608, 33, 102], [16,100]], PushBox.IDLE, HurtBox.NULL,]],
             ['hyperskill2-0', [[[268, 608, 47, 102], [23,100]], PushBox.IDLE, HurtBox.NULL,]],
             ['hyperskill2-1', [[[70, 482, 43, 100], [22,98]], PushBox.IDLE, HurtBox.NULL,]],
-            ['hyperskill2-2', [[[18, 506, 39, 72], [19,70]], PushBox.CROUCH, HurtBox.NULL]],
+            ['hyperskill2-2', [[[18, 506, 39, 72], [19,70]], PushBox.IDLE, HurtBox.NULL,]],
             ['hyperskill2-3', [[[124, 463, 66, 127], [33,125]], PushBox.IDLE, HurtBox.NULL, HitBox.SLASH]],
             ['hyperskill2-4', [[[199, 501, 59, 90], [29,88]], PushBox.IDLE, HurtBox.NULL, HitBox.SLASH]],
             ['hyperskill2-5', [[[266, 498, 101, 103], [50,101]], PushBox.IDLE, HurtBox.NULL, HitBox.SLASH]],
             ['hyperskill2-6', [[[8, 606, 59, 70], [30,68]], PushBox.IDLE, HurtBox.NULL, HitBox.SLASH]],
             ['hyperskill2-7', [[[91, 604, 67, 71], [33,69]], PushBox.IDLE, HurtBox.NULL, HitBox.SLASH]],
-            ['hyperskill2-8', [[[181, 605, 58, 111], [29,109]], PushBox.IDLE, HurtBox.NULL, PushBox.IDLE, HurtBox.IDLE, HitBox.SLASH]],
+            ['hyperskill2-8', [[[181, 605, 58, 111], [29,109]], PushBox.IDLE, HurtBox.NULL, HitBox.SLASH]],
 
             //Death State
             ['death-1', [[[9, 838, 53, 91], [27,89]], PushBox.IDLE, HurtBox.IDLE]],
@@ -278,7 +278,7 @@ export class Malupiton extends Fighter {
             ],
             [FighterState.HEAVY_PUNCH]:[
                 ['light-punch-1', 50],['light-punch-1', 50],['light-punch-3', 33],['heavy-punch-1', 100],
-                ['light-punch-3', 166],['light-punch-1', 199],['light-punch-1', FrameDelay.TRANSITION],
+                ['light-punch-3', 250],['light-punch-1', 199],['light-punch-1', FrameDelay.TRANSITION],
             ],
              [FighterState.LIGHT_KICK]:[
                 ['light-punch-1', 50],['light-kick-1', 50],['light-kick-2', 133],
@@ -293,8 +293,8 @@ export class Malupiton extends Fighter {
                 ['crouch-heavykick-2', 166],['crouch-heavykick-1', 196],['crouch-heavykick-1', FrameDelay.TRANSITION],
             ],
             [FighterState.HEAVY_KICK]:[
-                ['heavy-kick-1', 66],['heavy-kick-2', 78],['heavy-kick-3', 88],
-                ['heavy-kick-2', 106],['heavy-kick-1', 106],['heavy-kick-5', FrameDelay.TRANSITION],
+                ['heavy-kick-1', 66],['heavy-kick-2', 78],['heavy-kick-3', 100],
+                ['heavy-kick-2', 250],['heavy-kick-1', 106],['heavy-kick-5', FrameDelay.TRANSITION],
             ],
             [FighterState.JUMP_HEAVYKICK]:[
                 ['heavy-kick-1', 66],['heavy-kick-2', 78],['heavy-kick-3', 88],
@@ -674,7 +674,7 @@ export class Malupiton extends Fighter {
       }
 
       if (this.isHyperSkillEnabled(frameActivation)) {
-        this.velocity.x = +500;
+        this.velocity.x = +1000;
         console.log('⚡ Berserker Barrage Activated!');
       } else if (this.isHyperSkillEnabled(frameDeactivation)) {
         this.velocity.x = 0;
