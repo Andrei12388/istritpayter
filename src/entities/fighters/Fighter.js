@@ -1377,8 +1377,6 @@ export class Fighter {
             [originX, originY]
         ]] = this.frames.get(frameKey);
 
-        const status = this.status ?? (gameState.fighters[this.playerId] && gameState.fighters[this.playerId].status);
-
         context.save();
 
          context.filter =
@@ -1401,8 +1399,42 @@ export class Fighter {
 
     }
 
+   drawShadowInverted(context, camera) {
+    const [frameKey] = this.animations[this.currentState][this.animationFrame];
+
+    const [[
+        [x, y, width, height], 
+        [originX, originY]
+    ]] = this.frames.get(frameKey);
+
+    context.save();
+
+    context.filter = `contrast(10%) grayscale(0%) brightness(0%) opacity(50%)`;
+    context.scale(this.direction, -0.5);
+
+    const drawX =
+        Math.floor((this.position.x - this.hurtShake - camera.position.x) * this.direction) - originX;
+
+    const drawY =
+        -(Math.floor((STAGE_FLOOR - camera.position.y) + originY) + STAGE_FLOOR+90 - this.position.y * 0.5);
+
+    context.drawImage(
+        this.image,
+        x, y, width, height,
+        drawX,
+        drawY,
+        width,
+        height + this.position.y * 0.05
+    );
+
+    context.restore();
+}
+
+
     draw(context, camera) {
-         this.drawShadow(context, camera);
+
+        if(!gameState.shadowInvert) this.drawShadow(context, camera);
+        else this.drawShadowInverted(context, camera);
         const [frameKey] = this.animations[this.currentState][this.animationFrame];
 
         const [[

@@ -38,4 +38,6 @@ export const gameState = {
         duration: 0,
         intensity: 0,
     },
+
+    shadowInvert: true,
 };
