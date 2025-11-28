@@ -1369,8 +1369,40 @@ export class Fighter {
         context.stroke();
     }
 
+     drawShadow(context, camera) {
+        const [frameKey] = this.animations[this.currentState][this.animationFrame];
+
+        const [[
+            [x, y, width, height], 
+            [originX, originY]
+        ]] = this.frames.get(frameKey);
+
+        const status = this.status ?? (gameState.fighters[this.playerId] && gameState.fighters[this.playerId].status);
+
+        context.save();
+
+         context.filter =
+            `contrast(10%) grayscale(0%) brightness(0%) opacity(50%)`;
+
+        context.scale(this.direction, 0.5);
+        context.drawImage(
+            this.image,
+            x,
+            y,
+            width,
+            height,
+            Math.floor((this.position.x - this.hurtShake - camera.position.x) * this.direction) - originX,
+            Math.floor((STAGE_FLOOR - camera.position.y) - originY)+130+this.position.y*0.3,
+            width,
+            height,
+        );
+
+        context.restore();
+
+    }
 
     draw(context, camera) {
+         this.drawShadow(context, camera);
         const [frameKey] = this.animations[this.currentState][this.animationFrame];
 
         const [[
@@ -1406,12 +1438,12 @@ export class Fighter {
     case 'burn': {
        
         const t = performance.now() * 0.01;
-        // warm flicker brightness
+       
         const flick = 1.4 + Math.sin(t * 6) * 0.5;
-        // subtle pulse for shadow blur and sepia amount
+        
         const sep = 90 + Math.sin(t * 4) * 8;
         context.filter = `brightness(${flick}) sepia(${sep}%) saturate(1200%) hue-rotate(-10deg)`;
-        // use shadow to create an orange glow around the sprite (restored by context.restore())
+        
         context.shadowColor = 'rgba(255, 89, 0, 0.92)';
         context.shadowBlur = 12 + Math.abs(Math.sin(t * 6)) * 10;
         
@@ -1421,18 +1453,18 @@ export class Fighter {
   case 'frozen': {
     const t = performance.now() * 0.02;
 
-    // Base flicker for icy shimmer
+    
     const flicker = 0.85 + Math.sin(t * 4) * 0.15; 
 
-    // Subtle extra pulse for frost sparkle
+    
     const pulse = 0.95 + Math.sin(t * 6) * 0.05;
 
-    // Apply combined filter
+    
     context.filter =
         `grayscale(30%) contrast(1.1) brightness(${flicker}) hue-rotate(200deg) saturate(180%)`;
 
-    // Optional: extra overlay for icy sparkle
-    context.globalAlpha = pulse; // pulsating overlay
+   
+    context.globalAlpha = pulse; 
 
     break;
 }
@@ -1442,7 +1474,7 @@ export class Fighter {
     case 'shock':
     case 'stun': {
         const t = performance.now() * 0.02;
-        const flicker = 0.8 + Math.sin(t * 5) * 0.4; // electric flicker
+        const flicker = 0.8 + Math.sin(t * 5) * 0.4; 
         context.filter =
             `invert(60%) sepia(60%) hue-rotate(200deg) brightness(${flicker})`;
         break;
@@ -1507,9 +1539,8 @@ export class Fighter {
             height,
         );
 
-        // Restore context (resets filter and transform)
         context.restore();
-
+       
       //  this.drawDebug(context, camera);
     }
     }
