@@ -1392,9 +1392,9 @@ export class Fighter {
             width,
             height,
             Math.floor((this.position.x - this.hurtShake - camera.position.x) * this.direction) - originX,
-            Math.floor((STAGE_FLOOR - camera.position.y) - originY)+130+this.position.y*0.3,
+            Math.floor((STAGE_FLOOR - camera.position.y) - originY)+125+this.position.y*0.3,
             width,
-            height,
+            height-this.position.y*0.05,
         );
 
         context.restore();
