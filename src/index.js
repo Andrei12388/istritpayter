@@ -3,6 +3,7 @@ import { StreetFighterGame } from './StreetFighterGame.js';
 import { FighterState } from './constants/fighter.js';
 import { heldKeys } from './inputHandler.js'; 
 import { state as controlHold } from './inputHandler.js';
+import { gameState } from './state/gameState.js';
 
 
 function populateMoveDropdown(){
@@ -104,42 +105,50 @@ function onDrag(e) {
             // Right
             document.getElementById('mFor').classList.add('active');
             heldKeys.add('mFor');
+            gameState.buttonHold = true;
         } else if (angle > Math.PI/8 && angle <= 3*Math.PI/8) {
             // Down-Right
             document.getElementById('mFor').classList.add('active');
             document.getElementById('crouchDown').classList.add('active');
             heldKeys.add('mFor');
             heldKeys.add('crouchDown');
+            
         } else if (angle > 3*Math.PI/8 && angle <= 5*Math.PI/8) {
             // Down
             document.getElementById('crouchDown').classList.add('active');
             heldKeys.add('crouchDown');
+            gameState.buttonHold = true;
         } else if (angle > 5*Math.PI/8 && angle <= 7*Math.PI/8) {
             // Down-Left
             document.getElementById('mBack').classList.add('active');
             document.getElementById('crouchDown').classList.add('active');
             heldKeys.add('mBack');
             heldKeys.add('crouchDown');
+            
         } else if (angle > 7*Math.PI/8 || angle <= -7*Math.PI/8) {
             // Left
             document.getElementById('mBack').classList.add('active');
             heldKeys.add('mBack');
+            gameState.buttonHold = true;
         } else if (angle > -7*Math.PI/8 && angle <= -5*Math.PI/8) {
             // Up-Left
             document.getElementById('mBack').classList.add('active');
             document.getElementById('jump').classList.add('active');
             heldKeys.add('mBack');
             heldKeys.add('jump');
+            
         } else if (angle > -5*Math.PI/8 && angle <= -3*Math.PI/8) {
             // Up
             document.getElementById('jump').classList.add('active');
             heldKeys.add('jump');
+            gameState.buttonHold = true;
         } else if (angle > -3*Math.PI/8 && angle <= -Math.PI/8) {
             // Up-Right
             document.getElementById('mFor').classList.add('active');
             document.getElementById('jump').classList.add('active');
             heldKeys.add('mFor');
             heldKeys.add('jump');
+            
         }
     }
 }

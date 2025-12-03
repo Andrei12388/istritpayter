@@ -241,29 +241,31 @@ export class CharacterSelect {
         
 
         // Movement
-        if (control.isControlPressed(playerId, Control.UP) && this.selectEnable[playerId] === true && controlHold.tapped === true){
+        if (control.isControlPressed(playerId, Control.UP) && this.selectEnable[playerId] === true && controlHold.tapped === true && gameState.buttonHold){
             if (index - cols >= 0) index -= cols;
              this.imageBigP[playerId] = this.characters[index].imageBig;
             
              controlHold.tapped = false;
              playSound(this.soundChoose, 0.6);
+             gameState.buttonHold = false;
             
         }
 
-        if (control.isControlPressed(playerId, Control.DOWN)&& this.selectEnable[playerId] === true && controlHold.tapped === true) {
+        if (control.isControlPressed(playerId, Control.DOWN)&& this.selectEnable[playerId] === true && controlHold.tapped === true && gameState.buttonHold) {
             if (index + cols < total) index += cols;
              this.imageBigP[playerId] = this.characters[index].imageBig;
              
              controlHold.tapped = false;
              playSound(this.soundChoose, 0.6);
+             gameState.buttonHold = false;
             
         }
 
-        if (control.isControlPressed(playerId, Control.LEFT) && controlHold.tapped === true) {
+        if (control.isControlPressed(playerId, Control.LEFT) && controlHold.tapped === true && gameState.buttonHold) {
            if(this.selectEnable[playerId] === true){
                 if (index % cols !== 0) index -= 1;
              this.imageBigP[playerId] = this.characters[index].imageBig;
-              
+             gameState.buttonHold = false;
              controlHold.tapped = false;
              playSound(this.soundChoose, 0.6);
            }
@@ -279,19 +281,21 @@ export class CharacterSelect {
 
              playSound(this.soundChoose, 0.6);
             controlHold.tapped = false;
+            gameState.buttonHold = false;
             
             
         }
             
         }
 
-        if (control.isControlPressed(playerId, Control.RIGHT) && controlHold.tapped === true) {
+        if (control.isControlPressed(playerId, Control.RIGHT) && controlHold.tapped === true && gameState.buttonHold) {
             if(this.selectEnable[playerId] === true){
                 if ((index + 1) % cols !== 0 && index + 1 < total) index += 1;
             this.imageBigP[playerId] = this.characters[index].imageBig;
             
              controlHold.tapped = false;
              playSound(this.soundChoose, 1);
+             gameState.buttonHold = false;
             }
             
 
@@ -303,8 +307,7 @@ export class CharacterSelect {
              if(this.stageIndexs === this.stage.length-1) this.selectStageNext = false;
              playSound(this.soundChoose, 0.6);
             controlHold.tapped = false;
-             
-             
+            gameState.buttonHold = false;
         }
              
         }

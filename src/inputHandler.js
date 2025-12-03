@@ -5,6 +5,7 @@ import { gameState } from './state/gameState.js';
 
 const heldKeys = new Set();
 const pressedKeys = new Set();
+const gamepadPressed = new Map(); // Map<"padId-btnIndex", boolean>
 const lastAxes = new Map(); // Map<padId, number[]>
 
 // Store *live* Gamepad objects keyed by index
@@ -98,21 +99,39 @@ export function registerGamepadEvents() {
   window.addEventListener('gamepaddisconnected', handleGamepadDisconnected);
 }
 
-// Call this every animation frame
 export function pollGamepads() {
   const pads = navigator.getGamepads();
+
   for (const pad of pads) {
     if (!pad) continue;
-    gamePads.set(pad.index, pad);
-    
-   holdTimer += 1;
-          //controlHold.tapped = true;
-          if (holdTimer === 10 || holdTimer >= 20) {
-           controlHold.tapped = true;
-            if (holdTimer >= 20) holdTimer = 0;
-          }
+
+    const padId = pad.index;
+    gamePads.set(padId, pad);
+
+    pad.buttons.forEach((btn, idx) => {
+      const key = `${padId}-${idx}`;
+      const wasPressed = gamepadPressed.get(key) || false;
+
+      if (btn.pressed && !wasPressed) {
+        // 🔥 TAP DETECTED (single)
+        gamepadPressed.set(key, true);
+        gameState.buttonHold = true;      // ⬅️ behaves like touchscreen buttons
+        controlHold.tapped = true;        // ⬅️ triggers movement/punch logic once
+         console.log("Gamepad TAP", padId, idx);
+      }
+
+      if (!btn.pressed && wasPressed) {
+        // 🧊 Released → allow next tap
+        gamepadPressed.set(key, false);
+        gameState.buttonHold = false;
+        controlHold.tapped = false;
+         console.log("Gamepad RELEASE", padId, idx);
+      }
+    });
   }
 }
+
+
 
 /* -------------------------------------------------
    ON-SCREEN BUTTONS (touch / mouse)
@@ -319,3 +338,26 @@ export const isAxeGreater = (padId, axeId, value) =>
 
 export const isAxeLower = (padId, axeId, value) =>
   gamePads.get(padId)?.axes?.[axeId] <= value;
+
+export function isButtonPressedOnce(padId, buttonIndex) {
+  if (buttonIndex === '') return false;
+
+  const pad = gamePads.get(padId);
+  if (!pad) return false;
+
+  const key = `${padId}-${buttonIndex}`;
+  const now = pad.buttons[buttonIndex].pressed;
+  const was = gamepadPressed.get(key) || false;
+
+  if (now && !was) {
+    gamepadPressed.set(key, true);
+    return true; // one-time press
+  }
+
+  if (!now && was) {
+    gamepadPressed.set(key, false);
+  }
+
+  return false;
+}
+
