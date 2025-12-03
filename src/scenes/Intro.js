@@ -5,6 +5,7 @@ import { playSound, stopSound } from '../soundHandler.js';
 import { gameState } from '../state/gameState.js';
 import { CharacterSelect } from './CharacterSelect.js';
 import * as control from '../inputHandler.js'; 
+import { MainMenu } from './MainMenu.js';
 
 
 
@@ -41,9 +42,9 @@ export class Intro {
         if (this.screenTimer >= this.screenTimerMax) {
             this.flashAlpha = 1;
 
-            // SAFETY CHECK: only go to CharacterSelect if a valid start was made
+            // SAFETY CHECK: only go to MainMenu if a valid start was made
             if (this.introScreen.gameStart) {
-                this.game.setScene(new CharacterSelect(this.game));
+                this.game.setScene(new MainMenu(this.game));
             } else {
                 console.warn("Prevented scene switch — no valid credit/game start flag.");
             }
@@ -107,14 +108,14 @@ export class Intro {
     stopSound(this.musicIntro);
 }
  else {
-        // no credits, don’t trigger flash or scene
+        
         playSound(this.soundChoose, 1);
         console.warn("No credits available, cannot start game!");
-        return; // <--- stops here safely
+        return; 
     }
 }
 
-    // --- SELECT button (add credit once per press) ---
+    
     if (selectPressed && !this.keyPressed.select && gameState.kapeCom) {
         this.keyPressed.select = true;
         gameState.credits += 1;

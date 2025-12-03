@@ -53,10 +53,12 @@ function showNotice(message) {
 function handleKeyDown(event) {
   event.preventDefault();
   heldKeys.add(event.code);
+  gameState.buttonHold = true;
 }
 
 function handleKeyUp(event) {
   controlHold.tapped = false;
+  gameState.buttonHold = false;
   holdTimer = 0;
   tapped = true;
   event.preventDefault();
@@ -127,6 +129,7 @@ export function registerScreenButtonEvents() {
 
       const handlePress = (e) => {
         e.preventDefault();
+        gameState.buttonHold = true;
         if (!heldKeys.has(virtualKeyCode)) {
           heldKeys.add(virtualKeyCode);
           holdTimer += 1;
@@ -144,6 +147,7 @@ export function registerScreenButtonEvents() {
 
       const handleRelease = (e) => {
         e.preventDefault();
+        gameState.buttonHold = false;
         controlHold.tapped = false;
         holdTimer = 0;
         heldKeys.delete(virtualKeyCode);

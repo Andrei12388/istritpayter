@@ -20,12 +20,13 @@ export const gameState = {
     pause: false,
     slowFX: 1,
     pauseTimer: 0,
-    credits: 0,
+    credits: 5,
     pauseFrameMove: -30,
-
+    skillNumber: 1,
     fighterNotIdle: false,
-
-    difficulty: 'insane',
+    difficultyIndex: 1,
+    difficulty: 'normal',
+    buttonHold: false,
     stage: 'final',
     flash: false,
     characterSelectMode: true,

@@ -791,6 +791,6 @@ drawCredits(context){
             this.drawFightOver(context);
         }
         if(this.flashScreen)this.drawFlash(context);
-        this.drawCredits(context);
+      
         }
 }

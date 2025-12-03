@@ -5,7 +5,7 @@ import { gameState } from "../state/gameState.js";
 import { StreetFighterGame } from "../StreetFighterGame.js";
 import { SceneBackgroundAnimation } from "./stage/shared/SceneBackgroundAnimation.js";
 
-const IJIWALK_FRAME_DELAY = 180; // milliseconds between frames (higher = slower)
+const IJIWALK_FRAME_DELAY = 180; 
 
 
 export class IntroBG {
@@ -421,7 +421,7 @@ updateScenes(time){
                  
             }
             if (this.timeDraw === true){
-                 this.drawTime(context);
+              //   this.drawTime(context);
             }
             
             if(this.insertCoin === true){
@@ -429,12 +429,10 @@ updateScenes(time){
                  this.drawScenes(context);
                 if(this.blink === 1){
                     this.drawInsertCoin(context);
-               //  this.drawFrame(context, 'push-start', 31, 160);
-               //  this.drawFrame(context, 'push-start', 240, 160);
                     
                 }
             }
-            this.drawCredits(context);
+           // this.drawCredits(context);
             if(this.kapecomPresent === true){
                 this.drawKapeComTitle(context);
             }

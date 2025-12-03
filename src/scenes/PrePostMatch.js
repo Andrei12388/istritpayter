@@ -502,7 +502,6 @@ drawVsScreen(context){
         if(gameState.gameScene === 'postmatch') this.drawSayings(context);
        
         this.fade.draw(context, 400, 400);
-        this.drawCredits(context);
         
          }
          if(this.flashScreen)this.drawFlash(context);

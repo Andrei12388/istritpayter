@@ -604,7 +604,6 @@ drawImageBig(context){
         this.drawImageBig(context);
         this.drawCharacterGrid(context);
         this.drawScreen(context);
-        this.drawCredits(context);
          }
          if(this.flashScreen)this.drawFlash(context);
          

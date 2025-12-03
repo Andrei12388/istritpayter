@@ -1,4 +1,5 @@
 import { HEALTH_MAX_HIT_POINTS, SKILL_POINTS } from "../constants/battle.js";
+import { gameState } from "./gameState.js";
 
 export const createDefaultFighterState = (id) => ({
 id, 
@@ -6,7 +7,7 @@ score: 100,
 battles: 0,
 wins: 0,
 status: 'normal',
-skillNumber: 3,
+skillNumber: gameState.skillNumber,
 skillConsumed: true,
 resetSkillBar: false,
 hitPoints: HEALTH_MAX_HIT_POINTS,
