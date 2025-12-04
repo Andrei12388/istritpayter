@@ -29,20 +29,20 @@ export class Malupiton extends Fighter {
         this.frames = new Map([
            
            //Forwards or Idle
-            ['forwards-1', [[[71, 253, 50, 90],[24,88]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-2', [[[140, 253,52,88],[26,90]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-3', [[[205, 255,52,88],[26,86]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-4', [[[269, 254,50,90],[25,88]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-5', [[[335, 254,61,90],[30,88]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-6', [[[410, 254,60,89],[30,87]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-7', [[[477, 252,57,96],[28,94]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-8', [[[482, 155,54,91],[27,89]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-9', [[[477, 252,57,96],[28,94]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-10',[[[410, 254,60,89],[30,87]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-11',[[[335, 254,61,90],[30,88]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-12', [[[269, 254,50,90],[25,88]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-13', [[[205, 255,52,88],[26,86]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-14', [[[140, 253,52,88],[26,90]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-1', [[[70, 255, 52, 95],[26,93]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-2', [[[140, 255,53,90],[26,88]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-3', [[[206, 255,52,91],[26,89]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-4', [[[269, 257,59,90],[30,88]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-5', [[[335, 257,69,91],[34,89]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-6', [[[408, 257,65,91],[32,89]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-7', [[[473, 255,61,97],[30,95]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-8', [[[469, 156,67,94],[33,92]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-9', [[[473, 255,61,97],[30,95]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-10',[[[408, 257,65,91],[32,89]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-11',[[[335, 257,69,91],[34,89]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-12', [[[269, 257,59,90],[30,88]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-13', [[[206, 255,52,91],[26,89]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-14', [[[140, 253,53,90],[26,88]], PushBox.IDLE, HurtBox.IDLE]],
 
             //Dodge
              ['dodge-1', [[[730, 25, 55, 92],[27,90]], PushBox.NULL, HurtBox.IDLE]],
@@ -52,19 +52,19 @@ export class Malupiton extends Fighter {
            
             
             //Jump Up
-            ['jumpup-1', [[[410, 254,60,89],[30,87]], PushBox.JUMP, HurtBox.JUMP]],
-            ['jumpup-2', [[[335, 254,61,90],[30,88]], PushBox.JUMP, HurtBox.JUMP]],
-            ['jumpup-3', [[[269, 254,50,90],[25,88]], PushBox.JUMP, HurtBox.JUMP]],
+            ['jumpup-1', [[[408, 257,64,91],[32,89]], PushBox.JUMP, HurtBox.JUMP]],
+            ['jumpup-2', [[[335, 257,69,91],[34,89]], PushBox.JUMP, HurtBox.JUMP]],
+            ['jumpup-3', [[[269, 257,59,92],[30,90]], PushBox.JUMP, HurtBox.JUMP]],
             
             
             //Jump Forwards/Backwards
             ['jump-roll-1', [[[70, 124, 55, 88], [27,86]], PushBox.JUMP, HurtBox.JUMP]],
             ['jump-roll-2', [[[136, 127, 82, 70], [41,68]], PushBox.JUMP, HurtBox.JUMP]],
-            ['jump-roll-3', [[[231, 138, 88, 48], [44,46]], PushBox.JUMP, HurtBox.JUMP]],
+            ['jump-roll-3', [[[236, 138, 88, 48], [44,46]], PushBox.JUMP, HurtBox.JUMP]],
             ['jump-roll-4', [[[339, 115, 50, 94], [24,91]], PushBox.JUMP, HurtBox.JUMP]],
             ['jump-roll-5', [[[327, 43, 100, 68], [50,68]], PushBox.JUMP, HurtBox.JUMP]],
-            ['jump-roll-6', [[[251, 21, 56, 102], [28,100]], PushBox.JUMP, HurtBox.JUMP]],
-            ['jump-roll-7', [[[482, 155,54,91],[27,89]], PushBox.JUMP, HurtBox.JUMP]],
+            ['jump-roll-6', [[[236, 23, 73, 105], [36,103]], PushBox.JUMP, HurtBox.JUMP]],
+            ['jump-roll-7', [[[469, 156,67,94],[33,92]], PushBox.JUMP, HurtBox.JUMP]],
 
             //Special Roll
             ['special-roll-1', [[[70, 124, 55, 88], [27,86]], PushBox.JUMP, HurtBox.JUMP, HitBox.LIGHT_PUNCH]],
@@ -73,15 +73,15 @@ export class Malupiton extends Fighter {
             ['special-roll-4', [[[339, 115, 50, 94], [24,91]], PushBox.JUMP, HurtBox.JUMP, HitBox.LIGHT_PUNCH]],
             ['special-roll-5', [[[327, 43, 100, 68], [50,68]], PushBox.JUMP, HurtBox.JUMP]],
             ['special-roll-6', [[[251, 21, 56, 102], [28,100]], PushBox.JUMP, HurtBox.JUMP]],
-            ['special-roll-7', [[[482, 155,54,91],[27,89]], PushBox.JUMP, HurtBox.JUMP, HitBox.LIGHT_PUNCH]],
+            ['special-roll-7', [[[469, 156,67,94],[33,92]], PushBox.JUMP, HurtBox.JUMP, HitBox.LIGHT_PUNCH]],
 
             //Jump first/Last frame
-            ['jump-land', [[[269, 254,51,90],[25,88]], PushBox.IDLE, HurtBox.IDLE]],
+            ['jump-land', [[[269, 257,59,90],[29,88]], PushBox.IDLE, HurtBox.IDLE]],
 
              //Crouch
             ['crouch-1', [[[17, 19, 52, 81], [26,79]], PushBox.IDLE, HurtBox.JUMP]],
             ['crouch-2', [[[81, 32, 57, 69], [28,67]], PushBox.BEND, HurtBox.BEND]],
-            ['crouch-3', [[[153, 43, 59, 59], [29,57]], PushBox.CROUCH, HurtBox.CROUCH]], 
+            ['crouch-3', [[[154, 44, 66, 60], [33,58]], PushBox.CROUCH, HurtBox.CROUCH]], 
            
             //Idle
 
@@ -96,7 +96,7 @@ export class Malupiton extends Fighter {
             ['idle-turn-1', [[[70, 252, 52, 91], [26,89]], PushBox.IDLE, [[-16, -96, 28, 18],[-14, -74, 40, 24], [-14, -31, 40, 32]]]],
 
             //Crouch Turn
-            ['crouch-turn-1', [[[154, 42, 58, 58], [29,56]], PushBox.CROUCH, [[7, -60, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
+            ['crouch-turn-1', [[[154, 44, 66, 60], [33,58]], PushBox.CROUCH, [[7, -60, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
             ['crouch-turn-2', [[[81, 32, 57, 67], [28,65]], PushBox.CROUCH, [[7, -60, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
             ['crouch-turn-3', [[[492, 34, 46, 67], [23,65]], PushBox.CROUCH, [[-26, -61, 24, 18],[-28, -46, 44, 24], [-28, -24, 44, 24]]]],
 
@@ -165,9 +165,9 @@ export class Malupiton extends Fighter {
             ['hyperskill1-9', [[[887, 554, 95, 140], [47,138]], PushBox.IDLE, HurtBox.NULL,]],
 
             //HyperSkill2
-            ['hyperskill2--4', [[[335, 720, 55, 92], [27,90]], PushBox.IDLE, HurtBox.NULL,]],
-            ['hyperskill2--3', [[[271, 720, 54, 92], [27,90]], PushBox.IDLE, HurtBox.NULL,]],
-            ['hyperskill2--2', [[[376, 613, 41, 92], [20,90]], PushBox.IDLE, HurtBox.NULL,]],
+            ['hyperskill2--4', [[[333, 718, 67, 94], [33,92]], PushBox.IDLE, HurtBox.NULL,]],
+            ['hyperskill2--3', [[[258, 720, 67, 92], [33,90]], PushBox.IDLE, HurtBox.NULL,]],
+            ['hyperskill2--2', [[[365, 613, 52, 92], [26,90]], PushBox.IDLE, HurtBox.NULL,]],
             ['hyperskill2--1', [[[329, 608, 33, 102], [16,100]], PushBox.IDLE, HurtBox.NULL,]],
             ['hyperskill2-0', [[[268, 608, 47, 102], [23,100]], PushBox.IDLE, HurtBox.NULL,]],
             ['hyperskill2-1', [[[70, 482, 43, 100], [22,98]], PushBox.IDLE, HurtBox.NULL,]],
@@ -186,7 +186,7 @@ export class Malupiton extends Fighter {
             ['death-4', [[[234, 852, 77, 76], [38,74]],PushBox.IDLE, HurtBox.IDLE]],
             ['death-5', [[[321, 855, 101, 51], [50,49]],PushBox.IDLE, HurtBox.IDLE]],
             ['death-6', [[[433, 870, 99, 37], [49,35]],PushBox.IDLE, HurtBox.IDLE]],
-            ['death-7', [[[540, 873, 101, 27], [50,25]],PushBox.IDLE, HurtBox.IDLE]],
+            ['death-7', [[[537, 867, 116, 37], [58,35]],PushBox.IDLE, HurtBox.IDLE]],
             
             //GetUp State
              ['getUp-1', [[[11, 955, 53, 55], [27,53]], PushBox.IDLE, HurtBox.NULL]],
@@ -199,13 +199,13 @@ export class Malupiton extends Fighter {
                   
          this.animations = {
             [FighterState.IDLE]:[ 
-                ['forwards-14', 75],['forwards-13',75],
-                ['forwards-12',75],['forwards-11',75],
-                ['forwards-10',75],['forwards-9',75],
-                ['forwards-8',75],['forwards-7',75],
-                ['forwards-6',75],['forwards-5',75],
-                ['forwards-4',75],['forwards-3',75],
-                ['forwards-2',75],['forwards-1',75],
+                ['forwards-14', 85],['forwards-13',85],
+                ['forwards-12',85],['forwards-11',85],
+                ['forwards-10',85],['forwards-9',85],
+                ['forwards-8',85],['forwards-7',85],
+                ['forwards-6',85],['forwards-5',85],
+                ['forwards-4',85],['forwards-3',85],
+                ['forwards-2',85],['forwards-1',85],
             ],
             [FighterState.DODGE_BACKWARD]:[ 
                 ['dodge-1', 40], ['dodge-2', 40],
@@ -221,19 +221,17 @@ export class Malupiton extends Fighter {
             ],
 
             [FighterState.WALK_FORWARD]: [
-                ['forwards-10', 65],['forwards-9',65],
-                ['forwards-8',65],['forwards-7',65],
-                ['forwards-6',65],['forwards-5',65],
-                ['forwards-4',65],['forwards-3',65],
-                ['forwards-2',65],['forwards-1',65],
+             
+                ['forwards-6',85],['forwards-5',85],
+                ['forwards-4',85],['forwards-3',85],
+                ['forwards-2',85],['forwards-1',85],
                         
             ],
             [FighterState.WALK_BACKWARD]:[
-                ['forwards-10', 65],['forwards-9',65],
-                ['forwards-8',65],['forwards-7',65],
-                ['forwards-6',65],['forwards-5',65],
-                ['forwards-4',65],['forwards-3',65],
-                ['forwards-2',65],['forwards-1',65],
+             
+                ['forwards-6',85],['forwards-5',85],
+                ['forwards-4',85],['forwards-3',85],
+                ['forwards-2',85],['forwards-1',85],
         ],
             [FighterState.JUMP_START]:[
                 ['jump-land', 50],['jump-land',FrameDelay.TRANSITION],

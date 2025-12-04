@@ -13,7 +13,7 @@ import { OptionsMenu } from './scenes/OptionsMenu.js';
 
 const selectedCharacters = [
     { 
-        name: "Golem", 
+        name: "Malupiton", 
         namePos: 5,
         sayings: 'Sabi ko naman sayo burger ka saken',
         color: "gray", 

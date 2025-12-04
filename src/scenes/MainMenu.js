@@ -63,8 +63,54 @@ export class MainMenu {
     gameState.gameStarted = true; 
     playSound(this.soundSelect, 1);
     stopSound(this.musicIntro);
-    this.handleFlash();
+    
     gameState.buttonHold = false;
+
+    if(!this.introScreen.vsMode){
+            if(this.introScreen.pointer.cursor === 0){
+                if(this.fade.done) this.game.setScene(new Intro(this.game));
+                this.handleFlash();
+                 console.log("Start mode selected");
+            } else if (this.introScreen.pointer.cursor === 1){
+               //if(this.fade.done) this.game.setScene(new CharacterSelect(this.game));
+                 this.introScreen.pointer.y = 108;
+                 this.introScreen.pointer.x = 95;
+                 this.introScreen.pointer.cursor = 0;
+               this.introScreen.vsMode = true;
+                console.log("Vs mode selected");
+        } else if (this.introScreen.pointer.cursor === 2){
+          //  if(this.fade.done) this.game.setScene(new BattleScene(this.game));
+          this.handleFlash();
+                console.log("Practice mode selected");
+        } else if (this.introScreen.pointer.cursor === 3){
+            this.handleFlash();
+           if(this.fade.done) this.game.setScene(new OptionsMenu(this.game));
+                console.log("Options selected");
+    }
+} else {
+     if(this.introScreen.pointer.cursor === 0){
+            gameState.bot.player1 = false;
+            gameState.bot.player2 = false;
+                this.handleFlash();
+                 console.log("PVP Selected");
+            } else if (this.introScreen.pointer.cursor === 1){
+                 gameState.bot.player1 = false;
+            gameState.bot.player2 = true;
+               this.handleFlash();
+                console.log("P VS Cpu selected");
+        } else if (this.introScreen.pointer.cursor === 2){
+             gameState.bot.player1 = true;
+            gameState.bot.player2 = true;
+          this.handleFlash();
+                console.log("CPU vs CPU Selected");
+        } else if (this.introScreen.pointer.cursor === 3){
+            this.introScreen.vsMode = false;
+            this.introScreen.pointer.y = 108;
+            this.introScreen.pointer.x = 135;
+                 this.introScreen.pointer.cursor = 0;
+                console.log("Vs mode Back");
+    }
+}
     
 }
 
@@ -92,20 +138,39 @@ export class MainMenu {
 
     update(time, context) {
         this.fade.update();
-        if(this.fade.done){
-            if(this.introScreen.pointer.cursor === 0){
-                this.game.setScene(new Intro(this.game));
-                 console.log("Start mode selected");
+if(!this.introScreen.vsMode){
+ if(this.introScreen.pointer.cursor === 0){
+                if(this.fade.done) this.game.setScene(new Intro(this.game));
+               
+                 
             } else if (this.introScreen.pointer.cursor === 1){
-                this.game.setScene(new CharacterSelect(this.game));
-                console.log("Vs mode selected");
+      
         } else if (this.introScreen.pointer.cursor === 2){
-          //  this.game.setScene(new BattleScene(this.game));
-                console.log("Practice mode selected");
+            if(this.fade.done) this.game.setScene(new BattleScene(this.game));
+   
         } else if (this.introScreen.pointer.cursor === 3){
-           this.game.setScene(new OptionsMenu(this.game));
-                console.log("Options selected");
+    
+           if(this.fade.done) this.game.setScene(new OptionsMenu(this.game));
+              
     }
+} else {
+    if(this.introScreen.pointer.cursor === 0){
+            gameState.bot.player1 = false;
+            gameState.bot.player2 = false;
+                if(this.fade.done) this.game.setScene(new CharacterSelect(this.game));
+               
+                 console.log("PVP Selected");
+            } else if (this.introScreen.pointer.cursor === 1){
+                 gameState.bot.player1 = false;
+            gameState.bot.player2 = true;
+               if(this.fade.done) this.game.setScene(new CharacterSelect(this.game));
+                console.log("P VS Cpu selected");
+        } else if (this.introScreen.pointer.cursor === 2){
+             gameState.bot.player1 = true;
+            gameState.bot.player2 = true;
+          if(this.fade.done) this.game.setScene(new CharacterSelect(this.game));
+                console.log("CPU vs CPU Selected");
+        } 
 }
          this.handleInput(0);
         this.handleInput(1);

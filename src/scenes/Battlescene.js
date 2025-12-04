@@ -360,8 +360,8 @@ handleFlash() {
         }
     // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
-      this.enemyAI.update(time); 
-    // this.enemyAI2.update(time);
+        if(gameState.bot.player2) this.enemyAI.update(time); 
+        if(gameState.bot.player1) this.enemyAI2.update(time);
     }
    
 

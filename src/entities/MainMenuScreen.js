@@ -37,7 +37,7 @@ export class MainMenuScreen {
         this.frameMovieEnable = true;
         this.tankTimer = 0;
 
-
+        this.vsMode = false;
         this.blinkTimer = 0;
         this.sceneTimer = 0;
         this.stopwatch = 0;
@@ -225,15 +225,19 @@ export class MainMenuScreen {
             this.drawTextLabel(context, '@ANDREIBARDOQUILLO..LTD2025', 70,210, 1, 0.7);
         }
 
+        drawVSMenu(context){
+           // this.drawTextLabel(context, '@KAPECOM..LTD2025', 90,190, 1, 0.7);
+            this.drawTextLabel(context, 'PLAYER VS PLAYER', 125,110, 1, 0.7);
+            this.drawTextLabel(context, 'PLAYER VS CPU', 125,125, 1, 0.7);
+            this.drawTextLabel(context, 'CPU VS CPU', 125,140, 1, 0.7);
+            this.drawTextLabel(context, 'BACK', 125,155, 1, 0.7);
+
+             this.drawTextLabel(context, '@ISTRITPAYTER..BY..IJI', 90,190, 1, 0.7);
+            this.drawTextLabel(context, '@ANDREIBARDOQUILLO..LTD2025', 70,210, 1, 0.7);
+        }
+
   drawScreenTitle(context){
     this.drawFrame(context, 'title-screen', 0, 0);
-  }
-
-  drawOptionsMenu(context){
-            this.drawTextLabel(context, 'START', 165,110, 1, 0.7);
-            this.drawTextLabel(context, 'VS MODE', 165,125, 1, 0.7);
-            this.drawTextLabel(context, 'PRACTICE', 165,140, 1, 0.7);
-            this.drawTextLabel(context, 'OPTIONS', 165,155, 1, 0.7);
   }
 
   drawPointer(context){
@@ -244,7 +248,9 @@ export class MainMenuScreen {
        
         this.gameStart = true;
         this.drawScreenTitle(context);
-        this.drawMenu(context);
+        
+        if(!this.vsMode)this.drawMenu(context);
+        else this.drawVSMenu(context);
         this.drawPointer(context);
     }
        
