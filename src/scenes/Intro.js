@@ -91,13 +91,13 @@ export class Intro {
     const startPressed = control.isControlPressed(playerId, Control.START);
     const selectPressed = control.isControlPressed(playerId, Control.SELECT);
 
-    // --- START button (only if credits >= 1) ---
+  
     if (startPressed && !this.keyPressed.start && gameState.kapeCom) {
     this.keyPressed.start = true;
 
     if (gameState.credits >= 1) {
     gameState.credits -= 1;
-    gameState.gameStarted = true; // ✅ mark game as properly started
+    gameState.gameStarted = true; 
     playSound(this.soundSelect, 1);
     this.introScreen.stopwatch = 11;
     this.introScreen.time = 0;

@@ -20,6 +20,8 @@ export const FighterAttackStrength = {
    LIGHT: 'light',
    HEAVY: 'heavy',
    HEAVYKICK: 'heavykick',
+   KNOCKLIFT: 'knocklift',
+   KNOCKLIFTDOWN: 'knockliftdown',
    SUPER1: 'super1',
    SUPER2: 'super2',
    SLASH: 'slash',
@@ -62,6 +64,36 @@ export const FighterAttackBaseData = {
         friction: 500,
     },
   // effect: { type: 'poison', duration: 1500 },
+ },
+ [FighterAttackStrength.KNOCKLIFT]: {
+    score: 500,
+    skill: 4,
+    knockup: true,
+    thrust: {
+       x: 0,
+        y: -480,
+    },
+    damage: 8,
+    slide: {
+        velocity: -20 * FRAME_TIME,
+        friction: 500,
+    },
+  
+ },
+ [FighterAttackStrength.KNOCKLIFTDOWN]: {
+    score: 500,
+    skill: 4,
+    knockup: true,
+    thrust: {
+       x: 0,
+        y: +450,
+    },
+    damage: 8,
+    slide: {
+        velocity: -30 * FRAME_TIME,
+        friction: 500,
+    },
+  
  },
  [FighterAttackStrength.HEAVYKICK]: {
     score: 500,
@@ -183,6 +215,8 @@ KNOCKUP: 'knockup',
 GETUP: 'getup',
 DIE: 'die',
 FALL: 'fall',
+KNOCKLIFT: 'knock-lift',
+KNOCKLIFTDOWN: 'knock-lift-down',
 };
 
 export const FrameDelay = {
@@ -235,6 +269,7 @@ export const hurtStateValidFrom = [
     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
     FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.HYPERSKILL_2, 
     FighterState.DIE, FighterState.DEATH, FighterState.KNOCKUP, FighterState.SPECIAL_2_MOVEFIGHTER,
+    FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
 ];
 
 export const knockUpStateValidFrom = [
@@ -247,6 +282,7 @@ export const knockUpStateValidFrom = [
     FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
     FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.HYPERSKILL_2, FighterState.KNOCKUP,
+    FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
     FighterState.SPECIAL_2_MOVEFIGHTER,
 ];
 

@@ -287,6 +287,8 @@ export class Fighter {
         [FighterAttackStrength.LIGHT]: document.querySelector('audio#sound-fighter-light-attack'),
         [FighterAttackStrength.HEAVY]: document.querySelector('audio#sound-fighter-heavy-attack'),
         [FighterAttackStrength.HEAVYKICK]: document.querySelector('audio#sound-fighter-heavy-attack'),
+        [FighterAttackStrength.KNOCKLIFT]: document.querySelector('audio#sound-fighter-heavy-attack'),
+        [FighterAttackStrength.KNOCKLIFTDOWN]: document.querySelector('audio#sound-fighter-heavy-attack'),
         [FighterAttackStrength.SUPER1]: document.querySelector('audio#sound-fighter-heavy-attack'),
         [FighterAttackStrength.SUPER2]: document.querySelector('audio#sound-fighter-heavy-attack'),
         [FighterAttackStrength.SLASH]: document.querySelector('audio#sound-slash'),
@@ -302,6 +304,14 @@ export class Fighter {
             [FighterAttackType.KICK]: document.querySelector('audio#sound-fighter-heavy-kick-hit'),
         },
         [FighterAttackStrength.HEAVYKICK]:{
+            [FighterAttackType.PUNCH]: document.querySelector('audio#sound-fighter-heavy-punch-hit'),
+            [FighterAttackType.KICK]: document.querySelector('audio#sound-fighter-heavy-kick-hit'),
+        },
+        [FighterAttackStrength.KNOCKLIFT]:{
+            [FighterAttackType.PUNCH]: document.querySelector('audio#sound-fighter-heavy-punch-hit'),
+            [FighterAttackType.KICK]: document.querySelector('audio#sound-fighter-heavy-kick-hit'),
+        },
+        [FighterAttackStrength.KNOCKLIFTDOWN]:{
             [FighterAttackType.PUNCH]: document.querySelector('audio#sound-fighter-heavy-punch-hit'),
             [FighterAttackType.KICK]: document.querySelector('audio#sound-fighter-heavy-kick-hit'),
         },
@@ -390,6 +400,9 @@ export class Fighter {
                 if(hitLocation === FighterHurtBox.HEAD) return FighterState.HURT_HEAD_HEAVY;
                 return FighterState.HURT_BODY_HEAVY;
             case FighterAttackStrength.SLASH:
+                if(hitLocation === FighterHurtBox.BODY) return FighterState.HURT_HEAD_HEAVY;
+                return FighterState.HURT_BODY_HEAVY;
+            case FighterAttackStrength.KNOCKLIFT:
                 if(hitLocation === FighterHurtBox.BODY) return FighterState.HURT_HEAD_HEAVY;
                 return FighterState.HURT_BODY_HEAVY;
                 }
@@ -1064,7 +1077,7 @@ export class Fighter {
 
 
     handleJumpStartState(){
-     if(this.isAnimationCompleted()){
+     if(this.isAnimationCompleted() && this.position.y >= STAGE_FLOOR){
         if(control.isBackward(this.playerId, this.direction)){
             this.changeState(FighterState.JUMP_BACKWARD);
         }else if (control.isForward(this.playerId, this.direction)){

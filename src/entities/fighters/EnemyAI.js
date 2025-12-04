@@ -212,7 +212,7 @@ export class EnemyAI {
       this.press(dx > 0 ? Control.RIGHT : Control.LEFT);
     } else {
       const rand = Math.random();
-      if (rand < 0.2) this.press(Control.UP);
+      if (rand < 0.6) this.press(Control.UP);
       else if (rand < 0.6) this.press(Control.DOWN);
       else if (rand < 0.8) {
         const back = this.fighter.direction === 1 ? Control.LEFT : Control.RIGHT;
@@ -223,15 +223,17 @@ export class EnemyAI {
 
   performAttack() {
     const combos = [
-      [{ control: Control.LIGHT_PUNCH, duration: 40 }],
-      [{ control: Control.HEAVY_PUNCH, duration: 40 }],
-      [{ control: Control.LIGHT_KICK, duration: 40 }],
-      [{ control: Control.HEAVY_KICK, duration: 40 }],
-      [{ control: Control.DOWN, duration: 20 },{ control: Control.DOWN, duration: 20 },{ control: Control.LIGHT_KICK, duration: 40 }],
-      [{ control: Control.DOWN, duration: 20 },{ control: Control.DOWN, duration: 20 },{ control: Control.HEAVY_KICK, duration: 40 }],
-      [{ control: Control.LIGHT_PUNCH, duration: 40 }, { control: Control.HEAVY_PUNCH, duration: 40 }],
-      [{ control: Control.LIGHT_KICK, duration: 40 }, { control: Control.HEAVY_KICK, duration: 40 }],
-      [{ control: Control.DOWN, duration: 30 }, { control: [Control.LEFT, Control.DOWN], duration: 30 }, { control: Control.HEAVY_PUNCH, duration: 30 }],
+     [{ control: Control.LIGHT_PUNCH, duration: 100 }],
+      [{ control: Control.DOWN, duration: 100 },{ control: Control.RIGHT, duration: 100 },{ control: Control.HEAVY_KICK, duration: 300},{ control: Control.HEAVY_PUNCH, duration: 50},{ control: Control.LIGHT_KICK, duration: 50},],
+      [{ control: Control.DOWN, duration: 100 },{ control: Control.LEFT, duration: 100 },{ control: Control.HEAVY_KICK, duration: 300},],
+      [{ control: Control.HEAVY_PUNCH, duration: 100 }],
+      [{ control: Control.LIGHT_KICK, duration: 100 }],
+      [{ control: Control.HEAVY_KICK, duration: 100 }],
+     [{ control: Control.DOWN, duration: 100 },{ control: Control.DOWN, duration: 100 },{ control: Control.LIGHT_KICK, duration: 100 }],
+     [{ control: Control.DOWN, duration: 100 },{ control: Control.DOWN, duration: 100 },{ control: Control.HEAVY_KICK, duration: 100 }],
+      [{ control: Control.LIGHT_PUNCH, duration: 100 }, { control: Control.HEAVY_PUNCH, duration: 100 }],
+      [{ control: Control.LIGHT_KICK, duration: 100 }, { control: Control.HEAVY_KICK, duration: 100 }],
+      [{ control: Control.DOWN, duration: 100 }, { control: [Control.LEFT, Control.DOWN], duration: 100 }, { control: Control.HEAVY_PUNCH, duration: 100 }],
     ];
     this.queueCombo(combos[Math.floor(Math.random() * combos.length)]);
   }
@@ -279,6 +281,12 @@ export class EnemyAI {
       this.opponent.currentState.includes(FighterState.HEAVY_PUNCH) ||
       this.opponent.currentState.includes(FighterState.HEAVY_KICK) ||
       this.opponent.currentState.includes(FighterState.IDLE) ||
+      this.opponent.currentState.includes(FighterState.GETUP) ||
+      this.opponent.currentState.includes(FighterState.KNOCKUP) ||
+      this.opponent.currentState.includes(FighterState.HURT_BODY_HEAVY) ||
+      this.opponent.currentState.includes(FighterState.HURT_BODY_LIGHT) ||
+      this.opponent.currentState.includes(FighterState.HURT_HEAD_HEAVY) ||
+      this.opponent.currentState.includes(FighterState.HURT_HEAD_LIGHT) ||
       this.opponent.currentState.includes(FighterState.WALK_FORWARD) ||
       this.opponent.currentState.includes(FighterState.WALK_BACKWARD) ||
       this.opponent.currentState.includes(FighterState.CROUCH) ||
@@ -290,7 +298,8 @@ export class EnemyAI {
        this.opponent.currentState.includes(FighterState.JUMP_LIGHTKICK) ||
       this.opponent.currentState.includes(FighterState.JUMP_HEAVYKICK) ||
       this.opponent.currentState.includes(FighterState.CROUCH_LIGHTKICK) ||
-      this.opponent.currentState.includes(FighterState.CROUCH_HEAVYKICK) 
+      this.opponent.currentState.includes(FighterState.CROUCH_HEAVYKICK) ||
+      this.opponent.currentState.includes(FighterState.SPECIAL_2) 
     );
   }
 
@@ -300,6 +309,8 @@ export class EnemyAI {
       this.opponent.currentState.includes(FighterState.LIGHT_KICK) ||
       this.opponent.currentState.includes(FighterState.HEAVY_PUNCH) ||
       this.opponent.currentState.includes(FighterState.HEAVY_KICK) ||
+      this.opponent.currentState.includes(FighterState.KNOCKLIFT) ||
+      this.opponent.currentState.includes(FighterState.KNOCKLIFTDOWN) ||
       this.opponent.currentState.includes(FighterState.JUMP_LIGHTKICK) ||
       this.opponent.currentState.includes(FighterState.JUMP_HEAVYKICK) ||
       this.opponent.currentState.includes(FighterState.CROUCH_LIGHTKICK) ||

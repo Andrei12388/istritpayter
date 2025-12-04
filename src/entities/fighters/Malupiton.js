@@ -1,5 +1,6 @@
 import { Control, controls } from '../../constants/control.js';
 import { FIGHTER_HURT_DELAY, FighterAttackStrength, FighterAttackType, FighterState, FrameDelay, HitBox, HurtBox, PushBox, SpecialMoveButton, SpecialMoveDirection } from '../../constants/fighter.js';
+import { STAGE_FLOOR } from '../../constants/stage.js';
 import { playSound } from '../../soundHandler.js';
 import { gameState } from '../../state/gameState.js';
 //import { FighterState, PushBox, AnimationFrame } from '../../constants/fighter.js';
@@ -74,6 +75,15 @@ export class Malupiton extends Fighter {
             ['special-roll-5', [[[327, 43, 100, 68], [50,68]], PushBox.JUMP, HurtBox.JUMP]],
             ['special-roll-6', [[[251, 21, 56, 102], [28,100]], PushBox.JUMP, HurtBox.JUMP]],
             ['special-roll-7', [[[469, 156,67,94],[33,92]], PushBox.JUMP, HurtBox.JUMP, HitBox.LIGHT_PUNCH]],
+
+            //knock lift kick
+            ['knock-lift-1', [[[70, 124, 55, 88], [27,86]], PushBox.JUMP, HurtBox.JUMP]],
+            ['knock-lift-2', [[[136, 127, 82, 70], [41,68]], PushBox.JUMP, HurtBox.JUMP]],
+            ['knock-lift-3', [[[231, 138, 88, 48], [44,46]], PushBox.JUMP, HurtBox.JUMP]],
+            ['knock-lift-4', [[[339, 115, 50, 94], [24,91]], PushBox.JUMP, HurtBox.JUMP, [8,-55,50,15],]],
+            ['knock-lift-5', [[[327, 43, 100, 68], [50,68]], PushBox.JUMP, HurtBox.JUMP]],
+            ['knock-lift-6', [[[251, 21, 56, 102], [28,100]], PushBox.JUMP, HurtBox.JUMP]],
+            ['knock-lift-7', [[[469, 156,67,94],[33,92]], PushBox.JUMP, HurtBox.JUMP]],
 
             //Jump first/Last frame
             ['jump-land', [[[269, 257,59,90],[29,88]], PushBox.IDLE, HurtBox.IDLE]],
@@ -304,6 +314,18 @@ export class Malupiton extends Fighter {
                 ['light-kick-1', 66],['light-kick-1', FrameDelay.TRANSITION],
                  // ['jump-attack-1',FrameDelay.TRANSITION],
             ],
+            [FighterState.KNOCKLIFT]:[
+                ['knock-lift-7', 50],['knock-lift-6', 50],
+                ['knock-lift-5', 50],['knock-lift-4', 50],
+                ['knock-lift-3', 50],['knock-lift-2', 50],
+                ['knock-lift-1', FrameDelay.TRANSITION],
+            ],
+            [FighterState.KNOCKLIFTDOWN]:[
+                ['knock-lift-1', 50],['knock-lift-2', 50],
+                ['knock-lift-3', 50],['knock-lift-4', 50],
+                ['knock-lift-5', 50],['knock-lift-6', 50],
+                ['knock-lift-7', FrameDelay.TRANSITION],
+            ],
             
             [FighterState.HURT_HEAD_LIGHT]:[
                 ['hurt-face-1', FIGHTER_HURT_DELAY],['hurt-face-1', 30],
@@ -432,6 +454,20 @@ export class Malupiton extends Fighter {
                 ],
                 cursor: 0,
             },
+             {
+                state: FighterState.KNOCKLIFT,
+                sequence: 
+                [SpecialMoveDirection.DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveButton.HEAVY_KICK,
+                ],
+                cursor: 0,
+            },
+            {
+                state: FighterState.KNOCKLIFTDOWN,
+                sequence: 
+                [SpecialMoveDirection.DOWN, SpecialMoveDirection.FORWARD, SpecialMoveButton.HEAVY_KICK,
+                ],
+                cursor: 0,
+            },
             {
                 state: FighterState.SPECIAL_1,
                 sequence: 
@@ -474,7 +510,7 @@ export class Malupiton extends Fighter {
             update: this.handleSpecial1State.bind(this),
             shadow: [1.6, 1, -40, 0],
             validFrom: [
-                FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, 
+                FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD, FighterState.JUMP_START,
                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
             ],
@@ -541,14 +577,58 @@ export class Malupiton extends Fighter {
                 FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD,
             ],
         }
+        this.states[FighterState.KNOCKLIFT] = {
+             attackType: FighterAttackType.PUNCH,
+            attackStrength: FighterAttackStrength.KNOCKLIFT,
+             init: this.handleKnockLiftInit.bind(this),
+             update: this.handleKnockLiftState.bind(this),
+           
+            validFrom: [
+                FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, 
+                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
+                FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, FighterState.JUMP_LIGHTKICK, FighterState.JUMP_HEAVYKICK,
+                FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD, FighterState.JUMP_START, FighterState.JUMP_LAND,
+            ],
+        }
+        this.states[FighterState.KNOCKLIFTDOWN] = {
+             attackType: FighterAttackType.PUNCH,
+            attackStrength: FighterAttackStrength.KNOCKLIFTDOWN,
+             init: this.handleKnockLiftInit.bind(this),
+             update: this.handleKnockLiftState.bind(this),
+           
+            validFrom: [
+                FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, 
+                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
+                FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, FighterState.JUMP_LIGHTKICK, FighterState.JUMP_HEAVYKICK,
+                FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD, FighterState.JUMP_START, FighterState.JUMP_LAND,
+            ],
+        }
         
     
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_1];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_2];
         this.states[FighterState.JUMP_BACKWARD].validFrom = [...this.states[FighterState.JUMP_BACKWARD].validFrom, FighterState.HYPERSKILL_1];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.HYPERSKILL_2];
+        //DOdges
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_FORWARD];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_BACKWARD];
+        //special moves
+        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.KNOCKLIFT];
+        
+        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.KNOCKLIFTDOWN];
+        
+    }
+
+    handleKnockLiftInit(distance, playerId){
+
+        console.log('Knocklift Init');
+        
+    }
+
+     handleKnockLiftState(){
+      
+        if (!this.isAnimationCompleted()) return;
+        if(this.position.y >= STAGE_FLOOR)this.changeState(FighterState.IDLE);
     }
 
     handleDodgeForwardInit(distance, playerId){
