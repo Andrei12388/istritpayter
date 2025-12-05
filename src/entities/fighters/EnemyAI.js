@@ -183,9 +183,13 @@ export class EnemyAI {
       return;
     }
 
-    // Attack and super if opponent vulnerable
+    // Attack or special move if opponent vulnerable
     if (this.opponentIsVulnerable() && distance < this.engageDistance + 40 && this.attackCooldown <= 0) {
-      this.performAttack();
+      if (Math.random() < 0.5) {
+        this.performAttack();
+      } else {
+        this.performSpecialMove(time);
+      }
       this.attackCooldown = this.attackCooldownBase;
       if (Math.random() < this.superChance) this.performSuper(time);
       return;
@@ -223,16 +227,8 @@ export class EnemyAI {
 
   performAttack() {
     const combos = [
-     [{ control: Control.LIGHT_PUNCH, duration: 100 }],
-      [{ control: Control.DOWN, duration: 100 },{ control: Control.RIGHT, duration: 100 },{ control: Control.HEAVY_KICK, duration: 300},{ control: Control.HEAVY_PUNCH, duration: 50},{ control: Control.LIGHT_KICK, duration: 50},],
-      [{ control: Control.DOWN, duration: 100 },{ control: Control.LEFT, duration: 100 },{ control: Control.HEAVY_KICK, duration: 300},],
-      [{ control: Control.HEAVY_PUNCH, duration: 100 }],
-      [{ control: Control.LIGHT_KICK, duration: 100 }],
-      [{ control: Control.HEAVY_KICK, duration: 100 }],
-     [{ control: Control.DOWN, duration: 100 },{ control: Control.DOWN, duration: 100 },{ control: Control.LIGHT_KICK, duration: 100 }],
-     [{ control: Control.DOWN, duration: 100 },{ control: Control.DOWN, duration: 100 },{ control: Control.HEAVY_KICK, duration: 100 }],
-      [{ control: Control.LIGHT_PUNCH, duration: 100 }, { control: Control.HEAVY_PUNCH, duration: 100 }],
-      [{ control: Control.LIGHT_KICK, duration: 100 }, { control: Control.HEAVY_KICK, duration: 100 }],
+      [{ control: Control.LIGHT_PUNCH, duration: 100 },{ control: Control.LIGHT_PUNCH, duration: 100 }, { control: Control.HEAVY_PUNCH, duration: 100 }],
+      [{ control: Control.LIGHT_KICK, duration: 100 },{ control: Control.LIGHT_PUNCH, duration: 100 }, { control: Control.HEAVY_KICK, duration: 100 }],
       [{ control: Control.DOWN, duration: 100 }, { control: [Control.LEFT, Control.DOWN], duration: 100 }, { control: Control.HEAVY_PUNCH, duration: 100 }],
     ];
     this.queueCombo(combos[Math.floor(Math.random() * combos.length)]);
@@ -262,6 +258,14 @@ export class EnemyAI {
     }
   }
 
+  // Special move: knocklift or knockliftdown (does not require skill energy)
+  performSpecialMove(time) {
+    const moves = [FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN];
+    const move = moves[Math.floor(Math.random() * moves.length)];
+    this.resetInputs();
+    this.fighter.changeState(move, time, 1); // strength default 1
+  }
+
   performDodge(dx) {
     this.jumpOrMixup(dx);
     const forward = Math.random() < 0.5;
@@ -276,10 +280,6 @@ export class EnemyAI {
 
   opponentIsVulnerable() {
     return (
-      this.opponent.currentState.includes(FighterState.LIGHT_PUNCH) ||
-      this.opponent.currentState.includes(FighterState.LIGHT_KICK) ||
-      this.opponent.currentState.includes(FighterState.HEAVY_PUNCH) ||
-      this.opponent.currentState.includes(FighterState.HEAVY_KICK) ||
       this.opponent.currentState.includes(FighterState.IDLE) ||
       this.opponent.currentState.includes(FighterState.GETUP) ||
       this.opponent.currentState.includes(FighterState.KNOCKUP) ||
@@ -295,10 +295,6 @@ export class EnemyAI {
       this.opponent.currentState.includes(FighterState.JUMP_UP) ||
       this.opponent.currentState.includes(FighterState.JUMP_FORWARD) ||
       this.opponent.currentState.includes(FighterState.JUMP_BACKWARD) ||
-       this.opponent.currentState.includes(FighterState.JUMP_LIGHTKICK) ||
-      this.opponent.currentState.includes(FighterState.JUMP_HEAVYKICK) ||
-      this.opponent.currentState.includes(FighterState.CROUCH_LIGHTKICK) ||
-      this.opponent.currentState.includes(FighterState.CROUCH_HEAVYKICK) ||
       this.opponent.currentState.includes(FighterState.SPECIAL_2) 
     );
   }

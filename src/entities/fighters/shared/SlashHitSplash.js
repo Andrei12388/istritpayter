@@ -4,7 +4,7 @@ export class SlashHitSplash extends HitSplash {
     constructor(args, time, entityList){
         super(args, time, entityList);
         this.frameNumber = 6;
-        this.position.x -= 10 * this.direction;
+        this.position.x -= 30 * this.direction;
         this.frames = [
             //Player1
             [[6, 282, 88, 57], [44, 55]],

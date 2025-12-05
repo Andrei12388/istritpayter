@@ -6,6 +6,7 @@ import { gameState } from '../../state/gameState.js';
 //import { FighterState, PushBox, AnimationFrame } from '../../constants/fighter.js';
 
 import { Fighter, AnimationFrame } from './Fighter.js';
+import { KnockLiftSplash } from './shared/KnockLiftSplash.js';
 import { Fireball } from './special/Fireball.js';
 
 export class Malupiton extends Fighter {
@@ -591,7 +592,7 @@ export class Malupiton extends Fighter {
             ],
         }
         this.states[FighterState.KNOCKLIFTDOWN] = {
-             attackType: FighterAttackType.PUNCH,
+            attackType: FighterAttackType.KICK,
             attackStrength: FighterAttackStrength.KNOCKLIFTDOWN,
              init: this.handleKnockLiftInit.bind(this),
              update: this.handleKnockLiftState.bind(this),
@@ -619,11 +620,17 @@ export class Malupiton extends Fighter {
         
     }
 
-    handleKnockLiftInit(distance, playerId){
+    handleKnockLiftInit(time, _, strength, attackType, playerId) {
+    console.log("TYPE:", attackType);
 
-        console.log('Knocklift Init');
+    if (attackType === FighterAttackType.PUNCH) {
+        this.entityList.add(KnockLiftSplash, time, this.position.x, this.position.y - 30, this.playerId, 1, this.direction * -1);
+    } else if (attackType === FighterAttackType.KICK) {
+        this.entityList.add(KnockLiftSplash, time, this.position.x, this.position.y + 50, this.playerId, -1, this.direction * -1);
         
     }
+}
+
 
      handleKnockLiftState(){
       

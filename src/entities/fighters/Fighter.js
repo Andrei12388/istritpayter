@@ -426,13 +426,24 @@ export class Fighter {
         
     }
 
-    changeState(newState, time, args) {
-        if(!this.states[newState].validFrom.includes(this.currentState)) return;
+   changeState(newState, ...args) {
+    if (!this.states[newState].validFrom.includes(this.currentState)) return;
+
+    const state = this.states[newState];
     this.currentState = newState;
     this.animationFrame = 0;
 
-    this.states[this.currentState].init(time, args);
-    }
+    // Pass args through so callers can provide extra data (e.g. hitPosition)
+    // Common call pattern: changeState(state, time, [hitPosition])
+    // Final args appended keep existing behaviour for attack inits.
+    state.init(
+        ...(args || []),
+        state.attackStrength,
+        state.attackType,
+        this.playerId
+    );
+}
+
     
     //Idle
     handleIdleInit(){
