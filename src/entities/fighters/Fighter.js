@@ -448,8 +448,10 @@ export class Fighter {
     //Idle
     handleIdleInit(){
         this.resetVelocities();
+        this.gravity = 1000;
         this.attackStruck = false;
-        if(this.position.y >= STAGE_FLOOR) this.headbuttActivate = false;
+        if(this.position.y >= STAGE_FLOOR)this.headbuttActivate = false;
+        
     }
 
      handleWalkIdleState(){
@@ -504,6 +506,7 @@ export class Fighter {
      //JUMP UP
     handleJumpInit(){
         this.velocity.y = this.initialVelocity.jump;
+       
         this.handleMoveInit();
     }
 
@@ -973,13 +976,13 @@ export class Fighter {
         }
         
         if(!gameState.fighterNotIdle) return;
-        if (control.isUp(this.playerId)) {
+        if (control.isUp(this.playerId) && this.position.y >= STAGE_FLOOR) {
             this.changeState(FighterState.JUMP_START);
-        } else if (control.isDown(this.playerId)) {
+        } else if (control.isDown(this.playerId) && this.position.y >= STAGE_FLOOR) {
             this.changeState(FighterState.CROUCH_DOWN, time);
-        } else if (control.isBackward(this.playerId, this.direction)) {
+        } else if (control.isBackward(this.playerId, this.direction) && this.position.y >= STAGE_FLOOR) {
             this.changeState(FighterState.WALK_BACKWARD);
-        }else if (control.isForward(this.playerId, this.direction)) {
+        }else if (control.isForward(this.playerId, this.direction) && this.position.y >= STAGE_FLOOR) {
             this.changeState(FighterState.WALK_FORWARD);
         }else if(control.isLightPunch(this.playerId)){
            this.changeState(FighterState.LIGHT_PUNCH);
@@ -1127,17 +1130,18 @@ export class Fighter {
 //Main Functions
 
     updateStageConstraints(time, context, camera){
+       
         if (this.position.x > camera.position.x + context.canvas.width - this.boxes.push.width) {
             this.position.x = camera.position.x + context.canvas.width - this.boxes.push.width;
-            
+          
             this.resetSlide(true);
-        }
+        } 
 
         if (this.position.x < camera.position.x + this.boxes.push.width){
             this.position.x = camera.position.x + this.boxes.push.width;
-             
+           
              this.resetSlide(true);
-        }
+        } 
      if(gameState.dodging) return;
         if (this.hasCollidedWithOpponent()) {
             if (this.position.x <= this.opponent.position.x){
@@ -1322,7 +1326,7 @@ export class Fighter {
 
     update(time, context, camera){
         this.updateStatus(time);
-        this.states[this.currentState].update(time, context);
+        this.states[this.currentState].update(time, context, camera);
         // Check win/death conditions after state updates and collisions
         // centralized handler ensures dying fighters go to DEATH state (not IDLE)
         this.updateSlide(time);
@@ -1598,7 +1602,7 @@ export class Fighter {
 
         context.restore();
        
-      this.drawDebug(context, camera);
+    // this.drawDebug(context, camera);
     }
     }
 }

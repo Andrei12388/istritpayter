@@ -183,6 +183,13 @@ export class EnemyAI {
       return;
     }
 
+    // Long distance move if opponent is far away
+    if (distance > this.engageDistance + 100 && this.attackCooldown <= 0 && Math.random() < 0.4) {
+      this.performLongDistanceMove(time);
+      this.attackCooldown = this.attackCooldownBase * 1.5;
+      return;
+    }
+
     // Attack or special move if opponent vulnerable
     if (this.opponentIsVulnerable() && distance < this.engageDistance + 40 && this.attackCooldown <= 0) {
       if (Math.random() < 0.5) {
@@ -266,6 +273,31 @@ export class EnemyAI {
     this.fighter.changeState(move, time, 1); // strength default 1
   }
 
+  // Long distance move: ranged attacks for when opponent is far
+  performLongDistanceMove(time) {
+    const moves = [FighterState.HEADBUTT];
+    const move = moves[Math.floor(Math.random() * moves.length)];
+    const defaultStrength = 1;
+
+    this.resetInputs(); // Make sure move triggers
+    switch (move) {
+      case FighterState.SPECIAL_1:
+        this.fighter.performSpecial1?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.SPECIAL_1, time, defaultStrength);
+        break;
+      case FighterState.HYPERSKILL_1:
+        this.fighter.performHyperSkill1?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.HYPERSKILL_1, time, defaultStrength);
+        break;
+      case FighterState.HYPERSKILL_2:
+        this.fighter.performHyperSkill2?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.HYPERSKILL_2, time, defaultStrength);
+        break;
+      case FighterState.HEADBUTT:
+        this.fighter.changeState(FighterState.HEADBUTT, time, 1);
+        break;
+      default:
+        this.fighter.changeState(move, time, defaultStrength);
+    }
+  }
+
   performDodge(dx) {
     this.jumpOrMixup(dx);
     const forward = Math.random() < 0.5;
@@ -307,6 +339,7 @@ export class EnemyAI {
       this.opponent.currentState.includes(FighterState.HEAVY_KICK) ||
       this.opponent.currentState.includes(FighterState.KNOCKLIFT) ||
       this.opponent.currentState.includes(FighterState.KNOCKLIFTDOWN) ||
+      this.opponent.currentState.includes(FighterState.HEADBUTT) ||
       this.opponent.currentState.includes(FighterState.JUMP_LIGHTKICK) ||
       this.opponent.currentState.includes(FighterState.JUMP_HEAVYKICK) ||
       this.opponent.currentState.includes(FighterState.CROUCH_LIGHTKICK) ||
