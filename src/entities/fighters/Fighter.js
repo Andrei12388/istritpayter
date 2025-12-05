@@ -449,6 +449,7 @@ export class Fighter {
     handleIdleInit(){
         this.resetVelocities();
         this.attackStruck = false;
+        if(this.position.y >= STAGE_FLOOR) this.headbuttActivate = false;
     }
 
      handleWalkIdleState(){
@@ -1597,7 +1598,7 @@ export class Fighter {
 
         context.restore();
        
-    //   this.drawDebug(context, camera);
+      this.drawDebug(context, camera);
     }
     }
 }

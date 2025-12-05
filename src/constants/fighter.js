@@ -217,6 +217,7 @@ DIE: 'die',
 FALL: 'fall',
 KNOCKLIFT: 'knock-lift',
 KNOCKLIFTDOWN: 'knock-lift-down',
+HEADBUTT: 'headbutt',
 };
 
 export const FrameDelay = {
@@ -269,7 +270,7 @@ export const hurtStateValidFrom = [
     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
     FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.HYPERSKILL_2, 
     FighterState.DIE, FighterState.DEATH, FighterState.KNOCKUP, FighterState.SPECIAL_2_MOVEFIGHTER,
-    FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
+    FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN, FighterState.HEADBUTT,
 ];
 
 export const knockUpStateValidFrom = [
@@ -282,7 +283,7 @@ export const knockUpStateValidFrom = [
     FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
     FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.HYPERSKILL_2, FighterState.KNOCKUP,
-    FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
+    FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN, FighterState.HEADBUTT,
     FighterState.SPECIAL_2_MOVEFIGHTER,
 ];
 

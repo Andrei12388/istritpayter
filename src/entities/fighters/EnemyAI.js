@@ -260,7 +260,7 @@ export class EnemyAI {
 
   // Special move: knocklift or knockliftdown (does not require skill energy)
   performSpecialMove(time) {
-    const moves = [FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN];
+    const moves = [FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN, FighterState.HEADBUTT];
     const move = moves[Math.floor(Math.random() * moves.length)];
     this.resetInputs();
     this.fighter.changeState(move, time, 1); // strength default 1
