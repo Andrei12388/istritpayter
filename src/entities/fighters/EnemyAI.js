@@ -2,6 +2,7 @@
 import { Control, controls } from "../../constants/control.js";
 import { heldKeys, pressedKeys } from "../../inputHandler.js";
 import { FighterHurtBox, FighterState } from "../../constants/fighter.js";
+import { gameState } from "../../state/gameState.js";
 
 function randomBetween(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -249,15 +250,19 @@ export class EnemyAI {
     this.resetInputs(); // Make sure skill triggers
     switch (move) {
       case FighterState.SPECIAL_1:
+        if(this.fighter.skillNumber > 0) return;
         this.fighter.performSpecial1?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.SPECIAL_1, time, defaultStrength);
         break;
       case FighterState.SPECIAL_2:
+        if(this.fighter.skillNumber > 0) return;
         this.fighter.performSpecial2?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.SPECIAL_2, time, defaultStrength);
         break;
       case FighterState.HYPERSKILL_1:
+        if(this.fighter.skillNumber > 2) return;
         this.fighter.performHyperSkill1?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.HYPERSKILL_1, time, defaultStrength);
         break;
       case FighterState.HYPERSKILL_2:
+        if(this.fighter.skillNumber > 2) return;
         this.fighter.performHyperSkill2?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.HYPERSKILL_2, time, defaultStrength);
         break;
       default:
@@ -275,19 +280,26 @@ export class EnemyAI {
 
   // Long distance move: ranged attacks for when opponent is far
   performLongDistanceMove(time) {
-    const moves = [FighterState.HEADBUTT];
+    const moves = [FighterState.HEADBUTT, FighterState.SPECIAL_1, FighterState.SPECIAL_2];
     const move = moves[Math.floor(Math.random() * moves.length)];
     const defaultStrength = 1;
 
     this.resetInputs(); // Make sure move triggers
     switch (move) {
       case FighterState.SPECIAL_1:
+        if(this.fighter.skillNumber > 0) return;
         this.fighter.performSpecial1?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.SPECIAL_1, time, defaultStrength);
         break;
+      case FighterState.SPECIAL_2:
+        if(this.fighter.skillNumber > 0) return;
+        this.fighter.performSpecial2?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.SPECIAL_2, time, defaultStrength);
+        break;
       case FighterState.HYPERSKILL_1:
+        if(this.fighter.skillNumber > 2) return;
         this.fighter.performHyperSkill1?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.HYPERSKILL_1, time, defaultStrength);
         break;
       case FighterState.HYPERSKILL_2:
+        if(this.fighter.skillNumber > 2) return;
         this.fighter.performHyperSkill2?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.HYPERSKILL_2, time, defaultStrength);
         break;
       case FighterState.HEADBUTT:

@@ -10,6 +10,8 @@ import { KnockLiftSplash } from './shared/KnockLiftSplash.js';
 import { Fireball } from './special/Fireball.js';
 import { boxOverlap, getActualBoxDimensions } from '../../utils/collisions.js';
 import { BlockHitSplash } from './shared/BlockHitSplash.js';
+import { HeavyHitSplash } from './shared/HeavyHitSplash.js';
+import { GreenHitSplash } from './shared/GreenHitSplash.js';
 
 export class Malupiton extends Fighter {
     constructor(playerId, onAttackHit, effectSplash, entityList, entityListForeground) {
@@ -539,7 +541,7 @@ export class Malupiton extends Fighter {
                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD, FighterState.JUMP_START,
                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
-                FighterState.HEADBUTT, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
+                FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
             ],
         }
         this.states[FighterState.SPECIAL_2] = {
@@ -552,7 +554,7 @@ export class Malupiton extends Fighter {
                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, 
                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
-                FighterState.HEADBUTT, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
+                FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
             ],
         }
         this.states[FighterState.HYPERSKILL_1] = {
@@ -643,7 +645,7 @@ export class Malupiton extends Fighter {
             validFrom: [
                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.WALK_BACKWARD,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, 
-                FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD, FighterState.JUMP_START, FighterState.JUMP_LAND, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
+                FighterState.JUMP_UP, FighterState.JUMP_START, FighterState.JUMP_LAND, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
             ],
         }
         
@@ -697,21 +699,29 @@ export class Malupiton extends Fighter {
         this.handleMoveInit();
     }
 
+     handleIdleInit(){
+            this.resetVelocities();
+            this.gravity = 1000;
+            this.attackStruck = false;
+            if(this.position.y >= STAGE_FLOOR)this.headbuttActivate = false;
+        }
+
 
     handleHeadbuttState(time, context, camera){
-
+       
     const isTouchingCamera = 
         this.position.x+5 > camera.position.x + context.canvas.width - this.boxes.push.width ||
         this.position.x-5 < camera.position.x + this.boxes.push.width;
  
         if(this.headbuttActivate){
             this.gravity = 1000;
+             
             this.changeState(FighterState.IDLE);
         } 
        
         const headbuttHit = this.checkHeadbuttHit(camera, context);
         if(isTouchingCamera){
-             this.entityList.add(BlockHitSplash, time, this.position.x+30*this.direction, this.position.y - 30, this.playerId, 1, this.direction * -1);
+             this.entityList.add(GreenHitSplash, time, this.position.x+30*this.direction, this.position.y - 30, this.playerId, 1, this.direction * -1);
              playSound(this.headbuttSound);
         }
         if(headbuttHit || this.attackStruck || isTouchingCamera || this.isAnimationCompleted()) {

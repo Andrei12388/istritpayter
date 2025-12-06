@@ -60,7 +60,7 @@ export class Fireball {
   const baseY = this.fighter?.position?.y ?? 0;
 
   this.position = {
-    x: baseX + (76 * this.direction),
+    x: baseX + (40 * this.direction),
     y: baseY - 57,
   };
 

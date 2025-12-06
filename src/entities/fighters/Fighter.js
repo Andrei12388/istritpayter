@@ -207,14 +207,14 @@ export class Fighter {
                 attackStrength: FighterAttackStrength.LIGHT,
                  init: this.handleJumpAttackInit.bind(this),
                 update: this.handleJumpHeavyKickState.bind(this),
-                validFrom:[FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD,FighterState.JUMP_UP,  FighterState.DODGE_FORWARD, FighterState.DODGE_BACKWARD,],
+                validFrom:[FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD,FighterState.JUMP_UP,],
             },
             [FighterState.JUMP_HEAVYKICK]:{
                 attackType: FighterAttackType.KICK,
                 attackStrength: FighterAttackStrength.HEAVY,
                  init: this.handleJumpAttackInit.bind(this),
                 update: this.handleJumpHeavyKickState.bind(this),
-                validFrom:[FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD,FighterState.JUMP_UP,  FighterState.DODGE_FORWARD, FighterState.DODGE_BACKWARD,],
+                validFrom:[FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD,FighterState.JUMP_UP,],
             },
             [FighterState.HEAVY_KICK]:{
                 attackType: FighterAttackType.KICK,
@@ -350,6 +350,7 @@ export class Fighter {
     );
 
      getDirection() {
+        
     if (this.position.x + this.boxes.push.x + this.boxes.push.width 
         <= this.opponent.position.x + this.opponent.boxes.push.x
     ){
@@ -411,8 +412,11 @@ export class Fighter {
 
 
     resetVelocities(){
-        this.velocity.x = 0;
+        if(this.position.y >= STAGE_FLOOR){
+            this.velocity.x = 0;
         this.velocity.y = 0;
+        }
+        
     }
 
     resetSlide(transferToOpponent = false){
@@ -450,7 +454,6 @@ export class Fighter {
         this.resetVelocities();
         this.gravity = 1000;
         this.attackStruck = false;
-        if(this.position.y >= STAGE_FLOOR)this.headbuttActivate = false;
         
     }
 
@@ -536,12 +539,18 @@ export class Fighter {
     this.resetVelocities();
    }
 
-   handleJumpLandInit(){
+   handleJumpLandInit(time){
+    const hitPosition = {
+            x: this.position.x,
+            y: 0,
+        };
     this.resetVelocities();
+    this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundSmoke", "foreground", this.direction);
     this.soundLand.play();
    }
 
    handleAttackInit(){
+    this.gravity = 1000;
     this.resetVelocities();
     playSound(this.soundAttacks[this.states[this.currentState].attackStrength]);
    }
@@ -1602,7 +1611,7 @@ export class Fighter {
 
         context.restore();
        
-    // this.drawDebug(context, camera);
+     this.drawDebug(context, camera);
     }
     }
 }
