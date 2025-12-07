@@ -1611,7 +1611,7 @@ export class Fighter {
 
         context.restore();
        
-    // this.drawDebug(context, camera);
+   //  this.drawDebug(context, camera);
     }
     }
 }
