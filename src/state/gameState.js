@@ -22,10 +22,10 @@ export const gameState = {
     pauseTimer: 0,
     credits: 5,
     pauseFrameMove: -30,
-    skillNumber: 1,
+    skillNumber: 3,
     fighterNotIdle: false,
     difficultyIndex: 1,
-    difficulty: 'normal',
+    difficulty: 'insane',
     buttonHold: false,
     stage: 'final',
     flash: false,
@@ -45,4 +45,7 @@ export const gameState = {
       player1: false,
       player2: false,
     },
+    // Onscreen controls settings
+    buttonTransparency: 1, // 0 to 1
+    buttonSize: 1, // 0.5 to 2 (multiplier)
 };

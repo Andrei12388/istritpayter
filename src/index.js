@@ -4,6 +4,7 @@ import { FighterState } from './constants/fighter.js';
 import { heldKeys } from './inputHandler.js'; 
 import { state as controlHold } from './inputHandler.js';
 import { gameState } from './state/gameState.js';
+import { initOnscreenControlsSliders, updateOnscreenControls } from './onscreenControlsSlider.js';
 
 
 function populateMoveDropdown(){
@@ -19,6 +20,10 @@ function populateMoveDropdown(){
 
 
 window.addEventListener('load', function (){
+    // Initialize onscreen control sliders
+    initOnscreenControlsSliders();
+    updateOnscreenControls();
+    
     window.addEventListener('click', function (){
         populateMoveDropdown();
         new StreetFighterGame().start();
@@ -195,15 +200,21 @@ knob.addEventListener('touchstart', startDrag, { passive: false });
 
 const scrbuttons1 = document.querySelector('.scrninput');
 const radios = document.querySelectorAll('input[name="joystickToggle"]');
+const display1 = document.querySelector('.screenJoystickController');
+const display2 = document.querySelector('.screenJoystickP2');
 
 radios.forEach(radio => {
     radio.addEventListener("change", () => {
         if (radio.value === "on") {
             joystick.style.display = "block";
             scrbuttons1.style.display = "block";
+            display1.style.display = "block";
+            display2.style.display = "block";
         } else {
             joystick.style.display = "none";
             scrbuttons1.style.display = "none";
+            display1.style.display = "none";
+            display2.style.display = "none";
         }
     });
 });
@@ -220,5 +231,20 @@ radios2.forEach(radio => {
         }
     });
 });
+
+const onscreenSettings = document.querySelector('.onscreen-controls-panel');
+const radios3 = document.querySelectorAll('input[name="controlPanelToggle"]');
+
+radios3.forEach(radio => {
+    radio.addEventListener("change", () => {
+        if (radio.value === "on") {
+            onscreenSettings.style.display = "block";
+        } else {
+            onscreenSettings.style.display = "none";
+        }
+    });
+});
+
+
 
 

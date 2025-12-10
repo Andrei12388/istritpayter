@@ -85,6 +85,7 @@ export class OptionsMenu {
                 gameState.skillNumber += 1;
                 if (gameState.skillNumber > 3)gameState.skillNumber = 0;
             }
+            
             gameState.buttonHold = false;
 }
 
@@ -112,6 +113,7 @@ export class OptionsMenu {
 
     update(time, context) {
         this.fade.update();
+        
         if(this.difficulty === 0) gameState.difficulty = 'easy';
         else if(this.difficulty === 1) gameState.difficulty = 'normal';
         else if(this.difficulty === 2) gameState.difficulty = 'hard';

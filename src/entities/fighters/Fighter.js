@@ -21,6 +21,7 @@ import { FRAME_TIME } from '../../constants/game.js';
 import { hasSpecialMoveBeenExecuted } from '../../controlHistory.js';
 import { EntityList } from '../../EntityList.js';
 import { SuperHitSplash } from './shared/SuperHitSplash.js';
+import { buildPaletteMap, extractPalette, paletteSwap } from '../../utils/palleteSwap.js';
 
 
 
@@ -60,6 +61,8 @@ export class Fighter {
         this.onAttackHit = onAttackHit;
         this.effectSplash = effectSplash;
         this.EntityList = new EntityList();
+        this.colorSwappedImage;
+
 
         this.boxes = {
         push: { x: 0, y: 0, width: 0, height: 0 },
@@ -1468,8 +1471,33 @@ export class Fighter {
     context.restore();
 }
 
+applyPalette(color) {
+    
+    if (!this.image || this.image.width === 0) return; // safety check
+    console.log("pallete swapped for p2!");
+
+    const PALettes = {
+        blue:    [[60,120,255], [30,70,180], [10,40,120]],
+        red:     [[255,60,60], [200,30,30], [150,10,10]],
+        green:   [[80,255,80], [40,180,40], [20,120,20]],
+        purple:  [[200,80,255], [140,50,200], [80,20,120]]
+    };
+
+    if (!this.basePalette) {
+        this.basePalette = extractPalette(this.image);
+    }
+
+    const colorMap = buildPaletteMap(this.basePalette, PALettes[color]);
+    this.colorSwappedImage = paletteSwap(this.image, colorMap);
+}
+
+
+
+
+
 
     draw(context, camera) {
+        
 
         if(!gameState.shadowInvert) this.drawShadow(context, camera);
         else this.drawShadowInverted(context, camera);
@@ -1481,7 +1509,7 @@ export class Fighter {
         ]] = this.frames.get(frameKey);
 
         const status = this.status ?? (gameState.fighters[this.playerId] && gameState.fighters[this.playerId].status);
-
+        
         context.save();
 
        if (status) {
@@ -1591,14 +1619,15 @@ export class Fighter {
     }
 
     default:
-        
-        context.filter =
-            `none`;
+        //none
 }
+    const spriteToDraw = this.colorSwappedImage || this.image;
 
+if (!spriteToDraw) return; // avoid crashes
+   
         context.scale(this.direction, 1);
         context.drawImage(
-            this.image,
+            spriteToDraw,
             x,
             y,
             width,

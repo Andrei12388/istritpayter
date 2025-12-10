@@ -280,7 +280,7 @@ export class EnemyAI {
 
   // Long distance move: ranged attacks for when opponent is far
   performLongDistanceMove(time) {
-    const moves = [FighterState.HEADBUTT, FighterState.SPECIAL_1, FighterState.SPECIAL_2];
+    const moves = [FighterState.HEADBUTT, FighterState.SPECIAL_1, FighterState.SPECIAL_2, FighterState.SPECIAL_2_ROCKRELEASE];
     const move = moves[Math.floor(Math.random() * moves.length)];
     const defaultStrength = 1;
 
@@ -293,6 +293,10 @@ export class EnemyAI {
       case FighterState.SPECIAL_2:
         if(this.fighter.skillNumber > 0) return;
         this.fighter.performSpecial2?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.SPECIAL_2, time, defaultStrength);
+        break;
+      case FighterState.SPECIAL_2_ROCKRELEASE:
+        if(this.fighter.skillNumber > 0) return;
+        this.fighter.performSpecial2?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.SPECIAL_2_ROCKRELEASE, time, defaultStrength);
         break;
       case FighterState.HYPERSKILL_1:
         if(this.fighter.skillNumber > 2) return;
@@ -359,7 +363,8 @@ export class EnemyAI {
       this.opponent.currentState.includes(FighterState.HYPERSKILL_1) ||
       this.opponent.currentState.includes(FighterState.HYPERSKILL_2) ||
       this.opponent.currentState.includes(FighterState.SPECIAL_1) ||
-      this.opponent.currentState.includes(FighterState.SPECIAL_2)
+      this.opponent.currentState.includes(FighterState.SPECIAL_2) ||
+      this.opponent.currentState.includes(FighterState.SPECIAL_2_ROCKRELEASE) 
     );
   }
 }

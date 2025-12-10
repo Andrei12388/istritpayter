@@ -58,6 +58,83 @@ main{
             display: none;
           }
 
+          /* Onscreen Controls Settings Panel */
+          .onscreen-controls-panel {
+            position: fixed;
+            display: none;
+            top: 10px;
+            left: 25vw;
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 2px solid rgb(64, 255, 0);
+            border-radius: 5px;
+            padding: 15px;
+            z-index: 500;
+            min-width: 300px;
+            font-family: Arial, Helvetica, sans-serif;
+            color: rgb(64, 255, 0);
+          }
+
+          .onscreen-controls-panel h3 {
+            margin: 0 0 15px 0;
+            font-size: 14px;
+            text-align: center;
+            border-bottom: 1px solid rgb(64, 255, 0);
+            padding-bottom: 10px;
+          }
+
+          .slider-group {
+            margin-bottom: 15px;
+          }
+
+          .slider-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 12px;
+          }
+
+          .slider-label-text {
+            flex: 1;
+          }
+
+          .slider-value {
+            margin-left: 10px;
+            font-weight: bold;
+            min-width: 40px;
+            text-align: right;
+          }
+
+          .slider-input {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(to right, rgb(100, 100, 100), rgb(64, 255, 0));
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+          }
+
+          .slider-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgb(64, 255, 0);
+            cursor: pointer;
+            border: 2px solid black;
+          }
+
+          .slider-input::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgb(64, 255, 0);
+            cursor: pointer;
+            border: 2px solid black;
+          }
+
           .moveLists {
             top: 65%;
             transform: scale(0.5);
@@ -283,10 +360,22 @@ main{
 
 .screenJoystickP2{
   position: fixed;
+  display: none;
  z-index: 105;
  top: 20vh;
  right: 1vw;
  font-family: Arial, Helvetica, sans-serif;
+ color: rgb(64, 255, 0);
+}
+
+.screenJoystickController{
+  position: fixed;
+ z-index: 105;
+ display: none;
+top: 40vh;
+ left: 1vw;
+ font-family: Arial, Helvetica, sans-serif;
+ font-size: small;
  color: rgb(64, 255, 0);
 }
 
@@ -328,6 +417,18 @@ main{
 <br>
 <label>
   <input type="radio" name="joystick2Toggle" value="off" checked> Off
+</label>
+    </div>
+
+    <div class="screenJoystickController">
+<label>
+  Control Panel
+  <br>
+  <input type="radio" name="controlPanelToggle" value="on" > On
+</label>
+<br>
+<label>
+  <input type="radio" name="controlPanelToggle" value="off" checked> Off
 </label>
     </div>
     
@@ -397,6 +498,43 @@ main{
       <select id="state-dropdown"name="state"></select>
       <button type="submit" >Transition!</button>
     </form>
+
+    <!-- Onscreen Controls Settings Panel -->
+    <div class="onscreen-controls-panel">
+      <h3>ONSCREEN CONTROLS</h3>
+      
+      <div class="slider-group">
+        <div class="slider-label">
+          <span class="slider-label-text">TRANSPARENCY:</span>
+          <span class="slider-value" id="transparency-value">20%</span>
+        </div>
+        <input 
+          type="range" 
+          id="button-transparency-slider" 
+          class="slider-input"
+          min="0" 
+          max="100" 
+          value="20"
+          step="5"
+        />
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-label">
+          <span class="slider-label-text">BUTTON SIZE:</span>
+          <span class="slider-value" id="size-value">100%</span>
+        </div>
+        <input 
+          type="range" 
+          id="button-size-slider" 
+          class="slider-input"
+          min="50" 
+          max="200" 
+          value="100"
+          step="10"
+        />
+      </div>
+    </div>
     </div>
    
     <img src="./images/malupiton2.png" alt="malupiton" />

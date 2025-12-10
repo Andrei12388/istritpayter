@@ -175,6 +175,10 @@ export class BattleScene {
         fighterEntities[0].opponent = fighterEntities[1];
         fighterEntities[1].opponent = fighterEntities[0];
 
+        if (gameState.fighters[0].id === gameState.fighters[1].id ) {
+        fighterEntities[1].applyPalette("blue"); // this will generate colorSwappedImage
+    }
+
         return fighterEntities;
     }
 

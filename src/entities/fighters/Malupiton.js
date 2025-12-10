@@ -213,6 +213,7 @@ export class Malupiton extends Fighter {
             ['death-5', [[[321, 855, 101, 51], [50,49]],PushBox.IDLE, HurtBox.IDLE]],
             ['death-6', [[[433, 870, 99, 37], [49,35]],PushBox.IDLE, HurtBox.IDLE]],
             ['death-7', [[[537, 867, 116, 37], [58,35]],PushBox.IDLE, HurtBox.IDLE]],
+            ['death-8', [[[537, 867, 116, 37], [58,35]],PushBox.IDLE, HurtBox.NULL]],
             
             //GetUp State
              ['getUp-1', [[[11, 955, 53, 55], [27,53]], PushBox.IDLE, HurtBox.NULL]],
@@ -444,7 +445,7 @@ export class Malupiton extends Fighter {
                 ['death-7', FrameDelay.TRANSITION],
             ],
              [FighterState.GETUP]:[
-                ['death-7', 300], ['getUp-1', 120], ['getUp-2', 120], ['getUp-3', 120],
+                ['death-8', 300], ['getUp-1', 120], ['getUp-2', 120], ['getUp-3', 120],
                 ['getUp-3', FrameDelay.TRANSITION],
             ],
 
