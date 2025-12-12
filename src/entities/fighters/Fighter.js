@@ -21,7 +21,7 @@ import { FRAME_TIME } from '../../constants/game.js';
 import { hasSpecialMoveBeenExecuted } from '../../controlHistory.js';
 import { EntityList } from '../../EntityList.js';
 import { SuperHitSplash } from './shared/SuperHitSplash.js';
-import { buildPaletteMap, buildSingleColorMap, extractPalette, hueShiftSprite, invertSprite, paletteSwap, paletteSwapReplaceWhite } from '../../utils/palleteSwap.js';
+import { buildPaletteMap, buildSingleColorMap, extractPalette, hueShiftSprite, invertSprite, paletteSwap, paletteSwapAllColors, paletteSwapFinal, paletteSwapSmart } from '../../utils/palleteSwap.js';
 
 
 
@@ -1483,6 +1483,22 @@ applyPalette(color) {
         purple:  [[200,80,255], [140,50,200], [80,20,120]]
     };
 
+    const palette = [
+    [255, 205, 180], // new light tone
+    [120, 90, 255],  // new mid tone
+    [30, 20, 80]     // new dark tone
+];
+
+const newPalette = [
+    [255, 215, 200], // skin light
+    [230, 150, 120], // skin mid
+    [180, 90, 60],   // skin shadow
+    [100, 140, 255], // clothes light
+    [60, 90, 220],   // clothes mid
+    [30, 50, 150],   // clothes shadow
+    [20, 20, 40]     // dark outlines
+];
+
 
     if (!this.basePalette) {
         this.basePalette = extractPalette(this.image);
@@ -1490,8 +1506,8 @@ applyPalette(color) {
 
    // const colorMap = buildPaletteMap(this.basePalette, PALettes[color]);
   //  this.colorSwappedImage = paletteSwap(this.image, colorMap);
-  const newColor = [30, 60, 255];
-//this.colorSwappedImage = paletteSwapReplaceWhite(this.image, newColor);
+ // const newColor = [50, 120, 255];
+//this.colorSwappedImage = paletteSwapFinal(this.image, newPalette);
 
 
 
@@ -1501,7 +1517,7 @@ applyPalette(color) {
 //this.colorSwappedImage = newImage;
 
 if(color === "invert")this.colorSwappedImage = invertSprite(this.image);
-else this.colorSwappedImage = hueShiftSprite(this.image, 340);
+else this.colorSwappedImage = hueShiftSprite(this.image, 340, 2, 1);
 
 
 
