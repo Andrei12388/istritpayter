@@ -494,7 +494,7 @@ export class Malupiton extends Fighter {
             {
                 state: FighterState.HEADBUTT,
                 sequence: 
-                [SpecialMoveDirection.DOWN,SpecialMoveDirection.BACKWARD_DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveButton.HEAVY_PUNCH,
+                [SpecialMoveDirection.DOWN,SpecialMoveDirection.FORWARD_DOWN, SpecialMoveDirection.FORWARD, SpecialMoveButton.HEAVY_PUNCH,
                 ],
                 cursor: 0,
             },
@@ -674,14 +674,16 @@ export class Malupiton extends Fighter {
     }
 
     handleKnockLiftInit(time, _, strength, attackType, playerId) {
-    console.log("TYPE:", attackType);
+   
      playSound(this.knockliftSound);
         this.gravity = 1000;
     if (attackType === FighterAttackType.PUNCH) {
          playSound(this.knockliftdownSound);
+         this.velocity.x += 100;
         this.entityList.add(KnockLiftSplash, time, this.position.x, this.position.y - 30, this.playerId, 1, this.direction * -1);
     } else if (attackType === FighterAttackType.KICK) {
          playSound(this.knockliftSound);
+          this.velocity.x -= 100;
         this.entityList.add(KnockLiftSplash, time, this.position.x, this.position.y + 50, this.playerId, -1, this.direction * -1);
         
     }
@@ -695,7 +697,7 @@ export class Malupiton extends Fighter {
     }
 
     handleHeadbuttInit(time) {
-        console.log("headbutt activated");
+       
         if(this.headbuttActivate){
             this.gravity = 1000;
              this.velocity.x = 0;

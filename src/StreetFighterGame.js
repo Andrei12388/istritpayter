@@ -13,7 +13,7 @@ import { OptionsMenu } from './scenes/OptionsMenu.js';
 
 const selectedCharacters = [
     { 
-        name: "Malupiton", 
+        name: "Golem", 
         namePos: 5,
         sayings: 'Sabi ko naman sayo burger ka saken',
         color: "gray", 
@@ -21,7 +21,7 @@ const selectedCharacters = [
         imageBig: 'malupitonBig' 
     },
     { 
-        name: "Golem", 
+        name: "Malupiton", 
         color: "gray", 
         namePos: 5,
         sayings: 'Sabi ko naman sayo burger ka saken',
@@ -40,10 +40,10 @@ export class StreetFighterGame{
 
     constructor(){
         
-this.scene = new Intro(this);
+//this.scene = new Intro(this);
 //this.scene = new MainMenu(this);
 //this.scene = new OptionsMenu(this);
-//this.scene = new BattleScene(this, selectedCharacters);
+this.scene = new BattleScene(this, selectedCharacters);
 // this.scene = new CharacterSelect(this);
 // this.scene = new PrePostMatch(this, selectedCharacters);
     }

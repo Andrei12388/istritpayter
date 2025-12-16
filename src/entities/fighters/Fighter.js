@@ -648,7 +648,7 @@ export class Fighter {
 
     handleAttackHit(time, attackStrength, attackType, hitPosition, hurtLocation){
         
-       
+         //if(this.attackStruck) return
          if(gameState.fighters[this.playerId].hitPoints <= 0 || gameState.fighters[this.playerId].dead === "die" || gameState.fighters[this.playerId].dead === "dead"){
             // Delegate win/death handling to centralized method
             this.velocity.x = FighterAttackBaseData[attackStrength].thrust.x;
@@ -1517,7 +1517,7 @@ const newPalette = [
 //this.colorSwappedImage = newImage;
 
 if(color === "invert")this.colorSwappedImage = invertSprite(this.image);
-else this.colorSwappedImage = hueShiftSprite(this.image, 340, 2, 1);
+else this.colorSwappedImage = hueShiftSprite(this.image, 180, 2, 1);
 
 
 
@@ -1672,7 +1672,7 @@ if (!spriteToDraw) return; // avoid crashes
 
         context.restore();
        
-   //  this.drawDebug(context, camera);
+     this.drawDebug(context, camera);
     }
     }
 }

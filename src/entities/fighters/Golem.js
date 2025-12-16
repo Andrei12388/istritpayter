@@ -39,11 +39,11 @@ export class Golem extends Fighter {
         this.frames = new Map([
            
            //Forwards or Idle
-            ['forwards-1', [[[330,346, 55, 99],[27,97]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-2', [[[404, 346,55,99],[27,97]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-3', [[[472, 346,55,99],[27,97]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-4', [[[543, 346,55,99],[27,97]], PushBox.IDLE, HurtBox.IDLE]],
-            ['forwards-5', [[[613, 346,55,99],[27,97]], PushBox.IDLE, HurtBox.IDLE]],
+            ['forwards-1', [[[330,346, 55, 99],[27,97]], [-13,-82,33,78],[[-5,-95,32,22],[-20,-80,44,38],[-20,-41,40,39]]]],
+            ['forwards-2', [[[404, 346,55,99],[27,97]], [-13,-82,33,78],[[-5,-95,32,22],[-20,-80,44,38],[-20,-41,40,39]]]],
+            ['forwards-3', [[[472, 346,55,99],[27,97]], [-13,-82,33,78],[[-5,-95,32,22],[-20,-80,44,38],[-20,-41,40,39]]]],
+            ['forwards-4', [[[543, 346,55,99],[27,97]], [-13,-82,33,78],[[-5,-95,32,22],[-20,-80,44,38],[-20,-41,40,39]]]],
+            ['forwards-5', [[[613, 346,55,99],[27,97]], [-13,-82,33,78],[[-5,-95,32,22],[-20,-80,44,38],[-20,-41,40,39]]]],
 
             ['forwards2-1', [[[45,968, 87, 109],[43,105]], PushBox.IDLE, HurtBox.IDLE]],
             ['forwards2-2', [[[148,968, 84, 106],[42,102]], PushBox.IDLE, HurtBox.IDLE]],
@@ -59,7 +59,7 @@ export class Golem extends Fighter {
             //Jump Up
             ['jumpup-1', [[[71, 110,54,97],[27,95]], PushBox.JUMP, HurtBox.JUMP]],
             ['jumpup-2', [[[472, 221,53,101],[21,99]], PushBox.JUMP, HurtBox.JUMP]],
-            ['jumpup-3', [[[87, 16,56,83],[28,81]], PushBox.CROUCH, HurtBox.CROUCH]],
+            ['jumpup-3', [[[87, 16,56,83],[28,81]], PushBox.BEND, HurtBox.BEND]],
             
             
             //Jump Forwards/Backwards
@@ -74,9 +74,14 @@ export class Golem extends Fighter {
             ['jump-land', [[[87, 16, 56, 83], [28,81]], PushBox.IDLE, HurtBox.IDLE]],
 
              //Crouch
-            ['crouch-1', [[[16, 3, 55, 98], [26,96]], PushBox.IDLE, HurtBox.JUMP]],
-            ['crouch-2', [[[87, 16, 56, 83], [28,81]], PushBox.BEND, HurtBox.BEND]],
-            ['crouch-3', [[[162, 32, 62, 70], [31,68]], PushBox.CROUCH, HurtBox.CROUCH]], 
+            ['crouch-1', [[[4, 1922, 75, 98], [37,96]], PushBox.IDLE, HurtBox.JUMP]],
+            ['crouch-2', [[[84, 1932, 82, 88], [41,86]], PushBox.BEND, HurtBox.BEND]],
+            ['crouch-3', [[[171, 1957, 80, 63], [40,61]], PushBox.CROUCH, HurtBox.CROUCH]], 
+
+            // crouch old
+           // ['crouch-1', [[[16, 3, 55, 98], [26,96]], PushBox.IDLE, HurtBox.JUMP]],
+           // ['crouch-2', [[[87, 16, 56, 83], [28,81]], PushBox.BEND, HurtBox.BEND]],
+           // ['crouch-3', [[[162, 32, 62, 70], [31,68]], PushBox.CROUCH, HurtBox.CROUCH]], 
            
             //Idle
 
@@ -98,37 +103,38 @@ export class Golem extends Fighter {
             //Crouch Block
             ['crouch-block-1', [[[558, 127, 62, 49], [31,24]], PushBox.CROUCH, HurtBox.CROUCH,]],
             
-             //Crouch Light Kick
-            ['crouch-lightkick-1', [[[555, 195, 53, 53], [21,51]], PushBox.CROUCH, HurtBox.CROUCH]],
-            ['crouch-lightkick-2', [[[615, 196, 91, 50], [45,48]], PushBox.CROUCH, HurtBox.CROUCH, HitBox.CROUCH_LIGHTKICK ]],
+              //Crouch Light Kick
+            ['crouch-lightkick-1', [[[11, 2031, 68, 90], [34,88]], PushBox.CROUCH, HurtBox.CROUCH]],
+            ['crouch-lightkick-2', [[[94, 2035, 124, 89], [62,87]], [-55,-68,32,54], [[-42,-88,28,22],[-55,-65,36,47],[-60,-25,117,20]], [5,-17,54,16] ]],
 
 
             //Crouch Heavvy Kick
-            ['crouch-heavykick-1', [[[548, 254, 63, 50], [31,48]], PushBox.CROUCH, HurtBox.CROUCH]],
-            ['crouch-heavykick-2', [[[622, 250, 49, 67], [24,65]], PushBox.CROUCH, HurtBox.CROUCH]],
-            ['crouch-heavykick-3', [[[696, 241, 114, 74], [57,64]], PushBox.CROUCH, HurtBox.CROUCH, HitBox.CROUCH_HEAVYKICK ]],
+            ['crouch-heavykick-1', [[[16, 2138, 77, 85], [38,83]], [-32,-65,32,53], [[-30,-83,28,21],[-36,-64,51,63],[-37,-35,74,20]]]],
+            ['crouch-heavykick-2', [[[106, 2134, 113, 89], [56,87]],[-32,-65,32,53], [[-30,-83,28,21],[-36,-64,51,63],[-37,-35,90,20]]]],
+            ['crouch-heavykick-3', [[[224, 2134, 156, 89], [78,87]], [-66,-73,57,54], [[-78,-87,28,22],[-69,-74,63,64],[-49,-20,125,20]], [-8,-25,86,23]]],
+            ['crouch-heavykick-3-nohit', [[[224, 2134, 156, 89], [78,87]], [-66,-73,57,54], [[-78,-87,28,22],[-69,-74,63,64],[-49,-20,125,20]]]],
 
             //Jump-attack
             ['jump-attack-1', [[[555, 42, 94, 54], [46,52]], PushBox.LIGHT_KICK, HurtBox.LIGHT_KICK, HitBox.JUMP_HEAVYKICKK]],
 
             //lIGHT Punch
             ['light-punch-1', [[[71, 109, 56, 99], [8,97]], PushBox.IDLE, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
-            ['light-punch-2', [[[83, 361, 104, 71], [32,79]], PushBox.BEND, [[3, -76, 30, 18],[-3, -69, 50, 20], [-2, -52, 44, 58]], HitBox.LIGHT_PUNCH]],
+            ['light-punch-2', [[[83, 361, 104, 71], [32,79]], PushBox.BEND, [[3, -76, 30, 18],[-3, -69, 50, 20], [-2, -52, 44, 58]], [20,-70,50,18]]],
             ['light-punch-3', [[[83, 361, 104, 71], [32,79]], PushBox.BEND, [[3, -76, 30, 18],[-3, -69, 50, 20], [-2, -52, 44, 58]]]],
 
              //Heavy Punch
             ['heavy-punch-1', [[[222, 133, 109, 55], [-8,77]], PushBox.BEND, [[3, -76, 30, 18],[3, -69, 84, 30], [-2, -52, 44, 58]], HitBox.HEAVY_PUNCH]],
 
              //lIGHT kick
-            ['light-kick-1', [[[239, 1434, 97, 108], [48,106]], PushBox.IDLE,  [[3, -76, 30, 18],[-3, -59, 64, 20], [-32, -52, 44, 58]]]],
-            ['light-kick-2', [[[423, 1429, 122, 118], [61,116]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 64, 20], [-32, -52, 44, 58]], HitBox.LIGHT_KICK_LOW]],
+            ['light-kick-1', [[[347, 1434, 61, 108], [30,106]], [-20, -90, 40, 80],  [[-30, -108, 32, 22],[-30, -88, 44, 87], [-23, -50, 53, 20]]]],
+            ['light-kick-2', [[[423, 1429, 122, 118], [61,116]], PushBox.BEND, [[-58, -111, 32, 22],[-58, -88, 53, 87], [-35, -50, 94, 30]], [16,-35,45,16]]],
 
              //Heavy kick
             ['heavy-kick-1', [[[151, 1436, 87, 108], [44,106]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
             ['heavy-kick-2', [[[241, 1434, 98, 108], [49,106]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
-            ['heavy-kick-3', [[[347, 1434, 61, 108], [30,106]], PushBox.BEND, [[3, -76, 30, 18],[8, -58, 75, 20], [-2, -52, 44, 58]]]],
-            ['heavy-kick-4', [[[572, 1435, 86, 104], [43,102]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]]]],
-            ['heavy-kick-5', [[[682, 1423, 135, 122], [67,120]], PushBox.BEND, [[3, -76, 30, 18],[-3, -59, 30, 20], [-32, -52, 44, 58]],HitBox.HEAVY_KICK]],
+            ['heavy-kick-3', [[[347, 1434, 61, 108], [30,106]], [-20, -90, 40, 80],  [[-30, -108, 32, 22],[-30, -88, 44, 87], [-23, -50, 53, 20]]]],
+            ['heavy-kick-4', [[[572, 1435, 86, 104], [43,102]], [-20, -90, 40, 80],  [[-30, -108, 32, 22],[-30, -88, 44, 87], [-23, -50, 53, 20]]]],
+            ['heavy-kick-5', [[[682, 1423, 135, 122], [67,120]], [-20, -90, 40, 80],  [[-30, -108, 32, 22],[-30, -88, 44, 87], [-23, -50, 53, 20]],[8,-69,60,27]]],
 
             //Hit Face
             ['hurt-face-3', [[[886, 774,73,84],[26,90]], PushBox.IDLE, HurtBox.IDLE]],
@@ -168,23 +174,23 @@ export class Golem extends Fighter {
              ['dodge2-4', [[[337, 590, 88, 91], [44,89]], PushBox.NULL,HurtBox.NULL]],
 
              //Death State
-                 ['death-1', [[[379, 461, 67, 97], [33,95]], PushBox.IDLE, HurtBox.IDLE]],
-                 ['death-2', [[[462, 463, 58, 99], [29,97]],PushBox.IDLE, HurtBox.IDLE]],
-                 ['death-3', [[[538, 464, 78, 84], [39,82]],PushBox.IDLE, HurtBox.IDLE]],
-                ['death-4', [[[624, 469, 97, 70], [48,68]],PushBox.IDLE, HurtBox.IDLE]],
-                ['death-5', [[[731, 476, 102, 55], [51,53]],PushBox.IDLE, HurtBox.IDLE]],
-                ['death-6', [[[492, 585, 102, 39], [51,37]],PushBox.IDLE, HurtBox.IDLE]],
-                ['death-7', [[[606, 585, 108, 29], [54,27]],PushBox.IDLE, HurtBox.IDLE]],
-                ['death-8', [[[606, 585, 108, 29], [54,27]],PushBox.IDLE, HurtBox.NULL]],
+                 ['death-1', [[[379, 461, 67, 97], [33,95]], [-6,-91,24,65], [[-10,-97,28,22],[-6,-75,33,48],[-26,40,39,39]]]],
+                 ['death-2', [[[462, 463, 58, 99], [29,97]],[-9,-83,28,65], [[-25,-97,28,22],[-7,-79,33,48],[-14,-40,39,39]]]],
+                 ['death-3', [[[538, 464, 78, 84], [39,82]],[-14,-72,48,44], [[-37,-76,28,22],[-10,-72,40,36],[16,-40,23,39]]]],
+                ['death-4', [[[624, 469, 97, 70], [48,68]],[-23,-45,60,26], [[-46,-46,28,22],[-23,-58,45,38],[25,-38,22,37]]]],
+                ['death-5', [[[731, 476, 102, 55], [51,53]],[-25,-32,60,26], [[-48,-23,28,22],[-26,-40,45,38],[19,-31,28,31]]]],
+                ['death-6', [[[492, 585, 102, 39], [51,37]],[-25,-32,60,26], [[-48,-23,28,22],[-26,-40,45,38],[19,-31,28,31]]]],
+                ['death-7', [[[606, 585, 108, 29], [54,27]],[-25,-32,60,26], [[-48,-23,28,22],[-26,-40,45,30],[19,-31,28,31]]]],
+                ['death-8', [[[606, 585, 108, 29], [54,27]],[-25,-32,60,26], HurtBox.NULL]],
 
                 //GetUp State
-                 ['getUp-1', [[[392, 678, 94, 64], [47,62]], PushBox.IDLE, HurtBox.NULL]],
-                ['getUp-2', [[[491, 670, 81, 72], [40,70]], PushBox.IDLE, HurtBox.NULL]],
-                 ['getUp-3', [[[601, 653, 59, 95], [29,93]], PushBox.IDLE, HurtBox.NULL]],
+                 ['getUp-1', [[[392, 678, 94, 64], [47,62]], [-25,-32,30,26], HurtBox.NULL]],
+                ['getUp-2', [[[491, 670, 81, 72], [40,70]], [-25,-52,30,46], HurtBox.NULL]],
+                 ['getUp-3', [[[601, 653, 59, 95], [29,93]], [-25,-72,30,66], HurtBox.NULL]],
 
-                ['getUp2-1', [[[519, 770, 73, 69], [36,67]], PushBox.IDLE, HurtBox.NULL]],
-                ['getUp2-2', [[[607, 769, 77, 65], [38,63]], PushBox.IDLE, HurtBox.NULL]],
-                ['getUp2-3', [[[431, 863, 61, 80], [30,78]], PushBox.IDLE, HurtBox.NULL]],
+                ['getUp2-1', [[[519, 770, 73, 69], [36,67]], [-25,-32,30,26], HurtBox.NULL]],
+                ['getUp2-2', [[[607, 769, 77, 65], [38,63]], [-25,-52,30,46], HurtBox.NULL]],
+                ['getUp2-3', [[[431, 863, 61, 80], [30,78]], [-25,-72,30,66], HurtBox.NULL]],
 
              //Special 1 Death Impact
              ['special1-1', [[[473, 12, 55, 99], [28,97]], PushBox.IDLE, HurtBox.NULL]],
@@ -312,8 +318,8 @@ export class Golem extends Fighter {
                 ['crouch-lightkick-1', 66],['crouch-lightkick-1', FrameDelay.TRANSITION],
             ],
            [FighterState.CROUCH_HEAVYKICK]:[
-                ['crouch-heavykick-1', 40],['crouch-heavykick-2', 40],['crouch-heavykick-3', 143],
-                ['crouch-heavykick-2', 166],['crouch-heavykick-1', 196],['crouch-heavykick-1', FrameDelay.TRANSITION],
+                ['crouch-heavykick-1', 30],['crouch-heavykick-2', 30],['crouch-heavykick-3', 30],['crouch-heavykick-3-nohit', 183],
+                ['crouch-heavykick-2', 60],['crouch-heavykick-1', 206],['crouch-heavykick-1', FrameDelay.TRANSITION],
             ],
             [FighterState.HEAVY_KICK]:[
                 ['heavy-kick-1', 66],['heavy-kick-2', 78],['heavy-kick-5', 100],
@@ -431,7 +437,7 @@ export class Golem extends Fighter {
                 state: FighterState.SPECIAL_2,
                 sequence: 
                 [SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveDirection.FORWARD, 
-                SpecialMoveDirection.FORWARD, SpecialMoveButton.AD
+                SpecialMoveDirection.FORWARD, SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveButton.AD
                 ],
                 cursor: 0,
             }
