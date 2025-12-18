@@ -22,10 +22,10 @@ export const gameState = {
     pauseTimer: 0,
     credits: 5,
     pauseFrameMove: -30,
-    skillNumber: 3,
+    skillNumber: 1,
     fighterNotIdle: false,
     difficultyIndex: 1,
-    difficulty: 'insane',
+    difficulty: 'normal',
     buttonHold: false,
     stage: 'final',
     flash: false,
@@ -42,8 +42,8 @@ export const gameState = {
     shadowInvert: true,
     // for Enemy AI
     bot: {
-      player1: true,
-      player2: true,
+      player1: false,
+      player2: false,
     },
     // Onscreen controls settings
     buttonTransparency: 1, // 0 to 1

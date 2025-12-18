@@ -154,7 +154,7 @@ export class EnemyAI {
       this.nextDecisionTime = now + randomBetween(this.reactionDelay[0], this.reactionDelay[1]);
       this.makeDecision(time, now);
     } else {
-      this.faceOpponent();
+      if(this.fighter.position.y >= 200)this.faceOpponent();
     }
   }
 
@@ -175,7 +175,7 @@ export class EnemyAI {
   makeDecision(time, now) {
     const dx = this.opponent.position.x - this.fighter.position.x;
     const distance = Math.abs(dx);
-    this.faceOpponent();
+    if(this.fighter.position.y >= 200)this.faceOpponent();
 
     // Dodge or block
     if (this.opponentIsAttacking() && distance < this.dodgeDistance) {
