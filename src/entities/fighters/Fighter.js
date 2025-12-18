@@ -1527,7 +1527,7 @@ const newPalette = [
 //this.colorSwappedImage = newImage;
 
 if(color === "invert")this.colorSwappedImage = invertSprite(this.image);
-else this.colorSwappedImage = hueShiftSprite(this.image, 180, 2, 1);
+else this.colorSwappedImage = hueShiftSprite(this.image, 340, 2, 1);
 
 
 
