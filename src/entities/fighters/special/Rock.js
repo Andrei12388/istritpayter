@@ -24,6 +24,7 @@ import { GreenHitSplash } from "../shared/GreenHitSplash.js";
 // Frame data
 const frames = new Map([
     ['special1-1', [[[850, 142, 85, 115], [42, 113]], [-42, -112, 85, 113], [-42, -112, 85, 113]]],
+    ['special1-1-nohit', [[[850, 142, 85, 115], [42, 113]], [0, 0, 0, 0], [0, 0, 0, 0]]],
     ['special1-2', [[[850, 258, 85, 115], [42, 113]], [0, 0, 0, 0], [0, 0, 0, 0]]],
     ['special1-3', [[[850, 379, 85, 115], [42, 113]], [0, 0, 0, 0], [0, 0, 0, 0]]],
     ['special1-4', [[[850, 496, 85, 115], [42, 113]], [0, 0, 0, 0], [0, 0, 0, 0]]],
@@ -44,7 +45,7 @@ const frames = new Map([
 // Animation sequences
 const animations = {
     [FireballState.ACTIVE]: [
-        ['special1-1', 10],['special1-1', 110],['special1-2', 10],
+        ['special1-1', 20],['special1-1-nohit', 100],['special1-2', 10],
         ['special1-3', 10],['special1-4', 10],
         ['special1-5', 10],['special1-5', 1]
     ],

@@ -89,7 +89,7 @@ export class Fighter {
                     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
                     FighterState.SPECIAL_1, FighterState.DODGE, FighterState.SPECIAL_2, FighterState.BLOCK, FighterState.CROUCH_BLOCK,
                     FighterState.DODGE_FORWARD, FighterState.DODGE_BACKWARD, FighterState.DEATH, FighterState.GETUP,
-                    FighterState.DIE, FighterState.FALL, 
+                    FighterState.DIE, FighterState.FALL,
                 ],
             },
             [FighterState.WALK_FORWARD]:{
@@ -268,6 +268,11 @@ export class Fighter {
                 update: this.handleDieState.bind(this),
                 validFrom: hurtStateValidFrom,
             },
+            [FighterState.LAYDOWN_GROUND]:{
+                init: this.handleKnockUpInit.bind(this),
+                update: this.handleKnockUpState.bind(this),
+                validFrom: hurtStateValidFrom,
+            },
             [FighterState.KNOCKUP]:{
                 init: this.handleKnockUpInit.bind(this),
                 update: this.handleKnockUpState.bind(this),
@@ -291,6 +296,7 @@ export class Fighter {
         [FighterAttackStrength.HEAVY]: document.querySelector('audio#sound-fighter-heavy-attack'),
         [FighterAttackStrength.HEAVYKICK]: document.querySelector('audio#sound-fighter-heavy-attack'),
         [FighterAttackStrength.KNOCKLIFT]: document.querySelector('audio#sound-fighter-heavy-attack'),
+        [FighterAttackStrength.KNOCKUP]: document.querySelector('audio#sound-fighter-heavy-attack'),
         [FighterAttackStrength.KNOCKLIFTDOWN]: document.querySelector('audio#sound-fighter-heavy-attack'),
         [FighterAttackStrength.SUPER1]: document.querySelector('audio#sound-fighter-heavy-attack'),
         [FighterAttackStrength.SUPER2]: document.querySelector('audio#sound-fighter-heavy-attack'),
@@ -311,6 +317,10 @@ export class Fighter {
             [FighterAttackType.KICK]: document.querySelector('audio#sound-fighter-heavy-kick-hit'),
         },
         [FighterAttackStrength.KNOCKLIFT]:{
+            [FighterAttackType.PUNCH]: document.querySelector('audio#sound-fighter-heavy-punch-hit'),
+            [FighterAttackType.KICK]: document.querySelector('audio#sound-fighter-heavy-kick-hit'),
+        },
+        [FighterAttackStrength.KNOCKUP]:{
             [FighterAttackType.PUNCH]: document.querySelector('audio#sound-fighter-heavy-punch-hit'),
             [FighterAttackType.KICK]: document.querySelector('audio#sound-fighter-heavy-kick-hit'),
         },
@@ -1672,7 +1682,7 @@ if (!spriteToDraw) return; // avoid crashes
 
         context.restore();
        
-     this.drawDebug(context, camera);
+    // this.drawDebug(context, camera);
     }
     }
 }

@@ -21,6 +21,7 @@ export const FighterAttackStrength = {
    HEAVY: 'heavy',
    HEAVYKICK: 'heavykick',
    KNOCKLIFT: 'knocklift',
+   KNOCKUP: 'knockup',
    KNOCKLIFTDOWN: 'knockliftdown',
    SUPER1: 'super1',
    SUPER2: 'super2',
@@ -78,6 +79,22 @@ export const FighterAttackBaseData = {
         velocity: -20 * FRAME_TIME,
         friction: 500,
     },
+  
+ },
+ [FighterAttackStrength.KNOCKUP]: {
+    score: 500,
+    skill: 4,
+    knockup: true,
+    thrust: {
+       x: 0,
+        y: -400,
+    },
+    damage: 25,
+    slide: {
+        velocity: 0 * FRAME_TIME,
+        friction: 800,
+    },
+    effect: { type: 'stun', duration: 1500 },
   
  },
  [FighterAttackStrength.KNOCKLIFTDOWN]: {
@@ -215,6 +232,7 @@ KNOCKUP: 'knockup',
 GETUP: 'getup',
 DIE: 'die',
 FALL: 'fall',
+LAYDOWN_GROUND: 'laydown_ground',
 KNOCKLIFT: 'knock-lift',
 KNOCKLIFTDOWN: 'knock-lift-down',
 HEADBUTT: 'headbutt',
@@ -284,7 +302,7 @@ export const knockUpStateValidFrom = [
     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
     FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.HYPERSKILL_2, FighterState.KNOCKUP,
     FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN, FighterState.HEADBUTT,
-    FighterState.SPECIAL_2_MOVEFIGHTER,
+    FighterState.SPECIAL_2_MOVEFIGHTER, FighterState.LAYDOWN_GROUND,
 ];
 
 export const SpecialMoveDirection = {

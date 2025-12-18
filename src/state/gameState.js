@@ -22,7 +22,7 @@ export const gameState = {
     pauseTimer: 0,
     credits: 5,
     pauseFrameMove: -30,
-    skillNumber: 1,
+    skillNumber: 3,
     fighterNotIdle: false,
     difficultyIndex: 1,
     difficulty: 'normal',

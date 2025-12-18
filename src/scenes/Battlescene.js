@@ -191,6 +191,7 @@ export class BattleScene {
             case FighterAttackStrength.HEAVYKICK:
                 return HeavyHitSplash;
             case FighterAttackStrength.KNOCKLIFT:
+            case FighterAttackStrength.KNOCKUP:
             case FighterAttackStrength.KNOCKLIFTDOWN:
                 return HeavyHitSplash;
             case FighterAttackStrength.SUPER1:

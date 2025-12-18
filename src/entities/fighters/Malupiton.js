@@ -216,9 +216,9 @@ export class Malupiton extends Fighter {
             ['death-8', [[[537, 867, 116, 37], [58,35]],PushBox.IDLE, HurtBox.NULL]],
             
             //GetUp State
-             ['getUp-1', [[[11, 955, 53, 55], [27,53]], PushBox.IDLE, HurtBox.NULL]],
-             ['getUp-2', [[[82, 959, 63, 50], [31,48]], PushBox.IDLE, HurtBox.NULL]],
-             ['getUp-3', [[[160, 959, 60, 59], [30,57]], PushBox.IDLE, HurtBox.NULL]],
+             ['getUp-1', [[[11, 955, 53, 55], [27,53]], [-25,-32,30,26], HurtBox.NULL]],
+             ['getUp-2', [[[82, 959, 63, 50], [31,48]], [-25,-32,30,26], HurtBox.NULL]],
+             ['getUp-3', [[[160, 959, 60, 59], [30,57]], [-25,-32,30,26], HurtBox.NULL]],
 
             
         ]);
@@ -438,6 +438,12 @@ export class Malupiton extends Fighter {
                 ['death-4', 120], ['death-5', 120], ['death-6', 130], 
                 ['death-7', 120],
                 ['death-7', FrameDelay.TRANSITION],
+            ],
+            [FighterState.LAYDOWN_GROUND]:[
+                ['death-1', 300], ['death-2', 120], ['death-3', 120], 
+                ['death-4', 120], ['death-5', 120], ['death-6', 120], 
+                ['death-7', 120],
+                ['death-7', FrameDelay.FREEZE],
             ],
             [FighterState.FALL]:[
                 ['death-4', 100], ['death-5', 100], ['death-6', 100], 
@@ -770,9 +776,6 @@ export class Malupiton extends Fighter {
                 return true;
             }
         }
-
-        
-        
         return false;
     }
 

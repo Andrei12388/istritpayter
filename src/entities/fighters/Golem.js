@@ -1,5 +1,5 @@
 import * as control from '../../inputHandler.js'
-import { FIGHTER_HURT_DELAY, FighterAttackStrength, FighterState, FrameDelay, HitBox, HurtBox, PushBox, SpecialMoveButton, SpecialMoveDirection } from '../../constants/fighter.js';
+import { FIGHTER_HURT_DELAY, FighterAttackStrength, FighterAttackType, FighterState, FrameDelay, HitBox, HurtBox, PushBox, SpecialMoveButton, SpecialMoveDirection } from '../../constants/fighter.js';
 import { playSound } from '../../soundHandler.js';
 import { gameState } from '../../state/gameState.js';
 //import { FighterState, PushBox, AnimationFrame } from '../../constants/fighter.js';
@@ -11,6 +11,7 @@ import { BlockRock } from './special/BlockRock.js';
 import { STAGE_FLOOR } from '../../constants/stage.js';
 import { HeavyRock } from './special/HeavyRock.js';
 import { RockSplash } from './special/RockSplash.js';
+import { boxOverlap, getActualBoxDimensions } from '../../utils/collisions.js';
 
 export class Golem extends Fighter {
     constructor(playerId, onAttackHit, effectSplash, entityList, entityListForeground) {
@@ -32,6 +33,7 @@ export class Golem extends Fighter {
 
         this.golemEnableMove = false;
         this.quake = false;
+        this.rockspawn = true;
 
         this.deathSound = document.querySelector('audio#sound-golem-death');
         this.deathSound.volume = 1;
@@ -222,6 +224,20 @@ export class Golem extends Fighter {
              ['special2-16', [[[1, 1398, 70, 151], [35,149]], PushBox.IDLE, HurtBox.IDLE]],
              ['special2-17', [[[80, 1432, 67, 117], [33,115]], PushBox.IDLE, HurtBox.IDLE]],
 
+             //hyper skill 1
+             ['hyperskill1-1', [[[3, 2260, 91, 104], [45,102]], [15,-70,50,60], HurtBox.NULL,]],
+             ['hyperskill1-2', [[[100, 2265, 64, 95], [32,93]], [15,-70,50,60], HurtBox.NULL,]],
+             ['hyperskill1-3', [[[171, 2280, 77, 81], [38,79]], PushBox.IDLE, HurtBox.NULL]],
+             ['hyperskill1-4', [[[251, 2283, 93, 81], [46,79]], PushBox.IDLE, HurtBox.NULL]],
+             ['hyperskill1-5', [[[353, 2287, 89, 80], [45,78]], PushBox.IDLE, HurtBox.NULL]],
+             ['hyperskill1-6', [[[448, 2291, 104, 76], [52,74]], PushBox.IDLE, HurtBox.NULL]],
+             ['hyperskill1-7', [[[552, 2300, 113, 67], [56,65]], PushBox.IDLE, HurtBox.NULL]],
+
+             ['hyperskill1-8', [[[669, 2290, 105, 74], [52,72]], PushBox.IDLE, HurtBox.NULL, [15,-70,50,60]]],
+             ['hyperskill1-9', [[[775, 2289, 118, 78], [59,76]], PushBox.IDLE, HurtBox.NULL]],
+             ['hyperskill1-10', [[[893, 2275, 131, 89], [65,87]], PushBox.IDLE, HurtBox.NULL]],
+             ['hyperskill1-11', [[[1026, 2295, 111, 69], [55,67]], PushBox.IDLE, HurtBox.NULL, [15,-70,50,60]]],
+
             
         ]);
 
@@ -367,6 +383,22 @@ export class Golem extends Fighter {
             ],
              [FighterState.SPECIAL_2_ROCKRELEASE]:[
                 ['special2-13', 70], ['special2-14', 70],['special2-15', 70],['special2-16', 70],['special2-17', 70],['special2-17', FrameDelay.TRANSITION],
+            ],[FighterState.HYPERSKILL_1]:[
+                ['hyperskill1-1', 150], ['hyperskill1-2', 80],
+                ['hyperskill1-3', 80], ['hyperskill1-4', 80],
+                ['hyperskill1-5', 80], ['hyperskill1-6', 150],
+                ['hyperskill1-7', 200], ['hyperskill1-8', 80],
+                ['hyperskill1-6', 150],
+                ['hyperskill1-7', 200], ['hyperskill1-8', 80],
+                ['hyperskill1-6', 150],
+                ['hyperskill1-7', 200], ['hyperskill1-8', 80],
+                ['hyperskill1-9', 140],
+
+                ['hyperskill1-10', 600], ['hyperskill1-11', 80],
+                ['hyperskill1-8', 60], ['hyperskill1-7', 210],
+                ['hyperskill1-6', 120], ['hyperskill1-5', 130],
+                ['hyperskill1-4', 170], ['hyperskill1-3', 140],
+                ['hyperskill1-2', 60], ['hyperskill1-2', FrameDelay.TRANSITION],
             ],
 
              [FighterState.DEATH]:[
@@ -385,6 +417,12 @@ export class Golem extends Fighter {
                             ['death-7', 120],
                             ['death-7', FrameDelay.TRANSITION],
                         ],
+                        [FighterState.LAYDOWN_GROUND]:[
+                                        ['death-1', 300], ['death-2', 120], ['death-3', 120], 
+                                        ['death-4', 120], ['death-5', 120], ['death-6', 120], 
+                                        ['death-7', 120],
+                                        ['death-7', FrameDelay.FREEZE],
+                                    ],
                         [FighterState.FALL]:[
                         ['death-4', 100], ['death-5', 100], ['death-6', 100], 
                         ['death-7', 100],
@@ -440,7 +478,15 @@ export class Golem extends Fighter {
                 SpecialMoveDirection.FORWARD, SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveButton.AD
                 ],
                 cursor: 0,
-            }
+            },
+             {
+                state: FighterState.HYPERSKILL_1,
+                sequence: 
+                [SpecialMoveDirection.DOWN,
+                SpecialMoveDirection.UP, SpecialMoveButton.AD,
+                ],
+                cursor: 0,
+            },
         ];
         this.gravity = 1000;
         
@@ -483,6 +529,19 @@ export class Golem extends Fighter {
                         FighterState.SPECIAL_2_MOVEFIGHTER
                     ],
                 }
+                 this.states[FighterState.HYPERSKILL_1] = {
+                            attackType: FighterAttackType.PUNCH,
+                            attackStrength: FighterAttackStrength.KNOCKUP,
+                            init: this.handleHyperSkill1Init.bind(this),
+                            update: this.handleHyperSkill1State.bind(this),
+                            shadow: [1.6, 1, -40, 0],
+                            validFrom: [
+                                FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.JUMP_UP, FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD, FighterState.JUMP_LAND,
+                                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
+                                FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
+                                FighterState.HEADBUTT, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
+                            ],
+                        }
         this.states[FighterState.DODGE_FORWARD] = {
              init: this.handleDodgeInit.bind(this),
              update: this.handleDodgeState.bind(this),
@@ -511,6 +570,8 @@ export class Golem extends Fighter {
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_2];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_2_MOVEFIGHTER];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_2_ROCKRELEASE];
+        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.HYPERSKILL_1];
+
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_FORWARD];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_BACKWARD];
     }
@@ -779,5 +840,106 @@ export class Golem extends Fighter {
 
              this.changeState(FighterState.IDLE);
    }
+
+   //Hyperskills
+
+   // Hyper Skill 1 - Super Kaldag!
+     handleHyperSkill1Init(_, strength) {
+       const fighter = gameState.fighters[this.playerId];
+       
+       // ✅ Ensure enough skill points & prevent double use
+       if (fighter.skillNumber < 3 || fighter.skillUsedThisFrame) return;
+       fighter.skillConsumed = false;
+       fighter.skillUsedThisFrame = true; // guard
+       fighter.skillNumber -= 3; // 🛡️ immediately spend skill
+       fighter.resetSkillBar = true;
+   
+       this.voiceHyperSkill1.play();
+       this.fireball = { fired: false, strength };
+       this.soundSuperLaunch.play();
+   
+       fighter.superAcivated = true;
+       gameState.pauseTimer = 1;
+       gameState.pauseFrameMove = -100;
+       gameState.pause = true;
+       gameState.hyperSkill = true;
+       fighter.hyperSprite += 1;
+   
+       console.log('🔥 Hyper Skill 1 initiated — skill points spent immediately');
+     }
+   
+     handleHyperSkill1State(time, context, camera) {
+       
+       const fighter = gameState.fighters[this.playerId];
+       const hyperskill1Hit = this.checkHyperskill1Hit(camera, context);
+   
+       if (fighter.skillNumber >= 0 && !fighter.skillConsumed) {
+        
+        
+        if(this.animationFrame === 1 && hyperskill1Hit){
+            this.opponent.changeState(FighterState.LAYDOWN_GROUND);
+            this.opponent.velocity.y = 100;
+            this.opponent.velocity.x += 70;
+        } 
+
+        if (this.animationFrame === 8 || this.animationFrame === 11 || this.animationFrame === 14 || this.animationFrame === 17) {
+
+       if(this.rockspawn) {this.entityList.add.call(this.entityList, RockSplash, time, this, this.fireball.strength);
+        this.soundGroundCrash.volume = 1;
+        this.soundGroundCrash.currentTime = 0;
+        this.soundGroundCrash.play();
+        gameState.cameraShake.enable = true;
+        gameState.cameraShake.duration = 0.3;
+        gameState.cameraShake.intensity = 10;
+        if(this.animationFrame === 17) {
+            if(hyperskill1Hit) this.opponent.velocity.y -= 500;
+            if(this.opponent.position.y >= STAGE_FLOOR){
+            
+            this.opponent.changeState(FighterState.KNOCKUP);
+            this.opponent.velocity.y -= 500;
+            console.log("changed state to knock up");
+            }
+        }
+       }
+         this.rockspawn = false;
+        console.log('Rock Spawned', this.rockspawn);
+      } else this.rockspawn = true;
+      
+   
+   
+         if (!this.isAnimationCompleted()) return;
+         fighter.skillConsumed = true;
+         // ✅ Reset guard and state after animation
+         gameState.flash = false;
+         fighter.superAcivated = false;
+         fighter.skillUsedThisFrame = false;
+        
+       }else this.changeState(FighterState.IDLE);
+   
+       this.changeState(FighterState.IDLE);
+     }
+
+     checkHyperskill1Hit(camera, context) {
+                // Check if touching camera directly instead of using this.touchingCamera
+             if (!this.boxes?.hit || !this.opponent?.boxes?.hurt) return false;
+            
+             
+             const actualHitBox = getActualBoxDimensions(this.position, this.direction, this.boxes.push);
+             if (!actualHitBox || actualHitBox.width <= 0 || actualHitBox.height <= 0) return false;
+             
+             for (const [hurtLocation, hurtBox] of Object.entries(this.opponent.boxes.hurt)) {
+                 const [x, y, width, height] = hurtBox;
+                 const actualOpponentHurtBox = getActualBoxDimensions(
+                     this.opponent.position, this.opponent.direction, {x, y, width, height}
+                 );
+                 if (!actualOpponentHurtBox || actualOpponentHurtBox.width <= 0 || actualOpponentHurtBox.height <= 0) continue;
+                 
+                 if (boxOverlap(actualHitBox, actualOpponentHurtBox)) {
+                     
+                     return true;
+                 }
+             }
+             return false;
+         }
         
 }
