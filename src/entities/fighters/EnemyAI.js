@@ -220,6 +220,23 @@ export class EnemyAI {
   }
 
   chaseOrMixup(dx, distance) {
+
+    // 65% chance to do NOTHING (Rugal calm)
+    if (Math.random() < 0.65) return;
+
+    if (distance > this.settings.engageDistance) {
+      // Slow walk forward
+      if (Math.random() < 0.5)
+        this.press(dx > 0 ? Control.RIGHT : Control.LEFT);
+    } else {
+      // Slight step back
+      const back =
+        this.fighter.direction === 1 ? Control.LEFT : Control.RIGHT;
+      this.press(back);
+    }
+  }
+
+    chaseOrMixupOld(dx, distance) {
     if (distance > 20) {
       this.press(dx > 0 ? Control.RIGHT : Control.LEFT);
     } else {
@@ -237,7 +254,7 @@ export class EnemyAI {
     const combos = [
       [{ control: Control.LIGHT_PUNCH, duration: 100 },{ control: Control.LIGHT_PUNCH, duration: 100 }, { control: Control.HEAVY_PUNCH, duration: 100 }],
       [{ control: Control.LIGHT_KICK, duration: 100 },{ control: Control.LIGHT_PUNCH, duration: 100 }, { control: Control.HEAVY_KICK, duration: 100 }],
-      [{ control: Control.DOWN, duration: 100 }, { control: [Control.LEFT, Control.DOWN], duration: 100 }, { control: Control.HEAVY_PUNCH, duration: 100 }],
+      //[{ control: Control.DOWN, duration: 100 }, { control: [Control.LEFT, Control.DOWN], duration: 100 }, { control: Control.HEAVY_PUNCH, duration: 100 }],
     ];
     this.queueCombo(combos[Math.floor(Math.random() * combos.length)]);
   }
