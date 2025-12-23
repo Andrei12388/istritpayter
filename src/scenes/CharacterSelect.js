@@ -34,15 +34,15 @@ export class CharacterSelect {
 
     characters = [
         { name: "Malupiton", color: "gray", imageSml: 'malupitonSmall', imageBig: 'malupitonBig', namePos: 5, sayings: 'Sabi ko naman sayo burger ka saken',},
-        { name: "Babygiant", color: "gray",  imageSml: 'babygiantSmall', imageBig: 'babygiantBig', namePos: 5, sayings: 'None'},
-        { name: "Unknown1", color: "gray", imageSml: 'unknownSmall', imageBig: 'unknownBig', namePos: 5, sayings: 'None' },
+        { name: "Babygiant", color: "gray",  imageSml: 'babygiantSmall', imageBig: 'babygiantBig', namePos: 5, sayings: 'Dimo ko kaya itaob men'},
+        { name: "Unknown1", color: "gray", imageSml: 'unknownSmall?', imageBig: 'unknownBig', namePos: 5, sayings: 'None' },
         { name: "Otlum", color: "gray", imageSml: 'otlumSmall', imageBig: 'otlumBig', namePos: 20, sayings: 'None' },
         { name: "Golem", color: "gray", imageSml: 'golemSmall', imageBig: 'golemBig', namePos: 20, sayings: 'None' },
         { name: "Lamok", color: "gray",  imageSml: 'lamokSmall', imageBig: 'lamokBig', namePos: 20, sayings: 'None' },
         { name: "Pinuno", color: "gray",  imageSml: 'pinunoSmall', imageBig: 'pinunoBig', namePos: 5, sayings: 'None' },
         { name: "Toni", color: "gray",  imageSml: 'toniSmall', imageBig: 'toniBig', namePos: 20, sayings: 'None' },
         { name: "Tyga", color: "gray",  imageSml: 'tygaSmall', imageBig: 'tygaBig', namePos: 20, sayings: 'None' },
-        { name: "Unknown6", color: "gray",  imageSml: 'unknownSmall', imageBig: 'unknownBig', namePos: 5 , sayings: 'None'},
+        { name: "Nabunturan", color: "gray",  imageSml: 'nabunturanSmall', imageBig: 'nabunturanBig', namePos: 5 , sayings: 'None'},
     ];
 
     stage = [
@@ -117,6 +117,7 @@ export class CharacterSelect {
 
                     //Char Select Small imgs
                     ['unknownSmall', [220, 684, 50, 50]],
+                    ['unknownSmall?', [526, 684, 50, 50]],
                     ['malupitonSmall', [16, 684, 50, 50]],
                     ['babygiantSmall', [67, 684, 50, 50]],
                     ['otlumSmall', [118, 684, 50, 50]],
@@ -125,6 +126,7 @@ export class CharacterSelect {
                     ['pinunoSmall', [322, 684, 50, 50]],
                     ['toniSmall', [373, 684, 50, 50]],
                     ['tygaSmall', [424, 684, 50, 50]],
+                    ['nabunturanSmall', [475, 684, 50, 50]],
 
                     //Char Select Big imgs
                     ['unknownBig', [16, 739, 100, 100]],
@@ -136,6 +138,7 @@ export class CharacterSelect {
                     ['pinunoBig', [412, 736, 100, 103]],
                     ['toniBig', [514, 739, 100, 100]],
                     ['tygaBig', [615, 739, 100, 100]],
+                    ['nabunturanBig', [516, 856, 100, 100]],
 
                     //Stage Images
                     ['stage-pointer', [31, 1066, 20, 23]],

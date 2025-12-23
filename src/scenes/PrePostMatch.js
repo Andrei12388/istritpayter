@@ -146,6 +146,7 @@ export class PrePostMatch {
                     ['pinunoSmall', [322, 684, 50, 50]],
                     ['toniSmall', [373, 684, 50, 50]],
                     ['tygaSmall', [424, 684, 50, 50]],
+                    ['nabunturanSmall', [475, 684, 50, 50]],
 
                     //Char Select Big imgs
                     ['unknownBig', [16, 739, 100, 100]],
@@ -157,6 +158,7 @@ export class PrePostMatch {
                     ['pinunoBig', [412, 736, 100, 103]],
                     ['toniBig', [514, 739, 100, 100]],
                     ['tygaBig', [615, 739, 100, 100]],
+                    ['nabunturanBig', [516, 856, 100, 100]],
 
                     //Stage Images
                     ['stage-pointer', [31, 1066, 20, 23]],

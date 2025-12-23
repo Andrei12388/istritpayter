@@ -146,7 +146,7 @@ if(!this.introScreen.vsMode){
             } else if (this.introScreen.pointer.cursor === 1){
       
         } else if (this.introScreen.pointer.cursor === 2){
-            if(this.fade.done) this.game.setScene(new BattleScene(this.game));
+            if(this.fade.done) this.game.setScene(new Intro(this.game));
    
         } else if (this.introScreen.pointer.cursor === 3){
     
