@@ -10,6 +10,7 @@ import { CharacterSelect } from './scenes/CharacterSelect.js';
 import { PrePostMatch } from './scenes/PrePostMatch.js';
 import { MainMenu } from './scenes/MainMenu.js';
 import { OptionsMenu } from './scenes/OptionsMenu.js';
+import { Disclaimer } from './scenes/Disclaimer.js';
 
 const selectedCharacters = [
     { 
@@ -40,7 +41,8 @@ export class StreetFighterGame{
 
     constructor(){
         
-this.scene = new Intro(this);
+//this.scene = new Intro(this);
+this.scene = new Disclaimer(this, selectedCharacters);
 //this.scene = new MainMenu(this);
 //this.scene = new OptionsMenu(this);
 //this.scene = new BattleScene(this, selectedCharacters);
