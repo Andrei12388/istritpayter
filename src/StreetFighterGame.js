@@ -22,7 +22,7 @@ const selectedCharacters = [
         imageBig: 'malupitonBig' 
     },
     { 
-        name: "Malupiton", 
+        name: "Golem", 
         color: "gray", 
         namePos: 5,
         sayings: 'Sabi ko naman sayo burger ka saken',

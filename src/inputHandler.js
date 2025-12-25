@@ -3,6 +3,25 @@ import { FighterDirection } from './constants/fighter.js';
 import { state as controlHold } from './index.js';
 import { gameState } from './state/gameState.js';
 
+let audioCtx;
+let audioUnlocked = false;
+
+export function unlockAudio() {
+  if (audioUnlocked) return;
+
+  audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+
+  if (audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+
+  window.sounds?.bgm?.play().catch(() => {});
+
+  audioUnlocked = true;
+  console.log("🔓 Audio unlocked");
+}
+
+
 const heldKeys = new Set();
 const pressedKeys = new Set();
 const gamepadPressed = new Map(); // Map<"padId-btnIndex", boolean>
@@ -52,6 +71,7 @@ function showNotice(message) {
    KEYBOARD
 --------------------------------------------------*/
 function handleKeyDown(event) {
+  unlockAudio();
   event.preventDefault();
   heldKeys.add(event.code);
   gameState.buttonHold = true;
@@ -108,6 +128,7 @@ export function registerGamepadEvents() {
 }
 
 export function pollGamepads() {
+  
   const pads = navigator.getGamepads();
 
   for (const pad of pads) {
@@ -117,11 +138,19 @@ export function pollGamepads() {
 
     gamePads.set(padId, pad);
 
+    pad.axes.forEach(axis => {
+  if (Math.abs(axis) > 0.2) {
+    unlockAudio();
+  }
+});
+
+
     pad.buttons.forEach((btn, idx) => {
       const key = `${padId}-${idx}`;
       const wasPressed = gamepadPressed.get(key) || false;
 
       if (btn.pressed && !wasPressed) {
+        unlockAudio();
         // 🔥 TAP DETECTED (single)
         gamepadPressed.set(key, true);
         gameState.buttonHold = true;      // ⬅️ behaves like touchscreen buttons
@@ -156,6 +185,7 @@ export function registerScreenButtonEvents() {
       const virtualKeyCode = elementId;
 
       const handlePress = (e) => {
+        unlockAudio();
         e.preventDefault();
         gameState.buttonHold = true;
         if (!heldKeys.has(virtualKeyCode)) {
