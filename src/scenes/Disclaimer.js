@@ -64,6 +64,8 @@ export class Disclaimer {
         this.soundChoose = document.querySelector('audio#sound-choose');
         this.soundSelect = document.querySelector('audio#sound-select');
         this.soundChooseFighter = document.querySelector('audio#choose-fighter');
+        this.soundStart = document.querySelector('audio#game-start');
+
         this.game = game;
         this.fade = new FadeEffect({ color: 'black', speed: 0.05 });
         
@@ -336,7 +338,8 @@ export class Disclaimer {
         }
       
         updateTime(time){
-             if (control.isControlPressed(0, Control.START)){
+             if (control.isControlPressed(0, Control.START) || control.isControlPressed(1, Control.START)) {
+                playSound(this.soundStart, 1);
                 this.handleFlash();
                 this.countdown = true;
              } 

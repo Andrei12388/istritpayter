@@ -80,18 +80,26 @@ export function unregisterKeyboardEvents() {
 /* -------------------------------------------------
    GAMEPAD
 --------------------------------------------------*/
-function handleGamepadConnected(e) {
+function mapPadIndexToPlayerId(padIndex) {
+ if(gameState.gamepadSwitchPlayer) return padIndex === 0 ? 1 : 0;
+ return padIndex;
+}
+
+export function handleGamepadConnected(e) {
   const pad = e.gamepad;
   gamePads.set(pad.index, pad);
+  
 
   // Display the ID and index
-  showNotice(`🎮 Gamepad Player ${pad.index + 1} connected: ${pad.id}`);
+  const playerId = mapPadIndexToPlayerId(pad.index);
+  showNotice(`🎮 Gamepad Player ${playerId + 1} connected: ${pad.id}`);
 }
 
 function handleGamepadDisconnected(e) {
   const pad = e.gamepad;
   gamePads.delete(pad.index);
-  showNotice(`❌ Gamepad Player ${pad.index + 1} disconnected: ${pad.id}`);
+  const playerId = mapPadIndexToPlayerId(pad.index);
+  showNotice(`❌ Gamepad Player ${playerId + 1} disconnected: ${pad.id}`);
 }
 
 export function registerGamepadEvents() {
@@ -105,7 +113,8 @@ export function pollGamepads() {
   for (const pad of pads) {
     if (!pad) continue;
 
-    const padId = pad.index;
+    const padId = mapPadIndexToPlayerId(pad.index);
+
     gamePads.set(padId, pad);
 
     pad.buttons.forEach((btn, idx) => {

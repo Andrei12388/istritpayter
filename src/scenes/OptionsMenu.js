@@ -66,7 +66,7 @@ export class OptionsMenu {
     gameState.gameStarted = true; 
     playSound(this.soundSelect, 1);
     stopSound(this.musicIntro);
-    if (this.introScreen.pointer.cursor === 3) this.handleFlash();
+    if (this.introScreen.pointer.cursor === 4) this.handleFlash();
 
     
             if(this.introScreen.pointer.cursor === 0){
@@ -84,6 +84,9 @@ export class OptionsMenu {
                
                 gameState.skillNumber += 1;
                 if (gameState.skillNumber > 3)gameState.skillNumber = 0;
+            } else if (this.introScreen.pointer.cursor === 3){
+                
+                gameState.gamepadSwitchPlayer = !gameState.gamepadSwitchPlayer;
             }
             
             gameState.buttonHold = false;
@@ -94,7 +97,7 @@ export class OptionsMenu {
         this.keyPressed.select = true;
         this.introScreen.pointer.y += 15;
         this.introScreen.pointer.cursor += 1;
-        if(this.introScreen.pointer.y > 80){
+        if(this.introScreen.pointer.y > 95){
             this.introScreen.pointer.y = 33;
             this.introScreen.pointer.cursor = 0;
         }
@@ -120,7 +123,7 @@ export class OptionsMenu {
         else if(this.difficulty === 3) gameState.difficulty = 'expert';
         else if(this.difficulty === 4) gameState.difficulty = 'insane';
               
-       if (this.introScreen.pointer.cursor === 3){
+       if (this.introScreen.pointer.cursor === 4){
             if(this.fade.done) this.game.setScene(new MainMenu(this.game));
 }
          this.handleInput(0);

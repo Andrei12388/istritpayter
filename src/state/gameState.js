@@ -48,4 +48,6 @@ export const gameState = {
     // Onscreen controls settings
     buttonTransparency: 1, // 0 to 1
     buttonSize: 1, // 0.5 to 2 (multiplier)
+    //for Gamepad Switch Player
+    gamepadSwitchPlayer: true,
 };
