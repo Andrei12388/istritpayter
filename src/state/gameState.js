@@ -50,4 +50,5 @@ export const gameState = {
     buttonSize: 1, // 0.5 to 2 (multiplier)
     //for Gamepad Switch Player
     gamepadSwitchPlayer: true,
+    FpsCounterEnable: false,
 };

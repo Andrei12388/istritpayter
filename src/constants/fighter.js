@@ -225,6 +225,8 @@ HYPERSKILL_1: 'hyper-skill1',
 HYPERSKILL_2: 'hyper-skill2',
 DODGE_FORWARD: 'dodge-forward',
 DODGE_BACKWARD: 'dodge-backward',
+DASH_FORWARD: 'dash-forward',
+DASH_BACKWARD: 'dash-backward',
 BLOCK: 'block',
 CROUCH_BLOCK: 'crouch-block',
 DEATH: 'death',
@@ -330,4 +332,11 @@ export const SpecialMoveButton = {
     BC: 'bc',
     BD: 'bd',
     CD: 'cd',
+};
+
+export const CancelWindow = {
+    LIGHT_PUNCH: { start: 2, end: 6 },      // Frames 2-6 can be cancelled
+    HEAVY_PUNCH: { start: 4, end: 10 },     // Frames 4-10 can be cancelled
+    LIGHT_KICK: { start: 2, end: 8 },
+    HEAVY_KICK: { start: 4, end: 12 },
 };

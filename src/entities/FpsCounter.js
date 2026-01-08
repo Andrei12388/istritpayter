@@ -1,3 +1,5 @@
+import { gameState } from "../state/gameState.js";
+
 export class FpsCounter {
     constructor(){
         this.fps = 0;
@@ -5,10 +7,20 @@ export class FpsCounter {
     update(time){
         this.fps = Math.trunc(1 / time.secondsPassed);
     }
-    draw(context){
-        context.font = "bold 20px Arial";
-        context.fillStyle = "yellow";
-        context.textAlign = "center";
-        //context.fillText(`FPS:${this.fps}`, context.canvas.width/2, 30);
-    }
+    draw(context) {
+    if (!gameState.FpsCounterEnable) return;
+
+    context.font = "12px Arial";
+    context.textAlign = "center";
+
+    // Outline
+    context.lineWidth = 3;
+    context.strokeStyle = "black";
+    context.strokeText(`${this.fps}`, 15, 15);
+
+    // Fill
+    context.fillStyle = "yellow";
+    context.fillText(`${this.fps}`, 15, 15);
+}
+
 }

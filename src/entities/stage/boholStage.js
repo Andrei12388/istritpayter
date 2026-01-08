@@ -56,7 +56,7 @@ export class boholStage {
             this.carabaoPosition.x += 1;
             this.carabaoFlip = 1;
         } else {
-            this.carabaoPosition.x -= 1
+            this.carabaoPosition.x -= 1;
             this.carabaoFlip = -1;
         };
         

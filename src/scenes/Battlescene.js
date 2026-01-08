@@ -128,7 +128,7 @@ export class BattleScene {
             
         this.overlays = [
            // new StatusBar(this.game, this.fighters),
-            new FpsCounter(),
+           // new FpsCounter(),
             this.statsBar,
             // show player combos (left for P1, right for P2)
             new ComboOverlay(this.fighters),

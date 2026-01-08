@@ -175,21 +175,21 @@ export class Fighter {
                 attackStrength: FighterAttackStrength.LIGHT,
                  init: this.handleAttackInit.bind(this),
                 update: this.handleLightPunchState.bind(this),
-                validFrom:[FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.WALK_BACKWARD],
+                validFrom:[FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.WALK_BACKWARD, FighterState.LIGHT_KICK, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH],
             },
             [FighterState.HEAVY_PUNCH]:{
                 attackType: FighterAttackType.PUNCH,
                 attackStrength: FighterAttackStrength.HEAVY,
                  init: this.handleAttackInit.bind(this),
                 update: this.handleHeavyPunchState.bind(this),
-                validFrom:[FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.WALK_BACKWARD, FighterState.SPECIAL_2, FighterState.LIGHT_PUNCH],
+                validFrom:[FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.WALK_BACKWARD, FighterState.SPECIAL_2, FighterState.LIGHT_KICK, FighterState.LIGHT_PUNCH, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH],
             },
              [FighterState.LIGHT_KICK]:{
                 attackType: FighterAttackType.KICK,
                 attackStrength: FighterAttackStrength.LIGHT,
                  init: this.handleAttackInit.bind(this),
                 update: this.handleLightKickState.bind(this),
-                validFrom:[FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.WALK_BACKWARD],
+                validFrom:[FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.WALK_BACKWARD, FighterState.LIGHT_PUNCH],
             },
             [FighterState.CROUCH_LIGHTKICK]:{
                 attackType: FighterAttackType.KICK,
@@ -224,7 +224,7 @@ export class Fighter {
                 attackStrength: FighterAttackStrength.HEAVY,
                  init: this.handleAttackInit.bind(this),
                 update: this.handleHeavyKickState.bind(this),
-                validFrom:[FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.WALK_BACKWARD, FighterState.LIGHT_KICK],
+                validFrom:[FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.WALK_BACKWARD, FighterState.LIGHT_KICK, FighterState.LIGHT_PUNCH],
             },
             [FighterState.HURT_HEAD_HEAVY]:{
                 init: this.handleHurtInit.bind(this),
@@ -460,6 +460,33 @@ export class Fighter {
         this.playerId
     );
 }
+// Cancel Attack implementation
+isInCancelWindow(state, cancelData = null) {
+    if (!cancelData) {
+        // Use default cancel windows if not specified
+        const windows = {
+            [FighterState.LIGHT_PUNCH]: { start: 3, end: 5 },
+            [FighterState.HEAVY_PUNCH]: { start: 4, end: 7 },
+            [FighterState.LIGHT_KICK]: { start: 3, end: 5 },
+            [FighterState.HEAVY_KICK]: { start: 4, end: 7 },
+            [FighterState.CROUCH_LIGHTKICK]: { start: 3, end: 5 },
+        };
+        cancelData = windows[state];
+    }
+    
+    if (!cancelData) return false;
+    return this.animationFrame >= cancelData.start && 
+           this.animationFrame <= cancelData.end;
+}
+
+// Helper method to check which attack input is pressed
+getNextAttackInput() {
+    if (control.isLightPunch(this.playerId)) return FighterState.LIGHT_PUNCH;
+    if (control.isHeavyPunch(this.playerId)) return FighterState.HEAVY_PUNCH;
+    if (control.isLightKick(this.playerId)) return FighterState.LIGHT_KICK;
+    if (control.isHeavyKick(this.playerId)) return FighterState.HEAVY_KICK;
+    return null;
+}
 
     
     //Idle
@@ -488,9 +515,11 @@ export class Fighter {
             this.changeState(FighterState.CROUCH_LIGHTKICK);
         }else if(control.isHeavyKick(this.playerId)){
             this.changeState(FighterState.CROUCH_HEAVYKICK);
-        } //else if(control.isBackward(this.playerId)){
-           // this.changeState(FighterState.CROUCH_BLOCK, time);
-       // }
+        } if(control.isLightPunch(this.playerId)){
+            this.changeState(FighterState.LIGHT_PUNCH);
+        }else if(control.isHeavyPunch(this.playerId)){
+            this.changeState(FighterState.HEAVY_PUNCH);
+        }
          const newDirection = this.getDirection();
 
         if(newDirection !== this.direction){
@@ -601,34 +630,100 @@ export class Fighter {
     }
 
     handleLightPunchState(){
-        if (this.animationFrame <2) return;
-        if (control.isLightPunch(this.playerId)) return;
-        if (control.isHeavyPunch(this.playerId)) this.changeState(FighterState.HEAVY_PUNCH);
-
-        if (!this.isAnimationCompleted()) return;
-        this.changeState(FighterState.IDLE);
+    // Startup frames (can't cancel or be interrupted)
+    if (this.animationFrame < 2) return;
+    if (control.isLightPunch(this.playerId)) return;
+    
+    // Cancel window: allow chaining to other attacks
+    if (this.isInCancelWindow(FighterState.LIGHT_PUNCH)) {
+        const nextAttack = this.getNextAttackInput();
+        if (nextAttack && nextAttack !== FighterState.LIGHT_PUNCH) {
+            if (this.states[nextAttack].validFrom.includes(FighterState.LIGHT_PUNCH)) {
+                this.changeState(nextAttack);
+                return;
+            }
+        }
     }
 
-    handleHeavyPunchState(){
-        if (!this.isAnimationCompleted()) return;
-        this.changeState(FighterState.IDLE);
+    if (!this.isAnimationCompleted()) return;
+    this.changeState(FighterState.IDLE);
+}
+
+handleHeavyPunchState(){
+    // Startup frames
+    if (this.animationFrame < 4) return;
+    
+    // Cancel window
+    if (this.isInCancelWindow(FighterState.HEAVY_PUNCH)) {
+        const nextAttack = this.getNextAttackInput();
+        if (nextAttack && nextAttack !== FighterState.HEAVY_PUNCH) {
+            if (this.states[nextAttack].validFrom.includes(FighterState.HEAVY_PUNCH)) {
+                this.changeState(nextAttack);
+                return;
+            }
+        }
     }
 
-    handleLightKickState(){
-        if (this.animationFrame < 2) return;
-        if (control.isLightKick(this.playerId)) return;
-         if (control.isHeavyKick(this.playerId)) this.changeState(FighterState.HEAVY_KICK);
-        if (!this.isAnimationCompleted()) return;
-        this.changeState(FighterState.IDLE);
+    if (!this.isAnimationCompleted()) return;
+    this.changeState(FighterState.IDLE);
+}
+
+handleLightKickState(){
+    if (this.animationFrame < 2) return;
+    if (control.isLightKick(this.playerId)) return;
+    
+    if (this.isInCancelWindow(FighterState.LIGHT_KICK)) {
+        const nextAttack = this.getNextAttackInput();
+        if (nextAttack && nextAttack !== FighterState.LIGHT_KICK) {
+            if (this.states[nextAttack].validFrom.includes(FighterState.LIGHT_KICK)) {
+                this.changeState(nextAttack);
+                return;
+            }
+        }
     }
+
+    if (!this.isAnimationCompleted()) return;
+    this.changeState(FighterState.IDLE);
+}
+
+handleHeavyKickState(){
+    if (this.animationFrame < 4) return;
+    
+    if (this.isInCancelWindow(FighterState.HEAVY_KICK)) {
+        const nextAttack = this.getNextAttackInput();
+        if (nextAttack && nextAttack !== FighterState.HEAVY_KICK) {
+            if (this.states[nextAttack].validFrom.includes(FighterState.HEAVY_KICK)) {
+                this.changeState(nextAttack);
+                return;
+            }
+        }
+    }
+
+    if (!this.isAnimationCompleted()) return;
+    this.changeState(FighterState.IDLE);
+}
 
     handleCrouchLightKickState(){
-        if (this.animationFrame < 2) return;
-        if (control.isLightKick(this.playerId)) return;
+    if (this.animationFrame < 2) return;
+    if (control.isLightKick(this.playerId)) return;
+    
+    if (this.isInCancelWindow(FighterState.CROUCH_LIGHTKICK)) {
+        if (control.isHeavyKick(this.playerId)) {
+            this.changeState(FighterState.CROUCH_HEAVYKICK);
+            return;
+        } else if (control.isLightPunch(this.playerId)) {
+            this.changeState(FighterState.LIGHT_PUNCH);
+            return;
+        }else if (control.isHeavyPunch(this.playerId)) {
+            this.changeState(FighterState.HEAVY_PUNCH);
+            return;
+        }
 
-        if (!this.isAnimationCompleted()) return;
-        this.changeState(FighterState.CROUCH);
     }
+
+    if (!this.isAnimationCompleted()) return;
+    this.changeState(FighterState.CROUCH);
+}
     
     handleCrouchHeavyKickState(){
         if (!this.isAnimationCompleted()) return;
@@ -640,13 +735,6 @@ export class Fighter {
             this.changeState(FighterState.IDLE);
             return;
         }
-    }
-    
-
-    handleHeavyKickState(){
-        if (!this.isAnimationCompleted()) return;
-        this.changeState(FighterState.IDLE);
-       
     }
 
     handleHurtState(){

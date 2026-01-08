@@ -221,7 +221,8 @@ export class OptionsMenuScreen {
             this.drawTextLabel(context, 'SHADOW INVERT', 55,50, 1, 0.7);
             this.drawTextLabel(context, 'SKILL NUMBER', 55,65, 1, 0.7);
             this.drawTextLabel(context, 'SWITCH GAMEPAD TO P2', 55,80, 1, 0.7);
-            this.drawTextLabel(context, 'EXIT', 55,95, 1, 0.7);
+            this.drawTextLabel(context, 'FPS COUNTER', 55,95, 1, 0.7);
+            this.drawTextLabel(context, 'EXIT', 55,110, 1, 0.7);
         }
 
          drawMenuSelections(context){
@@ -235,6 +236,8 @@ export class OptionsMenuScreen {
             this.drawTextLabel(context, skillNum, 255,65, 1, 0.7);
             if(gameState.gamepadSwitchPlayer)this.drawTextLabel(context, 'ON', 255,80, 1, 0.7);
             else this.drawTextLabel(context, 'OFF', 255,80, 1, 0.7);
+            if(gameState.FpsCounterEnable)this.drawTextLabel(context, 'ON', 255,95, 1, 0.7);
+            else this.drawTextLabel(context, 'OFF', 255,95, 1, 0.7);
          
         }
 

@@ -34,10 +34,10 @@ export class CharacterSelect {
 
     characters = [
         { name: "Malupiton", color: "gray", imageSml: 'malupitonSmall', imageBig: 'malupitonBig', namePos: 5, sayings: 'Sabi ko naman sayo burger ka saken',},
-        { name: "Babygiant", color: "gray",  imageSml: 'babygiantSmall', imageBig: 'babygiantBig', namePos: 5, sayings: 'Dimo ko kaya itaob men'},
+        { name: "Babygiant", color: "gray",  imageSml: 'babygiantSmall', imageBig: 'babygiantBig', namePos: 5, sayings: 'None'},
         { name: "Unknown1", color: "gray", imageSml: 'unknownSmall?', imageBig: 'unknownBig', namePos: 5, sayings: 'None' },
         { name: "Otlum", color: "gray", imageSml: 'otlumSmall', imageBig: 'otlumBig', namePos: 20, sayings: 'None' },
-        { name: "Golem", color: "gray", imageSml: 'golemSmall', imageBig: 'golemBig', namePos: 20, sayings: 'None' },
+        { name: "Golem", color: "gray", imageSml: 'golemSmall', imageBig: 'golemBig', namePos: 20, sayings: 'Dimo ko kaya itaob men' },
         { name: "Lamok", color: "gray",  imageSml: 'lamokSmall', imageBig: 'lamokBig', namePos: 20, sayings: 'None' },
         { name: "Pinuno", color: "gray",  imageSml: 'pinunoSmall', imageBig: 'pinunoBig', namePos: 5, sayings: 'None' },
         { name: "Toni", color: "gray",  imageSml: 'toniSmall', imageBig: 'toniBig', namePos: 20, sayings: 'None' },

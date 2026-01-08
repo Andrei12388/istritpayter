@@ -11,10 +11,11 @@ import { PrePostMatch } from './scenes/PrePostMatch.js';
 import { MainMenu } from './scenes/MainMenu.js';
 import { OptionsMenu } from './scenes/OptionsMenu.js';
 import { Disclaimer } from './scenes/Disclaimer.js';
+import { FpsCounter } from './entities/FpsCounter.js';
 
 const selectedCharacters = [
     { 
-        name: "Golem", 
+        name: "Malupiton", 
         namePos: 5,
         sayings: 'Sabi ko naman sayo burger ka saken',
         color: "gray", 
@@ -40,6 +41,7 @@ export class StreetFighterGame{
     };
 
     constructor(){
+        this.fpsCounter = new FpsCounter();
         
 //this.scene = new Intro(this);
 this.scene = new Disclaimer(this, selectedCharacters);
@@ -66,6 +68,8 @@ frame(time){
     
    this.scene.update(this.frameTime, this.context);
    this.scene.draw(this.context);
+   this.fpsCounter.update(this.frameTime);
+   this.fpsCounter.draw(this.context);
   
     }
 

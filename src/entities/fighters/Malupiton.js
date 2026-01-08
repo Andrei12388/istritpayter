@@ -625,7 +625,7 @@ export class Malupiton extends Fighter {
            
             validFrom: [
                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, 
-                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
+                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_BLOCK,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, FighterState.JUMP_LIGHTKICK, FighterState.JUMP_HEAVYKICK,
                 FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD, FighterState.JUMP_START, FighterState.JUMP_LAND, FighterState.KNOCKLIFTDOWN
                  
@@ -639,7 +639,7 @@ export class Malupiton extends Fighter {
            
             validFrom: [
                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, 
-                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
+                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_BLOCK,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, FighterState.JUMP_LIGHTKICK, FighterState.JUMP_HEAVYKICK,
                 FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD, FighterState.JUMP_START, FighterState.JUMP_LAND, FighterState.KNOCKLIFT,
                
@@ -653,7 +653,7 @@ export class Malupiton extends Fighter {
            
             validFrom: [
                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.WALK_BACKWARD,
-                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
+                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_BLOCK,
                 FighterState.JUMP_LIGHTKICK, FighterState.JUMP_HEAVYKICK,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD,
                 FighterState.JUMP_UP, FighterState.JUMP_START, FighterState.JUMP_LAND, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
