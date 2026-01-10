@@ -142,7 +142,7 @@ export class OptionsMenu {
 
    
 
-    draw(context) {
+    draw(context, time) {
         
         this.drawEntities(context);
         this.fade.draw(context, 400, 400);

@@ -1,4 +1,4 @@
-import { FRAME_TIME } from "../../constants/game.js";
+import { FPS, FRAME_TIME } from "../../constants/game.js";
 import { playSound } from "../../soundHandler.js";
 import { gameState } from "../../state/gameState.js";
 import { drawFrame } from "../../utils/context.js";
@@ -53,10 +53,10 @@ export class boholStage {
 
     updateCarabao(time){
         if(this.carabaoDirection){
-            this.carabaoPosition.x += 1;
+            this.carabaoPosition.x += 60 * time.secondsPassed;
             this.carabaoFlip = 1;
         } else {
-            this.carabaoPosition.x -= 1;
+            this.carabaoPosition.x -= 60 * time.secondsPassed;
             this.carabaoFlip = -1;
         };
         

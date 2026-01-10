@@ -29,7 +29,7 @@ export class DashEffectSplash extends HitSplash {
         ];
     }
     update(time){
-        this.position.x += 1;
+        this.position.x += 1 * time.secondsPassed;
          if (time.previous < this.animationTimer + 4 * FRAME_TIME) return;
                 this.animationFrame += 1;
                 this.animationTimer = time.previous;

@@ -285,11 +285,11 @@ export class Disclaimer {
         control.pressedKeys.clear();
     }
 
-    startTimer(){
+    startTimer(time){
    
     if (this.screenFlashTrigger === true ){
         this.flashScreen = true;
-        this.screenTimer = Math.min(this.screenTimer + 1, this.screenTimerMax);
+        this.screenTimer = Math.min(this.screenTimer + (1 * 60) * time.secondsPassed, this.screenTimerMax);
          if(this.screenTimer >= this.screenTimerMax){
             this.flashAlpha = 1;
             this.flash = false;
@@ -298,7 +298,7 @@ export class Disclaimer {
            }
     }
     if (this.screenFlashTrigger === false ) {
-        this.screenTimer = Math.max(this.screenTimer - 1, 0);
+        this.screenTimer = Math.max(this.screenTimer - (1 * 60) * time.secondsPassed, 0);
         if(this.screenTimer <= 0){
             this.flash = false;
             this.screenFlashTrigger = false;
@@ -313,10 +313,10 @@ export class Disclaimer {
 
     }
 
-    screenAnimation(){
+    screenAnimation(time){
 
         if(this.screenanim.trigger === true){
-            this.screenanim.y += this.screenanim.speed;
+            this.screenanim.y += (this.screenanim.speed * 60) * time.secondsPassed;
          if(this.screenanim.y >= 120){
             this.flashScreen = true;
              this.screenanim.trigger = false;
@@ -326,10 +326,10 @@ export class Disclaimer {
         }
         }
         if(this.stageAnim === true){
-            this.screenanim.x = Math.min(this.screenanim.x + 4,350);
-            this.screenanim2.x = Math.max(this.screenanim2.x - 5, -400);
-            if(this.stageSelect && this.stageDropY <= 110)this.stageDropY += 3;
-            this.pointerTimer += 1;
+            this.screenanim.x = Math.min(this.screenanim.x + (4 * 60) * time.secondsPassed,350);
+            this.screenanim2.x = Math.max(this.screenanim2.x - (5 * 60) * time.secondsPassed, -400);
+            if(this.stageSelect && this.stageDropY <= 110)this.stageDropY += (3 * 60) * time.secondsPassed;
+            this.pointerTimer += (1 * 60) * time.secondsPassed;
             if(this.stageDropY >= 110) this.stageSelectEnable = true;;
             if (this.pointerTimer >= 10) this.pointerTimer = 0;
             
@@ -377,13 +377,13 @@ export class Disclaimer {
     }
 
     update(time, context) {
-        this.blinkTime += 1;
+        this.blinkTime += (1 * 60) * time.secondsPassed;
         this.updateTime(time);
         this.updateEntities(time, context);
         this.updateImports();
         this.fade.update();
-        this.screenAnimation();
-        if(this.flashScreen)this.startTimer();
+        this.screenAnimation(time);
+        if(this.flashScreen)this.startTimer(time);
 
         
     }
@@ -523,7 +523,7 @@ drawVsScreen(context){
     else if(gameState.gameScene === 'postmatch')this.drawFrame(context, 'post-screen', 0, 0);
 }
 
-    draw(context) {
+    draw(context, time) {
         
         
         this.drawDisclaimer(context);

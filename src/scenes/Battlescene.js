@@ -662,7 +662,7 @@ winFlash(time){
     }
 }
 
-    draw(context){
+    draw(context, time){
       //  console.log(this.statsBar.timerDelay);
         this.stage.drawBackground(context, this.camera);
         //When Super Activates

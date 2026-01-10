@@ -177,7 +177,7 @@ export class OptionsMenuScreen {
 
 
     updateTime(time){
-         this.blinkTimer += 1;
+         this.blinkTimer += (1 * 60) * time.secondsPassed;
          
         if(time.previous > this.timeTimer + TIME_DELAY){
            

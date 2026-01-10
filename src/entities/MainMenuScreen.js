@@ -177,7 +177,7 @@ export class MainMenuScreen {
 
 
     updateTime(time){
-         this.blinkTimer += 1;
+         this.blinkTimer += (1 * 60) * time.secondsPassed;
          
         if(time.previous > this.timeTimer + TIME_DELAY){
            
@@ -244,7 +244,7 @@ export class MainMenuScreen {
     this.drawFrame(context, 'pointer', this.pointer.x,this.pointer.y);
   }
 
-    draw(context){
+    draw(context, time){
        
         this.gameStart = true;
         this.drawScreenTitle(context);

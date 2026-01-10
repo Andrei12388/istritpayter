@@ -126,7 +126,7 @@ export class CharacterSelectScreen {
 }
 
     updateTime(time){
-         this.blinkTimer += 1;
+         this.blinkTimer += (1 * 60) * time.secondsPassed;
         if(time.previous > this.timeTimer + TIME_DELAY){
             this.time -=1;
             this.timeTimer = time.previous;
@@ -174,7 +174,7 @@ export class CharacterSelectScreen {
         this.drawFrame(context, `${flashFrame}-${timeString.charAt(1)}`, 194, 90);
    
     }
-    draw(context){
+    draw(context, time){
         this.drawScreenTitle(context);
        // this.drawTime(context);
 }

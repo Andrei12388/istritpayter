@@ -86,7 +86,7 @@ export class BlockRock {
     // 🚀 Update movement and handle collisions
     updateMovement(time, camera) {
        this.position.x += (this.direction) * time.secondsPassed;
-       if(this.animationFrame >= 4)  this.position.y += 1.8;
+       if(this.animationFrame >= 4)  this.position.y += 1.8 * time.secondsPassed;
        
         const screenX = this.position.x - camera.position.x;
         if (screenX > 384 + 56 || screenX < -56) {

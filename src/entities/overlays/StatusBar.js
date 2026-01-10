@@ -6,6 +6,7 @@ import { Intro } from "../../scenes/Intro.js";
 import { playSound, stopSound } from "../../soundHandler.js";
 import { gameState } from "../../state/gameState.js";
 import { drawFrame } from "../../utils/context.js";
+import { FadeEffect } from "../../scenes/utils/FadeEffect.js";
 
 
 export class StatusBar {
@@ -291,6 +292,7 @@ export class StatusBar {
         this.fightOverTimer = 0;
         this.flashScreen = false;
         this.flashAlpha = 0;
+        this.fade = new FadeEffect({ color: 'black', speed: 0.1, maxAlpha: 1 });
 
         this.screenTimer = 0;
         this.screenTimerMax = 50;
@@ -309,9 +311,9 @@ export class StatusBar {
     updateTime(time,context){
         //Move Big Image
         gameState.pauseFrameMove = Math.min(gameState.pauseFrameMove + 5, 10);
-        this.hyperskillframe += 1;
-        gameState.pauseTimer = Math.max(gameState.pauseTimer - 0.20, 0);
-        if(this.hyperskillframe === 19) this.hyperskillframe = 1;
+        this.hyperskillframe += Math.trunc((1 * 60) * time.secondsPassed);
+        gameState.pauseTimer = Math.max(gameState.pauseTimer - (0.20 * 60) * time.secondsPassed, 0);
+        if(this.hyperskillframe >= 19) this.hyperskillframe = 1;
        // console.log(gameState.pauseFrameMove);
         if(time.previous > this.timeTimer + TIME_DELAY + this.timerDelay){
             if(!gameState.pause)this.time -=1;
@@ -436,24 +438,22 @@ export class StatusBar {
         this.koAnimationTimer = time.previous;
     }
 
-    startTimer(){
+    startTimer(time){
         if (this.screenFlashTrigger === true ){
             this.flashScreen = true;
-            this.screenTimer = Math.min(this.screenTimer + 1, this.screenTimerMax);
+            this.screenTimer = Math.min(this.screenTimer + (1 * 60) * time.secondsPassed, this.screenTimerMax);
              if(this.screenTimer >= this.screenTimerMax){
-                this.flashAlpha = 1;
-                
+                this.fade.fadeOut();
                 this.screenFlashTrigger = false;
                
                }
         }
         if (this.screenFlashTrigger === false ) {
-            this.screenTimer = Math.max(this.screenTimer - 1, 0);
+            this.screenTimer = Math.max(this.screenTimer - (1 * 60) * time.secondsPassed, 0);
             if(this.screenTimer <= 0){
                
                 this.screenFlashTrigger = false;
-                
-                this.flashAlpha = 1;
+                this.flashScreen = false;
                 
                
                }
@@ -470,7 +470,8 @@ export class StatusBar {
             this.updateSkillBars(time);
         }
         
-        if(this.flashScreen)this.startTimer();
+        this.fade.update();
+        if(this.flashScreen)this.startTimer(time);
     }
 
     drawFrame(context, frameKey, x, y, direction = 1, scale = 1, alpha = 1) {
@@ -703,25 +704,19 @@ drawSkillNum(context, label, x, y){
 
     }
 
-    drawFlash(context){
-    if (this.flash === true){
-    this.flashAlpha = Math.min(this.flashAlpha + 0.07, 1);
-    context.globalAlpha = this.flashAlpha;
-     context.fillStyle = "rgb(0, 0, 0)";
-     context.fillRect(0, 0, 400, 400);
-     
+    drawFlash(context, time){
+        if (this.flash === true){
+            if (!this.fade.active) {
+                this.fade.fadeIn();
+            }
+        }
+        if (this.flash === false){
+            if (this.fade.fadingIn) {
+                this.fade.fadeOut();
+            }
+        }
+        this.fade.draw(context, 400, 400);
     }
-    if (this.flash === false){
-        this.screenFlashTrigger = false;
-        
-        context.globalAlpha = this.flashAlpha;
-        context.fillStyle = "rgb(0, 0, 0)";
-        context.fillRect(0, 0, 400, 400);
-       
-    }
-     context.globalAlpha = 1;
-    
-}
 
 drawCredits(context){
         this.drawTextLabel(context, 'CREDITS' + ' ' + `${gameState.credits}`, 270,10, 1, 0.7);
@@ -733,7 +728,7 @@ drawCredits(context){
         if(gameState.fighters[1].wins === 1) this.drawFrame(context, 'win', 207, 2);
     }
 
-    draw(context){
+    draw(context, time){
         
         if(this.time===this.timeCount - 1 && this.soundEnable){
              console.log('Round 1');
@@ -812,7 +807,7 @@ drawCredits(context){
              this.timerDelay = 0;
             this.drawFightOver(context);
         }
-        if(this.flashScreen)this.drawFlash(context);
+        if(this.flashScreen)this.drawFlash(context, time);
       
         }
 }

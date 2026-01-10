@@ -180,17 +180,17 @@ if(!this.introScreen.vsMode){
          if(this.flashScreen)this.startTimer();
     }
 
-    drawEntities(context) {
+    drawEntities(context, time) {
         for (const entity of this.entities) {
-            entity.draw(context, this.camera);
+            entity.draw(context, time, this.camera);
         }
     }
 
    
 
-    draw(context) {
+    draw(context, time) {
         
-        this.drawEntities(context);
+        this.drawEntities(context, time);
         this.fade.draw(context, 400, 400);
         
     }

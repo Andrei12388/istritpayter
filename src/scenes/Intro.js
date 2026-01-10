@@ -34,10 +34,10 @@ export class Intro {
     }
 
     
-    startTimer() {
+    startTimer(time) {
     if (this.screenFlashTrigger === true && gameState.gameStarted) {
         this.flashScreen = true;
-        this.screenTimer = Math.min(this.screenTimer + 1, this.screenTimerMax);
+        this.screenTimer = Math.min(this.screenTimer + (1 * 60) * time.secondsPassed, this.screenTimerMax);
 
         if (this.screenTimer >= this.screenTimerMax) {
             this.flashAlpha = 1;
@@ -57,7 +57,7 @@ export class Intro {
 
     // Reset flash gradually if trigger is false
     if (this.screenFlashTrigger === false) {
-        this.screenTimer = Math.max(this.screenTimer - 1, 0);
+        this.screenTimer = Math.max(this.screenTimer - (1 * 60) * time.secondsPassed, 0);
         if (this.screenTimer <= 0) {
             this.flash = false;
             this.screenFlashTrigger = false;
@@ -143,7 +143,7 @@ export class Intro {
          this.handleInput(0);
         this.handleInput(1);
         this.updateEntities(time, context);
-         if(this.flashScreen)this.startTimer();
+         if(this.flashScreen)this.startTimer(time);
 
         // Check if time reached -1
        if (this.introScreen.time <= -1 && !this.nextScene) {
@@ -162,9 +162,9 @@ export class Intro {
         
     }
 
-  drawFlash(context){
+  drawFlash(context, time){
     if (this.flash === true){
-    this.flashAlpha = Math.min(this.flashAlpha + 0.1, 1);
+    this.flashAlpha = Math.min(this.flashAlpha + (0.1 * 60) * time.secondsPassed, 1);
     context.globalAlpha = this.flashAlpha;
      context.fillStyle = "rgb(0, 0, 0)";
      context.fillRect(0, 0, 400, 400);
@@ -172,7 +172,7 @@ export class Intro {
     }
     if (this.flash === false){
         this.screenFlashTrigger = false;
-        this.flashAlpha = Math.max(this.flashAlpha - 0.1, 0);
+        this.flashAlpha = Math.max(this.flashAlpha - (0.1 * 60) * time.secondsPassed, 0);
         context.globalAlpha = this.flashAlpha;
         context.fillStyle = "rgb(0, 0, 0)";
         context.fillRect(0, 0, 400, 400);
@@ -182,20 +182,20 @@ export class Intro {
     
 }
 
-    drawEntities(context) {
+    drawEntities(context, time) {
         for (const entity of this.entities) {
-            entity.draw(context, this.camera);
+            entity.draw(context, time, this.camera);
         }
     }
 
    
 
-    draw(context) {
+    draw(context, time) {
         
-        this.drawEntities(context);
+        this.drawEntities(context, time);
         
         
-         if(this.flashScreen)this.drawFlash(context);
+         if(this.flashScreen)this.drawFlash(context, time);
         
     }
     

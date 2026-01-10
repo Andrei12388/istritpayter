@@ -247,7 +247,7 @@ export class IntroScreen {
 
 
     updateTime(time){
-         this.blinkTimer += 1;
+         this.blinkTimer += (1 * 60) * time.secondsPassed;
          
         if(time.previous > this.timeTimer + TIME_DELAY){
             this.time -=1;
@@ -322,8 +322,8 @@ updateScenes(time){
     if (this.insertCoin === true){
         
         this.ijiWalking.update(time);
-        this.sceneTimer += 1;
-        if(this.sceneTimer >= 690) this.ijiWalkingX -= 3;
+        this.sceneTimer += (1 * 60) * time.secondsPassed;
+        if(this.sceneTimer >= 690) this.ijiWalkingX -= (3 * 60) * time.secondsPassed;
         if(this.sceneTimer >= 850)this.devilHand.update(time);
     }
 }
@@ -376,21 +376,21 @@ updateScenes(time){
         this.drawTextLabel(context, 'CREDITS' + ' ' + `${gameState.credits}`, 270,10, 1, 0.7);
     }
 
-     drawScenes(context){
+     drawScenes(context, time){
         this.brickWall.draw(context, this.sceneTimer*2, 30);
         this.brickWall2.draw(context, this.sceneTimer*2-384, 30);
         this.brickWall.draw(context, this.sceneTimer*2-762, 30);
         this.brickWall2.draw(context, this.sceneTimer*2-1024, 30);
         this.ijiWalking.draw(context,  270 + this.ijiWalkingX, 30);
-        if(this.handLevitateAnim) this.handLevitateAnimNum += 0.3;
-        if(!this.handLevitateAnim) this.handLevitateAnimNum -= 0.3;
+        if(this.handLevitateAnim) this.handLevitateAnimNum += (0.3 * 60) * time.secondsPassed;
+        if(!this.handLevitateAnim) this.handLevitateAnimNum -= (0.3 * 60) * time.secondsPassed;
         if(this.handLevitateAnimNum >= 50 || this.handLevitateAnimNum <= 30) this.handLevitateAnim = !this.handLevitateAnim;
         
         
         if(this.sceneTimer >=200 && this.sceneTimer <= 340+100){
-            if(this.sceneTimer >=200 && this.sceneTimer <= 250+100)this.tankTimer += 1;
+            if(this.sceneTimer >=200 && this.sceneTimer <= 250+100)this.tankTimer += (1 * 60) * time.secondsPassed;
             if (this.sceneTimer>=300+100 && this.sceneTimer <= 305+100)this.tankTimer = 40;
-            if(this.sceneTimer >=310+100 && this.sceneTimer <= 330+100)this.tankTimer -= 1;
+            if(this.sceneTimer >=310+100 && this.sceneTimer <= 330+100)this.tankTimer -= (1 * 60) * time.secondsPassed;
 
              this.greenWater.draw(context, 0, 0, 1, 1, Math.min(this.tankTimer*0.020, 1));
              if(this.sceneTimer >=230) {
@@ -411,7 +411,7 @@ updateScenes(time){
         
     }
 
-    draw(context){
+    draw(context, time){
         
          if (this.gameStart === true){
                  this.drawScreenTitle(context);
@@ -426,7 +426,7 @@ updateScenes(time){
             
             if(this.insertCoin === true){
                 gameState.kapeCom = true;
-                 this.drawScenes(context);
+                 this.drawScenes(context, time);
                 if(this.blink === 1){
                     this.drawInsertCoin(context);
                     
