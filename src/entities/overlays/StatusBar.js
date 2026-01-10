@@ -355,6 +355,10 @@ export class StatusBar {
     
     for (let i = 0; i < this.SkillBars.length; i++) {
         const playerKey = i === 0 ? 'player1' : 'player2';
+        if(gameState.practiceMode.infiniteSkill) {
+            this.SkillBars[i].skillPoints = SKILL_MAX_POINTS;
+            gameState.fighters[i].skillNumber = 3;
+        }
 
         // 1st skill trigger
         if(gameState.fighters[i].skillNumber === 0){
@@ -489,8 +493,26 @@ export class StatusBar {
     context.restore();
 }
 
-    drawHealthBars(context){
+practiceModeHealthBar(){
+    // console.log("drawing health bars p/Gamestate.hitpoints", this.healthBars[1].hitPoints, gameState.fighters[1].hitPoints);
+
+    for (let i = 0; i < 2; i++) {
+        if(gameState.fighters[i].resetHP){
+            console.log(`resetting HP for player ${i+1}`);
+            this.healthBars[i].hitPoints = Math.min(this.healthBars[i].hitPoints + 3, 144);
+            gameState.fighters[i].hitPoints = Math.min(this.healthBars[i].hitPoints, 144);
+            if(this.healthBars[i].hitPoints >= 144){
+                gameState.fighters[i].resetHP = false;
+            }
+            
+        }
+}
+
         
+}
+
+    drawHealthBars(context){
+       if(gameState.practiceMode.enabled) this.practiceModeHealthBar();
         this.drawFrame(context, 'health-bar', 31, 20);
         this.drawFrame(context, KO_ANIMATION[this.koFrame], 176, 18 - this.koFrame);
         this.drawFrame(context, 'health-bar', 353, 20,-1);
@@ -765,7 +787,7 @@ drawCredits(context){
             
             if (this.time < this.timeCount - 5) {
                 if (this.gameIn === true) {
-                    
+                    if(gameState.practiceMode.infiniteTime) this.time = 84;
                     this.drawHealthBars(context);
                     this.updateSkill = true;
                     this.drawSkillBars(context);

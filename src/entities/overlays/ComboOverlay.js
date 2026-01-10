@@ -15,6 +15,9 @@ export class ComboOverlay {
 
             // reset expired combos
             if (f.comboCount > 0 && time.previous > (f.comboExpiresAt || 0)) {
+                console.log("resetting combo for fighter", i);
+                if(i === 0) gameState.fighters[i+1].resetHP = true;
+                else if(i === 1) gameState.fighters[i-1].resetHP = true;
                 f.comboCount = 0;
                 f.lastHitTime = 0;
                 f.comboExpiresAt = 0;

@@ -12,6 +12,7 @@ import { MainMenu } from './scenes/MainMenu.js';
 import { OptionsMenu } from './scenes/OptionsMenu.js';
 import { Disclaimer } from './scenes/Disclaimer.js';
 import { FpsCounter } from './entities/FpsCounter.js';
+import { PracticeBattleScene } from './scenes/PracticeBattlescene.js';
 
 const selectedCharacters = [
     { 
@@ -43,13 +44,17 @@ export class StreetFighterGame{
     constructor(){
         this.fpsCounter = new FpsCounter();
         
+        //Mainscenes
 //this.scene = new Intro(this);
-this.scene = new Disclaimer(this, selectedCharacters);
+//this.scene = new Disclaimer(this, selectedCharacters);
 //this.scene = new MainMenu(this);
 //this.scene = new OptionsMenu(this);
 //this.scene = new BattleScene(this, selectedCharacters);
 // this.scene = new CharacterSelect(this);
 // this.scene = new PrePostMatch(this, selectedCharacters);
+
+//practice mode scene
+this.scene = new PracticeBattleScene(this, selectedCharacters);
     }
 
     setScene(newScene) {

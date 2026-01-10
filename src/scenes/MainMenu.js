@@ -17,6 +17,7 @@ export class MainMenu {
     entities = [];
 
     constructor(game) {
+        gameState.practiceMode.enabled = false;
         this.game = game; // store reference to main game
         this.image = document.querySelector('img[alt="misc"]');
         this.flashAlpha = 0;
@@ -146,7 +147,8 @@ if(!this.introScreen.vsMode){
             } else if (this.introScreen.pointer.cursor === 1){
       
         } else if (this.introScreen.pointer.cursor === 2){
-            if(this.fade.done) this.game.setScene(new Intro(this.game));
+            gameState.practiceMode.enabled = true;
+            if(this.fade.done) this.game.setScene(new CharacterSelect(this.game));
    
         } else if (this.introScreen.pointer.cursor === 3){
     

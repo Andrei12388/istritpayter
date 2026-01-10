@@ -3,6 +3,7 @@ import { gameState } from "./gameState.js";
 
 export const createDefaultFighterState = (id) => ({
 id, 
+resetHP: false,
 score: 100,
 battles: 0,
 wins: 0,

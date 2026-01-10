@@ -51,4 +51,12 @@ export const gameState = {
     //for Gamepad Switch Player
     gamepadSwitchPlayer: true,
     FpsCounterEnable: false,
+
+    //for practice mode
+    practiceMode: {
+        enabled: false,
+        infiniteHealth: false,
+        infiniteSkill: false,
+        infiniteTime: false,
+    },
 };

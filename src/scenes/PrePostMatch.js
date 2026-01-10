@@ -11,6 +11,7 @@ import { gameState } from '../state/gameState.js';
 import { createDefaultFighterState } from '../state/fighterState.js';
 import { CharacterSelect } from './CharacterSelect.js';
 import { FadeEffect } from './utils/FadeEffect.js';
+import { PracticeBattleScene } from './PracticeBattlescene.js';
 
 
 
@@ -334,7 +335,8 @@ export class PrePostMatch {
             if(this.time === 8)this.handleFlash();
          if(this.time === 10 && gameState.gameScene === 'prematch') {
            
-            this.game.setScene(new BattleScene(this.game, this.selectedCharacters));
+            if(gameState.practiceMode.enabled)this.game.setScene(new PracticeBattleScene(this.game, this.selectedCharacters));
+            else this.game.setScene(new BattleScene(this.game, this.selectedCharacters));
          }else if(this.time === 10 && gameState.gameScene === 'postmatch'){
            
             this.game.setScene(new CharacterSelect(this.game));
