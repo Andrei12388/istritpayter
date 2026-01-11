@@ -13,6 +13,8 @@ export const gameState = {
       // createDefaultFighterState(FighterId.MALUPITON),
     //  createDefaultFighterState(FighterId.GOLEM),
     ],
+    inputEnable: false,
+
     gameScene: 'prematch',
     gameStarted: false,
     gamePlayerWinned: 'P1',
@@ -42,8 +44,8 @@ export const gameState = {
     shadowInvert: true,
     // for Enemy AI
     bot: {
-      player1: false,
-      player2: false,
+      player1: true,
+      player2: true,
     },
     // Onscreen controls settings
     buttonTransparency: 1, // 0 to 1
@@ -58,5 +60,9 @@ export const gameState = {
         infiniteHealth: false,
         infiniteSkill: false,
         infiniteTime: false,
+    },
+    pauseMenu: {
+      show: false,
+      pauseGame: false,
     },
 };

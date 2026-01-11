@@ -309,6 +309,7 @@ export class StatusBar {
     }
 
     updateTime(time,context){
+       
         //Move Big Image
         gameState.pauseFrameMove = Math.min(gameState.pauseFrameMove + 5, 10);
         this.hyperskillframe += Math.trunc((1 * 60) * time.secondsPassed);
@@ -728,6 +729,33 @@ drawCredits(context){
         if(gameState.fighters[1].wins === 1) this.drawFrame(context, 'win', 207, 2);
     }
 
+    drawMenu(context, time){
+            const menu = {
+                x: 72,
+                y: 80,
+                width: 240,
+                height: 110,
+                strokeWidth: 3,
+            }
+            //Upper Part of the pause Menu
+                 context.fillStyle = 'rgb(12, 2, 82)';
+                  context.fillRect(menu.x, menu.y - 30, menu.width, menu.height-90);
+    
+                  context.strokeStyle = "yellow";
+                  context.lineWidth = menu.strokeWidth;
+                  context.strokeRect(menu.x, menu.y - 30, menu.width, menu.height-90);
+    
+            //lower Part of the pause Menu
+                  context.fillStyle = 'rgb(12, 2, 82)';
+                  context.fillRect(menu.x, menu.y, menu.width, menu.height);
+    
+                  context.strokeStyle = "yellow";
+                  context.lineWidth = menu.strokeWidth;
+                  context.strokeRect(menu.x, menu.y, menu.width, menu.height);
+                 
+    }
+    
+
     draw(context, time){
         
         if(this.time===this.timeCount - 1 && this.soundEnable){
@@ -782,6 +810,7 @@ drawCredits(context){
             
             if (this.time < this.timeCount - 5) {
                 if (this.gameIn === true) {
+                    gameState.inputEnable = true;
                     if(gameState.practiceMode.infiniteTime) this.time = 84;
                     this.drawHealthBars(context);
                     this.updateSkill = true;
@@ -789,9 +818,18 @@ drawCredits(context){
                     this.drawWins(context);
                     this.drawNameTags(context);
                     this.drawTime(context);
+                    console.log(this.gameIn);
+                    if(gameState.pauseMenu.show){
+                        
+                      this.music.pause();
+                       context.fillStyle = 'rgba(0, 0, 0, 0.60)';
+                        context.fillRect(0, 0, 400, 400);
+                       
+                    } else this.music.play();
                     this.enemyStart = true;
                 } else if (this.gameIn === false) {
                     this.enemyStart = false;
+                    gameState.inputEnable = false;
                 }
             } else if (this.time > this.timeCount - 4) {
                 this.drawFrame(context, 'round', 150, 103);
@@ -808,6 +846,7 @@ drawCredits(context){
             this.drawFightOver(context);
         }
         if(this.flashScreen)this.drawFlash(context, time);
+         this.drawMenu(context, time);
       
         }
 }

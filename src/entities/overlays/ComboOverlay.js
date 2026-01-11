@@ -39,6 +39,7 @@ export class ComboOverlay {
     }
 
     draw(context, camera) {
+        if(gameState.pauseMenu.pauseGame) return;
         const screenY = 70;
 
         for (let i = 0; i < this.fighters.length; i++) {

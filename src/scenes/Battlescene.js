@@ -31,6 +31,8 @@ import { CharacterSelect } from "./CharacterSelect.js";
 import { PrePostMatch } from "./PrePostMatch.js";
 import { FadeEffect } from "./utils/FadeEffect.js";
 import { finalStage } from "../entities/stage/finalStage.js";
+import { Control } from "../constants/control.js";
+import * as control from '../inputHandler.js'; 
 
 
 
@@ -68,6 +70,9 @@ export class BattleScene {
         gameState.fighters[1].hitPoints = HEALTH_MAX_HIT_POINTS;
 
         this.fade = new FadeEffect({ color: 'white', speed: 0.005 });
+
+        this.soundSelect = document.querySelector('audio#sound-select');
+        this.soundChoose = document.querySelector('audio#sound-choose');
 
         this.entities = new EntityList();
         this.entitiesBackground = new EntityList();
@@ -362,27 +367,50 @@ handleFlash() {
     }
 
     updateFighters(time, context) {
-        if (this.paused) {
-            // Optional: still draw overlays like pause text
-            return;
+    
+            for (const fighter of this.fighters) {
+             const startPressed = control.isControlPressed(fighter.playerId, Control.START);
+            const selectPressed = control.isControlPressed(fighter.playerId, Control.SELECT);
+    
+            
+                if(gameState.inputEnable){
+                    console.log("Game In");
+                    pollControl(time, fighter.playerId, FighterDirection);
+                    if (!this.keyPressed) this.keyPressed = { start: false, select: false };
+            if (startPressed && !this.keyPressed.start && gameState.buttonHold) {
+                        playSound(this.soundSelect, 1);
+                        this.keyPressed.start = true;
+                        gameState.pauseMenu.pauseGame = !gameState.pauseMenu.pauseGame;
+                        gameState.pauseMenu.show = !gameState.pauseMenu.show;
+                        gameState.buttonHold = false;
+                       
+                    }
+                    //reset button pressed
+                     if (!startPressed) this.keyPressed.start = false;
+                    if (!selectPressed) this.keyPressed.select = false;
+                }
+            
+    
+            if (this.paused) {
+                // Optional: still draw overlays like pause text
+                return;
+            }
+        
+        
+    
+                    // Let AI control fighter 1 (index 1)
+        if(this.statsBar.enemyStart === true){
+            if(gameState.bot.player2) this.enemyAI.update(time); 
+            if(gameState.bot.player1) this.enemyAI2.update(time);
         }
-    // Let AI control fighter 1 (index 1)
-    if(this.statsBar.enemyStart === true){
-        if(gameState.bot.player2) this.enemyAI.update(time); 
-        if(gameState.bot.player1) this.enemyAI2.update(time);
-    }
-   
-
-    for (const fighter of this.fighters) {
-        pollControl(time, fighter.playerId, FighterDirection);
-
-        if (time.previous < this.hurtTimer) {
-            fighter.updateHurtShake(time, this.hurtTimer);
-        } else {
-            fighter.update(time, context, this.camera);
+    
+            if (time.previous < this.hurtTimer) {
+                fighter.updateHurtShake(time, this.hurtTimer);
+            } else {
+                fighter.update(time, context, this.camera);
+            }
         }
     }
-}
 
     updateShadows(time, context){
         for (const shadow of this.shadows){
@@ -421,12 +449,10 @@ handleFlash() {
         this.updateSpriteEntity(scaledTime, context);
         this.updateFighters(scaledTime, context);
         this.updateShadows(scaledTime, context);
+         if(gameState.pauseMenu.pauseGame) return;
         this.stage.update(scaledTime);
         this.entities.update(scaledTime, context, this.camera);
-        // Ensure any foreground entities (effects such as camera shakes / ground splashes)
-        // are updated too — they were not being updated previously which caused
-        // EffectSplash-derived entities (e.g. GroundShakeSplash) to never advance
-        // their animationFrame and therefore not render correctly.
+        
         this.entitiesBackground.update(scaledTime, context, this.camera);
         this.entitiesForeground.update(scaledTime, context, this.camera);
         this.camera.update(scaledTime, context);
@@ -704,6 +730,10 @@ winFlash(time){
         this.drawOverlays(context);
          this.WinCondition({previous: performance.now()});
         this.fade.draw(context, 400, 400);
+         //Show when Paused
+                if (gameState.pauseMenu.pauseGame) { 
+                    this.paused = true;
+                    }
        
     }
 }

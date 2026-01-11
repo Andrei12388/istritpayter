@@ -1104,7 +1104,6 @@ handleHeavyKickState(){
             this.changeState(FighterState.HEAVY_KICK);
         } else if(control.isSelect(this.playerId)){
             this.changeState(FighterState.KNOCKUP);
-
         } else if(gameState.fighters[this.playerId].dead === "dead"){
             console.log("Dead State");
              this.changeState(FighterState.DEATH);

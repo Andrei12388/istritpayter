@@ -17,7 +17,6 @@ import { payatasStage } from "../entities/stage/payatasStage.js";
 import { pasayStage } from "../entities/stage/pasayStage.js";
 import { boholStage } from "../entities/stage/boholStage.js";
 
-
 import { EntityList } from "../EntityList.js";
 import { registerKeyboardEvents, registerScreenButtonEvents, unregisterKeyboardEvents, unregisterScreenButtonEvents, heldKeys, pressedKeys } from "../inputHandler.js";
 import { playSound, stopSound } from "../soundHandler.js";
@@ -31,6 +30,8 @@ import { CharacterSelect } from "./CharacterSelect.js";
 import { PrePostMatch } from "./PrePostMatch.js";
 import { FadeEffect } from "./utils/FadeEffect.js";
 import { finalStage } from "../entities/stage/finalStage.js";
+import { Control } from "../constants/control.js";
+import * as control from '../inputHandler.js'; 
 
 
 
@@ -370,19 +371,36 @@ handleFlash() {
     }
 
     updateFighters(time, context) {
+
+        for (const fighter of this.fighters) {
+         const startPressed = control.isControlPressed(fighter.playerId, Control.START);
+        const selectPressed = control.isControlPressed(fighter.playerId, Control.SELECT);
+
+        pollControl(time, fighter.playerId, FighterDirection);
+
+        if (!this.keyPressed) this.keyPressed = { start: false, select: false };
+        if (startPressed && !this.keyPressed.start && gameState.buttonHold) {
+                    this.keyPressed.start = true;
+                    gameState.pauseMenu.pauseGame = !gameState.pauseMenu.pauseGame;
+                    gameState.pauseMenu.show = !gameState.pauseMenu.show;
+                    gameState.buttonHold = false;
+                }
+                //reset button pressed
+                 if (!startPressed) this.keyPressed.start = false;
+                if (!selectPressed) this.keyPressed.select = false;
+
         if (this.paused) {
             // Optional: still draw overlays like pause text
             return;
         }
-    // Let AI control fighter 1 (index 1)
+    
+    
+
+                // Let AI control fighter 1 (index 1)
     if(this.statsBar.enemyStart === true){
         if(gameState.bot.player2) this.enemyAI.update(time); 
         if(gameState.bot.player1) this.enemyAI2.update(time);
     }
-   
-
-    for (const fighter of this.fighters) {
-        pollControl(time, fighter.playerId, FighterDirection);
 
         if (time.previous < this.hurtTimer) {
             fighter.updateHurtShake(time, this.hurtTimer);
@@ -713,6 +731,11 @@ winFlash(time){
         this.drawOverlays(context);
         this.WinCondition({previous: performance.now()});
         this.fade.draw(context, 400, 400);
+
+        //Show when Paused
+        if (gameState.pauseMenu.pauseGame) { 
+            this.paused = true;
+            }
        
     }
 }
