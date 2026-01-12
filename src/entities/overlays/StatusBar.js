@@ -78,8 +78,8 @@ export class StatusBar {
         this.useFlashFrames = false;
         this.music.loop = true;
         this.music.volume = 0.6;
-        
-
+        this.fade = new FadeEffect({ color: 'black', speed: 0.1, maxAlpha: 1 });
+        this.hyperskillframeAccumulator = 0;
         this.healthBars = [{
             timer: 0,
             hitPoints: HEALTH_MAX_HIT_POINTS,
@@ -100,6 +100,7 @@ export class StatusBar {
         this.koAnimationTimer = 0;
         
         this.frames = new Map([
+            ['pointer', [498,7,26,18]],
 
             ['health-bar', [16,18, 145, 11]],
             ['skill-bar', [222,157, 72, 9]],
@@ -234,6 +235,9 @@ export class StatusBar {
             ['score-@', [17,113, 10, 10]],
             ['score-#', [41,89, 10, 10]], 
             ['score-!', [17,89, 10, 10]],
+            ['score-?', [197,101, 10, 10]],
+            ['score-(', [101,89, 10, 10]],
+            ['score-)', [111,89, 10, 10]],
             ['score- ', [105,54, 18, 12]], 
 
             //Name tags Alphabet
@@ -308,15 +312,23 @@ export class StatusBar {
         this.music.loop = true;
         this.music.volume = 0.6;
         console.log('Statsbar reset');
+        this.hyperskillframeAccumulator = 0;
     }
 
     updateTime(time,context){
        
         //Move Big Image
         gameState.pauseFrameMove = Math.min(gameState.pauseFrameMove + 5, 10);
-        this.hyperskillframe += Math.trunc((1 * 60) * time.secondsPassed);
+        
+        // Accumulate hyperskill frame with proper delta time handling
+        this.hyperskillframeAccumulator += (1 * 60) * time.secondsPassed;
+        if (this.hyperskillframeAccumulator >= 1) {
+            this.hyperskillframe += Math.floor(this.hyperskillframeAccumulator);
+            this.hyperskillframeAccumulator -= Math.floor(this.hyperskillframeAccumulator);
+            if (this.hyperskillframe >= 19) this.hyperskillframe = 1;
+        }
+        
         gameState.pauseTimer = Math.max(gameState.pauseTimer - (0.20 * 60) * time.secondsPassed, 0);
-        if(this.hyperskillframe >= 19) this.hyperskillframe = 1;
        // console.log(gameState.pauseFrameMove);
         if(time.previous > this.timeTimer + TIME_DELAY + this.timerDelay){
             if(!gameState.pause)this.time -=1;
@@ -739,6 +751,7 @@ drawCredits(context){
     }
 
     drawMenu(context, time){
+        if(gameState.pauseMenu.confirmSelection) return;
             const menu = {
                 x: 72,
                 y: 80,
@@ -778,6 +791,39 @@ drawCredits(context){
                   
                   if(gameState.pauseMenu.selectPosition.y > 4) gameState.pauseMenu.selectPosition.y = 0;
                   this.drawMenuStroke(context, menu.x + 15 + gameState.pauseMenu.selectPosition.x, menu.y + 12 + gameState.pauseMenu.selectPosition.y * 15, menu.width - 30, 15, 1);
+    }
+
+    //confirm selection drawmenu
+    drawConfirmSelection(context, time){
+        if(!gameState.pauseMenu.confirmSelection) return;
+        const confirmMenu = {
+                x: 72,
+                y: 115,
+                width: 240,
+                height: 110,
+                strokeWidth: 3,
+            }
+
+            //Upper Part of the pause Menu
+                 context.fillStyle = 'rgb(12, 2, 82)';
+                  context.fillRect(confirmMenu.x, confirmMenu.y - 30, confirmMenu.width, confirmMenu.height-90);
+    
+                  context.strokeStyle = "yellow";
+                  context.lineWidth = confirmMenu.strokeWidth;
+                  context.strokeRect(confirmMenu.x, confirmMenu.y - 30, confirmMenu.width, confirmMenu.height-90);
+            //lower Part of the pause Menu
+                  context.fillStyle = 'rgb(12, 2, 82)';
+                  context.fillRect(confirmMenu.x, confirmMenu.y, confirmMenu.width, confirmMenu.height-90);
+    
+                  context.strokeStyle = "yellow";
+                  context.lineWidth = confirmMenu.strokeWidth;
+                  context.strokeRect(confirmMenu.x, confirmMenu.y, confirmMenu.width, confirmMenu.height-90);
+                  this.drawScoreLabel(context, `CONFIRM ${gameState.pauseMenu.confirmText}?`, confirmMenu.x + gameState.pauseMenu.selectPosition.x, confirmMenu.y - 25);
+                  this.drawScoreLabel(context, 'NO', confirmMenu.x + 65, confirmMenu.y + 5);
+                  this.drawScoreLabel(context, 'YES', confirmMenu.x + 140, confirmMenu.y + 5);
+                  if(gameState.pauseMenu.selectPosition.y > 1) gameState.pauseMenu.selectPosition.y = 0;
+                this.drawFrame(context, 'pointer', confirmMenu.x + 35 + gameState.pauseMenu.selectPosition.y * 75, confirmMenu.y + 3);
+                  
     }
      
     
@@ -853,7 +899,7 @@ drawCredits(context){
                         context.fillRect(0, 0, 400, 400);
                         this.drawMenu(context, time);
                        
-                    } else this.music.play();
+                    } 
                     this.enemyStart = true;
                 } else if (this.gameIn === false) {
                     this.enemyStart = false;
@@ -874,7 +920,8 @@ drawCredits(context){
             this.drawFightOver(context);
         }
         if(this.flashScreen)this.drawFlash(context, time);
-         this.drawMenu(context, time);
+       //  this.drawMenu(context, time);
+         this.drawConfirmSelection(context, time);
       
         }
 }

@@ -44,8 +44,8 @@ export const gameState = {
     shadowInvert: true,
     // for Enemy AI
     bot: {
-      player1: true,
-      player2: true,
+      player1: false,
+      player2: false,
     },
     // Onscreen controls settings
     buttonTransparency: 1, // 0 to 1
@@ -63,6 +63,9 @@ export const gameState = {
     },
     pauseMenu: {
       show: false,
+      selectedMenu: 'resume',
+      confirmText: 'exit',
+      confirmSelection: false,
       pauseGame: false,
       select: false,
       selectPosition:{

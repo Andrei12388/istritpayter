@@ -45,6 +45,9 @@ export class PracticeBattleScene {
     enemyAI = undefined; 
     paused = false;
     timeScale = 1;
+    sceneChangePending = null;
+    transitionCountdown = 0;
+    sceneChangeInfo = null;
 
     constructor(game, selectedCharacters){
          gameState.pause = false;
@@ -53,11 +56,15 @@ export class PracticeBattleScene {
         gameState.practiceMode.infiniteHealth = true;
         gameState.practiceMode.infiniteSkill = true;
         gameState.practiceMode.infiniteTime = true;
+
         this.game = game;
+
         gameState.characterSelectMode = false;
          gameState.pauseMenu.pauseGame = false;
         gameState.pauseMenu.selectPosition.y = 0;
+        gameState.pauseMenu.selectPosition.x = 0;
         gameState.pauseMenu.show = false;
+        gameState.pauseMenu.confirmSelection = false;
 
          controlHistory[0].time = 0;
          controlHistory[1].time = 0;
@@ -385,7 +392,7 @@ handleFlash() {
                  const startPressed = control.isControlPressed(fighter.playerId, Control.START);
                 const selectPressed = control.isControlPressed(fighter.playerId, Control.SELECT);
                     
-                
+                    console.log(gameState.pauseMenu.selectedMenu);
                     if(gameState.inputEnable){
                         
                         pollControl(time, fighter.playerId, FighterDirection);
@@ -398,18 +405,59 @@ handleFlash() {
                             //Reset buttonholds
                             gameState.buttonHold = false;
                             this.keyPressed.start = true;
-                             if(gameState.pauseMenu.selectPosition.y === 0 && gameState.pauseMenu.pauseGame && gameState.pauseMenu.select){
+                            if(gameState.pauseMenu.confirmSelection && gameState.pauseMenu.selectPosition.y === 0){
+                                gameState.pauseMenu.confirmSelection = false;
+                                gameState.pauseMenu.selectPosition.x = 0;
+                                return;
+                            }
+                             if(gameState.pauseMenu.selectPosition.y === 0 && gameState.pauseMenu.pauseGame && gameState.pauseMenu.select && !gameState.pauseMenu.confirmSelection){
                         gameState.pauseMenu.pauseGame = false;
+                        this.statsBar.music.play();
                         gameState.pauseMenu.show = false;
                         gameState.pauseMenu.select = false;
+                        
                         return;
                       }else if(gameState.pauseMenu.selectPosition.y === 1 && gameState.pauseMenu.select){
-                            console.log('Change Character');
-                            this.game.setScene(new PrePostMatch(this.game, this.selectedCharacters));
+                           console.log('Change Character');
+                           
+                            if(!gameState.pauseMenu.confirmSelection) gameState.pauseMenu.selectedMenu = 'changeCharacter';
+                            if(gameState.pauseMenu.confirmSelection && gameState.pauseMenu.selectedMenu === 'changeCharacter'){
+                                 //transition countdown before set scene
+                                this.transitionCountdown = 4;
+                                this.handleFlash();
+                                gameState.pauseMenu.pauseGame = false;
+                                gameState.pauseMenu.confirmSelection = false;
+                                gameState.pauseMenu.show = false;
+                                gameState.pauseMenu.select = false;
+                                this.sceneChangeInfo = { SceneClass: CharacterSelect, args: [this.game, this.selectedCharacters] };
+                                this.statsBar.music.pause();
+                                return;
+                            }else if(gameState.pauseMenu.confirmSelection && gameState.pauseMenu.selectedMenu === 'exit'){
+                                //transition countdown before set scene
+                                this.transitionCountdown = 4;
+                                this.handleFlash();
+                                gameState.pauseMenu.pauseGame = false;
+                                gameState.pauseMenu.confirmSelection = false;
+                                gameState.pauseMenu.show = false;
+                                gameState.pauseMenu.select = false;
+                                this.statsBar.music.pause();
+                                this.sceneChangeInfo = { SceneClass: MainMenu, args: [this.game, this.selectedCharacters] };
+                                return;
+                            }
+                            gameState.pauseMenu.confirmText = 'REPICK';
+                            gameState.pauseMenu.selectPosition.y = 0;
+                            gameState.pauseMenu.selectPosition.x = 35;
+                             gameState.pauseMenu.confirmSelection = true;
+                           
                         } 
                       else if(gameState.pauseMenu.selectPosition.y === 4 && gameState.pauseMenu.select){
                             console.log('Quitting to main menu');
-                            this.game.setScene(new MainMenu(this.game, this.selectedCharacters));
+                             gameState.pauseMenu.selectedMenu = 'exit';
+                             gameState.pauseMenu.confirmText = 'EXIT';
+                            gameState.pauseMenu.confirmSelection = true;
+                            gameState.pauseMenu.selectPosition.y = 0;
+                            gameState.pauseMenu.selectPosition.x = 45;
+                            
                         } 
                             if(!gameState.pauseMenu.pauseGame){
                                 console.log("pausing game");
@@ -488,6 +536,20 @@ handleFlash() {
         }
 
         this.fade.update();
+        
+        // Handle countdown transition
+        if (this.transitionCountdown > 0) {
+            this.transitionCountdown -= time.secondsPassed;
+            gameState.inputEnable = false;
+            if (this.transitionCountdown <= 0 && this.sceneChangeInfo) {
+                // Only create the scene instance when countdown completes
+                const newScene = new this.sceneChangeInfo.SceneClass(...this.sceneChangeInfo.args);
+                this.game.setScene(newScene);
+                console.log('Scene changed to:', newScene.constructor.name);
+                this.sceneChangeInfo = null;
+            }
+        }
+        
         const scaledTime = {
             ...time,
             secondsPassed: time.secondsPassed * this.timeScale
