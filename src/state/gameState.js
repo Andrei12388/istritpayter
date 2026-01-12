@@ -64,5 +64,10 @@ export const gameState = {
     pauseMenu: {
       show: false,
       pauseGame: false,
+      select: false,
+      selectPosition:{
+        x: 0,
+        y: 0,
+      }
     },
 };

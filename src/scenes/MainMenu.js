@@ -145,7 +145,7 @@ if(!this.introScreen.vsMode){
                
                  
             } else if (this.introScreen.pointer.cursor === 1){
-      
+                
         } else if (this.introScreen.pointer.cursor === 2){
             gameState.practiceMode.enabled = true;
             if(this.fade.done) this.game.setScene(new CharacterSelect(this.game));
@@ -160,17 +160,19 @@ if(!this.introScreen.vsMode){
             gameState.bot.player1 = false;
             gameState.bot.player2 = false;
                 if(this.fade.done) this.game.setScene(new CharacterSelect(this.game));
-               
+               gameState.practiceMode.enabled = false;
                  console.log("PVP Selected");
             } else if (this.introScreen.pointer.cursor === 1){
                  gameState.bot.player1 = false;
             gameState.bot.player2 = true;
                if(this.fade.done) this.game.setScene(new CharacterSelect(this.game));
+               gameState.practiceMode.enabled = false;
                 console.log("P VS Cpu selected");
         } else if (this.introScreen.pointer.cursor === 2){
              gameState.bot.player1 = true;
             gameState.bot.player2 = true;
           if(this.fade.done) this.game.setScene(new CharacterSelect(this.game));
+          gameState.practiceMode.enabled = false;
                 console.log("CPU vs CPU Selected");
         } 
 }

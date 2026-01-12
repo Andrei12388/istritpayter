@@ -33,6 +33,7 @@ import { FadeEffect } from "./utils/FadeEffect.js";
 import { finalStage } from "../entities/stage/finalStage.js";
 import { Control } from "../constants/control.js";
 import * as control from '../inputHandler.js'; 
+import { MainMenu } from "./MainMenu.js";
 
 
 
@@ -47,8 +48,15 @@ export class BattleScene {
     timeScale = 1;
 
     constructor(game, selectedCharacters){
+        gameState.practiceMode.enabled = false;
+        gameState.practiceMode.infiniteHealth = false;
+        gameState.practiceMode.infiniteSkill = false;
+        gameState.practiceMode.infiniteTime = false;
         this.game = game;
         gameState.characterSelectMode = false;
+        gameState.pauseMenu.pauseGame = false;
+        gameState.pauseMenu.selectPosition.y = 0;
+        gameState.pauseMenu.show = false;
          controlHistory[0].time = 0;
          controlHistory[1].time = 0;
         this.image = document.querySelector('img[alt="misc"]');
@@ -371,21 +379,52 @@ handleFlash() {
             for (const fighter of this.fighters) {
              const startPressed = control.isControlPressed(fighter.playerId, Control.START);
             const selectPressed = control.isControlPressed(fighter.playerId, Control.SELECT);
-    
+                
             
                 if(gameState.inputEnable){
-                    console.log("Game In");
+                    
                     pollControl(time, fighter.playerId, FighterDirection);
                     if (!this.keyPressed) this.keyPressed = { start: false, select: false };
             if (startPressed && !this.keyPressed.start && gameState.buttonHold) {
+                        gameState.pauseMenu.select = true;
+            
+                        gameState.fighters[fighter.playerId].pause = true;
                         playSound(this.soundSelect, 1);
-                        this.keyPressed.start = true;
-                        gameState.pauseMenu.pauseGame = !gameState.pauseMenu.pauseGame;
-                        gameState.pauseMenu.show = !gameState.pauseMenu.show;
+                        //Reset buttonholds
                         gameState.buttonHold = false;
+                        this.keyPressed.start = true;
+                         if(gameState.pauseMenu.selectPosition.y === 0 && gameState.pauseMenu.pauseGame && gameState.pauseMenu.select){
+                    gameState.pauseMenu.pauseGame = false;
+                    gameState.pauseMenu.show = false;
+                    gameState.pauseMenu.select = false;
+                    return;
+                  }else if(gameState.pauseMenu.selectPosition.y === 1 && gameState.pauseMenu.select){
+                        console.log('Change Character');
+                        this.game.setScene(new PrePostMatch(this.game, this.selectedCharacters));
+                    } 
+                  else if(gameState.pauseMenu.selectPosition.y === 4 && gameState.pauseMenu.select){
+                        console.log('Quitting to main menu');
+                        this.game.setScene(new MainMenu(this.game, this.selectedCharacters));
+                    } 
+                        if(!gameState.pauseMenu.pauseGame){
+                            console.log("pausing game");
+                            gameState.pauseMenu.pauseGame = true;
+                            gameState.pauseMenu.show = true;
+                        }
+                        
+                  
                        
                     }
+                    if( selectPressed && !this.keyPressed.select && gameState.buttonHold) {
+                        playSound(this.soundChoose, 1);
+                        gameState.pauseMenu.selectPosition.y += 1;
+                        //Reset buttonholds
+                        this.keyPressed.select = true;
+                        gameState.buttonHold = false;
+                    }
                     //reset button pressed
+                    gameState.pauseMenu.select = false;
+
                      if (!startPressed) this.keyPressed.start = false;
                     if (!selectPressed) this.keyPressed.select = false;
                 }
@@ -393,8 +432,10 @@ handleFlash() {
     
             if (this.paused) {
                 // Optional: still draw overlays like pause text
-                return;
+               
+                continue;
             }
+            
         
         
     
@@ -427,7 +468,7 @@ handleFlash() {
     
 
     update(time, context){
-        
+     
         //camera shake
         // trigger a camera shake based on attack strength
         try {
@@ -450,6 +491,8 @@ handleFlash() {
         this.updateFighters(scaledTime, context);
         this.updateShadows(scaledTime, context);
          if(gameState.pauseMenu.pauseGame) return;
+          gameState.fighters[0].pause = false;
+          gameState.fighters[1].pause = false;
         this.stage.update(scaledTime);
         this.entities.update(scaledTime, context, this.camera);
         

@@ -90,6 +90,8 @@ export const controls = [
             [Control.HEAVY_PUNCH]: 'KeyK',
             [Control.LIGHT_KICK]: 'KeyN',
             [Control.HEAVY_KICK]: 'KeyM',
+            [Control.START]: 'Enter',
+            [Control.SELECT]: 'ShiftRight',
             
         },
        

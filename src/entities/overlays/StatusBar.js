@@ -729,6 +729,12 @@ drawCredits(context){
         if(gameState.fighters[1].wins === 1) this.drawFrame(context, 'win', 207, 2);
     }
 
+   drawMenuStroke(context, x, y, width, height, strokeWidth){
+        context.strokeStyle = "white";
+        context.lineWidth = strokeWidth;
+        context.strokeRect(x, y, width, height);
+    }
+
     drawMenu(context, time){
             const menu = {
                 x: 72,
@@ -737,6 +743,11 @@ drawCredits(context){
                 height: 110,
                 strokeWidth: 3,
             }
+            const nameP2 = gameState.fighters[1].id.toUpperCase();
+            const nameP1 = gameState.fighters[0].id.toUpperCase();
+            const stringp1 = String(nameP1);
+            const stringp2 = String(nameP2);
+            
             //Upper Part of the pause Menu
                  context.fillStyle = 'rgb(12, 2, 82)';
                   context.fillRect(menu.x, menu.y - 30, menu.width, menu.height-90);
@@ -752,12 +763,24 @@ drawCredits(context){
                   context.strokeStyle = "yellow";
                   context.lineWidth = menu.strokeWidth;
                   context.strokeRect(menu.x, menu.y, menu.width, menu.height);
-                 
+                  
+                //pAUSE menu options
+                  if(gameState.fighters[1].pause)this.drawScoreLabel(context, 'P2 PAUSE', menu.x + 75, menu.y - 25);
+                  else this.drawScoreLabel(context, 'P1 PAUSE', menu.x + 75, menu.y - 25);
+                  this.drawScoreLabel(context, 'RESUME', menu.x + 20, menu.y + 15);
+                  this.drawScoreLabel(context, 'CHANGE PAYTER', menu.x + 20, menu.y + 30);
+                  this.drawScoreLabel(context, `MOVE LIST`, menu.x + 20, menu.y + 45);
+                  this.drawScoreLabel(context, 'OPTIONS', menu.x + 20, menu.y + 60);
+                  this.drawScoreLabel(context, 'QUIT', menu.x + 20, menu.y + 75);
+                  
+                  if(gameState.pauseMenu.selectPosition.y > 4) gameState.pauseMenu.selectPosition.y = 0;
+                  this.drawMenuStroke(context, menu.x + 15 + gameState.pauseMenu.selectPosition.x, menu.y + 12 + gameState.pauseMenu.selectPosition.y * 15, menu.width - 30, 15, 1);
     }
+     
     
 
     draw(context, time){
-        
+       
         if(this.time===this.timeCount - 1 && this.soundEnable){
              console.log('Round 1');
              gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;
@@ -818,12 +841,14 @@ drawCredits(context){
                     this.drawWins(context);
                     this.drawNameTags(context);
                     this.drawTime(context);
-                    console.log(this.gameIn);
+                   
+                    
                     if(gameState.pauseMenu.show){
                         
                       this.music.pause();
                        context.fillStyle = 'rgba(0, 0, 0, 0.60)';
                         context.fillRect(0, 0, 400, 400);
+                        this.drawMenu(context, time);
                        
                     } else this.music.play();
                     this.enemyStart = true;
@@ -846,7 +871,7 @@ drawCredits(context){
             this.drawFightOver(context);
         }
         if(this.flashScreen)this.drawFlash(context, time);
-         this.drawMenu(context, time);
+       //  this.drawMenu(context, time);
       
         }
 }
