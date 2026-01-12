@@ -48,6 +48,7 @@ export class BattleScene {
     timeScale = 1;
 
     constructor(game, selectedCharacters){
+        gameState.pause = false;
         gameState.practiceMode.enabled = false;
         gameState.practiceMode.infiniteHealth = false;
         gameState.practiceMode.infiniteSkill = false;
@@ -415,7 +416,7 @@ handleFlash() {
                   
                        
                     }
-                    if( selectPressed && !this.keyPressed.select && gameState.buttonHold) {
+                    if( selectPressed && !this.keyPressed.select && gameState.buttonHold && gameState.pauseMenu.pauseGame) {
                         playSound(this.soundChoose, 1);
                         gameState.pauseMenu.selectPosition.y += 1;
                         //Reset buttonholds

@@ -27,6 +27,8 @@ export class StatusBar {
         this.soundSkillAdd = document.querySelector('audio#super-skill-add');
         this.soundSkillMax = document.querySelector('audio#super-skill-max');
 
+        gameState.inputEnable = false;
+
         gameState.fighters[0].wins = 0;
         gameState.fighters[1].wins = 0;
         gameState.rounds = 0;
@@ -732,6 +734,7 @@ drawCredits(context){
    drawMenuStroke(context, x, y, width, height, strokeWidth){
         context.strokeStyle = "white";
         context.lineWidth = strokeWidth;
+        context.borderRadius = 5;
         context.strokeRect(x, y, width, height);
     }
 
@@ -846,7 +849,7 @@ drawCredits(context){
                     if(gameState.pauseMenu.show){
                         
                       this.music.pause();
-                       context.fillStyle = 'rgba(0, 0, 0, 0.60)';
+                       context.fillStyle = 'rgba(0, 0, 0, 0.30)';
                         context.fillRect(0, 0, 400, 400);
                         this.drawMenu(context, time);
                        
@@ -871,7 +874,7 @@ drawCredits(context){
             this.drawFightOver(context);
         }
         if(this.flashScreen)this.drawFlash(context, time);
-       //  this.drawMenu(context, time);
+         this.drawMenu(context, time);
       
         }
 }

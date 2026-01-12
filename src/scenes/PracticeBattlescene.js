@@ -47,7 +47,7 @@ export class PracticeBattleScene {
     timeScale = 1;
 
     constructor(game, selectedCharacters){
-
+         gameState.pause = false;
         console.log('Practice Battle Scene Initialized');
         gameState.practiceMode.enabled = true;
         gameState.practiceMode.infiniteHealth = true;
@@ -420,7 +420,7 @@ handleFlash() {
                       
                            
                         }
-                        if( selectPressed && !this.keyPressed.select && gameState.buttonHold) {
+                        if( selectPressed && !this.keyPressed.select && gameState.buttonHold && gameState.pauseMenu.pauseGame) {
                             playSound(this.soundChoose, 1);
                             gameState.pauseMenu.selectPosition.y += 1;
                             //Reset buttonholds
