@@ -63,6 +63,7 @@ export const gameState = {
     },
     pauseMenu: {
       show: false,
+      showMoveList: false,
       selectedMenu: 'resume',
       confirmText: 'exit',
       confirmSelection: false,

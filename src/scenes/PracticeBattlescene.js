@@ -397,6 +397,29 @@ handleFlash() {
                         
                         pollControl(time, fighter.playerId, FighterDirection);
                         if (!this.keyPressed) this.keyPressed = { start: false, select: false };
+                    if(gameState.pauseMenu.showMoveList){
+                            console.log('In Move List');
+                            if (startPressed && !this.keyPressed.start && gameState.buttonHold) {
+                                console.log('Exiting Move List');
+                                gameState.fighters[fighter.playerId].pause = true;
+                                gameState.pauseMenu.showMoveList = false;
+                                this.keyPressed.start = true;
+                                playSound(this.soundSelect, 1);
+                                gameState.buttonHold = false;
+                            }
+                             if (selectPressed && !this.keyPressed.select && gameState.buttonHold) {
+                                console.log('Page Next');
+                                this.statsBar.movelistPageIndex += 1;
+                                this.keyPressed.select = true;
+                                playSound(this.soundChoose, 1);
+                                gameState.buttonHold = false;gameState.buttonHold = false;
+                            }
+                            // SELECT button is handled by StatusBar.drawMoveList for pagination
+                            // Reset button pressed states
+                            if (!startPressed) this.keyPressed.start = false;
+                            if (!selectPressed) this.keyPressed.select = false;
+                            continue;
+                        }
                 if (startPressed && !this.keyPressed.start && gameState.buttonHold) {
                             gameState.pauseMenu.select = true;
                 
@@ -407,14 +430,18 @@ handleFlash() {
                             this.keyPressed.start = true;
                             if(gameState.pauseMenu.confirmSelection && gameState.pauseMenu.selectPosition.y === 0){
                                 gameState.pauseMenu.confirmSelection = false;
+                                gameState.pauseMenu.showMoveList = false;
                                 gameState.pauseMenu.selectPosition.x = 0;
                                 return;
                             }
                              if(gameState.pauseMenu.selectPosition.y === 0 && gameState.pauseMenu.pauseGame && gameState.pauseMenu.select && !gameState.pauseMenu.confirmSelection){
                         gameState.pauseMenu.pauseGame = false;
                         this.statsBar.music.play();
+                         this.statsBar.movelistPageIndex = 0;
                         gameState.pauseMenu.show = false;
                         gameState.pauseMenu.select = false;
+                        gameState.fighters[0].pause = false;
+                        gameState.fighters[1].pause = false;
                         
                         return;
                       }else if(gameState.pauseMenu.selectPosition.y === 1 && gameState.pauseMenu.select){
@@ -449,6 +476,14 @@ handleFlash() {
                             gameState.pauseMenu.selectPosition.x = 35;
                              gameState.pauseMenu.confirmSelection = true;
                            
+                        } else if(gameState.pauseMenu.selectPosition.y === 2 && gameState.pauseMenu.select){
+                            console.log('Showing Move List');
+                            this.statsBar.movelistPageIndex = 0;
+                             gameState.pauseMenu.selectedMenu = 'moveList';
+                             
+                             gameState.pauseMenu.showMoveList = true;
+                            
+                            
                         } 
                       else if(gameState.pauseMenu.selectPosition.y === 4 && gameState.pauseMenu.select){
                             console.log('Quitting to main menu');
@@ -468,7 +503,7 @@ handleFlash() {
                       
                            
                         }
-                        if( selectPressed && !this.keyPressed.select && gameState.buttonHold && gameState.pauseMenu.pauseGame) {
+                        if( selectPressed && !this.keyPressed.select && gameState.buttonHold && gameState.pauseMenu.pauseGame && !gameState.pauseMenu.showMoveList) {
                             playSound(this.soundChoose, 1);
                             gameState.pauseMenu.selectPosition.y += 1;
                             //Reset buttonholds

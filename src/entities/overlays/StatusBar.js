@@ -7,6 +7,10 @@ import { playSound, stopSound } from "../../soundHandler.js";
 import { gameState } from "../../state/gameState.js";
 import { drawFrame } from "../../utils/context.js";
 import { FadeEffect } from "../../scenes/utils/FadeEffect.js";
+import { GOLEM, MALUPITON } from "../../constants/movelist.js";
+import * as control from '../../inputHandler.js'; 
+import { Control } from "../../constants/control.js";
+
 
 
 export class StatusBar {
@@ -98,6 +102,9 @@ export class StatusBar {
 
         this.koFrame = 0;
         this.koAnimationTimer = 0;
+        
+        this.movelistPageIndex = 0;
+        this.movelistPageSize = 5;
         
         this.frames = new Map([
             ['pointer', [498,7,26,18]],
@@ -238,6 +245,11 @@ export class StatusBar {
             ['score-?', [197,101, 10, 10]],
             ['score-(', [101,89, 10, 10]],
             ['score-)', [111,89, 10, 10]],
+            ['score-.', [172,87, 10, 10]], 
+            ['score-:', [136,100, 10, 10]], 
+            ['score-,', [149,89, 10, 10]], 
+            ['score--', [161,89, 10, 10]], 
+            ['score-/', [185,89, 10, 10]], 
             ['score- ', [105,54, 18, 12]], 
 
             //Name tags Alphabet
@@ -257,6 +269,22 @@ export class StatusBar {
             //Character Names
             ['tag-malupiton', [15,56,83,9]],
             ['tag-golem', [17,206,47,9]],
+
+            //movelist icons
+            ['arrow-up', [534,70,16,19]],
+            ['arrow-down', [501,124,16,19]],
+            ['arrow-left', [530,126,21,15]],
+            ['arrow-right', [501,72,20,15]],
+
+            ['arrow-upRight', [501,44,17,16]],
+            ['arrow-upLeft', [532,98,18,16]],
+            ['arrow-downRight', [502,99,18,16]],
+            ['arrow-downLeft', [532,45,18,16]],
+
+            ['button-a', [498,151,23,21]],
+            ['button-b', [531,151,23,21]],
+            ['button-c', [498,179,23,21]],
+            ['button-d', [532,179,23,21]],
 
         ]);
 
@@ -313,6 +341,7 @@ export class StatusBar {
         this.music.volume = 0.6;
         console.log('Statsbar reset');
         this.hyperskillframeAccumulator = 0;
+        this.movelistPageIndex = 0;
     }
 
     updateTime(time,context){
@@ -752,6 +781,7 @@ drawCredits(context){
 
     drawMenu(context, time){
         if(gameState.pauseMenu.confirmSelection) return;
+          
             const menu = {
                 x: 72,
                 y: 80,
@@ -825,6 +855,84 @@ drawCredits(context){
                 this.drawFrame(context, 'pointer', confirmMenu.x + 35 + gameState.pauseMenu.selectPosition.y * 75, confirmMenu.y + 3);
                   
     }
+
+    drawMoveList(context, time){
+        const nameP2 = gameState.fighters[1].id.toUpperCase();
+        const nameP1 = gameState.fighters[0].id.toUpperCase();
+        
+        // Create mapping for character movesets
+        const characterMoves = {
+            'MALUPITON': MALUPITON,
+            'GOLEM': GOLEM,
+        };
+
+        let moveList = [];
+
+        const stringp1 = String(nameP1);
+        const stringp2 = String(nameP2);
+        const menu = {
+                x: 25,
+                y: 80,
+                width: 330,
+                height: 120,
+                strokeWidth: 3,
+            }
+        const movelistOffsets = {
+            placement: 130,
+            arrow:20,
+            button: 20,
+        }
+         //Upper Part of the Movelist
+                 context.fillStyle = 'rgb(12, 2, 82)';
+                  context.fillRect(menu.x, menu.y - 30, menu.width, menu.height-90);
+    
+                  context.strokeStyle = "yellow";
+                  context.lineWidth = menu.strokeWidth;
+                  context.strokeRect(menu.x, menu.y - 30, menu.width, menu.height-90);
+    
+            //lower Part of the Movelist
+                  context.fillStyle = 'rgb(12, 2, 82)';
+                  context.fillRect(menu.x, menu.y, menu.width, menu.height);
+    
+                  context.strokeStyle = "yellow";
+                  context.lineWidth = menu.strokeWidth;
+                  context.strokeRect(menu.x, menu.y, menu.width, menu.height);
+
+                  if(gameState.fighters[1].pause) this.drawScoreLabel(context, `MOVELIST (${nameP2})`, menu.x + 15, menu.y - 20);
+                  else if(gameState.fighters[0].pause) this.drawScoreLabel(context, `MOVELIST (${nameP1})`, menu.x + 15, menu.y - 20);
+                  
+                 if(gameState.fighters[0].pause) moveList = characterMoves[nameP1] || [];
+                 if(gameState.fighters[1].pause) moveList = characterMoves[nameP2] || [];
+
+                 if(this.movelistPageIndex < 0) this.movelistPageIndex = 0;
+                 const maxPageIndex = Math.floor((moveList.length - 1) / this.movelistPageSize);
+                 if(this.movelistPageIndex > maxPageIndex) this.movelistPageIndex = 0;
+                 
+                 // Calculate pagination
+                 const totalPages = Math.ceil(moveList.length / this.movelistPageSize);
+                 const startIdx = this.movelistPageIndex * this.movelistPageSize;
+                 const endIdx = Math.min(startIdx + this.movelistPageSize, moveList.length);
+                 const pagedMoves = moveList.slice(startIdx, endIdx);
+                 
+                 // Handle page navigation
+                 
+                  for(let moveIdx = 0; moveIdx < pagedMoves.length; moveIdx++){
+                      const move = pagedMoves[moveIdx];
+                      this.drawScoreLabel(context, move.name, menu.x + 15, menu.y + move.y + (moveIdx * 18));
+                      
+                      for(let inputIdx = 0; inputIdx < move.inputs.length; inputIdx++){
+                          const icon = move.inputs[inputIdx];
+                          const xOffset = moveIdx === 0 ? movelistOffsets.arrow : movelistOffsets.button;
+                          const xPosition = menu.x + 8 + movelistOffsets.placement + (inputIdx + 1) * xOffset;
+                          this.drawFrame(context, icon, xPosition, menu.y - 3 + move.y + (moveIdx * 18));
+                      }
+                  }
+                  
+                  // Draw page indicator
+                  if(totalPages > 1) {
+                      this.drawScoreLabel(context, `PAGE ${this.movelistPageIndex + 1}/${totalPages}`, menu.x + 220, menu.y + 105);
+                  }
+    }           
      
     
 
@@ -922,6 +1030,7 @@ drawCredits(context){
         if(this.flashScreen)this.drawFlash(context, time);
        //  this.drawMenu(context, time);
          this.drawConfirmSelection(context, time);
-      
+         if(gameState.pauseMenu.showMoveList)this.drawMoveList(context,time);
         }
-}
+    }
+    
