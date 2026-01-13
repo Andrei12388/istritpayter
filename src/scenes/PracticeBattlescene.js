@@ -52,6 +52,8 @@ export class PracticeBattleScene {
     constructor(game, selectedCharacters){
          gameState.pause = false;
         console.log('Practice Battle Scene Initialized');
+         gameState.bot.player1 = false;
+        gameState.bot.player2 = false;
         gameState.practiceMode.enabled = true;
         gameState.practiceMode.infiniteHealth = true;
         gameState.practiceMode.infiniteSkill = true;
