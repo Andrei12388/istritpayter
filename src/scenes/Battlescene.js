@@ -387,7 +387,7 @@ handleFlash() {
                      const startPressed = control.isControlPressed(fighter.playerId, Control.START);
                     const selectPressed = control.isControlPressed(fighter.playerId, Control.SELECT);
                         
-                        console.log(gameState.pauseMenu.selectedMenu);
+                      //  console.log(gameState.pauseMenu.selectedMenu);
                         if(gameState.inputEnable){
                             
                             pollControl(time, fighter.playerId, FighterDirection);

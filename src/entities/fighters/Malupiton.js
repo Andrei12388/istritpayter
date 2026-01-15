@@ -100,6 +100,16 @@ export class Malupiton extends Fighter {
             ['headbutt-2', [[[367, 970, 100, 59], [50,59]], PushBox.JUMP, HurtBox.JUMP]],
             ['headbutt-3', [[[477, 980, 116, 39], [58,37]], PushBox.JUMP, HurtBox.JUMP, [38,-25,20,15],]],
 
+            //Headbutt Up
+            ['headbutt-up-1', [[[277, 1052, 60, 89], [30,87]], PushBox.JUMP, HurtBox.JUMP]],
+            ['headbutt-up-2', [[[361, 1063, 88, 79], [44,77]], PushBox.JUMP, HurtBox.JUMP]],
+            ['headbutt-up-3', [[[459, 1058, 98, 74], [49,72]], PushBox.JUMP, HurtBox.JUMP, [38,-75,20,15],]],
+
+            //Headbutt Down
+            ['headbutt-down-1', [[[261, 1157, 98, 53], [49,51]], PushBox.JUMP, HurtBox.JUMP]],
+            ['headbutt-down-2', [[[367, 1156, 88, 63], [44,61]], PushBox.JUMP, HurtBox.JUMP]],
+            ['headbutt-down-3', [[[464, 1151, 102, 73], [51,71]], PushBox.JUMP, HurtBox.JUMP, [20,-30,20,15],]],
+
 
             //Jump first/Last frame
             ['jump-land', [[[269, 257,59,90],[29,88]], PushBox.IDLE, HurtBox.IDLE]],
@@ -348,6 +358,16 @@ export class Malupiton extends Fighter {
                 ['headbutt-3', 1000],
                 ['headbutt-3', FrameDelay.TRANSITION],
             ],
+            [FighterState.HEADBUTT_UP]:[
+                ['headbutt-up-1', 40],['headbutt-up-2', 40],
+                ['headbutt-up-3', 1000],
+                ['headbutt-up-3', FrameDelay.TRANSITION],
+            ],
+            [FighterState.HEADBUTT_DOWN]:[
+                ['headbutt-down-1', 40],['headbutt-down-2', 40],
+                ['headbutt-down-3', 1000],
+                ['headbutt-down-3', FrameDelay.TRANSITION],
+            ],
             
             [FighterState.HURT_HEAD_LIGHT]:[
                 ['hurt-face-1', FIGHTER_HURT_DELAY],['hurt-face-1', 30],
@@ -464,6 +484,8 @@ export class Malupiton extends Fighter {
                 [FighterState.JUMP_FORWARD]: ((48 * 3) + (12 * 2)),
                 [FighterState.JUMP_BACKWARD]: -((45 * 4) + (15 * 3)),
                 [FighterState.HEADBUTT]: 600,
+                [FighterState.HEADBUTT_UP]: 600,
+                [FighterState.HEADBUTT_DOWN]: 600,
             },
             jump: -420,
         };
@@ -529,10 +551,24 @@ export class Malupiton extends Fighter {
                 ],
                 cursor: 0,
             },
+           {
+                state: FighterState.HEADBUTT_DOWN,
+                sequence: 
+                [SpecialMoveDirection.DOWN,SpecialMoveDirection.FORWARD_DOWN, SpecialMoveDirection.FORWARD, SpecialMoveDirection.FORWARD, SpecialMoveButton.HEAVY_PUNCH,
+                ],
+                cursor: 0,
+            },
             {
+                state: FighterState.HEADBUTT_UP,
+                sequence: 
+                [SpecialMoveDirection.DOWN,SpecialMoveDirection.FORWARD_DOWN, SpecialMoveDirection.FORWARD, SpecialMoveDirection.FORWARD, SpecialMoveButton.HEAVY_PUNCH,
+                ],
+                cursor: 0,
+            },
+             {
                 state: FighterState.HEADBUTT,
                 sequence: 
-                [SpecialMoveDirection.DOWN,SpecialMoveDirection.BACKWARD_DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveButton.HEAVY_PUNCH,
+                [SpecialMoveDirection.DOWN,SpecialMoveDirection.BACKWARD_DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveButton.HEAVY_PUNCH,
                 ],
                 cursor: 0,
             },
@@ -660,6 +696,31 @@ export class Malupiton extends Fighter {
                 FighterState.JUMP_UP, FighterState.JUMP_START, FighterState.JUMP_LAND, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
             ],
         }
+        this.states[FighterState.HEADBUTT_UP] = {
+            attackType: FighterAttackType.PUNCH,
+            attackStrength: FighterAttackStrength.HEAVY,
+             init: this.handleHeadbuttUpInit.bind(this),
+             update: this.handleHeadbuttUpState.bind(this),
+           
+            validFrom: [
+                FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.WALK_BACKWARD,
+                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_BLOCK,
+                FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, 
+                FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
+            ],
+        }
+        this.states[FighterState.HEADBUTT_DOWN] = {
+            attackType: FighterAttackType.PUNCH,
+            attackStrength: FighterAttackStrength.HEAVY,
+             init: this.handleHeadbuttDownInit.bind(this),
+             update: this.handleHeadbuttDownState.bind(this),
+           
+            validFrom: [
+                FighterState.JUMP_LIGHTKICK, FighterState.JUMP_HEAVYKICK,
+                 FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD,
+                FighterState.JUMP_UP, FighterState.JUMP_START, FighterState.JUMP_LAND, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
+            ],
+        }
         
     
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_1];
@@ -674,9 +735,21 @@ export class Malupiton extends Fighter {
         
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.KNOCKLIFTDOWN];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.HEADBUTT];
+        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.HEADBUTT_UP];
+        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.HEADBUTT_DOWN];
+
+         //headbutt up valid states
         this.states[FighterState.JUMP_BACKWARD].validFrom = [...this.states[FighterState.JUMP_BACKWARD].validFrom, FighterState.HEADBUTT];
         this.states[FighterState.JUMP_FORWARD].validFrom = [...this.states[FighterState.JUMP_FORWARD].validFrom, FighterState.HEADBUTT];
         this.states[FighterState.KNOCKLIFT].validFrom = [...this.states[FighterState.KNOCKLIFT].validFrom, FighterState.HEADBUTT];
+        //headbutt up valid states
+        this.states[FighterState.JUMP_BACKWARD].validFrom = [...this.states[FighterState.JUMP_BACKWARD].validFrom, FighterState.HEADBUTT_UP];
+        this.states[FighterState.JUMP_FORWARD].validFrom = [...this.states[FighterState.JUMP_FORWARD].validFrom, FighterState.HEADBUTT_UP];
+        this.states[FighterState.KNOCKLIFT].validFrom = [...this.states[FighterState.KNOCKLIFT].validFrom, FighterState.HEADBUTT_UP];
+         //headbutt Down valid states
+        this.states[FighterState.JUMP_BACKWARD].validFrom = [...this.states[FighterState.JUMP_BACKWARD].validFrom, FighterState.HEADBUTT_DOWN];
+        this.states[FighterState.JUMP_FORWARD].validFrom = [...this.states[FighterState.JUMP_FORWARD].validFrom, FighterState.HEADBUTT_DOWN];
+        this.states[FighterState.KNOCKLIFT].validFrom = [...this.states[FighterState.KNOCKLIFT].validFrom, FighterState.HEADBUTT_DOWN];
         
     }
 
@@ -706,7 +779,7 @@ export class Malupiton extends Fighter {
     }
 
     handleHeadbuttInit(time) {
-       
+       console.log("HEADBUTT INIT");
         if(this.headbuttActivate){
             this.gravity = 1000;
              this.velocity.x = 0;
@@ -715,7 +788,40 @@ export class Malupiton extends Fighter {
              this.gravity = 0;
         this.velocity.y = 0;
         this.position.y -= 25;
-        this.position.x += 30*this.direction;
+        //this.position.x += 30*this.direction;
+        playSound(this.headbuttDashSound);
+        this.entityList.add(DashEffectSplash, time, this.position.x-30*this.direction, this.position.y-5, this.playerId, 1, this.direction * -1);
+        this.handleMoveInit();
+        }
+       
+    }
+
+    handleHeadbuttUpInit(time) {
+        console.log("HEADBUTT Up INIT");
+        if(this.headbuttActivate){
+            this.gravity = 1000;
+             this.velocity.x = 0;
+            this.changeState(FighterState.IDLE);
+        } else {
+             this.gravity = 0;
+        this.velocity.y = -300;
+       
+        playSound(this.headbuttDashSound);
+        this.entityList.add(DashEffectSplash, time, this.position.x-30*this.direction, this.position.y-5, this.playerId, 1, this.direction * -1);
+        this.handleMoveInit();
+        }
+       
+    }
+    handleHeadbuttDownInit(time) {
+        console.log("HEADBUTT Down INIT");
+        if(this.headbuttActivate){
+            this.gravity = 1000;
+             this.velocity.x = 0;
+            this.changeState(FighterState.IDLE);
+        } else {
+             this.gravity = 0;
+        this.velocity.y = 330;
+       
         playSound(this.headbuttDashSound);
         this.entityList.add(DashEffectSplash, time, this.position.x-30*this.direction, this.position.y-5, this.playerId, 1, this.direction * -1);
         this.handleMoveInit();
@@ -747,6 +853,63 @@ export class Malupiton extends Fighter {
         
         if(headbuttHit || this.attackStruck || isTouchingCamera || this.isAnimationCompleted()) {
             if(isTouchingCamera){
+             this.entityList.add(GreenHitSplash, time, this.position.x+30*this.direction, this.position.y - 30, this.playerId, 1, this.direction * -1);
+             playSound(this.headbuttSound);
+        }
+           this.headbuttActivate = true;
+           this.gravity = 1000;
+           
+           
+             if (control.isBackward(this.playerId, this.direction)) this.changeState(FighterState.JUMP_BACKWARD);
+              else  this.changeState(FighterState.JUMP_FORWARD);
+        }
+    
+    }
+
+    handleHeadbuttUpState(time, context, camera){
+        console.log("HEADBUTT up STATE");
+    const isTouchingCamera = 
+        this.position.x+5 > camera.position.x + context.canvas.width - this.boxes.push.width ||
+        this.position.x-5 < camera.position.x + this.boxes.push.width;
+ 
+        if(this.headbuttActivate){
+            this.gravity = 1000;
+             this.velocity.x = 0;
+            this.changeState(FighterState.JUMP_FORWARD);
+        } 
+       
+        const headbuttHit = this.checkHeadbuttHit(camera, context);
+        
+        if(headbuttHit || this.attackStruck || isTouchingCamera || this.isAnimationCompleted()) {
+            if(isTouchingCamera){
+             this.entityList.add(GreenHitSplash, time, this.position.x+30*this.direction, this.position.y - 30, this.playerId, 1, this.direction * -1);
+             playSound(this.headbuttSound);
+        }
+           this.headbuttActivate = true;
+           this.gravity = 1000;
+           
+           
+             if (control.isBackward(this.playerId, this.direction)) this.changeState(FighterState.JUMP_BACKWARD);
+              else  this.changeState(FighterState.JUMP_FORWARD);
+        }
+    
+    }
+    handleHeadbuttDownState(time, context, camera){
+       console.log("HEADBUTT DOWN STATE");
+    const isTouchingCamera = 
+        this.position.x+5 > camera.position.x + context.canvas.width - this.boxes.push.width ||
+        this.position.x-5 < camera.position.x + this.boxes.push.width;
+ 
+        if(this.headbuttActivate){
+            this.gravity = 1000;
+             this.velocity.x = 0;
+            this.changeState(FighterState.JUMP_FORWARD);
+        } 
+       
+        const headbuttHit = this.checkHeadbuttHit(camera, context);
+        
+        if(headbuttHit || this.attackStruck || isTouchingCamera || this.position.y >= STAGE_FLOOR || this.isAnimationCompleted()) {
+            if(isTouchingCamera || this.position.y >= STAGE_FLOOR){
              this.entityList.add(GreenHitSplash, time, this.position.x+30*this.direction, this.position.y - 30, this.playerId, 1, this.direction * -1);
              playSound(this.headbuttSound);
         }

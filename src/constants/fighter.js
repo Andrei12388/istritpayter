@@ -238,6 +238,8 @@ LAYDOWN_GROUND: 'laydown_ground',
 KNOCKLIFT: 'knock-lift',
 KNOCKLIFTDOWN: 'knock-lift-down',
 HEADBUTT: 'headbutt',
+HEADBUTT_UP: 'headbutt-up',
+HEADBUTT_DOWN: 'headbutt-down',
 };
 
 export const FrameDelay = {
