@@ -90,7 +90,7 @@ export class Malupiton extends Fighter {
             ['knock-lift-1', [[[70, 124, 55, 88], [27,86]], PushBox.JUMP, HurtBox.JUMP]],
             ['knock-lift-2', [[[136, 127, 82, 70], [41,68]], PushBox.JUMP, HurtBox.JUMP]],
             ['knock-lift-3', [[[231, 138, 88, 48], [44,46]], PushBox.JUMP, HurtBox.JUMP]],
-            ['knock-lift-4', [[[339, 115, 50, 94], [24,91]], PushBox.JUMP, HurtBox.JUMP, [8,-55,50,15],]],
+            ['knock-lift-4', [[[339, 115, 50, 94], [24,91]], PushBox.JUMP, HurtBox.JUMP, [8,-55,60,55],]],
             ['knock-lift-5', [[[327, 43, 100, 68], [50,68]], PushBox.JUMP, HurtBox.JUMP]],
             ['knock-lift-6', [[[251, 21, 56, 102], [28,100]], PushBox.JUMP, HurtBox.JUMP]],
             ['knock-lift-7', [[[469, 156,67,94],[33,92]], PushBox.JUMP, HurtBox.JUMP]],
@@ -470,41 +470,6 @@ export class Malupiton extends Fighter {
        
         this.SpecialMoves = [
             {
-                state: FighterState.DODGE_FORWARD,
-                sequence: 
-                [SpecialMoveDirection.FORWARD, SpecialMoveDirection.FORWARD, SpecialMoveButton.BC,
-                ],
-                cursor: 0,
-            },
-            {
-                state: FighterState.DODGE_BACKWARD,
-                sequence: 
-                [SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveButton.BC,
-                ],
-                cursor: 0,
-            },
-             {
-                state: FighterState.KNOCKLIFT,
-                sequence: 
-                [SpecialMoveDirection.DOWN,SpecialMoveDirection.BACKWARD_DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveButton.HEAVY_KICK,
-                ],
-                cursor: 0,
-            },
-            {
-                state: FighterState.KNOCKLIFTDOWN,
-                sequence: 
-                [SpecialMoveDirection.DOWN, SpecialMoveDirection.FORWARD_DOWN, SpecialMoveDirection.FORWARD, SpecialMoveButton.HEAVY_KICK,
-                ],
-                cursor: 0,
-            },
-            {
-                state: FighterState.HEADBUTT,
-                sequence: 
-                [SpecialMoveDirection.DOWN,SpecialMoveDirection.FORWARD_DOWN, SpecialMoveDirection.FORWARD, SpecialMoveButton.HEAVY_PUNCH,
-                ],
-                cursor: 0,
-            },
-            {
                 state: FighterState.SPECIAL_1,
                 sequence: 
                 [SpecialMoveDirection.DOWN, SpecialMoveDirection.BACKWARD_DOWN, 
@@ -535,7 +500,43 @@ export class Malupiton extends Fighter {
                 SpecialMoveButton.AC,
                 ],
                 cursor: 0,
-            }
+            },
+            {
+                state: FighterState.DODGE_FORWARD,
+                sequence: 
+                [SpecialMoveDirection.FORWARD, SpecialMoveDirection.FORWARD, SpecialMoveButton.BC,
+                ],
+                cursor: 0,
+            },
+            {
+                state: FighterState.DODGE_BACKWARD,
+                sequence: 
+                [SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveButton.BC,
+                ],
+                cursor: 0,
+            },
+             {
+                state: FighterState.KNOCKLIFT,
+                sequence: 
+                [SpecialMoveDirection.DOWN,SpecialMoveDirection.BACKWARD_DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveButton.HEAVY_KICK,
+                ],
+                cursor: 0,
+            },
+            {
+                state: FighterState.KNOCKLIFTDOWN,
+                sequence: 
+                [SpecialMoveDirection.DOWN, SpecialMoveDirection.FORWARD_DOWN, SpecialMoveDirection.FORWARD, SpecialMoveButton.HEAVY_KICK,
+                ],
+                cursor: 0,
+            },
+            {
+                state: FighterState.HEADBUTT,
+                sequence: 
+                [SpecialMoveDirection.DOWN,SpecialMoveDirection.BACKWARD_DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveButton.HEAVY_PUNCH,
+                ],
+                cursor: 0,
+            },
+            
         ];
         this.gravity = 1000;
         
@@ -685,11 +686,13 @@ export class Malupiton extends Fighter {
         this.gravity = 1000;
     if (attackType === FighterAttackType.PUNCH) {
          playSound(this.knockliftdownSound);
-         this.velocity.x += 100;
-        this.entityList.add(KnockLiftSplash, time, this.position.x, this.position.y - 30, this.playerId, 1, this.direction * -1);
+         this.velocity.x = 150;
+         this.velocity.y = -380;
+        this.entityList.add(KnockLiftSplash, time, this.position.x, this.position.y - 50, this.playerId, 1, this.direction * -1);
     } else if (attackType === FighterAttackType.KICK) {
          playSound(this.knockliftSound);
-          this.velocity.x -= 100;
+          this.velocity.x = -100;
+          this.velocity.y = -380;
         this.entityList.add(KnockLiftSplash, time, this.position.x, this.position.y + 50, this.playerId, -1, this.direction * -1);
         
     }

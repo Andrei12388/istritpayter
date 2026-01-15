@@ -723,11 +723,13 @@ export class Golem extends Fighter {
     this.gravity = 1300;
     fighter.sprite += 1;
 
+    this.fireball = { fired: false, strength };
+
     console.log('🔥 Special 1 (Fireball) started — skill spent instantly');
   }
 
   handleSpecial2MoveFighterInit(_, strength){
-    this.fireball = { fired: false, strength };
+    // this.fireball = { fired: false, strength }; // Moved to handleSpecial2Init
   }
 
   handleSpecial2RockReleaseInit(_, strength){
@@ -786,13 +788,18 @@ export class Golem extends Fighter {
             this.velocity.y = -400;
          }
     }
-    if(control.isHeavyPunch(this.playerId, this.direction) || control.isLightPunch(this.playerId, this.direction)){
-        
+    if(control.isHeavyPunch(this.playerId, this.direction)){
+         this.fireball.strength = 300;
          this.changeState(FighterState.SPECIAL_2_ROCKRELEASE);
+         this.gravity = 1000;
+    } else if (control.isLightPunch(this.playerId, this.direction)){
+        this.fireball.strength = 120;
+        this.changeState(FighterState.SPECIAL_2_ROCKRELEASE);
          this.gravity = 1000;
     }
     
     if(!control.isForward(this.playerId, this.direction) && !control.isBackward(this.playerId, this.direction)){
+       
              this.velocity.x = 0;
              return;
          }
@@ -832,6 +839,7 @@ export class Golem extends Fighter {
             }
 
              if (!this.fireball.fired && this.animationFrame === 4) {
+                console.log('Rock Released', this.fireball.strength);
 
             this.entityList.add.call(this.entityList, HeavyRock, time, this, this.fireball.strength);
             this.fireball.fired = true;

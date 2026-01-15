@@ -38,7 +38,7 @@ export const MALUPITON = [
     { 
         name: 'HEADBUTT',
         y: 7,
-        inputs: [code.d, code.dl, code.l, code.B],
+        inputs: [code.d, code.dr, code.r, code.B],
     },
      { 
         name: 'K.LIFTUP',

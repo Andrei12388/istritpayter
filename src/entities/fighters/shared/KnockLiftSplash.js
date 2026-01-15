@@ -8,7 +8,7 @@ export class KnockLiftSplash extends HitSplash {
        
         this.flipped = maybe4;
         this.frameNumber = 6;
-        this.position.x -= 35 * this.direction;
+        this.position.x -= 70 * this.direction;
         this.frames = [
             //Player1
             [[102, 282, 88, 57], [44, 55]],

@@ -14,6 +14,7 @@ import {
     FighterHurtBox,
     FighterState
 } from "../../../constants/fighter.js";
+import { STAGE_FLOOR } from "../../../constants/stage.js";
 import { gameState } from "../../../state/gameState.js";
 import { LightHitSplash } from "../shared/LightHitSplash.js";
 import { HeavyHitSplash } from "../shared/HeavyHitSplash.js";
@@ -48,13 +49,22 @@ export class HeavyRock {
 
     constructor(args, time, entityList) {
         const [fighter, strength] = args;
+
+        this.soundGroundCrash = document.querySelector('audio#sound-groundCrash');
+        this.soundGroundCrash.volume = 1;
         this.canDealDamage = true;
 
+         this.quake = false;
         this.fighter = fighter;
         this.entityList = entityList;
-        this.velocity = fireballVelocity[strength] || 400;
+        this.velocity = strength || 200;
+        console.log('Heavy Rock Velocity:', strength, this.velocity);
         this.direction = this.fighter?.direction ?? 1;
         this.directionY = 1;
+        this.velocityY = 0; // Initial vertical velocity
+        this.gravity = 1000; // Gravity acceleration
+        this.bounceCount = 0; // Number of bounces
+        this.bounceActive = false; // Prevent multiple bounce triggers
 
         const baseX = this.fighter?.position?.x ?? 0;
         const baseY = this.fighter?.position?.y ?? 0;
@@ -115,9 +125,46 @@ export class HeavyRock {
     // 🚀 Update movement and handle collisions
     updateMovement(time, camera) {
        this.position.x += (this.velocity * this.direction) * time.secondsPassed * 1.8;
-        this.position.y += 70 * time.secondsPassed* 1.8;
-
        
+       // Apply gravity to vertical velocity
+       this.velocityY += this.gravity * time.secondsPassed;
+       this.position.y += this.velocityY * time.secondsPassed;
+
+       // Check if rock hits the ground
+       if(this.position.y < STAGE_FLOOR)  this.quake = true;
+       if (this.position.y >= STAGE_FLOOR) {
+        if(this.quake){
+                        this.soundGroundCrash.volume = 0.5;
+                         this.soundGroundCrash.play();
+                        
+                        gameState.cameraShake.enable = true;
+                        gameState.cameraShake.duration = 0.4;
+                        gameState.cameraShake.intensity = 7;
+                        this.quake = false;
+                    }
+           // Detect a NEW bounce (only when hitting floor from above and not already bouncing)
+           if (!this.bounceActive && this.bounceCount < 3 && this.velocityY > 0) {
+               this.bounceActive = true;
+               this.bounceCount++;
+
+               // Bounce effect
+               const bounceFactor = 0.5; // Less bouncy than fighters
+               this.velocityY = -Math.max(50, Math.abs(this.velocityY) * bounceFactor);
+
+               // Reduce horizontal velocity on bounce
+               this.velocity *= 0.8;
+
+               // Prevent going below ground
+               this.position.y = STAGE_FLOOR;
+           } else if (this.bounceCount >= 3) {
+               // After 3 bounces, remove the rock
+               this.entityList.remove(this);
+               return;
+           }
+       } else {
+           // Airborne: reset bounce trigger
+           this.bounceActive = false;
+       }
 
         const screenX = this.position.x - camera.position.x;
         if (screenX > 384 + 56 || screenX < -56) {
@@ -249,7 +296,7 @@ export class HeavyRock {
 
         context.restore();
        
-      //  this.drawDebug(context, camera);
+        this.drawDebug(context, camera);
     }
 
     // ⏱️ Main update loop

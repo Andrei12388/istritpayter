@@ -397,6 +397,7 @@ handleFlash() {
                                 if (startPressed && !this.keyPressed.start && gameState.buttonHold) {
                                     console.log('Exiting Move List');
                                     gameState.fighters[fighter.playerId].pause = true;
+                                    gameState.pauseMenu.selectPosition.y = 0;
                                     gameState.pauseMenu.showMoveList = false;
                                     this.keyPressed.start = true;
                                     playSound(this.soundSelect, 1);

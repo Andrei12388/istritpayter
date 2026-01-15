@@ -403,6 +403,7 @@ handleFlash() {
                             console.log('In Move List');
                             if (startPressed && !this.keyPressed.start && gameState.buttonHold) {
                                 console.log('Exiting Move List');
+                                gameState.pauseMenu.selectPosition.y = 0;
                                 gameState.fighters[fighter.playerId].pause = true;
                                 gameState.pauseMenu.showMoveList = false;
                                 this.keyPressed.start = true;
