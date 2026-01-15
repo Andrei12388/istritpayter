@@ -1772,7 +1772,7 @@ if (!spriteToDraw) return; // avoid crashes
 
         context.restore();
        
-     this.drawDebug(context, camera);
+     //this.drawDebug(context, camera);
     }
     }
 }

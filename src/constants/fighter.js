@@ -240,6 +240,9 @@ KNOCKLIFTDOWN: 'knock-lift-down',
 HEADBUTT: 'headbutt',
 HEADBUTT_UP: 'headbutt-up',
 HEADBUTT_DOWN: 'headbutt-down',
+
+//Golem Moves
+KNEEDASH: 'knee-dash',
 };
 
 export const FrameDelay = {
@@ -292,7 +295,7 @@ export const hurtStateValidFrom = [
     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
     FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.HYPERSKILL_2, 
     FighterState.DIE, FighterState.DEATH, FighterState.KNOCKUP, FighterState.SPECIAL_2_MOVEFIGHTER,
-    FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN, FighterState.HEADBUTT,
+    FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN, FighterState.HEADBUTT, FighterState.KNEEDASH, FighterState.HEADBUTT_DOWN,FighterState.HEADBUTT_UP,
 ];
 
 export const knockUpStateValidFrom = [
@@ -306,7 +309,7 @@ export const knockUpStateValidFrom = [
     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
     FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.HYPERSKILL_2, FighterState.KNOCKUP,
     FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN, FighterState.HEADBUTT,
-    FighterState.SPECIAL_2_MOVEFIGHTER, FighterState.LAYDOWN_GROUND,
+    FighterState.SPECIAL_2_MOVEFIGHTER, FighterState.LAYDOWN_GROUND, FighterState.KNEEDASH, FighterState.HEADBUTT_DOWN,FighterState.HEADBUTT_UP,
 ];
 
 export const SpecialMoveDirection = {

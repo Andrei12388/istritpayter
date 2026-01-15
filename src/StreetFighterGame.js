@@ -16,7 +16,7 @@ import { PracticeBattleScene } from './scenes/PracticeBattlescene.js';
 
 const selectedCharacters = [
     { 
-        name: "Malupiton", 
+        name: "Golem", 
         namePos: 5,
         sayings: 'Sabi ko naman sayo burger ka saken',
         color: "gray", 

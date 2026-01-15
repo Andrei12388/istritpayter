@@ -26,6 +26,8 @@ export class Golem extends Fighter {
         this.voiceSpecial1 = document.querySelector('audio#sound-golem-special-1');
         this.voiceHyperSkill1 = document.querySelector('audio#sound-golem-hyperskill-1');
         this.soundGroundCrash = document.querySelector('audio#sound-groundCrash');
+        this.soundKneeDash = document.querySelector('audio#sound-fighter-heavy-attack');
+        this.soundKneeDash.volume = 1;
         this.soundGroundCrash.volume = 1;
         this.voiceSpecial1.volume = 1;
         this.voiceSpecial2.volume = 0.9;
@@ -240,6 +242,16 @@ export class Golem extends Fighter {
              ['hyperskill1-10', [[[821, 2281, 93, 75], [46,73]], PushBox.IDLE, HurtBox.NULL]],
              ['hyperskill1-11', [[[916, 2298, 79, 58], [40,56]], PushBox.IDLE, HurtBox.NULL, [15,-70,50,60]]],
 
+             //Golem Special Moves
+             //Knee Dash
+            ['kneeDash-1', [[[799, 1425, 59, 99], [29,97]], PushBox.JUMP, HurtBox.JUMP]],
+            ['kneeDash-2', [[[875, 1426, 62, 99], [31,97]], PushBox.JUMP, HurtBox.JUMP]],
+            ['kneeDash-3', [[[956, 1425, 65, 99], [32,97]], PushBox.JUMP, HurtBox.JUMP]],
+            ['kneeDash-4', [[[1027, 1420, 75, 104], [37,102]], PushBox.JUMP, HurtBox.JUMP]],
+            //Active Frame
+            ['kneeDash-5', [[[1106, 1418, 93, 106], [46,104]], PushBox.JUMP, HurtBox.JUMP, [18,-55,23,35]]],
+            ['kneeDash-6', [[[1099, 1544, 95, 106], [47,104]], PushBox.JUMP, HurtBox.JUMP, [18,-55,23,35]]],
+            ['kneeDash-7', [[[1004, 1544, 82, 106], [41,104]], PushBox.JUMP, HurtBox.JUMP]],
             
         ]);
 
@@ -434,6 +446,12 @@ export class Golem extends Fighter {
                             ['death-8', 300], ['getUp2-1', 120], ['getUp2-2', 120], ['getUp2-3', 100],['getUp-3', 100],
                             ['getUp-3', FrameDelay.TRANSITION],
                         ],
+                        [FighterState.KNEEDASH]:[
+                                        ['kneeDash-1', 80],['kneeDash-2', 60],['kneeDash-3', 50],['kneeDash-4', 50],
+                                        ['kneeDash-5', 100],['kneeDash-6', 60],['kneeDash-7', 60],
+                                        ['kneeDash-4', 60],['kneeDash-3', 60],['kneeDash-2', 20],['kneeDash-1', 20],
+                                        ['kneeDash-1', FrameDelay.TRANSITION],
+                                    ],
           
 
         };
@@ -446,6 +464,7 @@ export class Golem extends Fighter {
                 [FighterState.JUMP_BACKWARD]: -((45 * 4) + (15 * 3)),
                 [FighterState.DODGE_FORWARD]: ((80 * 4) + (12 * 2)),
                 [FighterState.DODGE_BACKWARD]: -((80 * 4) + (12 * 3)),
+                
             },
             jump: -420,
         };
@@ -489,6 +508,14 @@ export class Golem extends Fighter {
                 ],
                 cursor: 0,
             },
+            //Special Moves
+            {
+                state: FighterState.KNEEDASH,
+                sequence: 
+                [SpecialMoveDirection.DOWN,SpecialMoveDirection.BACKWARD_DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveButton.ANY_KICK,
+                ],
+                cursor: 0,
+            },
         ];
         this.gravity = 1000;
         
@@ -501,7 +528,7 @@ export class Golem extends Fighter {
             validFrom: [
                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, 
                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
-                FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
+                FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, FighterState.KNEEDASH,
             ],
         }
         this.states[FighterState.SPECIAL_2] = {
@@ -511,7 +538,7 @@ export class Golem extends Fighter {
                     validFrom: [
                         FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, 
                         FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
-                        FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
+                        FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, FighterState.KNEEDASH,
                         
                     ],
                 }
@@ -541,7 +568,7 @@ export class Golem extends Fighter {
                                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.JUMP_UP, FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD, FighterState.JUMP_LAND,
                                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
                                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
-                                FighterState.HEADBUTT, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
+                                FighterState.HEADBUTT, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN, FighterState.KNEEDASH,
                             ],
                         }
         this.states[FighterState.DODGE_FORWARD] = {
@@ -568,6 +595,20 @@ export class Golem extends Fighter {
                 FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD,
             ],
         }
+         this.states[FighterState.KNEEDASH] = {
+                    attackType: FighterAttackType.PUNCH,
+            attackStrength: FighterAttackStrength.HEAVY,
+                     init: this.handleKneeDashInit.bind(this),
+                     update: this.handleKneeDashState.bind(this),
+                   
+                    validFrom: [
+                        FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.WALK_BACKWARD,
+                        FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_BLOCK,
+                        FighterState.JUMP_LIGHTKICK, FighterState.JUMP_HEAVYKICK,
+                        FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD,
+                        FighterState.JUMP_UP, FighterState.JUMP_START, FighterState.JUMP_LAND, 
+                    ],
+                }
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_1];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_2];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_2_MOVEFIGHTER];
@@ -576,7 +617,65 @@ export class Golem extends Fighter {
 
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_FORWARD];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_BACKWARD];
+        //Special Moves
+         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.KNEEDASH];
+        this.states[FighterState.JUMP_BACKWARD].validFrom = [...this.states[FighterState.JUMP_BACKWARD].validFrom, FighterState.KNEEDASH];
+        this.states[FighterState.JUMP_FORWARD].validFrom = [...this.states[FighterState.JUMP_FORWARD].validFrom, FighterState.KNEEDASH];
     }
+
+    handleKneeDashInit(_, strength) {
+        
+       
+        playSound(this.soundKneeDash, 1);
+        const slowSpeed = {
+            x: 300,
+            y: -180,
+        }
+        const fastSpeed = {
+            x: 600,
+            y: -270,
+        }
+        this.kneeDashSpeed = (strength === 'heavyKick') ? fastSpeed.x : slowSpeed.x;
+        this.kneeDashJump = (strength === 'heavyKick') ? fastSpeed.y : slowSpeed.y;
+
+        
+       
+    }
+
+         handleKneeDashState(_, strength){
+             const slowSpeed = {
+            x: 300,
+            y: -180,
+        }
+        const fastSpeed = {
+            x: 600,
+            y: -270,
+        }
+                if(this.kneeDashSpeed === fastSpeed.x && this.animationFrame === 3){
+            this.velocity.y = this.kneeDashJump;
+            this.velocity.x = this.kneeDashSpeed;
+        }else if (this.kneeDashSpeed === slowSpeed.x && this.animationFrame === 0){
+             this.velocity.y = this.kneeDashJump;
+        this.velocity.x = this.kneeDashSpeed;
+        }
+              if(this.kneeDashSpeed === slowSpeed.x && this.animationFrame === 4){
+               
+                 this.velocity.x = 0;
+                this.changeState(FighterState.IDLE);
+              } 
+             
+              if(this.animationFrame === 7 ) this.velocity.x = this.kneeDashSpeed;
+             if (!this.isAnimationCompleted()) return;
+             this.velocity.x = 0;
+       this.changeState(FighterState.IDLE);
+    }
+
+     handleIdleInit(){
+                this.resetVelocities();
+                this.gravity = 1000;
+            }
+
+    
 
 
      handleDodgeInit(distance, playerId){
