@@ -12,6 +12,7 @@ import { STAGE_FLOOR } from '../../constants/stage.js';
 import { HeavyRock } from './special/HeavyRock.js';
 import { RockSplash } from './special/RockSplash.js';
 import { boxOverlap, getActualBoxDimensions } from '../../utils/collisions.js';
+import { TornadoSpinSplash } from './shared/TornadoSpinSplash.js';
 
 export class Golem extends Fighter {
     constructor(playerId, onAttackHit, effectSplash, entityList, entityListForeground) {
@@ -252,6 +253,23 @@ export class Golem extends Fighter {
             ['kneeDash-5', [[[1106, 1418, 93, 106], [46,104]], PushBox.JUMP, HurtBox.JUMP, [18,-55,23,35]]],
             ['kneeDash-6', [[[1099, 1544, 95, 106], [47,104]], PushBox.JUMP, HurtBox.JUMP, [18,-55,23,35]]],
             ['kneeDash-7', [[[1004, 1544, 82, 106], [41,104]], PushBox.JUMP, HurtBox.JUMP]],
+
+            //Tornado dig frame
+            ['tornado-dig-1', [[[1011, 1679, 55, 99], [27,97]], PushBox.JUMP, HurtBox.JUMP]],
+
+            ['tornado-dig-2', [[[1084, 1680, 76, 94], [38,92]], PushBox.JUMP, HurtBox.JUMP]],
+            ['tornado-dig-3', [[[1001, 1800, 94, 79], [47,77]], PushBox.JUMP, HurtBox.JUMP]],
+            ['tornado-dig-4', [[[1096, 1819, 104, 50], [52,48]], PushBox.JUMP, HurtBox.JUMP]],
+            ['tornado-dig-5', [[[1002, 1893, 95, 80], [47,78]], PushBox.JUMP, HurtBox.JUMP]],
+            ['tornado-dig-6', [[[1115, 1888, 66, 104], [33,102]], [0,0,0,0], HurtBox.JUMP]],
+            ['tornado-dig-7', [[[1123, 2007, 50, 104], [25,102]], [0,0,0,0], HurtBox.JUMP]],
+            ['tornado-dig-8', [[[1028, 2000, 50, 103], [25,101]], [0,0,0,0], HurtBox.JUMP]],
+            ['tornado-dig-9', [[[934, 1902, 50, 103], [25,101]], [0,0,0,0], HurtBox.JUMP]],
+
+
+            // Golem Pick up opponent frame
+            ['pickup-1', [[[1011, 1679, 55, 99], [27,7]], [0,0,0,0], HurtBox.NULL]],
+            
             
         ]);
 
@@ -452,6 +470,20 @@ export class Golem extends Fighter {
                                         ['kneeDash-4', 60],['kneeDash-3', 60],['kneeDash-2', 20],['kneeDash-1', 20],
                                         ['kneeDash-1', FrameDelay.TRANSITION],
                                     ],
+                        [FighterState.TORNADO_DIG]:[
+                            ['tornado-dig-1', 20],['tornado-dig-1', 60], 
+                            ['tornado-dig-2', 60], ['tornado-dig-3', 60], 
+                            ['tornado-dig-4', 60], ['tornado-dig-5', 60], 
+                            ['tornado-dig-6', 60], ['tornado-dig-7', 60],
+                            ['tornado-dig-8', 60],['tornado-dig-9', 700], 
+                            ['tornado-dig-9', FrameDelay.TRANSITION],
+                        ],
+                            [FighterState.PICKUP]:[
+                            ['pickup-1', 1100],
+                            ['pickup-1', FrameDelay.TRANSITION],
+                        
+                    ],
+
           
 
         };
@@ -464,6 +496,7 @@ export class Golem extends Fighter {
                 [FighterState.JUMP_BACKWARD]: -((45 * 4) + (15 * 3)),
                 [FighterState.DODGE_FORWARD]: ((80 * 4) + (12 * 2)),
                 [FighterState.DODGE_BACKWARD]: -((80 * 4) + (12 * 3)),
+                [FighterState.TORNADO_DIG]: -(2 * 50),
                 
             },
             jump: -420,
@@ -513,6 +546,13 @@ export class Golem extends Fighter {
                 state: FighterState.KNEEDASH,
                 sequence: 
                 [SpecialMoveDirection.DOWN,SpecialMoveDirection.BACKWARD_DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveButton.ANY_KICK,
+                ],
+                cursor: 0,
+            },
+            {
+                state: FighterState.TORNADO_DIG,
+                sequence: 
+                [SpecialMoveDirection.DOWN,SpecialMoveDirection.BACKWARD_DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveButton.HEAVY_PUNCH,
                 ],
                 cursor: 0,
             },
@@ -609,6 +649,30 @@ export class Golem extends Fighter {
                         FighterState.JUMP_UP, FighterState.JUMP_START, FighterState.JUMP_LAND, 
                     ],
                 }
+        this.states[FighterState.TORNADO_DIG] = {
+                    attackType: FighterAttackType.PUNCH,
+            attackStrength: FighterAttackStrength.HEAVY,
+                     init: this.handleTornadoDigInit.bind(this),
+                     update: this.handleTornadoDigState.bind(this),
+                   
+                    validFrom: [
+                        FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.WALK_BACKWARD,
+                        FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_BLOCK,
+                        FighterState.JUMP_LIGHTKICK, FighterState.JUMP_HEAVYKICK,
+                        FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD,
+                        FighterState.JUMP_UP, FighterState.JUMP_START, FighterState.JUMP_LAND, 
+                    ],
+                }
+                this.states[FighterState.PICKUP] = {
+                    attackType: FighterAttackType.PUNCH,
+            attackStrength: FighterAttackStrength.HEAVY,
+                     init: this.handlePickUpInit.bind(this),
+                     update: this.handlePickUpState.bind(this),
+                   
+                    validFrom: [
+                       FighterState.TORNADO_DIG,
+                    ],
+                }
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_1];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_2];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_2_MOVEFIGHTER];
@@ -619,12 +683,16 @@ export class Golem extends Fighter {
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_BACKWARD];
         //Special Moves
          this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.KNEEDASH];
+         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.TORNADO_DIG];
+         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.PICKUP];
+         this.states[FighterState.HEAVY_PUNCH].validFrom = [...this.states[FighterState.HEAVY_PUNCH].validFrom, FighterState.PICKUP];
+
         this.states[FighterState.JUMP_BACKWARD].validFrom = [...this.states[FighterState.JUMP_BACKWARD].validFrom, FighterState.KNEEDASH];
         this.states[FighterState.JUMP_FORWARD].validFrom = [...this.states[FighterState.JUMP_FORWARD].validFrom, FighterState.KNEEDASH];
     }
 
-    handleKneeDashInit(_, strength) {
-        
+    //Knee Dash move
+    handleKneeDashInit(time, _, strength, attackType, playerId) {
        
         playSound(this.soundKneeDash, 1);
         const slowSpeed = {
@@ -637,12 +705,14 @@ export class Golem extends Fighter {
         }
         this.kneeDashSpeed = (strength === 'heavyKick') ? fastSpeed.x : slowSpeed.x;
         this.kneeDashJump = (strength === 'heavyKick') ? fastSpeed.y : slowSpeed.y;
-
+        console.log(strength);
+       
         
        
     }
 
          handleKneeDashState(_, strength){
+             console.log('strength', strength);
              const slowSpeed = {
             x: 300,
             y: -180,
@@ -651,6 +721,7 @@ export class Golem extends Fighter {
             x: 600,
             y: -270,
         }
+        
                 if(this.kneeDashSpeed === fastSpeed.x && this.animationFrame === 3){
             this.velocity.y = this.kneeDashJump;
             this.velocity.x = this.kneeDashSpeed;
@@ -668,6 +739,102 @@ export class Golem extends Fighter {
              if (!this.isAnimationCompleted()) return;
              this.velocity.x = 0;
        this.changeState(FighterState.IDLE);
+    }
+    //End Knee Dash move
+
+   
+
+    //Tornado dig move
+    handleTornadoDigInit(time, _, strength, attackType, playerId){
+        console.log("tornado dig init");
+        this.rotation = 0;
+        this.gravity = 0;
+        this.position.y -= 10;
+        this.velocity.y = -50;
+        this.touchGround = false;
+        this.rotationValue = 5;
+        this.handleMoveInit();
+ this.entityList.add(TornadoSpinSplash, time, this.position.x, this.position.y - 50, this.playerId, 1, this.direction * -1);
+    }
+
+    handleTornadoDigState(time){
+         console.log("tornado dig state");
+         this.rotation -= this.rotationValue;
+         if(this.position.y >= STAGE_FLOOR && !this.touchGround){
+            this.entityList.add.call(this.entityList, RockSplash, time, this, this.fireball.strength);
+            this.touchGround = true;
+         }
+
+         if(this.position.y <= 130) this.position.y = 130;
+         if(this.rotation <= -30 && this.rotation >= -35){
+            this.velocity.y -= 320;
+            this.rotationValue = 8;
+         } 
+         if(this.rotation <= -90){
+            console.log("rotating golem", this.rotation);
+            this.rotationValue = 8;
+        } 
+        if(this.rotation <= -90) this.velocity.y += 30;
+        if(this.rotation <= -180) this.rotation = -180;
+         
+          if (!this.isAnimationCompleted()) return;
+             this.velocity.x = 0;
+             
+                // remove invisibility, set position.x to the opponent
+                    this.changeState(FighterState.PICKUP);
+                    this.position.x = this.opponent.position.x +13*this.direction;
+            
+    }
+
+     //Pickup init and state
+    handlePickUpInit(){
+        this.opponent.velocity.y = -40;
+        this.opponent.gravity = 0;
+
+        this.touchGround = false;
+        this.stageEnable = false;
+
+        this.gravity = 0;
+        this.velocity.y = -500;
+        this.opponent.changeState(FighterState.FALL);
+        
+    }
+    handlePickUpState(time){
+       
+        
+        console.log("gravity", this.gravity, this.opponent.gravity);
+        if(!this.touchGround){
+            this.entityList.add.call(this.entityList, RockSplash, time, this, this.fireball.strength);
+            this.touchGround = true;
+        }
+       
+        
+       
+        this.opponent.position.x = this.position.x;
+        this.opponent.position.y = this.position.y-10;
+        if(this.stageEnable && this.position.y >= STAGE_FLOOR-90){
+            this.position.y = STAGE_FLOOR-90;
+            this.velocity.y = 0;
+           
+        } 
+        if(this.touchGround && !this.stageEnable && this.position.y <= 100){
+             this.gravity = 2000;
+              console.log("touching ground");
+             this.stageEnable = true; 
+        } 
+        
+        if (!this.isAnimationCompleted()) return;
+             this.velocity.y = 0;
+             this.position.y = STAGE_FLOOR;
+             this.opponent.position.y = this.position.y-100;
+             this.gravity = 1000;
+             this.opponent.velocity.x = -700;
+             this.opponent.gravity = 1000;
+             this.opponent.velocity.y = 80;
+             
+       this.changeState(FighterState.HEAVY_PUNCH);
+       gameState.fighters[this.opponent.playerId].hitPoints -= 30;
+       this.opponent.changeState(FighterState.KNOCKUP);
     }
 
      handleIdleInit(){

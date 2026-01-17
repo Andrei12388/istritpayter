@@ -243,6 +243,8 @@ HEADBUTT_DOWN: 'headbutt-down',
 
 //Golem Moves
 KNEEDASH: 'knee-dash',
+TORNADO_DIG: 'tornado-dig',
+PICKUP: 'pickup',
 };
 
 export const FrameDelay = {
@@ -308,8 +310,9 @@ export const knockUpStateValidFrom = [
     FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
     FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.HYPERSKILL_2, FighterState.KNOCKUP,
-    FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN, FighterState.HEADBUTT,
-    FighterState.SPECIAL_2_MOVEFIGHTER, FighterState.LAYDOWN_GROUND, FighterState.KNEEDASH, FighterState.HEADBUTT_DOWN,FighterState.HEADBUTT_UP,
+    FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN, FighterState.HEADBUTT, 
+    FighterState.SPECIAL_2_MOVEFIGHTER, FighterState.LAYDOWN_GROUND, FighterState.KNEEDASH, FighterState.HEADBUTT_DOWN,FighterState.HEADBUTT_UP, 
+    FighterState.FALL,
 ];
 
 export const SpecialMoveDirection = {
