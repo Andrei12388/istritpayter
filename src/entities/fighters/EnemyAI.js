@@ -297,7 +297,7 @@ export class EnemyAI {
 
   // Long distance move: ranged attacks for when opponent is far
   performLongDistanceMove(time) {
-    const moves = [FighterState.HEADBUTT, FighterState.SPECIAL_1, FighterState.SPECIAL_2, FighterState.SPECIAL_2_ROCKRELEASE];
+    const moves = [FighterState.HEADBUTT, FighterState.SPECIAL_1, FighterState.SPECIAL_2, FighterState.SPECIAL_2_ROCKRELEASE, FighterState.TORNADO_DIG,FighterState.KNEEDASH, FighterState.HEADBUTT_DOWN];
     const move = moves[Math.floor(Math.random() * moves.length)];
     const defaultStrength = 1;
 
@@ -325,6 +325,18 @@ export class EnemyAI {
         break;
       case FighterState.HEADBUTT:
         this.fighter.changeState(FighterState.HEADBUTT, time, 1);
+        break;
+      case FighterState.HEADBUTT_DOWN:
+        this.fighter.changeState(FighterState.HEADBUTT_DOWN, time, 1);
+        break;
+      case FighterState.HEADBUTT_UP:
+        this.fighter.changeState(FighterState.HEADBUTT_UP, time, 1);
+        break;
+      case FighterState.TORNADO_DIG:
+        this.fighter.changeState(FighterState.TORNADO_DIG, time, 1);
+        break;
+      case FighterState.KNEEDASH:
+        this.fighter.changeState(FighterState.KNEEDASH, time, 1);
         break;
       default:
         this.fighter.changeState(move, time, defaultStrength);

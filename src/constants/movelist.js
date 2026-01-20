@@ -98,6 +98,21 @@ export const GOLEM = [
         y: 7,
         inputs: [code.l, code.B, code.C,] 
     },
+     { 
+        name: 'KNEEDASH.L',
+        y: 7,
+        inputs: [code.d, code.dr, code.r, code.C],
+    },
+    { 
+        name: 'KNEEDASH.H',
+        y: 7,
+        inputs: [code.d, code.dr, code.r, code.D],
+    },
+    { 
+        name: 'TORNADO.D',
+        y: 7,
+        inputs: [code.d, code.dr, code.r, code.B],
+    },
     { 
         name: 'SPECIAL SKILLS(1 S.POINT)',
         y: 13,
