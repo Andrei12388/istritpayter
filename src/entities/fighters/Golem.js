@@ -264,11 +264,12 @@ export class Golem extends Fighter {
             ['tornado-dig-6', [[[1115, 1888, 66, 104], [33,102]], [0,0,0,0], HurtBox.JUMP]],
             ['tornado-dig-7', [[[1123, 2007, 50, 104], [25,102]], [0,0,0,0], HurtBox.JUMP]],
             ['tornado-dig-8', [[[1028, 2000, 50, 103], [25,101]], [0,0,0,0], HurtBox.JUMP]],
-            ['tornado-dig-9', [[[934, 1902, 50, 103], [25,101]], [0,0,0,0], HurtBox.JUMP]],
+            ['tornado-dig-9', [[[934, 1902, 50, 103], [25,101]], [0,0,0,0], HurtBox.NULL]],
 
 
             // Golem Pick up opponent frame
-            ['pickup-1', [[[1011, 1679, 55, 99], [27,7]], [0,0,0,0], HurtBox.NULL]],
+            ['pickup-1', [[[1011, 1679, 55, 99], [27,7]], [0,0,0,0], HurtBox.NULL, [-15,30,30,20]]],
+            ['pickup-2', [[[1011, 1679, 55, 99], [27,7]], [0,0,0,0], [[-8, -18, 24, 16],[-26, -4, 48, 42], [-26, 41, 45, 32]]]],
             
             
         ]);
@@ -475,12 +476,12 @@ export class Golem extends Fighter {
                             ['tornado-dig-2', 60], ['tornado-dig-3', 60], 
                             ['tornado-dig-4', 60], ['tornado-dig-5', 60], 
                             ['tornado-dig-6', 60], ['tornado-dig-7', 60],
-                            ['tornado-dig-8', 60],['tornado-dig-9', 700], 
+                            ['tornado-dig-8', 60],['tornado-dig-9', 1500], 
                             ['tornado-dig-9', FrameDelay.TRANSITION],
                         ],
                             [FighterState.PICKUP]:[
-                            ['pickup-1', 1100],
-                            ['pickup-1', FrameDelay.TRANSITION],
+                            ['pickup-1', 100],['pickup-1', 200],['pickup-2', 900],
+                            ['pickup-2', FrameDelay.TRANSITION],
                         
                     ],
 
@@ -665,7 +666,7 @@ export class Golem extends Fighter {
                 }
                 this.states[FighterState.PICKUP] = {
                     attackType: FighterAttackType.PUNCH,
-            attackStrength: FighterAttackStrength.HEAVY,
+            attackStrength: FighterAttackStrength.LIGHT,
                      init: this.handlePickUpInit.bind(this),
                      update: this.handlePickUpState.bind(this),
                    
@@ -763,6 +764,13 @@ export class Golem extends Fighter {
          if(this.position.y >= STAGE_FLOOR && !this.touchGround){
             this.entityList.add.call(this.entityList, RockSplash, time, this, this.fireball.strength);
             this.touchGround = true;
+            this.velocity.x = 0;
+            
+            this.soundGroundCrash.volume = 1;
+        this.soundGroundCrash.play();
+        gameState.cameraShake.enable = true;
+        gameState.cameraShake.duration = 0.2;
+        gameState.cameraShake.intensity = 7;
          }
 
          if(this.position.y <= 130) this.position.y = 130;
@@ -776,7 +784,13 @@ export class Golem extends Fighter {
         } 
         if(this.rotation <= -90) this.velocity.y += 30;
         if(this.rotation <= -180) this.rotation = -180;
-         
+         if(this.animationFrame >= 9 && (control.isHeavyPunch(this.playerId, this.direction))){
+            this.velocity.x = 0;
+            this.changeState(FighterState.PICKUP);
+            this.position.x = this.opponent.position.x +13*this.direction;
+         } 
+            
+       
           if (!this.isAnimationCompleted()) return;
              this.velocity.x = 0;
              
@@ -787,31 +801,46 @@ export class Golem extends Fighter {
     }
 
      //Pickup init and state
-    handlePickUpInit(){
+    handlePickUpInit(time,hitPosition){
         this.opponent.velocity.y = -40;
-        this.opponent.gravity = 0;
-
+       
+        this.pickUp = false;
         this.touchGround = false;
         this.stageEnable = false;
 
         this.gravity = 0;
         this.velocity.y = -500;
-        this.opponent.changeState(FighterState.FALL);
-        
-    }
-    handlePickUpState(time){
        
-        
+    }
+    handlePickUpState(time,context,camera,hitPosition){
+       
+        const pickupHit = this.checkPickupHit(camera, context);
+        if(pickupHit && !this.pickUp){
+            this.opponent.gravity = 0;
+             this.opponent.changeState(FighterState.FALL);
+             this.pickUp = true;
+        }
         console.log("gravity", this.gravity, this.opponent.gravity);
         if(!this.touchGround){
+            this.soundGroundCrash.currentTime = 0;
+            this.soundGroundCrash.volume = 1;
+        this.soundGroundCrash.play();
+        gameState.cameraShake.enable = true;
+        gameState.cameraShake.duration = 0.2;
+        gameState.cameraShake.intensity = 7;
             this.entityList.add.call(this.entityList, RockSplash, time, this, this.fireball.strength);
             this.touchGround = true;
         }
        
         
-       
-        this.opponent.position.x = this.position.x;
-        this.opponent.position.y = this.position.y-10;
+       console.log(this.opponent.currentState);
+        if(this.opponent.currentState === 'fall'){
+            this.opponent.position.x = this.position.x;
+            this.opponent.position.y = this.position.y-10;
+        } else {
+            this.opponent.gravity = 1000;
+        }
+        
         if(this.stageEnable && this.position.y >= STAGE_FLOOR-90){
             this.position.y = STAGE_FLOOR-90;
             this.velocity.y = 0;
@@ -826,16 +855,44 @@ export class Golem extends Fighter {
         if (!this.isAnimationCompleted()) return;
              this.velocity.y = 0;
              this.position.y = STAGE_FLOOR;
-             this.opponent.position.y = this.position.y-100;
+            this.opponent.gravity = 1000;
              this.gravity = 1000;
-             this.opponent.velocity.x = -700;
-             this.opponent.gravity = 1000;
-             this.opponent.velocity.y = 80;
+             
              
        this.changeState(FighterState.HEAVY_PUNCH);
-       gameState.fighters[this.opponent.playerId].hitPoints -= 30;
+       if(this.opponent.currentState === 'fall') {
+         this.opponent.position.y = this.position.y-100;
+             this.opponent.velocity.x = -700;
+             
+             this.opponent.velocity.y = 80;
+         this.onAttackHit?.(time, this.playerId, this.opponent.playerId, hitPosition, FighterAttackStrength.HEAVY,this.direction);
+       gameState.fighters[this.opponent.playerId].hitPoints -= 10;
        this.opponent.changeState(FighterState.KNOCKUP);
+       }
     }
+
+    checkPickupHit(camera, context) {
+        console.log("hit pick up", this.pickUp);
+               // Check if touching camera directly instead of using this.touchingCamera
+            if (!this.boxes?.hit || !this.opponent?.boxes?.hurt) return false;
+            
+            const actualHitBox = getActualBoxDimensions(this.position, this.direction, this.boxes.hit);
+            if (!actualHitBox || actualHitBox.width <= 0 || actualHitBox.height <= 0) return false;
+            
+            for (const [hurtLocation, hurtBox] of Object.entries(this.opponent.boxes.hurt)) {
+                const [x, y, width, height] = hurtBox;
+                const actualOpponentHurtBox = getActualBoxDimensions(
+                    this.opponent.position, this.opponent.direction, {x, y, width, height}
+                );
+                if (!actualOpponentHurtBox || actualOpponentHurtBox.width <= 0 || actualOpponentHurtBox.height <= 0) continue;
+                
+                if (boxOverlap(actualHitBox, actualOpponentHurtBox)) {
+                    
+                    return true;
+                }
+            }
+            return false;
+        }
 
      handleIdleInit(){
                 this.resetVelocities();
