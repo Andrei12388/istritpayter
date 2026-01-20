@@ -637,8 +637,8 @@ export class Golem extends Fighter {
             ],
         }
          this.states[FighterState.KNEEDASH] = {
-                    attackType: FighterAttackType.PUNCH,
-            attackStrength: FighterAttackStrength.HEAVY,
+                    attackType: FighterAttackType.KICK,
+                     attackStrength: FighterAttackStrength.HEAVY,
                      init: this.handleKneeDashInit.bind(this),
                      update: this.handleKneeDashState.bind(this),
                    
@@ -707,13 +707,14 @@ export class Golem extends Fighter {
         this.kneeDashSpeed = (strength === 'heavyKick') ? fastSpeed.x : slowSpeed.x;
         this.kneeDashJump = (strength === 'heavyKick') ? fastSpeed.y : slowSpeed.y;
         console.log(strength);
+         console.log(attackType);
        
         
        
     }
 
          handleKneeDashState(_, strength){
-             console.log('strength', strength);
+           
              const slowSpeed = {
             x: 300,
             y: -180,
@@ -747,7 +748,7 @@ export class Golem extends Fighter {
 
     //Tornado dig move
     handleTornadoDigInit(time, _, strength, attackType, playerId){
-        console.log("tornado dig init");
+       
         this.rotation = 0;
         this.gravity = 0;
         this.position.y -= 10;
@@ -759,7 +760,7 @@ export class Golem extends Fighter {
     }
 
     handleTornadoDigState(time){
-         console.log("tornado dig state");
+        
          this.rotation -= this.rotationValue;
          if(this.position.y >= STAGE_FLOOR && !this.touchGround){
             this.entityList.add.call(this.entityList, RockSplash, time, this, this.fireball.strength);
@@ -779,12 +780,12 @@ export class Golem extends Fighter {
             this.rotationValue = 8;
          } 
          if(this.rotation <= -90){
-            console.log("rotating golem", this.rotation);
+            
             this.rotationValue = 8;
         } 
         if(this.rotation <= -90) this.velocity.y += 30;
         if(this.rotation <= -180) this.rotation = -180;
-         if(this.animationFrame >= 9 && (control.isHeavyPunch(this.playerId, this.direction))){
+         if(this.animationFrame >= 9 && this.position.y >= STAGE_FLOOR &&(control.isHeavyPunch(this.playerId, this.direction))){
             this.velocity.x = 0;
             this.changeState(FighterState.PICKUP);
             this.position.x = this.opponent.position.x +13*this.direction;
@@ -818,9 +819,11 @@ export class Golem extends Fighter {
         if(pickupHit && !this.pickUp){
             this.opponent.gravity = 0;
              this.opponent.changeState(FighterState.FALL);
+             this.opponent.velocity.x = 0;
+             this.direction *= -1;
              this.pickUp = true;
         }
-        console.log("gravity", this.gravity, this.opponent.gravity);
+       
         if(!this.touchGround){
             this.soundGroundCrash.currentTime = 0;
             this.soundGroundCrash.volume = 1;
@@ -848,7 +851,7 @@ export class Golem extends Fighter {
         } 
         if(this.touchGround && !this.stageEnable && this.position.y <= 100){
              this.gravity = 2000;
-              console.log("touching ground");
+             
              this.stageEnable = true; 
         } 
         
@@ -862,7 +865,7 @@ export class Golem extends Fighter {
        this.changeState(FighterState.HEAVY_PUNCH);
        if(this.opponent.currentState === 'fall') {
          this.opponent.position.y = this.position.y-100;
-             this.opponent.velocity.x = -700;
+             this.opponent.velocity.x = -700*this.direction;
              
              this.opponent.velocity.y = 80;
          this.onAttackHit?.(time, this.playerId, this.opponent.playerId, hitPosition, FighterAttackStrength.HEAVY,this.direction);
@@ -872,7 +875,7 @@ export class Golem extends Fighter {
     }
 
     checkPickupHit(camera, context) {
-        console.log("hit pick up", this.pickUp);
+       
                // Check if touching camera directly instead of using this.touchingCamera
             if (!this.boxes?.hit || !this.opponent?.boxes?.hurt) return false;
             

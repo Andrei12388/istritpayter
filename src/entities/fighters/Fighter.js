@@ -443,23 +443,24 @@ export class Fighter {
         
     }
 
-   changeState(newState, ...args) {
+  changeState(newState, ...args) {
     if (!this.states[newState].validFrom.includes(this.currentState)) return;
 
     const state = this.states[newState];
     this.currentState = newState;
     this.animationFrame = 0;
 
-    // Pass args through so callers can provide extra data (e.g. hitPosition)
-    // Common call pattern: changeState(state, time, [hitPosition])
-    // Final args appended keep existing behaviour for attack inits.
+    const passedStrength = args[1];
+    const passedType = args[2];
+
     state.init(
         ...(args || []),
-        state.attackStrength,
-        state.attackType,
+        passedStrength ?? state.attackStrength,
+        passedType ?? state.attackType,
         this.playerId
     );
 }
+
 // Cancel Attack implementation
 isInCancelWindow(state, cancelData = null) {
     if (!cancelData) {
@@ -1429,7 +1430,7 @@ handleHeavyKickState(){
     updateSpecialMoves(time){
         for (const specialMove of this.SpecialMoves){
             const resultArgs = hasSpecialMoveBeenExecuted(specialMove, this.playerId, time);
-
+            
             if (resultArgs) this.changeState(specialMove.state, time, resultArgs);
         }
     }
@@ -1772,7 +1773,7 @@ if (!spriteToDraw) return; // avoid crashes
 
         context.restore();
        
-     this.drawDebug(context, camera);
+   //  this.drawDebug(context, camera);
     }
     }
 }
