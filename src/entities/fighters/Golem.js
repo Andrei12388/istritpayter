@@ -244,23 +244,22 @@ export class Golem extends Fighter {
              ['hyperskill1-11', [[[916, 2298, 79, 58], [40,56]], PushBox.IDLE, HurtBox.NULL, [15,-70,50,60]]],
 
              //Golem Special Moves
-             //Knee Dash
-            ['kneeDash-1', [[[799, 1425, 59, 99], [29,97]], PushBox.JUMP, HurtBox.JUMP]],
-            ['kneeDash-2', [[[875, 1426, 62, 99], [31,97]], PushBox.JUMP, HurtBox.JUMP]],
-            ['kneeDash-3', [[[956, 1425, 65, 99], [32,97]], PushBox.JUMP, HurtBox.JUMP]],
-            ['kneeDash-4', [[[1027, 1420, 75, 104], [37,102]], PushBox.JUMP, HurtBox.JUMP]],
-            //Active Frame
-            ['kneeDash-5', [[[1106, 1418, 93, 106], [46,104]], PushBox.JUMP, HurtBox.JUMP, [18,-55,23,35]]],
-            ['kneeDash-6', [[[1099, 1544, 95, 106], [47,104]], PushBox.JUMP, HurtBox.JUMP, [18,-55,23,35]]],
-            ['kneeDash-7', [[[1004, 1544, 82, 106], [41,104]], PushBox.JUMP, HurtBox.JUMP]],
+             //kneedash
+            ['kneeDash-1', [[[799,1425,59,99],[29,97]], [-18,-80,44,65], [[0,-100,30,30],[-18,-79,48,56],[-25,-28,50,30]], [0,-500,0,0]]],
+            ['kneeDash-2', [[[875,1426,62,99],[31,97]], [-16,-80,41,64], [[-1,-99,28,27],[-15,-80,42,57],[-25,-29,50,29]], [0,-500,0,0]]],
+            ['kneeDash-3', [[[956,1425,65,99],[32,97]], [-21,-79,43,62], [[-1,-101,27,28],[-18,-79,44,57],[-29,-30,56,30]], [0,-500,0,0]]],
+            ['kneeDash-4', [[[1027,1420,75,104],[37,102]], [-21,-81,41,72], [[-2,-94,25,20],[-19,-77,39,47],[-32,-28,54,26]], [0,-500,0,0]]],
+            //active
+            ['kneeDash-5', [[[1106,1418,93,106],[46,104]], [-25,-83,43,59], [[1,-106,30,30],[-23,-84,43,60],[-44,-30,63,30]], [11,-64,34,53]]],
+            ['kneeDash-6', [[[1099,1544,95,106],[47,104]], [-27,-82,45,57], [[-2,-106,30,30],[-26,-79,47,57],[-42,-33,55,33]], [0,500,0,0]]],
+            ['kneeDash-7', [[[1004,1544,82,106],[41,104]], [-19,-81,40,56], [[6,-106,30,30],[-18,-80,42,49],[-33,-32,54,29]], [0,-500,0,0]]],
 
             //Tornado dig frame
-            ['tornado-dig-1', [[[1011, 1679, 55, 99], [27,97]], PushBox.JUMP, HurtBox.JUMP]],
-
-            ['tornado-dig-2', [[[1084, 1680, 76, 94], [38,92]], PushBox.JUMP, HurtBox.JUMP]],
-            ['tornado-dig-3', [[[1001, 1800, 94, 79], [47,77]], PushBox.JUMP, HurtBox.JUMP]],
-            ['tornado-dig-4', [[[1096, 1819, 104, 50], [52,48]], PushBox.JUMP, HurtBox.JUMP]],
-            ['tornado-dig-5', [[[1002, 1893, 95, 80], [47,78]], PushBox.JUMP, HurtBox.JUMP]],
+            ['tornado-dig-1', [[[1011,1679,55,99],[27,97]],[-13,-82,33,78],[[-14,-99,32,22],[-20,-80,44,38],[-20,-41,40,39]],[0,0,0,0]]],
+            ['tornado-dig-2', [[[1084,1680,76,94],[38,92]],[-24,-81,35,73],[[-30,-94,32,22],[-31,-74,44,38],[-13,-41,40,39]],[0,0,0,0]]],
+            ['tornado-dig-3', [[[1001,1800,94,79],[47,77]],[-36,-64,57,50],[[-50,-78,32,22],[-45,-67,44,38],[-6,-41,40,39]],[0,0,0,0]]],
+            ['tornado-dig-4', [[[1096,1819,104,50],[52,48]],[-41,-42,88,29],[[-54,-46,27,22],[-30,-49,50,38],[20,-41,28,28]],[0,0,0,0]]],
+            ['tornado-dig-5', [[[1002,1893,95,80],[47,78]],[-25,-54,51,41],[[-49,-32,34,29],[-26,-54,44,38],[20,-75,27,39]],[0,0,0,0]]],
             ['tornado-dig-6', [[[1115, 1888, 66, 104], [33,102]], [0,0,0,0], HurtBox.JUMP]],
             ['tornado-dig-7', [[[1123, 2007, 50, 104], [25,102]], [0,0,0,0], HurtBox.JUMP]],
             ['tornado-dig-8', [[[1028, 2000, 50, 103], [25,101]], [0,0,0,0], HurtBox.JUMP]],
@@ -467,9 +466,9 @@ export class Golem extends Fighter {
                         ],
                         [FighterState.KNEEDASH]:[
                                         ['kneeDash-1', 80],['kneeDash-2', 60],['kneeDash-3', 50],['kneeDash-4', 50],
-                                        ['kneeDash-5', 100],['kneeDash-6', 60],['kneeDash-7', 60],
-                                        ['kneeDash-4', 60],['kneeDash-3', 60],['kneeDash-2', 20],['kneeDash-1', 20],
-                                        ['kneeDash-1', FrameDelay.TRANSITION],
+                                               ['kneeDash-5', 500],['kneeDash-6', 60],['kneeDash-7', 60],
+                                               ['kneeDash-4', 60],['kneeDash-3', 60],['kneeDash-2', 20],['kneeDash-1', 20],
+                                               ['kneeDash-1', FrameDelay.TRANSITION],
                                     ],
                         [FighterState.TORNADO_DIG]:[
                             ['tornado-dig-1', 20],['tornado-dig-1', 60], 
@@ -1097,7 +1096,7 @@ export class Golem extends Fighter {
   }
 
    handleSpecial2MoveFighterState(time) {
-
+     this.direction = this.getDirection();
     if(this.position.y < STAGE_FLOOR)  this.quake = true;
     if(this.quake && this.position.y >= STAGE_FLOOR){
                 this.soundGroundCrash.volume = 0.5;
@@ -1233,12 +1232,12 @@ export class Golem extends Fighter {
             
             this.opponent.changeState(FighterState.KNOCKUP);
             this.opponent.velocity.y -= 500;
-            console.log("changed state to knock up");
+           
             }
         }
        }
          this.rockspawn = false;
-        console.log('Rock Spawned', this.rockspawn);
+       
       } else this.rockspawn = true;
       
    

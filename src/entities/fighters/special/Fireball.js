@@ -215,6 +215,7 @@ if (hasCollided === FireballCollidedState.OPPONENT && this.canDealDamage) {
 
 
     update(time, _, camera){
+         if(gameState.pauseMenu.pauseGame) return;
         this.updateMovement(time, camera);
         this.updateAnimation(time);
        

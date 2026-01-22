@@ -154,7 +154,7 @@ export class EnemyAI {
       this.nextDecisionTime = now + randomBetween(this.reactionDelay[0], this.reactionDelay[1]);
       this.makeDecision(time, now);
     } else {
-      if(this.fighter.position.y >= 200)this.faceOpponent();
+    // if(this.fighter.position.y >= 200)this.faceOpponent();
     }
   }
 
@@ -175,7 +175,7 @@ export class EnemyAI {
   makeDecision(time, now) {
     const dx = this.opponent.position.x - this.fighter.position.x;
     const distance = Math.abs(dx);
-    if(this.fighter.position.y >= 200)this.faceOpponent();
+    // if(this.fighter.position.y >= 200)this.faceOpponent();
 
     // Dodge or block
     if (this.opponentIsAttacking() && distance < this.dodgeDistance) {
@@ -272,7 +272,7 @@ export class EnemyAI {
         break;
       case FighterState.SPECIAL_2:
         if(this.fighter.skillNumber > 0) return;
-        this.fighter.performSpecial2?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.SPECIAL_2, time, defaultStrength);
+        this.fighter.performSpecial2?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.SPECIAL_2, time, 300);
         break;
       case FighterState.HYPERSKILL_1:
         if(this.fighter.skillNumber > 2) return;
@@ -309,11 +309,11 @@ export class EnemyAI {
         break;
       case FighterState.SPECIAL_2:
         if(this.fighter.skillNumber > 0) return;
-        this.fighter.performSpecial2?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.SPECIAL_2, time, defaultStrength);
+        this.fighter.performSpecial2?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.SPECIAL_2, time, 300);
         break;
       case FighterState.SPECIAL_2_ROCKRELEASE:
         if(this.fighter.skillNumber > 0) return;
-        this.fighter.performSpecial2?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.SPECIAL_2_ROCKRELEASE, time, defaultStrength);
+        this.fighter.performSpecial2?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.SPECIAL_2_ROCKRELEASE, time, 300);
         break;
       case FighterState.HYPERSKILL_1:
         if(this.fighter.skillNumber > 2) return;
@@ -336,7 +336,7 @@ export class EnemyAI {
         this.fighter.changeState(FighterState.TORNADO_DIG, time, 1);
         break;
       case FighterState.KNEEDASH:
-        this.fighter.changeState(FighterState.KNEEDASH, time, 1);
+        this.fighter.changeState(FighterState.KNEEDASH, time, 'heavyKick');
         break;
       default:
         this.fighter.changeState(move, time, defaultStrength);

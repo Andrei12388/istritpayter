@@ -838,10 +838,18 @@ export class Malupiton extends Fighter {
 
 
     handleHeadbuttState(time, context, camera){
+        let isTouchingCamera;
+
+        if (this.direction === -1) {
+            isTouchingCamera =
+                this.position.x-5 < camera.position.x + this.boxes.push.width;
+        } else {
+            isTouchingCamera =
+               this.position.x+5 > camera.position.x + context.canvas.width - this.boxes.push.width
+        }
+
+
        
-    const isTouchingCamera = 
-        this.position.x+5 > camera.position.x + context.canvas.width - this.boxes.push.width ||
-        this.position.x-5 < camera.position.x + this.boxes.push.width;
  
         if(this.headbuttActivate){
             this.gravity = 1000;
@@ -868,9 +876,15 @@ export class Malupiton extends Fighter {
 
     handleHeadbuttUpState(time, context, camera){
         console.log("HEADBUTT up STATE");
-    const isTouchingCamera = 
-        this.position.x+5 > camera.position.x + context.canvas.width - this.boxes.push.width ||
-        this.position.x-5 < camera.position.x + this.boxes.push.width;
+    let isTouchingCamera;
+
+        if (this.direction === -1) {
+            isTouchingCamera =
+                this.position.x-5 < camera.position.x + this.boxes.push.width;
+        } else {
+            isTouchingCamera =
+               this.position.x+5 > camera.position.x + context.canvas.width - this.boxes.push.width
+        }
  
         if(this.headbuttActivate){
             this.gravity = 1000;
@@ -896,9 +910,15 @@ export class Malupiton extends Fighter {
     }
     handleHeadbuttDownState(time, context, camera){
        console.log("HEADBUTT DOWN STATE");
-    const isTouchingCamera = 
-        this.position.x+5 > camera.position.x + context.canvas.width - this.boxes.push.width ||
-        this.position.x-5 < camera.position.x + this.boxes.push.width;
+     let isTouchingCamera;
+
+        if (this.direction === -1) {
+            isTouchingCamera =
+                this.position.x-5 < camera.position.x + this.boxes.push.width;
+        } else {
+            isTouchingCamera =
+               this.position.x+5 > camera.position.x + context.canvas.width - this.boxes.push.width
+        }
  
         if(this.headbuttActivate){
             this.gravity = 1000;

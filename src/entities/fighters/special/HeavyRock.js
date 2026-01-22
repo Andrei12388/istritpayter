@@ -296,11 +296,12 @@ export class HeavyRock {
 
         context.restore();
        
-        this.drawDebug(context, camera);
+      //  this.drawDebug(context, camera);
     }
 
     // ⏱️ Main update loop
     update(time, _, camera) {
+         if(gameState.pauseMenu.pauseGame) return;
         this.updateMovement(time, camera);
         this.updateAnimation(time);
        

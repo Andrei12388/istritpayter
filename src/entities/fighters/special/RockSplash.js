@@ -5,6 +5,7 @@ import {
     fireballVelocity
 } from "../../../constants/fireball.js";
 import { STAGE_FLOOR } from "../../../constants/stage.js";
+import { gameState } from "../../../state/gameState.js";
 
 // Frame data
 const frames = new Map([
@@ -180,6 +181,7 @@ export class RockSplash {
 
     // ⏱️ Main update loop
     update(time, _, camera) {
+         if(gameState.pauseMenu.pauseGame) return;
         this.updateMovement(time, camera);
         this.updateAnimation(time);
         
