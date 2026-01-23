@@ -259,7 +259,7 @@ if (hasCollided === FireballCollidedState.OPPONENT && this.canDealDamage) {
     );
 
     context.restore();  // Reset transform
-   this.drawDebug(context, camera);
+ //  this.drawDebug(context, camera);
 }
 
 
