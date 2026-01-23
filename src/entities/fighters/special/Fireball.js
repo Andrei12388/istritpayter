@@ -10,14 +10,14 @@ import { BlockHitSplash } from "../shared/BlockHitSplash.js";
 import { GreenHitSplash } from "../shared/GreenHitSplash.js";
 
 const frames = new Map([
-    ['special1-1', [[[4, 365, 73, 30],[24,18]], [-15, -13, 30, 24],[-28, 20, 56, 38]]],
-    ['special1-2', [[[83, 363, 70, 36],[24,18]], [-15, -13, 30, 24],[-28, 20, 56, 38]]],
-    ['special1-3', [[[182, 348, 44, 66],[24,18]], [-15, -13, 30, 24],[-28, 20, 56, 38]]],
-    ['special1-4', [[[246, 350, 53, 60],[24,18]], [-15, -13, 30, 24],[-28, 20, 56, 38]]],
-    ['special1-5', [[[312, 363, 73, 31],[24,18]], [-15, -13, 30, 24],[-28, 20, 56, 38]]],
-    ['special1-6', [[[399, 356, 61, 51],[24,18]], [-15, -13, 30, 24],[-28, 20, 56, 38]]],
-    ['special1-7', [[[486, 357, 48, 64],[24,18]], [-15, -13, 30, 24],[-28, 20, 56, 38]]],
-    ['special1-8', [[[546, 364, 73, 29],[24,18]], [-15, -13, 30, 24],[-28, 20, 56, 38]]],
+    ['special1-1', [[[4, 365, 73, 30],[24,18]], [-15, -13, 30, 60],[-28, 0, 56, 38]]],
+    ['special1-2', [[[83, 363, 70, 36],[24,18]], [-15, -13, 30, 60],[-28, 0, 56, 38]]],
+    ['special1-3', [[[182, 348, 44, 66],[24,18]], [-15, -13, 30, 60],[-28, 0, 56, 38]]],
+    ['special1-4', [[[246, 350, 53, 60],[24,18]], [-15, -13, 30, 60],[-28, 0, 56, 38]]],
+    ['special1-5', [[[312, 363, 73, 31],[24,18]], [-15, -13, 30, 60],[-28, 0, 56, 38]]],
+    ['special1-6', [[[399, 356, 61, 51],[24,18]], [-15, -13, 30, 60],[-28, 0, 56, 38]]],
+    ['special1-7', [[[486, 357, 48, 64],[24,18]], [-15, -13, 30, 60],[-28, 0, 56, 38]]],
+    ['special1-8', [[[546, 364, 73, 29],[24,18]], [-15, -13, 30, 60],[-28, 0, 56, 38]]],
 
     //Collision Frames
     ['special1-collide-1', [[[22, 450, 10, 11],[3,10]], [0, 0, 0, 0]]],
@@ -181,6 +181,55 @@ if (hasCollided === FireballCollidedState.OPPONENT && this.canDealDamage) {
         this.animationTimer = time.previous + animations[this.state][this.animationFrame][1] * FRAME_TIME;
     }
 
+     // 🧭 Draw individual debug boxes
+    drawDebugBox(context, camera, dimensions, baseColor) {
+        if (!Array.isArray(dimensions)) return;
+
+        const [x = 0, y = 0, width = 0, height = 0] = dimensions;
+        const finalWidth = Math.abs(width);
+
+        context.beginPath();
+        context.strokeStyle = baseColor + 'AA';
+        context.fillStyle = baseColor + '33';
+
+        const drawX = Math.floor(this.position.x + (x * this.direction) - camera.position.x) + 0.5;
+        const drawY = Math.floor(this.position.y + y - camera.position.y) + 0.5;
+
+        context.fillRect(drawX, drawY, finalWidth, height);
+        context.rect(drawX, drawY, finalWidth, height);
+        context.stroke();
+    }
+
+     // 🔍 Draw all debug boxes
+        drawDebug(context, camera) {
+            const [frameKey] = animations[FireballState.ACTIVE][this.animationFrame];
+            const frameData = frames.get(frameKey);
+            if (!frameData) return;
+    
+            const boxes = {
+                hit: frameData[1],
+                hurt: frameData[2] || [],
+            };
+    
+            context.lineWidth = 1;
+    
+            this.drawDebugBox(context, camera, boxes.hit, '#FF0000');
+            if (Array.isArray(boxes.hurt)) {
+                this.drawDebugBox(context, camera, boxes.hurt, '#7777FF');
+            }
+    
+            // Draw origin
+            const originX = Math.floor(this.position.x - camera.position.x);
+            const originY = Math.floor(this.position.y - camera.position.y);
+            context.beginPath();
+            context.strokeStyle = 'red';
+            context.moveTo(originX - 4, originY);
+            context.lineTo(originX + 5, originY);
+            context.moveTo(originX, originY - 5);
+            context.lineTo(originX, originY + 4);
+            context.stroke();
+        }
+
     draw(context, camera) {
         
     if (!this.image || !this.image.complete) {
@@ -210,12 +259,12 @@ if (hasCollided === FireballCollidedState.OPPONENT && this.canDealDamage) {
     );
 
     context.restore();  // Reset transform
-   
+   this.drawDebug(context, camera);
 }
 
 
     update(time, _, camera){
-         if(gameState.pauseMenu.pauseGame) return;
+       if(gameState.pauseMenu.pauseGame || gameState.pause) return;
         this.updateMovement(time, camera);
         this.updateAnimation(time);
        

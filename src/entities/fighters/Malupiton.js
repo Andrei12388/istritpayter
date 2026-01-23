@@ -90,7 +90,8 @@ export class Malupiton extends Fighter {
             ['knock-lift-1', [[[70, 124, 55, 88], [27,86]], PushBox.JUMP, HurtBox.JUMP]],
             ['knock-lift-2', [[[136, 127, 82, 70], [41,68]], PushBox.JUMP, HurtBox.JUMP]],
             ['knock-lift-3', [[[231, 138, 88, 48], [44,46]], PushBox.JUMP, HurtBox.JUMP]],
-            ['knock-lift-4', [[[339, 115, 50, 94], [24,91]], PushBox.JUMP, HurtBox.JUMP, [8,-55,60,55],]],
+            ['knock-lift-4', [[[339, 115, 50, 94], [24,91]], PushBox.JUMP, HurtBox.JUMP, [12,-55,60,55],]],
+            ['knock-lift-4-down', [[[339, 115, 50, 94], [24,91]], PushBox.JUMP, HurtBox.JUMP, [20,-55,60,55],]],
             ['knock-lift-5', [[[327, 43, 100, 68], [50,68]], PushBox.JUMP, HurtBox.JUMP]],
             ['knock-lift-6', [[[251, 21, 56, 102], [28,100]], PushBox.JUMP, HurtBox.JUMP]],
             ['knock-lift-7', [[[469, 156,67,94],[33,92]], PushBox.JUMP, HurtBox.JUMP]],
@@ -98,7 +99,7 @@ export class Malupiton extends Fighter {
             //Headbutt
             ['headbutt-1', [[[264, 957, 93, 75], [46,73]], PushBox.JUMP, HurtBox.JUMP]],
             ['headbutt-2', [[[367, 970, 100, 59], [50,59]], PushBox.JUMP, HurtBox.JUMP]],
-            ['headbutt-3', [[[477, 980, 116, 39], [58,37]], PushBox.JUMP, HurtBox.JUMP, [38,-25,20,15],]],
+            ['headbutt-3', [[[477, 980, 116, 39], [58,37]], [0,-32,26,22], [[-52,-26,24,24],[-28,-26,45,28],[17,-26,30,27]],[38,-25,20,15]]],
 
             //Headbutt Up
             ['headbutt-up-1', [[[277, 1052, 60, 89], [30,87]], PushBox.JUMP, HurtBox.JUMP]],
@@ -216,19 +217,22 @@ export class Malupiton extends Fighter {
             ['hyperskill2-8', [[[181, 605, 58, 111], [29,109]], PushBox.IDLE, HurtBox.NULL, HitBox.SLASH]],
 
             //Death State
-            ['death-1', [[[9, 838, 53, 91], [27,89]], PushBox.IDLE, HurtBox.IDLE]],
-            ['death-2', [[[84, 836, 48, 98], [24,96]],PushBox.IDLE, HurtBox.IDLE]],
-            ['death-3', [[[150, 840, 69, 97], [34,95]],PushBox.IDLE, HurtBox.IDLE]],
-            ['death-4', [[[234, 852, 77, 76], [38,74]],PushBox.IDLE, HurtBox.IDLE]],
-            ['death-5', [[[321, 855, 101, 51], [50,49]],PushBox.IDLE, HurtBox.IDLE]],
-            ['death-6', [[[433, 870, 99, 37], [49,35]],PushBox.IDLE, HurtBox.IDLE]],
-            ['death-7', [[[537, 867, 116, 37], [58,35]],PushBox.IDLE, HurtBox.IDLE]],
-            ['death-8', [[[537, 867, 116, 37], [58,35]],PushBox.IDLE, HurtBox.NULL]],
+              
+            ['death-1', [[[9,838,53,91],[27,89]], [-10,-84,29,52], [[8,-83,25,30],[-11,-85,36,41],[-24,-43,45,40]], [0,-500,0,0]]],
+            ['death-2', [[[84,836,48,98],[24,96]], [-24,-93,39,66], [[-5,-89,27,27],[-21,-93,36,46],[-24,-44,45,40]], [0,-500,0,0]]],
+            ['death-3', [[[150,840,69,97],[34,95]], [-29,-85,40,51], [[-16,-90,25,26],[-28,-93,41,50],[-13,-55,43,47]], [0,-500,0,0]]],
+            ['death-4', [[[234,852,77,76],[38,74]], [-36,-66,57,43], [[-28,-77,25,25],[-37,-71,40,41],[0,-57,33,53]], [0,-500,0,0]]],
+            ['death-5', [[[321,855,101,51],[50,49]], [-43,-35,63,35], [[-47,-39,31,32],[-44,-33,52,34],[-4,-43,30,41]], [0,-500,0,0]]],
+            ['death-6', [[[433,870,99,37],[49,35]], [-48,-31,55,31], [[-48,-39,30,30],[-44,-31,45,32],[-4,-32,30,30]], [0,-500,0,0]]],
+            ['death-7', [[[537,867,116,37],[58,35]], [-47,-22,96,22], [[-52,-26,24,24],[-28,-26,45,28],[17,-26,30,27]], [0,-500,0,0]]],
+             ['death-8', [[[537,867,116,37],[58,35]], [-53,-26,106,23], [[0,-500,0,0],[0,-500,0,0],[0,-500,0,0]], [0,-500,0,0]]],
             
             //GetUp State
-             ['getUp-1', [[[11, 955, 53, 55], [27,53]], [-25,-32,30,26], HurtBox.NULL]],
-             ['getUp-2', [[[82, 959, 63, 50], [31,48]], [-25,-32,30,26], HurtBox.NULL]],
-             ['getUp-3', [[[160, 959, 60, 59], [30,57]], [-25,-32,30,26], HurtBox.NULL]],
+            ['getUp-1', [[[11,955,53,55],[27,53]], [-20,-50,36,46], [[0,-500,0,0],[0,-500,0,0],[0,-500,0,0]], [0,-500,0,0]]],
+            ['getUp-2', [[[82,959,63,50],[31,48]], [-19,-43,37,37], [[0,-500,0,0],[0,-500,0,0],[0,-500,0,0]], [0,-500,0,0]]],
+            ['getUp-3', [[[160,959,60,59],[30,57]], [-18,-57,46,47], [[0,-500,0,0],[0,-500,0,0],[0,-500,0,0]], [0,-500,0,0]]],
+
+  
 
             
         ]);
@@ -349,17 +353,17 @@ export class Malupiton extends Fighter {
             ],
             [FighterState.KNOCKLIFTDOWN]:[
                 ['knock-lift-1', 50],['knock-lift-2', 50],
-                ['knock-lift-3', 50],['knock-lift-4', 50],
+                ['knock-lift-3', 50],['knock-lift-4-down', 50],
                 ['knock-lift-5', 50],['knock-lift-6', 50],
                 ['knock-lift-7', FrameDelay.TRANSITION],
             ],
             [FighterState.HEADBUTT]:[
-                ['headbutt-1', 40],['headbutt-2', 40],
+                ['headbutt-1', 80],['headbutt-2', 80],
                 ['headbutt-3', 1000],
                 ['headbutt-3', FrameDelay.TRANSITION],
             ],
             [FighterState.HEADBUTT_UP]:[
-                ['headbutt-up-1', 40],['headbutt-up-2', 40],
+                ['headbutt-up-1', 80],['headbutt-up-2', 80],
                 ['headbutt-up-3', 1000],
                 ['headbutt-up-3', FrameDelay.TRANSITION],
             ],
@@ -485,7 +489,7 @@ export class Malupiton extends Fighter {
                 [FighterState.JUMP_BACKWARD]: -((45 * 4) + (15 * 3)),
                 [FighterState.HEADBUTT]: 600,
                 [FighterState.HEADBUTT_UP]: 600,
-                [FighterState.HEADBUTT_DOWN]: 600,
+                [FighterState.HEADBUTT_DOWN]: 700,
             },
             jump: -420,
         };
@@ -820,7 +824,7 @@ export class Malupiton extends Fighter {
             this.changeState(FighterState.IDLE);
         } else {
              this.gravity = 0;
-        this.velocity.y = 330;
+        this.velocity.y = 400;
        
         playSound(this.headbuttDashSound);
         this.entityList.add(DashEffectSplash, time, this.position.x-30*this.direction, this.position.y-5, this.playerId, 1, this.direction * -1);
@@ -1101,9 +1105,6 @@ export class Malupiton extends Fighter {
     this.changeState(FighterState.IDLE);
   }
 
-  // ==============================
-  // Special Skill 1 - Fireball
-  // ==============================
   handleSpecial1Init(_, strength) {
     const fighter = gameState.fighters[this.playerId];
     this.gravity = 1000;
@@ -1124,8 +1125,8 @@ export class Malupiton extends Fighter {
     gameState.pauseFrameMove = -100;
     gameState.pause = true;
 
-    this.velocity.x = -300;
-    this.velocity.y = -100;
+   
+    
     fighter.sprite += 1;
 
     console.log('🔥 Special 1 (Fireball) started — skill spent instantly');

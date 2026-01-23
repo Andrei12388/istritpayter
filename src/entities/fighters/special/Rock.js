@@ -299,7 +299,7 @@ export class Rock {
 
     // ⏱️ Main update loop
     update(time, _, camera) {
-         if(gameState.pauseMenu.pauseGame) return;
+        if(gameState.pauseMenu.pauseGame || gameState.pause) return;
         this.updateMovement(time, camera);
         this.updateAnimation(time);
          this.updateCrackAnimation(time);
