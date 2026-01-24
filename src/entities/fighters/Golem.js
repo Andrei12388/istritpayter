@@ -206,10 +206,10 @@ export class Golem extends Fighter {
              ['special1-1', [[[473, 12, 55, 99], [28,97]], PushBox.IDLE, HurtBox.NULL]],
              ['special1-2', [[[537, 12, 55, 99], [28,97]], PushBox.IDLE, HurtBox.NULL]],
              ['special1-3', [[[601, 12, 55, 99], [28,97]], PushBox.IDLE, HurtBox.NULL]],
-             ['special1-4', [[[676, 12, 55, 99], [28,97]], PushBox.IDLE, HurtBox.NULL]],
-             ['special1-5', [[[751, 12, 55, 99], [28,97]], PushBox.IDLE, HurtBox.NULL]],
-             ['special1-6', [[[815, 18, 55, 99], [28,67]], PushBox.IDLE, HurtBox.NULL]],
-             ['special1-7', [[[880, 18, 55, 99], [28,67]], PushBox.IDLE, HurtBox.NULL]],
+             ['special1-4', [[[676, 12, 55, 99], [28,97]], PushBox.IDLE, HurtBox.IDLE]],
+             ['special1-5', [[[751, 12, 55, 99], [28,97]], PushBox.IDLE, HurtBox.IDLE]],
+             ['special1-6', [[[815, 18, 55, 99], [28,67]], PushBox.IDLE, HurtBox.IDLE]],
+             ['special1-7', [[[880, 18, 55, 99], [28,67]], PushBox.IDLE, HurtBox.IDLE]],
 
              //Special 2 Rockman
              ['special2-1', [[[240, 1119, 57, 99], [28,97]], PushBox.IDLE, HurtBox.NULL]],
@@ -1299,6 +1299,7 @@ export class Golem extends Fighter {
                 console.log("Hyperskill 1 hitted!");
                 this.opponent.position.y = STAGE_FLOOR-50;
                  this.opponent.velocity.y -= 1200;
+                  this.opponent.changeState(FighterState.KNOCKUP);
                  
             }
             if(this.opponent.position.y >= STAGE_FLOOR){
