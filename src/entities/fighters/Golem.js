@@ -13,6 +13,7 @@ import { HeavyRock } from './special/HeavyRock.js';
 import { RockSplash } from './special/RockSplash.js';
 import { boxOverlap, getActualBoxDimensions } from '../../utils/collisions.js';
 import { TornadoSpinSplash } from './shared/TornadoSpinSplash.js';
+import { TornadoSpin } from './special/TornadoSpin.js';
 
 export class Golem extends Fighter {
     constructor(playerId, onAttackHit, effectSplash, entityList, entityListForeground) {
@@ -283,6 +284,17 @@ export class Golem extends Fighter {
             ['toss-7', [[[886,2137,58,105],[29,103]], [-20,-77,35,77], [[-10,-97,27,26],[-20,-85,37,61],[-18,-29,34,29]], [0,-500,0,0]]],
             ['toss-8', [[[968,2139,72,101],[36,99]], [-29,-77,36,76], [[-24,-105,30,30],[-30,-86,38,56],[-25,-33,30,30]], [0,-500,0,0]]],
             ['toss-9', [[[1050,2140,107,100],[30,98]], [-25,-76,43,75], [[-12,-102,30,30],[-22,-78,36,55],[-23,-28,43,28]], [0,-500,0,0]]],
+
+            //tornado Spin Hyperskill frames
+            ['tornado-spin-1', [[[257,1995,73,98],[36,96]], [-15,-98,49,98], [[20,-500,30,30],[40,-500,30,30],[60,-500,30,30]], [0,-500,0,0]]],
+            ['tornado-spin-2', [[[344,1992,72,106],[36,104]], [-20,-103,53,102], [[20,-500,30,30],[40,-500,30,30],[60,-500,30,30]], [0,-500,0,0]]],
+            ['tornado-spin-3', [[[418,1992,77,101],[38,99]], [-19,-97,49,97], [[20,-500,30,30],[40,-500,30,30],[60,-500,30,30]], [0,-500,0,0]]],
+            ['tornado-spin-4', [[[507,1995,60,100],[30,98]], [0,0,0,0], [[20,-500,30,30],[40,-500,30,30],[60,-500,30,30]], [0,-500,0,0]]],
+            ['tornado-spin-5', [[[588,1992,75,106],[37,104]], [0,0,0,0], [[20,-500,30,30],[40,-500,30,30],[60,-500,30,30]], [0,-500,0,0]]],
+            ['tornado-spin-6', [[[682,1994,58,100],[29,98]], [0,0,0,0], [[20,-500,30,30],[40,-500,30,30],[60,-500,30,30]], [0,-500,0,0]]],
+            ['tornado-spin-7', [[[756,1995,60,100],[30,98]], [0,0,0,0], [[20,-500,30,30],[40,-500,30,30],[60,-500,30,30]], [0,-500,0,0]]],
+            ['tornado-spin-8', [[[827,1995,57,100],[28,98]], [-29,-88,50,82], [[20,-500,30,30],[40,-500,30,30],[60,-500,30,30]], [0,-500,0,0]]],
+            ['tornado-spin-9', [[[903,1998,60,100],[30,98]], [-28,-96,54,86], [[20,-500,30,30],[40,-500,30,30],[60,-500,30,30]], [0,-500,0,0]]],
             
             
         ]);
@@ -501,6 +513,18 @@ export class Golem extends Fighter {
                             ['toss-7', 120], ['toss-8', 80], ['toss-9', 200],
                             ['toss-9', FrameDelay.TRANSITION],
                     ],
+                    [FighterState.HYPERSKILL_2]:[   
+                                              ['tornado-spin-1', 120], ['tornado-spin-2', 120], ['tornado-spin-3', 120], 
+                                              ['tornado-spin-4', 100], ['tornado-spin-5', 100], ['tornado-spin-6', 100], ['tornado-spin-7', 100],
+                                            ['tornado-spin-4', 100], ['tornado-spin-5', 100], ['tornado-spin-6', 100], ['tornado-spin-7', 100],
+                                            ['tornado-spin-4', 100], ['tornado-spin-5', 100], ['tornado-spin-6', 100], ['tornado-spin-7', 100],
+                                            ['tornado-spin-4', 100], ['tornado-spin-5', 100], ['tornado-spin-6', 100], ['tornado-spin-7', 100],
+                                            ['tornado-spin-4', 100], ['tornado-spin-5', 100], ['tornado-spin-6', 100], ['tornado-spin-7', 100],
+                                              ['tornado-spin-8', 100], ['tornado-spin-9', 100],
+                                               ['tornado-spin-3', 120], ['tornado-spin-2', 120], ['tornado-spin-1', 120], 
+                                              ['tornado-spin-1', FrameDelay.TRANSITION],
+                                ],
+                                                  
 
           
 
@@ -516,6 +540,7 @@ export class Golem extends Fighter {
                 [FighterState.DODGE_BACKWARD]: -((80 * 4) + (12 * 3)),
                 [FighterState.TORNADO_DIG]: -(2 * 50),
                 [FighterState.TOSS]: 3 * 60,
+                [FighterState.HYPERSKILL_2]: 1 * 60,
                 
             },
             jump: -420,
@@ -560,6 +585,13 @@ export class Golem extends Fighter {
                 ],
                 cursor: 0,
             },
+              {
+                state: FighterState.HYPERSKILL_2,
+                sequence: 
+                [SpecialMoveDirection.DOWN,SpecialMoveDirection.BACKWARD_DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveButton.LIGHT_PUNCH,
+                ],
+                cursor: 0,
+            },
             //Special Moves
             {
                 state: FighterState.KNEEDASH,
@@ -575,6 +607,7 @@ export class Golem extends Fighter {
                 ],
                 cursor: 0,
             },
+           
         ];
         this.gravity = 1000;
         
@@ -622,6 +655,19 @@ export class Golem extends Fighter {
                             attackStrength: FighterAttackStrength.KNOCKUP,
                             init: this.handleHyperSkill1Init.bind(this),
                             update: this.handleHyperSkill1State.bind(this),
+                            shadow: [1.6, 1, -40, 0],
+                            validFrom: [
+                                FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.JUMP_UP, FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD, FighterState.JUMP_LAND,
+                                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
+                                FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
+                                FighterState.HEADBUTT, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN, FighterState.KNEEDASH,
+                            ],
+                        }
+             this.states[FighterState.HYPERSKILL_2] = {
+                            attackType: FighterAttackType.PUNCH,
+                            attackStrength: FighterAttackStrength.KNOCKUP,
+                            init: this.handleHyperSkill2Init.bind(this),
+                            update: this.handleHyperSkill2State.bind(this),
                             shadow: [1.6, 1, -40, 0],
                             validFrom: [
                                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.JUMP_UP, FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD, FighterState.JUMP_LAND,
@@ -707,6 +753,7 @@ export class Golem extends Fighter {
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_2_MOVEFIGHTER];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_2_ROCKRELEASE];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.HYPERSKILL_1];
+        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.HYPERSKILL_2];
 
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_FORWARD];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_BACKWARD];
@@ -1232,6 +1279,7 @@ export class Golem extends Fighter {
                 console.log('Rock Released', this.fireball.strength);
 
             this.entityList.add.call(this.entityList, HeavyRock, time, this, this.fireball.strength);
+            
             this.fireball.fired = true;
             
       
@@ -1350,5 +1398,51 @@ export class Golem extends Fighter {
              }
              return false;
          }
+
+         handleHyperSkill2Init(time){
+           console.log("Tornado Spin Activated")
+            const fighter = gameState.fighters[this.playerId];
+               
+               // ✅ Ensure enough skill points & prevent double use
+               if (fighter.skillNumber < 3 || fighter.skillUsedThisFrame) return;
+               fighter.skillConsumed = false;
+               fighter.skillUsedThisFrame = true; // guard
+               fighter.skillNumber -= 3; // 🛡️ immediately spend skill
+               fighter.resetSkillBar = true;
+           
+               this.voiceHyperSkill1.play();
+               
+               this.soundSuperLaunch.play();
+           
+               fighter.superAcivated = true;
+               gameState.pauseTimer = 1;
+               gameState.pauseFrameMove = -100;
+               gameState.pause = true;
+               gameState.hyperSkill = true;
+               fighter.hyperSprite += 1;
+           
+           
+            fighter.spawnEntity = true;
+           this.spawnTornado = false;
+          
+         }
+         handleHyperSkill2State(time){
+            const fighter = gameState.fighters[this.playerId];
+            
+                if (fighter.skillNumber >= 0 && !fighter.skillConsumed) {
+            if(this.animationFrame === 5 && !this.spawnTornado){
+                this.spawnTornado = true;
+                 this.handleMoveInit();
+                this.entityList.add.call(this.entityList, TornadoSpin, time, this, this.fireball.strength);
+            }  
+            if(this.animationFrame === 19) fighter.spawnEntity = false;
+            if(!this.isAnimationCompleted()) return;
+                gameState.flash = false;
+                fighter.superAcivated = false;
+                fighter.skillUsedThisFrame = false;
+                this.gravity = 1000;
+            this.changeState(FighterState.IDLE);
+         } else this.changeState(FighterState.IDLE);
+        }
         
 }

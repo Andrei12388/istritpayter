@@ -300,6 +300,7 @@ export class Fighter {
         [FighterAttackStrength.KNOCKLIFTDOWN]: document.querySelector('audio#sound-fighter-heavy-attack'),
         [FighterAttackStrength.SUPER1]: document.querySelector('audio#sound-fighter-heavy-attack'),
         [FighterAttackStrength.SUPER2]: document.querySelector('audio#sound-fighter-heavy-attack'),
+        [FighterAttackStrength.SUPER3]: document.querySelector('audio#sound-fighter-heavy-attack'),
         [FighterAttackStrength.SLASH]: document.querySelector('audio#sound-slash'),
     }
 
@@ -333,6 +334,10 @@ export class Fighter {
             [FighterAttackType.KICK]: document.querySelector('audio#sound-fighter-heavy-kick-hit'),
         },
         [FighterAttackStrength.SUPER2]:{
+            [FighterAttackType.PUNCH]: document.querySelector('audio#sound-fighter-heavy-punch-hit'),
+            [FighterAttackType.KICK]: document.querySelector('audio#sound-fighter-heavy-kick-hit'),
+        },
+        [FighterAttackStrength.SUPER3]:{
             [FighterAttackType.PUNCH]: document.querySelector('audio#sound-fighter-heavy-punch-hit'),
             [FighterAttackType.KICK]: document.querySelector('audio#sound-fighter-heavy-kick-hit'),
         },
@@ -411,6 +416,9 @@ export class Fighter {
                 if(hitLocation === FighterHurtBox.HEAD) return FighterState.HURT_HEAD_HEAVY;
                 return FighterState.HURT_BODY_HEAVY;
             case FighterAttackStrength.SUPER2:
+                if(hitLocation === FighterHurtBox.HEAD) return FighterState.HURT_HEAD_HEAVY;
+                return FighterState.HURT_BODY_HEAVY;
+             case FighterAttackStrength.SUPER3:
                 if(hitLocation === FighterHurtBox.HEAD) return FighterState.HURT_HEAD_HEAVY;
                 return FighterState.HURT_BODY_HEAVY;
             case FighterAttackStrength.SLASH:
@@ -1645,6 +1653,14 @@ else this.colorSwappedImage = hueShiftSprite(this.image, 340, 2, 1);
         
         context.save();
 
+         //fade effect
+
+         if (gameState.fighters[this.playerId].alpha >= 1) gameState.fighters[this.playerId].alpha = 1;
+         if (gameState.fighters[this.playerId].alpha <= 0) gameState.fighters[this.playerId].alpha = 0;
+        context.globalAlpha = gameState.fighters[this.playerId].alpha;
+     
+        //end fade effect
+
        if (status) {
 
     const flicker = Math.random() > 0.5 
@@ -1773,7 +1789,7 @@ if (!spriteToDraw) return; // avoid crashes
 
         context.restore();
        
-   this.drawDebug(context, camera);
+  // this.drawDebug(context, camera);
     }
     }
 }
