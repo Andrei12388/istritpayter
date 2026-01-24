@@ -1,0 +1,35 @@
+export class BackgroundAnimation {
+    constructor(image, frames, animation, startFrame = 0) {
+        this.image = image;
+        this.frames = new Map(frames);
+        this.animation = animation;
+        this.animationFrame = startFrame;
+        this.animationTimer = 0;
+        this.frameDelay = animation[this.animationFrame][1]; // ✅ Fixed
+    }
+
+    update(time) {
+        if (time.previous > this.animationTimer + this.frameDelay) {
+            this.animationFrame += 1;
+
+            if (this.animationFrame >= this.animation.length) {
+                this.animationFrame = 0;
+            }
+
+            this.frameDelay = this.animation[this.animationFrame][1]; // ✅ Fixed
+            this.animationTimer = time.previous;
+        }
+    }
+
+    draw(context, x, y, direction = 1) {
+        const [frameKey] = this.animation[this.animationFrame];
+        const [frameX, frameY, frameWidth, frameHeight] = this.frames.get(frameKey);
+        context.scale(direction,1);
+        context.drawImage(
+            this.image,
+            frameX, frameY, frameWidth, frameHeight,
+            x*direction, y, frameWidth, frameHeight,
+        );
+        context.setTransform(1,0,0,1,0,0);
+    }
+}

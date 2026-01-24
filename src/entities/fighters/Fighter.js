@@ -445,7 +445,7 @@ export class Fighter {
 
   changeState(newState, ...args) {
     if (!this.states[newState].validFrom.includes(this.currentState)) return;
-
+    this.attackStruck = false;
     const state = this.states[newState];
     this.currentState = newState;
     this.animationFrame = 0;
@@ -1243,13 +1243,13 @@ handleHeavyKickState(){
        
         if (this.position.x > camera.position.x + context.canvas.width - this.boxes.push.width) {
             this.position.x = camera.position.x + context.canvas.width - this.boxes.push.width;
-          
+        
             this.resetSlide(true);
         } 
 
         if (this.position.x < camera.position.x + this.boxes.push.width){
             this.position.x = camera.position.x + this.boxes.push.width;
-           
+          
              this.resetSlide(true);
         } 
      if(gameState.dodging) return;
@@ -1773,7 +1773,7 @@ if (!spriteToDraw) return; // avoid crashes
 
         context.restore();
        
-  //  this.drawDebug(context, camera);
+  // this.drawDebug(context, camera);
     }
     }
 }

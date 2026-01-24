@@ -252,12 +252,23 @@ export class EnemyAI {
 
   performAttack() {
     const combos = [
-      [{ control: Control.LIGHT_PUNCH, duration: 100 },{ control: Control.LIGHT_PUNCH, duration: 100 }, { control: Control.HEAVY_PUNCH, duration: 100 }],
-      [{ control: Control.LIGHT_KICK, duration: 100 },{ control: Control.LIGHT_PUNCH, duration: 100 }, { control: Control.HEAVY_KICK, duration: 100 }],
+      [{ control: Control.LIGHT_PUNCH, duration: 150 },{ control: Control.LIGHT_PUNCH, duration: 150 }, { control: Control.HEAVY_PUNCH, duration: 150 }],
+      [{ control: Control.LIGHT_KICK, duration: 150 },{ control: Control.LIGHT_PUNCH, duration: 150 }, { control: Control.HEAVY_KICK, duration: 150 }],
       //[{ control: Control.DOWN, duration: 100 }, { control: [Control.LEFT, Control.DOWN], duration: 100 }, { control: Control.HEAVY_PUNCH, duration: 100 }],
     ];
     this.queueCombo(combos[Math.floor(Math.random() * combos.length)]);
   }
+
+  safeChangeState(state, time, strength) {
+  if (!this.fighter.states?.[state]) {
+    // state not implemented by this fighter → skip
+    return false;
+  }
+
+  this.fighter.changeState(state, time, strength);
+  return true;
+}
+
 
   performSuper(time) {
     const moves = [FighterState.HYPERSKILL_1, FighterState.HYPERSKILL_2, FighterState.SPECIAL_1, FighterState.SPECIAL_2];
@@ -268,31 +279,31 @@ export class EnemyAI {
     switch (move) {
       case FighterState.SPECIAL_1:
         if(this.fighter.skillNumber > 0) return;
-        this.fighter.performSpecial1?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.SPECIAL_1, time, defaultStrength);
+        this.fighter.performSpecial1?.(time, defaultStrength) ??  this.safeChangeState(FighterState.SPECIAL_1, time, defaultStrength);
         break;
       case FighterState.SPECIAL_2:
         if(this.fighter.skillNumber > 0) return;
-        this.fighter.performSpecial2?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.SPECIAL_2, time, 300);
+        this.fighter.performSpecial2?.(time, defaultStrength) ??  this.safeChangeState(FighterState.SPECIAL_2, time, 300);
         break;
       case FighterState.HYPERSKILL_1:
         if(this.fighter.skillNumber > 2) return;
-        this.fighter.performHyperSkill1?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.HYPERSKILL_1, time, defaultStrength);
+        this.fighter.performHyperSkill1?.(time, defaultStrength) ??  this.safeChangeState(FighterState.HYPERSKILL_1, time, defaultStrength);
         break;
       case FighterState.HYPERSKILL_2:
         if(this.fighter.skillNumber > 2) return;
-        this.fighter.performHyperSkill2?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.HYPERSKILL_2, time, defaultStrength);
+        this.fighter.performHyperSkill2?.(time, defaultStrength) ??  this.safeChangeState(FighterState.HYPERSKILL_2, time, defaultStrength);
         break;
       default:
-        this.fighter.changeState(move, time, defaultStrength);
+         this.safeChangeState(move, time, defaultStrength);
     }
   }
 
   // Special move: knocklift or knockliftdown (does not require skill energy)
   performSpecialMove(time) {
-    const moves = [FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN, FighterState.HEADBUTT];
+    const moves = [FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN, FighterState.KNEEDASH,FighterState.HEADBUTT_DOWN, FighterState.HEADBUTT,FighterState.TORNADO_DIG,];
     const move = moves[Math.floor(Math.random() * moves.length)];
     this.resetInputs();
-    this.fighter.changeState(move, time, 1); // strength default 1
+     this.safeChangeState(move, time, 1); // strength default 1
   }
 
   // Long distance move: ranged attacks for when opponent is far
@@ -305,41 +316,41 @@ export class EnemyAI {
     switch (move) {
       case FighterState.SPECIAL_1:
         if(this.fighter.skillNumber > 0) return;
-        this.fighter.performSpecial1?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.SPECIAL_1, time, defaultStrength);
+        this.fighter.performSpecial1?.(time, defaultStrength) ?? this.safeChangeState(FighterState.SPECIAL_1, time, defaultStrength);
         break;
       case FighterState.SPECIAL_2:
         if(this.fighter.skillNumber > 0) return;
-        this.fighter.performSpecial2?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.SPECIAL_2, time, 300);
+        this.fighter.performSpecial2?.(time, defaultStrength) ?? this.safeChangeState(FighterState.SPECIAL_2, time, 300);
         break;
       case FighterState.SPECIAL_2_ROCKRELEASE:
         if(this.fighter.skillNumber > 0) return;
-        this.fighter.performSpecial2?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.SPECIAL_2_ROCKRELEASE, time, 300);
+        this.fighter.performSpecial2?.(time, defaultStrength) ?? this.safeChangeState(FighterState.SPECIAL_2_ROCKRELEASE, time, 300);
         break;
       case FighterState.HYPERSKILL_1:
         if(this.fighter.skillNumber > 2) return;
-        this.fighter.performHyperSkill1?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.HYPERSKILL_1, time, defaultStrength);
+        this.fighter.performHyperSkill1?.(time, defaultStrength) ?? this.safeChangeState(FighterState.HYPERSKILL_1, time, defaultStrength);
         break;
       case FighterState.HYPERSKILL_2:
         if(this.fighter.skillNumber > 2) return;
-        this.fighter.performHyperSkill2?.(time, defaultStrength) ?? this.fighter.changeState(FighterState.HYPERSKILL_2, time, defaultStrength);
+        this.fighter.performHyperSkill2?.(time, defaultStrength) ?? this.safeChangeState(FighterState.HYPERSKILL_2, time, defaultStrength);
         break;
       case FighterState.HEADBUTT:
-        this.fighter.changeState(FighterState.HEADBUTT, time, 1);
+        this.safeChangeState(FighterState.HEADBUTT, time, 1);
         break;
       case FighterState.HEADBUTT_DOWN:
-        this.fighter.changeState(FighterState.HEADBUTT_DOWN, time, 1);
+        this.safeChangeState(FighterState.HEADBUTT_DOWN, time, 1);
         break;
       case FighterState.HEADBUTT_UP:
-        this.fighter.changeState(FighterState.HEADBUTT_UP, time, 1);
+        this.safeChangeState(FighterState.HEADBUTT_UP, time, 1);
         break;
       case FighterState.TORNADO_DIG:
-        this.fighter.changeState(FighterState.TORNADO_DIG, time, 1);
+        this.safeChangeState(FighterState.TORNADO_DIG, time, 1);
         break;
       case FighterState.KNEEDASH:
-        this.fighter.changeState(FighterState.KNEEDASH, time, 'heavyKick');
+        this.safeChangeState(FighterState.KNEEDASH, time, 'heavyKick');
         break;
       default:
-        this.fighter.changeState(move, time, defaultStrength);
+        this.safeChangeState(move, time, defaultStrength);
     }
   }
 
@@ -372,7 +383,11 @@ export class EnemyAI {
       this.opponent.currentState.includes(FighterState.JUMP_UP) ||
       this.opponent.currentState.includes(FighterState.JUMP_FORWARD) ||
       this.opponent.currentState.includes(FighterState.JUMP_BACKWARD) ||
-      this.opponent.currentState.includes(FighterState.SPECIAL_2) 
+      this.opponent.currentState.includes(FighterState.SPECIAL_2) ||
+       this.opponent.currentState.includes(FighterState.TORNADO_DIG) ||
+       this.opponent.currentState.includes(FighterState.PICKUP) ||
+       this.opponent.currentState.includes(FighterState.TOSS) ||
+       this.opponent.currentState.includes(FighterState.KNEEDASH) 
     );
   }
 
