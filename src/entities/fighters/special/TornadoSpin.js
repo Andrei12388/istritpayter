@@ -82,7 +82,7 @@ export class TornadoSpin {
        
     }
 
-    // 🧩 Check collision with opponent
+   
     hasCollidedWithOpponent(hitBox) {
         for (const [, hurtBox] of Object.entries(this.fighter.opponent.boxes.hurt)) {
             const [x, y, width, height] = hurtBox;
