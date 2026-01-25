@@ -35,12 +35,15 @@ export class StatusBar {
 
         gameState.fighters[0].wins = 0;
         gameState.fighters[1].wins = 0;
+        gameState.fighters[0].perfectHP = false;
+        gameState.fighters[1].perfectHP = false;
         gameState.rounds = 0;
         gameState.fighterNotIdle = false;
         this.music.currentTime = 0;
 
         this.soundWin = document.querySelector('audio#sound-win');
         this.soundLose = document.querySelector('audio#sound-lose');
+        this.soundPerfect = document.querySelector('audio#sound-perfect');
        
         this.image = document.querySelector('img[alt="misc"]');
 
@@ -49,6 +52,7 @@ export class StatusBar {
         this.timeCount = 90;
         this.timeTimer = 0;
         this.soundEnable = true;
+        this.soundPerfectEnable = true;
         this.blinkMax = false;
         this.updateSkill = false;
         this.enemyStart = false;
@@ -299,6 +303,7 @@ export class StatusBar {
         this.timeCount = 90;
         this.timeTimer = 0;
         this.soundEnable = true;
+        this.soundPerfectEnable = true;
         this.blinkMax = false;
         this.updateSkill = false;
         this.inputRegistered = false;
@@ -320,6 +325,9 @@ export class StatusBar {
                 skillColor: SKILL_POINTS1_COLOR,
             },
         }];
+
+        gameState.fighters[0].perfectHP = false;
+        gameState.fighters[1].perfectHP = false;
         
         this.fightOver = false;
         this.fightOverEnable = false;
@@ -697,6 +705,8 @@ drawSkillNum(context, label, x, y){
         if(this.fightOverTimer >= 4 && this.fightOverTimer <= 6){
              
             if(this.winSituation === 'DRAW')this.drawFrame(context, 'draw-game', 158,103);
+            
+           
             if(this.winSituation === 'P1WIN'){
                 if(!this.soundEnable && this.fightOverTimer <=4){
                 playSound(this.soundWin, 1);
@@ -718,9 +728,13 @@ drawSkillNum(context, label, x, y){
                 this.drawScoreLabel(context, 'WINNER!', 299, 90);
             } 
         }
+        
+        if(this.fightOverTimer >= 6 && this.fightOverTimer <= 10) this.drawPerfect(context);
+        
 
          if(this.fightOverTimer >= 8 && this.fightOverTimer <= 10 && !this.fightOverEnable){
             console.log('Next round');
+             this.drawPerfect(context);
             this.fightOverEnable = true;
             this.screenFlashTrigger = true;
             this.flashScreen = true
@@ -856,6 +870,17 @@ drawCredits(context){
                   
     }
 
+    drawPerfect(context){
+         if(gameState.fighters[1].perfectHP || gameState.fighters[0].perfectHP){
+        this.drawScoreLabel(context, 'PERFECT!', 158, 90);
+
+         if(this.soundPerfectEnable){
+            playSound(this.soundPerfect, 1);
+            this.soundPerfectEnable = false;
+         } 
+         }
+    }
+
     drawMoveList(context, time){
         const nameP2 = gameState.fighters[1].id.toUpperCase();
         const nameP1 = gameState.fighters[0].id.toUpperCase();
@@ -937,7 +962,7 @@ drawCredits(context){
     
 
     draw(context, time){
-       
+      
         if(this.time===this.timeCount - 1 && this.soundEnable){
              console.log('Round 1');
              gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;
@@ -1025,12 +1050,14 @@ drawCredits(context){
         }
          if(this.fightOver){
              this.timerDelay = 0;
-            this.drawFightOver(context);
+           if(!(gameState.fighters[0].wins === 2 || gameState.fighters[1].wins === 2)) this.drawFightOver(context);
+           
         }
         if(this.flashScreen)this.drawFlash(context, time);
        //  this.drawMenu(context, time);
          this.drawConfirmSelection(context, time);
          if(gameState.pauseMenu.showMoveList)this.drawMoveList(context,time);
         }
+        
     }
     

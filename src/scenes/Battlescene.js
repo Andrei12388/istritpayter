@@ -771,6 +771,7 @@ winFlash(time){
 
         //deadState
         gameState.fighters[1].dead = "dead";
+        if(gameState.fighters[0].hitPoints === HEALTH_MAX_HIT_POINTS) gameState.fighters[0].perfectHP = true;
         return;
     }
     if (gameState.fighters[0].hitPoints <= 0 && !this.statsBar.fightOver && !this.fightOver) {
@@ -789,6 +790,7 @@ winFlash(time){
 
         //deadState
         gameState.fighters[0].dead = "dead";
+        if(gameState.fighters[1].hitPoints === HEALTH_MAX_HIT_POINTS) gameState.fighters[1].perfectHP = true;
         return;
     }
 
