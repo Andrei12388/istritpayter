@@ -49,6 +49,7 @@ export class Fighter {
         this.hurtShakeTimer = 0;
         this.slideVelocity = 0;
         this.slideFriction = 0;
+        this.touchedCamera = false;
         
         this.frames = new Map();
         this.animationFrame = 0;
@@ -1053,6 +1054,7 @@ handleHeavyKickState(){
 
 
     handleFallState(){
+      
         if(this.isAnimationKnockUp()) gameState.fighters[this.playerId].dead = "invulnerable";
          
         if (!this.isAnimationCompleted()) return;
@@ -1095,6 +1097,8 @@ handleHeavyKickState(){
         }
         
         if(!gameState.fighterNotIdle) return;
+          this.touchedCamera = false;
+ 
         if (control.isUp(this.playerId) && this.position.y >= STAGE_FLOOR) {
             this.changeState(FighterState.JUMP_START);
         } else if (control.isDown(this.playerId) && this.position.y >= STAGE_FLOOR) {
@@ -1248,18 +1252,27 @@ handleHeavyKickState(){
 //Main Functions
 
     updateStageConstraints(time, context, camera){
-       
-        if (this.position.x > camera.position.x + context.canvas.width - this.boxes.push.width) {
-            this.position.x = camera.position.x + context.canvas.width - this.boxes.push.width;
-        
-            this.resetSlide(true);
-        } 
+       //- this.boxes.push.width
+       //+ this.boxes.push.width
+       const fighterBox = 25;
+        if (this.position.x > camera.position.x-fighterBox + context.canvas.width ) {
+            this.position.x = camera.position.x-fighterBox + context.canvas.width ;
+           //  this.touchedCamera = true;
+            console.log("out of bounds right", this.playerId, this.touchedCamera);
+            
+            this.velocity.x = 0;
 
-        if (this.position.x < camera.position.x + this.boxes.push.width){
-            this.position.x = camera.position.x + this.boxes.push.width;
-          
+            this.resetSlide(true);
+        }
+
+        if (this.position.x < camera.position.x+fighterBox ){
+            this.position.x = camera.position.x+fighterBox ;
+          //  this.touchedCamera = true;
+             console.log("out of bounds left", this.playerId, this.touchedCamera);
+            
+            this.velocity.x = 0;
              this.resetSlide(true);
-        } 
+        }
      if(gameState.dodging) return;
         if (this.hasCollidedWithOpponent()) {
             if (this.position.x <= this.opponent.position.x){
@@ -1431,7 +1444,11 @@ handleHeavyKickState(){
     }
 
     updatePosition(time){
-        this.position.x += ((this.velocity.x + this.slideVelocity) * this.direction) * time.secondsPassed;
+        if(!this.touchedCamera) this.position.x += ((this.velocity.x + this.slideVelocity) * this.direction) * time.secondsPassed;
+        else {
+            this.velocity.x = 0;
+            this.position.x += (this.velocity.x * this.direction) * time.secondsPassed;
+        }
         this.position.y += this.velocity.y * time.secondsPassed;
     }
 
@@ -1789,7 +1806,7 @@ if (!spriteToDraw) return; // avoid crashes
 
         context.restore();
        
-  // this.drawDebug(context, camera);
+    //this.drawDebug(context, camera);
     }
     }
 }

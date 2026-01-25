@@ -580,6 +580,17 @@ handleFlash() {
             this.transitionCountdown -= time.secondsPassed;
             gameState.inputEnable = false;
             if (this.transitionCountdown <= 0 && this.sceneChangeInfo) {
+                // Clear any lingering held inputs (safeguard in case inputs were left active)
+                    try {
+                        heldKeys.clear();
+                        pressedKeys.clear();
+                        console.log('Cleared held and pressed keys during scene transition');
+                    } catch (e) {
+                        // ignore
+                        console.log('No held/pressed keys to clear during scene transition');
+                    }
+                    if (this.enemyAI && typeof this.enemyAI.resetInputs === 'function') this.enemyAI.resetInputs();
+                    if (this.enemyAI2 && typeof this.enemyAI2.resetInputs === 'function') this.enemyAI2.resetInputs();
                 // Only create the scene instance when countdown completes
                 const newScene = new this.sceneChangeInfo.SceneClass(...this.sceneChangeInfo.args);
                 this.game.setScene(newScene);

@@ -387,7 +387,9 @@ export class EnemyAI {
        this.opponent.currentState.includes(FighterState.TORNADO_DIG) ||
        this.opponent.currentState.includes(FighterState.PICKUP) ||
        this.opponent.currentState.includes(FighterState.TOSS) ||
-       this.opponent.currentState.includes(FighterState.KNEEDASH) 
+       this.opponent.currentState.includes(FighterState.KNEEDASH) ||
+       this.opponent.currentState.includes(FighterState.KNOCKLIFT) ||
+       this.opponent.currentState.includes(FighterState.KNOCKLIFTDOWN) 
     );
   }
 
@@ -408,7 +410,10 @@ export class EnemyAI {
       this.opponent.currentState.includes(FighterState.HYPERSKILL_2) ||
       this.opponent.currentState.includes(FighterState.SPECIAL_1) ||
       this.opponent.currentState.includes(FighterState.SPECIAL_2) ||
-      this.opponent.currentState.includes(FighterState.SPECIAL_2_ROCKRELEASE) 
+      this.opponent.currentState.includes(FighterState.SPECIAL_2_ROCKRELEASE) ||
+      this.opponent.currentState.includes(FighterState.KNEEDASH) ||
+       this.opponent.currentState.includes(FighterState.HEADBUTT_DOWN) ||
+       this.opponent.currentState.includes(FighterState.HEADBUTT_UP) 
     );
   }
 }

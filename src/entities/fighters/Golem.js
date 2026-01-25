@@ -267,17 +267,17 @@ export class Golem extends Fighter {
             ['tornado-dig-6', [[[1115, 1888, 66, 104], [33,102]], [0,0,0,0], HurtBox.JUMP]],
             ['tornado-dig-7', [[[1123, 2007, 50, 104], [25,102]], [0,0,0,0], HurtBox.JUMP]],
             ['tornado-dig-8', [[[1028, 2000, 50, 103], [25,101]], [0,0,0,0], HurtBox.JUMP]],
-            ['tornado-dig-9', [[[934, 1902, 50, 103], [25,101]], [0,0,0,0], HurtBox.NULL]],
+            ['tornado-dig-9', [[[1124, 2251, 50, 103], [25,101]], [0,0,0,0], HurtBox.NULL]],
 
 
             // Golem Pick up opponent frame
             ['pickup-1', [[[1011, 1679, 55, 99], [27,7]], [0,0,0,0], HurtBox.NULL, [-15,30,30,20]]],
-            ['pickup-2', [[[1011, 1679, 55, 99], [27,7]], [0,0,0,0], [[-8, -18, 24, 16],[-26, -4, 48, 42], [-26, 41, 45, 32]]]],
+            ['pickup-2', [[[1011, 1679, 55, 99], [27,7]], [0,0,0,0], [[-8, 0, 24, 16],[-26, 32, 48, 42], [-26, 69, 45, 32]]]],
 
-             ['toss-1', [[[402,2145,59,99],[30,7]], [0,0,0,0], [[-1,-98,30,30],[-18,-71,43,64],[-25,-27,48,28]], [-15,30,30,20]]],
-            ['toss-2', [[[476,2146,60,99],[30,7]],[0,0,0,0], [[-14,-104,30,30],[-27,-77,42,49],[-21,-30,30,30]], [0,-500,0,0]]],
-            ['toss-3', [[[551,2140,62,104],[31,7]], [0,0,0,0], [[-10,-102,30,30],[-21,-75,44,47],[-17,-30,30,30]], [0,-500,0,0]]],
-            ['toss-4', [[[624,2144,74,100],[37,7]], [0,0,0,0], [[1,-102,23,28],[-13,-88,36,55],[-13,-36,32,36]], [0,-500,0,0]]],
+             ['toss-1', [[[402,2145,59,99],[30,7]], [0,0,0,0], [[-1,-28,30,30],[-18,-1,43,64],[-25,57,48,28]], [-15,30,30,20]]],
+            ['toss-2', [[[476,2146,60,99],[30,7]],[0,0,0,0], [[-14,-34,30,30],[-27,-7,42,49],[-21,40,30,30]], [0,-500,0,0]]],
+            ['toss-3', [[[551,2140,62,104],[31,7]], [0,0,0,0], [[-10,-32,30,30],[-1,-25,44,47],[-17,40,30,30]], [0,-500,0,0]]],
+            ['toss-4', [[[624,2144,74,100],[37,7]], [0,0,0,0], [[1,-32,23,28],[-13,-18,36,55],[-13,46,32,36]], [0,-500,0,0]]],
             
             ['toss-5', [[[706,2140,76,104],[38,102]], [-20,-79,44,79], [[-6,-103,30,30],[-18,-88,43,53],[-18,-35,41,35]], [0,-500,0,0]]],
             ['toss-6', [[[788,2135,73,109],[36,107]], [-19,-83,40,83], [[-11,-105,30,30],[-21,-90,44,60],[-22,-37,47,36]], [0,-500,0,0]]],
@@ -844,17 +844,7 @@ export class Golem extends Fighter {
          this.velocity.x = 120;
     }
     handleTossState(time,context,camera,hitPosition){
-         if (this.opponent.position.x > camera.position.x + context.canvas.width - this.boxes.push.width) {
-            this.position.x = camera.position.x + context.canvas.width - this.boxes.push.width;
-          console.log("out of bound");
-            this.resetSlide(true);
-        } 
-
-        if (this.opponent.position.x < camera.position.x + this.boxes.push.width){
-            this.position.x = camera.position.x + this.boxes.push.width;
-           console.log("out of bound");
-             this.resetSlide(true);
-        } 
+         
          if(this.opponent.currentState === 'fall'){
             this.opponent.position.x = this.position.x;
             this.opponent.position.y = this.position.y-95;
@@ -910,7 +900,7 @@ export class Golem extends Fighter {
          if(this.animationFrame >= 9 && this.position.y >= STAGE_FLOOR &&(control.isHeavyPunch(this.playerId, this.direction))){
             this.velocity.x = 0;
             this.changeState(FighterState.PICKUP);
-            this.position.x = this.opponent.position.x +1*this.direction;
+            this.position.x = this.opponent.position.x +13*this.direction;
          } 
             
        
@@ -1437,12 +1427,14 @@ export class Golem extends Fighter {
             }  
             if(this.animationFrame === 19) fighter.spawnEntity = false;
             if(!this.isAnimationCompleted()) return;
+             fighter.skillConsumed = true;
                 gameState.flash = false;
                 fighter.superAcivated = false;
                 fighter.skillUsedThisFrame = false;
                 this.gravity = 1000;
             this.changeState(FighterState.IDLE);
          } else this.changeState(FighterState.IDLE);
+         this.changeState(FighterState.IDLE);
         }
         
 }
