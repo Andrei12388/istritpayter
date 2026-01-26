@@ -33,9 +33,9 @@ export class Golem extends Fighter {
         this.soundKneeDash.volume = 1;
         this.soundGroundCrash.volume = 1;
         this.voiceSpecial1.volume = 1;
-        this.voiceSpecial2.volume = 0.9;
-        this.voiceHyperSkill1.volume = 0.9;
-        this.voiceHyperSkill2.volume = 0.9;
+        this.voiceSpecial2.volume = 1;
+        this.voiceHyperSkill1.volume = 1;
+        this.voiceHyperSkill2.volume = 1;
 
         this.golemEnableMove = false;
         this.quake = false;
@@ -590,7 +590,7 @@ export class Golem extends Fighter {
               {
                 state: FighterState.HYPERSKILL_2,
                 sequence: 
-                [SpecialMoveDirection.DOWN,SpecialMoveDirection.BACKWARD_DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveButton.LIGHT_PUNCH,
+                [SpecialMoveDirection.DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD,SpecialMoveDirection.UP,SpecialMoveDirection.FORWARD, SpecialMoveDirection.FORWARD, 
                 ],
                 cursor: 0,
             },

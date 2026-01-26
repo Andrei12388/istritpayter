@@ -124,7 +124,7 @@ export const GOLEM = [
         inputs: [code.d, code.dr, code.r, code.A,code.B], 
     },
     { 
-        name: 'NABIBIGATAN!',
+        name: 'BAGSAKAN!',
         y: 15,
         inputs: [code.l,code.r,code.l,code.r, code.A,code.D], 
     },
@@ -134,8 +134,13 @@ export const GOLEM = [
         inputs: [code.x], 
     },
     { 
-        name: 'SMACKDOWN',
+        name: 'NABIBIGATAN!',
         y: 23,
         inputs: [code.d, code.u, code.A,code.D],
+    },
+    { 
+        name: 'TORNADOSPIN!',
+        y: 23,
+        inputs: [code.d,code.dr, code.r, code.ur, code.u,code.ul, code.l],
     },
 ];

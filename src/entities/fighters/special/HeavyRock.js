@@ -24,7 +24,7 @@ import { GreenHitSplash } from "../shared/GreenHitSplash.js";
 
 // Frame data
 const frames = new Map([
-    ['special1-1', [[[894, 902, 54, 44], [27, 42]], [-15, -40, 54, 44],[-15, -40, 54, 44]]],
+    ['special1-1', [[[894, 902, 54, 44], [27, 42]], [-15, -40, 34, 34],[-15, -40, 34, 34]]],
     
     // Collision frames
     ['special1-collide-1', [[[22, 450, 10, 11], [3, 10]], [0, 0, 0, 0]]],
@@ -195,6 +195,7 @@ export class HeavyRock {
 
         if (collisionState === FireballCollidedState.OPPONENT && this.canDealDamage) {
             this.canDealDamage = false;
+            this.direction *= -1;
             opponent.position.y -= 150 * time.secondsPassed;
            // this.direction *= -1;
            // this.directionY = 1;
@@ -233,8 +234,8 @@ export class HeavyRock {
         context.strokeStyle = baseColor + 'AA';
         context.fillStyle = baseColor + '33';
 
-        const drawX = Math.floor(this.position.x + (x * this.direction) - camera.position.x) + 0.5;
-        const drawY = Math.floor(this.position.y + y - camera.position.y) + 0.5;
+        const drawX = Math.floor(this.position.x + (x * this.direction) - camera.position.x) ;
+        const drawY = Math.floor(this.position.y + y - camera.position.y) ;
 
         context.fillRect(drawX, drawY, finalWidth, height);
         context.rect(drawX, drawY, finalWidth, height);
@@ -296,7 +297,7 @@ export class HeavyRock {
 
         context.restore();
        
-      //  this.drawDebug(context, camera);
+     //  this.drawDebug(context, camera);
     }
 
     // ⏱️ Main update loop

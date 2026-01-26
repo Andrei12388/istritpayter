@@ -21,6 +21,7 @@ import { SuperHitSplash } from "../shared/SuperHitSplash.js";
 import { BlockHitSplash } from "../shared/BlockHitSplash.js";
 import { GreenHitSplash } from "../shared/GreenHitSplash.js";
 import { playSound } from "../../../soundHandler.js";
+import { STAGE_FLOOR } from "../../../constants/stage.js";
 
 // Frame data
 const frames = new Map([
@@ -79,7 +80,7 @@ export class TornadoSpin {
 
         this.position = {
             x: baseX -30*this.direction ,
-            y: baseY + 5,
+            y: STAGE_FLOOR,
         };
         console.log("tornado direction",this.direction, "position", this.position.x);
 
