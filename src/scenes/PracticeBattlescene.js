@@ -177,7 +177,7 @@ export class PracticeBattleScene {
         switch (stage) {
             case 'litex':
                 return new payatasStage;
-            case 'cubao':
+            case 'pasay':
                 return new pasayStage;
             case 'bohol':
                 return new boholStage;

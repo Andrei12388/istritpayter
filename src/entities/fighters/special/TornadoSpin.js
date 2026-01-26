@@ -20,6 +20,7 @@ import { HeavyHitSplash } from "../shared/HeavyHitSplash.js";
 import { SuperHitSplash } from "../shared/SuperHitSplash.js";
 import { BlockHitSplash } from "../shared/BlockHitSplash.js";
 import { GreenHitSplash } from "../shared/GreenHitSplash.js";
+import { playSound } from "../../../soundHandler.js";
 
 // Frame data
 const frames = new Map([
@@ -60,6 +61,10 @@ export class TornadoSpin {
     constructor(args, time, entityList) {
         const [fighter, strength] = args;
         this.canDealDamage = true;
+        this.soundTornado = document.getElementById('sound-tornado');
+        this.soundTornado.volume = 1;
+        this.soundTornado.currentTime = 0;
+        playSound(this.soundTornado,1);
         this.alpha = 0;
         this.speed = 0.1;
         this.fighter = fighter;
@@ -115,7 +120,7 @@ export class TornadoSpin {
     updateMovement(time, camera) {
         this.position.y -= 300 * this.directionY * time.secondsPassed;
 
-        if (this.position.y <= 175) this.directionY = 0;
+        if (this.position.y <= 170) this.directionY = 0;
 
         const collided = this.hasCollided();
         if (!collided) return;

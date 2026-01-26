@@ -78,10 +78,14 @@ export class PrePostMatch {
 
         console.log(this.selectedCharacterP1, this.selectedCharacterP2);
         console.log(this.selectedCharacterP1NamePos, this.selectedCharacterP2NamePos);
-        gameState.fighters = [createDefaultFighterState(this.selectedCharacterP1),createDefaultFighterState(this.selectedCharacterP2)];
+        if(gameState.gameScene === 'prematch') {
+            gameState.fighters = [createDefaultFighterState(this.selectedCharacterP1),createDefaultFighterState(this.selectedCharacterP2)];
+        }
 
         this.time = 0;
         this.timeTimer = 0;
+        this.blackNwhiteP1 = false;
+        this.blackNwhiteP2 = false;
 
         this.indexImg = 0;
         this.flashAlpha = 0;
@@ -432,13 +436,50 @@ drawFrame(context, frameKey, x, y, direction = 1, scale = 1, alpha = 1) {
     context.restore();
 }
 
+drawFrameCharacter(context, frameKey, x, y, direction = 1, scale = 1, blackWhite = false) {
+    const frame = this.frames.get(frameKey);
+    if (!frame) {
+        console.error(`Frame key "${frameKey}" not found in frames map.`);
+        return;
+    }
+    if (!this.image) {
+        console.error('Image not loaded.');
+        return;
+    }
+    const [sourceX, sourceY, sourceWidth, sourceHeight] = frame;
+
+    context.save();
+    if (blackWhite) {
+        context.filter = 'grayscale(100%)';
+    }
+
+    // Translate to drawing position, then scale
+    context.translate(x, y);
+    context.scale(direction * scale, scale); // scale x and y
+
+    // Since we already translated, draw at (0, 0) relative to transform
+    context.drawImage(
+        this.image,
+        sourceX, sourceY, sourceWidth, sourceHeight,
+        0, 0, sourceWidth, sourceHeight
+    );
+
+    context.restore();
+}
+
 //draw sayings
 drawSayings(context){
      const player1Saying = this.selectedCharacterP1Saying;
      const player2Saying = this.selectedCharacterP2Saying;
 
-        if(gameState.gamePlayerWinned === 'P1') this.drawPlayerSaying(context, player1Saying, 40);
-        else if(gameState.gamePlayerWinned === 'P2') this.drawPlayerSaying(context, player2Saying, 40);
+        if(gameState.gamePlayerWinned === 'P1'){
+             this.drawPlayerSaying(context, player1Saying, 40);
+             this.blackNwhiteP2 = true;
+        }
+        else if(gameState.gamePlayerWinned === 'P2'){
+            this.drawPlayerSaying(context, player2Saying, 40);
+            this.blackNwhiteP1 = true;
+        } 
 }
 
 drawPlayerSaying(context, sayings, x){
@@ -487,8 +528,8 @@ drawNameTags(context){
 drawImageBig(context){
         const x = this.screenanim2.x + 0;
         const y = this.screenanim2.y + 50;
-        this.drawFrame(context,  this.imageBigP[0], x, y, 1);
-        this.drawFrame(context,  this.imageBigP[1], x + 384, y, -1);
+        this.drawFrameCharacter(context,  this.imageBigP[0], x, y, 1, 1, this.blackNwhiteP1);
+        this.drawFrameCharacter(context,  this.imageBigP[1], x + 384, y, -1, 1, this.blackNwhiteP2);
 }
 
 drawVsScreen(context){

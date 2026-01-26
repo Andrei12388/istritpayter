@@ -33,22 +33,22 @@ export class CharacterSelect {
     ];
 
     characters = [
-        { name: "Malupiton", color: "gray", imageSml: 'malupitonSmall', imageBig: 'malupitonBig', namePos: 5, sayings: 'Sabi ko naman sayo burger ka saken',},
-        { name: "Babygiant", color: "gray",  imageSml: 'babygiantSmall', imageBig: 'babygiantBig', namePos: 5, sayings: 'None'},
-        { name: "Unknown1", color: "gray", imageSml: 'unknownSmall?', imageBig: 'unknownBig', namePos: 5, sayings: 'None' },
-        { name: "Otlum", color: "gray", imageSml: 'otlumSmall', imageBig: 'otlumBig', namePos: 20, sayings: 'None' },
-        { name: "Golem", color: "gray", imageSml: 'golemSmall', imageBig: 'golemBig', namePos: 20, sayings: 'Dimo ko kaya itaob men' },
-        { name: "Lamok", color: "gray",  imageSml: 'lamokSmall', imageBig: 'lamokBig', namePos: 20, sayings: 'None' },
-        { name: "Pinuno", color: "gray",  imageSml: 'pinunoSmall', imageBig: 'pinunoBig', namePos: 5, sayings: 'None' },
-        { name: "Toni", color: "gray",  imageSml: 'toniSmall', imageBig: 'toniBig', namePos: 20, sayings: 'None' },
-        { name: "Tyga", color: "gray",  imageSml: 'tygaSmall', imageBig: 'tygaBig', namePos: 20, sayings: 'None' },
-        { name: "Nabunturan", color: "gray",  imageSml: 'nabunturanSmall', imageBig: 'nabunturanBig', namePos: 5 , sayings: 'None'},
+        { name: "Malupiton", color: "gray", imageSml: 'malupitonSmall', imageBig: 'malupitonBig', namePos: 5, sayings: 'Sabi ko naman sayo burger ka saken',voice: 'voice-malupiton', },
+        { name: "Babygiant", color: "gray",  imageSml: 'babygiantSmall', imageBig: 'babygiantBig', namePos: 5, sayings: 'None',voice: 'voice-babygiant',},
+        { name: "Unknown1", color: "gray", imageSml: 'unknownSmall?', imageBig: 'unknownBig', namePos: 5, sayings: 'None',voice: 'voice-malupiton', },
+        { name: "Otlum", color: "gray", imageSml: 'otlumSmall', imageBig: 'otlumBig', namePos: 20, sayings: 'None',voice: 'voice-otlum', },
+        { name: "Golem", color: "gray", imageSml: 'golemSmall', imageBig: 'golemBig', namePos: 20, sayings: 'Dimo ko kaya itaob men',voice: 'voice-golem', },
+        { name: "Lamok", color: "gray",  imageSml: 'lamokSmall', imageBig: 'lamokBig', namePos: 20, sayings: 'None',voice: 'voice-lamok', },
+        { name: "Pinuno", color: "gray",  imageSml: 'pinunoSmall', imageBig: 'pinunoBig', namePos: 5, sayings: 'None',voice: 'voice-pinunongpuds', },
+        { name: "Toni", color: "gray",  imageSml: 'toniSmall', imageBig: 'toniBig', namePos: 20, sayings: 'None',voice: 'voice-mamaoni', },
+        { name: "Tyga", color: "gray",  imageSml: 'tygaSmall', imageBig: 'tygaBig', namePos: 20, sayings: 'None',voice: 'voice-daddytyga', },
+        { name: "Nabunturan", color: "gray",  imageSml: 'nabunturanSmall', imageBig: 'nabunturanBig', namePos: 5 , sayings: 'None',voice: 'voice-nabunturan',},
     ];
 
     stage = [
-        { name: 'CUBAO', pointerX: 130, pointerY: 25},
-        { name: 'LITEX', pointerX: 150, pointerY: 35},
-        { name: 'BOHOL', pointerX: 210, pointerY: 38},
+        { name: 'PASAY', pointerX: 130, pointerY: 25, voice: 'voice-pasay' },
+        { name: 'LITEX', pointerX: 150, pointerY: 35, voice: 'voice-litex' },
+        { name: 'BOHOL', pointerX: 210, pointerY: 38, voice: 'voice-bohol' },
     ];
 
     cursorIndices = [0, 4]; // P1 and P2 starting positions
@@ -59,6 +59,8 @@ export class CharacterSelect {
         this.soundChoose = document.querySelector('audio#sound-choose');
         this.soundSelect = document.querySelector('audio#sound-select');
         this.soundChooseFighter = document.querySelector('audio#choose-fighter');
+        this.voiceCharacterSelected = null;
+        this.voiceStageSelected = null;
         this.game = game;
         this.indexImg = 0;
         this.flashAlpha = 0;
@@ -143,7 +145,7 @@ export class CharacterSelect {
                     //Stage Images
                     ['stage-pointer', [31, 1066, 20, 23]],
                     ['LITEX', [23, 952, 183, 98]],
-                    ['CUBAO', [65, 1061, 183, 98]],
+                    ['PASAY', [65, 1061, 183, 98]],
                     ['BOHOL', [250, 1061, 183, 98]],
                      
 
@@ -323,14 +325,17 @@ export class CharacterSelect {
                 const selectedChar = this.characters[index];
                 this.selectEnable[playerId] = false;
                 
-           
+             
              playSound(this.soundSelect, 1);
-
+             this.voiceCharacterSelected = document.querySelector(`audio#${selectedChar.voice}`);
+                playSound(this.voiceCharacterSelected, 1);
             this.selectCharacter(playerId, selectedChar);
             }
               if (this.stageSelect && this.stageSelectEnable) {
                 
                 gameState.stage = this.stage[this.stageIndexs].name.toLowerCase();
+                this.voiceStageSelected = document.querySelector(`audio#${this.stage[this.stageIndexs].voice}`);
+                playSound(this.voiceStageSelected, 1);
                 console.log(gameState.stage);
                 playSound(this.soundSelect, 1);
                 stopSound(this.musicCharSelect);
