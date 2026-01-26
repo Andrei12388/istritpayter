@@ -23,7 +23,7 @@ import { GreenHitSplash } from "../shared/GreenHitSplash.js";
 
 // Frame data
 const frames = new Map([
-    ['special1-1', [[[23, 2397, 128, 167], [64, 165]], [-10, -132, 100, 150], [0, 0, 0, 0]]],
+    ['special1-1', [[[23, 2397, 128, 167], [64, 165]], [-20, -132, 110, 150], [0, 0, 0, 0]]],
     ['special1-2', [[[286, 2397, 125, 177], [62, 175]], [0, 0, 0, 0], [0, 0, 0, 0]]],
    
     ['special1-3', [[[553, 2398, 119, 172], [60, 170]], [0, 0, 0, 0], [0, 0, 0, 0]]],
@@ -33,7 +33,7 @@ const frames = new Map([
 
     ['special1-7', [[[273, 2587, 127, 166], [64, 164]], [0, 0, 0, 0], [0, 0, 0, 0]]],
     ['special1-8', [[[557, 2587, 115, 165], [57, 163]], [0, 0, 0, 0], [0, 0, 0, 0]]],
-    ['special1-9', [[[819, 2588, 121, 162], [60, 160]], [-10, -132, 100, 150], [0, 0, 0, 0]]],
+    ['special1-9', [[[819, 2588, 121, 162], [60, 160]], [-20, -132, 110, 150], [0, 0, 0, 0]]],
     ['special1-10', [[[1069, 2586, 127, 165], [63, 163]], [0, 0, 0, 0], [0, 0, 0, 0]]],
 
 ]);
@@ -116,12 +116,6 @@ export class TornadoSpin {
         this.position.y -= 300 * this.directionY * time.secondsPassed;
 
         if (this.position.y <= 175) this.directionY = 0;
-
-        const screenX = this.position.x - camera.position.x;
-        if (screenX > 384 + 56 || screenX < -56) {
-            this.entityList.remove(this);
-            return;
-        }
 
         const collided = this.hasCollided();
         if (!collided) return;

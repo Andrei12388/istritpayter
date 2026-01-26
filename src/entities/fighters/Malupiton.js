@@ -1201,9 +1201,10 @@ export class Malupiton extends Fighter {
       fighter.skillConsumed = true;
       fighter.superAcivated = false;
       fighter.skillUsedThisFrame = false;
+       this.changeState(FighterState.HEAVY_PUNCH);
     }else this.changeState(FighterState.IDLE);
 
-    this.changeState(FighterState.HEAVY_PUNCH);
+    this.changeState(FighterState.IDLE);
   }
 
   // ==============================

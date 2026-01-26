@@ -24,9 +24,10 @@ export class Golem extends Fighter {
         
         this.image = document.querySelector('img[alt="golem"]');
 
-        this.voiceSpecial2 = document.querySelector('audio#sound-malupiton-special-2');
+        this.voiceSpecial2 = document.querySelector('audio#sound-golem-hyperskill-2');
         this.voiceSpecial1 = document.querySelector('audio#sound-golem-special-1');
         this.voiceHyperSkill1 = document.querySelector('audio#sound-golem-hyperskill-1');
+        this.voiceHyperSkill2 = document.querySelector('audio#sound-golem-special-2');
         this.soundGroundCrash = document.querySelector('audio#sound-groundCrash');
         this.soundKneeDash = document.querySelector('audio#sound-fighter-heavy-attack');
         this.soundKneeDash.volume = 1;
@@ -34,6 +35,7 @@ export class Golem extends Fighter {
         this.voiceSpecial1.volume = 1;
         this.voiceSpecial2.volume = 0.9;
         this.voiceHyperSkill1.volume = 0.9;
+        this.voiceHyperSkill2.volume = 0.9;
 
         this.golemEnableMove = false;
         this.quake = false;
@@ -1138,7 +1140,7 @@ export class Golem extends Fighter {
 
     if (fighter.skillNumber === 2) fighter.resetSkillBar = true;
 
-    this.voiceHyperSkill1.play();
+    this.voiceSpecial2.play();
    
     this.soundSuperLaunch.play();
 
@@ -1292,7 +1294,7 @@ export class Golem extends Fighter {
        fighter.skillNumber -= 3; // 🛡️ immediately spend skill
        fighter.resetSkillBar = true;
    
-       this.voiceHyperSkill1.play();
+       this.voiceHyperSkill2.play();
        this.fireball = { fired: false, strength };
        this.soundSuperLaunch.play();
    

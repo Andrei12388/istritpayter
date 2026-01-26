@@ -170,9 +170,9 @@ export const FighterAttackBaseData = {
         x: -120,
         y: -200,
     },
-    damage: 3,
+    damage: 4,
     slide: {
-        velocity: -16 * FRAME_TIME,
+        velocity: -1 * FRAME_TIME,
         friction: 500,
     },
     effect: { type: 'stun', duration: 1500 },
