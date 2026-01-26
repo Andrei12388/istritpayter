@@ -9,16 +9,16 @@ export class BackgroundAnimation {
     }
 
     update(time) {
-        if (time.previous > this.animationTimer + this.frameDelay) {
-            this.animationFrame += 1;
+        this.animationTimer += time.secondsPassed;
+        if (this.animationTimer < this.frameDelay / 1000) return;
+        this.animationFrame += 1;
 
-            if (this.animationFrame >= this.animation.length) {
-                this.animationFrame = 0;
-            }
-
-            this.frameDelay = this.animation[this.animationFrame][1]; // ✅ Fixed
-            this.animationTimer = time.previous;
+        if (this.animationFrame >= this.animation.length) {
+            this.animationFrame = 0;
         }
+
+        this.frameDelay = this.animation[this.animationFrame][1]; // ✅ Fixed
+        this.animationTimer = 0;
     }
 
     draw(context, x, y, direction = 1) {

@@ -346,10 +346,11 @@ export class PrePostMatch {
             this.game.setScene(new CharacterSelect(this.game));
          }
 
-        if(time.previous > this.timeTimer + TIME_DELAY){
+        this.timeTimer += time.secondsPassed;
+        if(this.timeTimer >= TIME_DELAY / 1000){
             this.time +=1;
             console.log('time', this.time);
-            this.timeTimer = time.previous;
+            this.timeTimer -= TIME_DELAY / 1000;
             this.stopwatch += 1;
             
             if (this.alphaSet <= 0.1) {
@@ -375,7 +376,7 @@ export class PrePostMatch {
         this.updateTime(time);
         this.updateEntities(time, context);
         this.updateImports();
-        this.fade.update();
+        this.fade.update(time);
         this.screenAnimation(time);
         if(this.flashScreen)this.startTimer(time);
 

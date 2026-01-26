@@ -522,7 +522,7 @@ export class StatusBar {
             this.updateSkillBars(time);
         }
         
-        this.fade.update();
+        this.fade.update(time);
         if(this.flashScreen)this.startTimer(time);
     }
 

@@ -37,8 +37,10 @@ export class TornadoSpinSplash extends HitSplash {
     const delay = 7;
   
      this.rotation -= this.rotationValue*this.direction;
-           if (time.previous < this.animationTimer + delay * FRAME_TIME) return;
-           this.animationFrame += 1;
+     this.animationTimer += time.secondsPassed;
+     if (this.animationTimer < delay * FRAME_TIME / 1000) return;
+     this.animationFrame += 1;
+     this.animationTimer -= delay * FRAME_TIME / 1000;
           
            if (!this.touchGround) {
                 this.opacity = Math.min(this.opacity + 0.2, 1);
@@ -46,7 +48,6 @@ export class TornadoSpinSplash extends HitSplash {
                 this.opacity = Math.max(this.opacity - 0.15, 0);
             }
 
-           this.animationTimer = time.previous;
    
            if (this.animationFrame >= this.frameNumber){
             this.animationFrame = 0;

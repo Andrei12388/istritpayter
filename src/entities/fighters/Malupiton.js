@@ -1204,7 +1204,7 @@ export class Malupiton extends Fighter {
        this.changeState(FighterState.HEAVY_PUNCH);
     }else this.changeState(FighterState.IDLE);
 
-    this.changeState(FighterState.IDLE);
+    this.changeState(FighterState.HEAVY_PUNCH);
   }
 
   // ==============================

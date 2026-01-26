@@ -8,6 +8,9 @@ function randomBetween(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+const MAX_VERTICAL_ATTACK_DISTANCE = 45; // tweak per game feel
+
+
 const DIFFICULTY_PRESETS = {
   easy: {
     blockChance: 0.15,
@@ -19,15 +22,6 @@ const DIFFICULTY_PRESETS = {
     superChance: 0.15,
   },
   normal: {
-    blockChance: 0.40,
-    dodgeChance: 0.40,
-    attackCooldown: 500,
-    reactionDelay: [50, 150],
-    engageDistance: 50,
-    dodgeDistance: 130,
-    superChance: 0.40,
-  },
-  hard: {
     blockChance: 0.65,
     dodgeChance: 0.45,
     attackCooldown: 600,
@@ -35,6 +29,15 @@ const DIFFICULTY_PRESETS = {
     engageDistance: 50,
     dodgeDistance: 180,
     superChance: 0.55,
+  },
+  hard: {
+    blockChance: 0.75,
+    dodgeChance: 0.55,
+    attackCooldown: 400,
+    reactionDelay: [30, 100],
+    engageDistance: 40,
+    dodgeDistance: 190,
+    superChance: 0.60,
   },
   expert: {
     blockChance: 0.9,
@@ -58,13 +61,17 @@ const DIFFICULTY_PRESETS = {
 
 export class EnemyAI {
   constructor(fighter, opponent, difficulty) {
+    
+
     this.settings = DIFFICULTY_PRESETS[difficulty] || DIFFICULTY_PRESETS.normal;
     console.log(`EnemyAI initialized with difficulty: ${difficulty}`);
     this.fighter = fighter;
     this.opponent = opponent;
-
+   
+    
     this.comboQueue = [];
     this.comboTimer = 0;
+   
     this.attackCooldownBase = this.settings.attackCooldown;
     this.attackCooldown = 0;
 
@@ -79,6 +86,19 @@ export class EnemyAI {
     this.blockUntil = 0;
     this.nextDecisionTime = 0;
   }
+
+  isVerticallyAlignedForAttack() {
+  const dy = Math.abs(this.opponent.position.y - this.fighter.position.y);
+    console.log("Vertical Distance:", dy);
+  const tolerance =
+    this.settings === DIFFICULTY_PRESETS.insane ? 60 :
+    this.settings === DIFFICULTY_PRESETS.expert ? 45 :
+    30;
+
+  return dy <= tolerance;
+}
+
+
 
   // -------------------- INPUT HELPERS --------------------
   resetInputs() {
@@ -121,8 +141,11 @@ export class EnemyAI {
 
   // -------------------- MAIN UPDATE --------------------
   update(time) {
+     console.log(`Skill energy of ${this.fighter.playerId}`, gameState.fighters[this.fighter.playerId].skillNumber);
+   // console.log("AI Update", this.fighter.position.y, this.opponent.position.y);
     const now = time.now || performance.now();
     const delta = (time.secondsPassed || 0) * 1000;
+     
 
     if (this.fighter.hitPoints <= 0) {
       if (this.fighter.dead !== "die" && this.fighter.dead !== "dead") {
@@ -173,35 +196,83 @@ export class EnemyAI {
   }
 
   makeDecision(time, now) {
-    const dx = this.opponent.position.x - this.fighter.position.x;
-    const distance = Math.abs(dx);
+    
+  const dx = this.opponent.position.x - this.fighter.position.x;
+  const dy = this.opponent.position.y - this.fighter.position.y;
+
+  const distance = Math.abs(dx);
+  const verticalDistance = Math.abs(dy);
+
+  const canAttackVertically = this.isVerticallyAlignedForAttack();
+
     // if(this.fighter.position.y >= 200)this.faceOpponent();
 
     // Dodge or block
-    if (this.opponentIsAttacking() && distance < this.dodgeDistance) {
+    if (
+  this.opponentIsAttacking() &&
+  distance < this.dodgeDistance &&
+  canAttackVertically
+) {
       if (Math.random() < this.blockChance) this.performBlockOrBackstep(now, dx);
       if (Math.random() < this.dodgeChance) this.performDodge(dx);
       return;
     }
 
     // Long distance move if opponent is far away
-    if (distance > this.engageDistance + 100 && this.attackCooldown <= 0 && Math.random() < 0.4) {
-      this.performLongDistanceMove(time);
-      this.attackCooldown = this.attackCooldownBase * 1.5;
-      return;
-    }
+   if (
+  canAttackVertically &&
+  distance > this.engageDistance + 100 &&
+  this.attackCooldown <= 0 &&
+  Math.random() < 0.4
+) {
+  this.performLongDistanceMove(time);
+  this.attackCooldown = this.attackCooldownBase * 1.5;
+  return;
+}
 
     // Attack or special move if opponent vulnerable
-    if (this.opponentIsVulnerable() && distance < this.engageDistance + 40 && this.attackCooldown <= 0) {
-      if (Math.random() < 0.5) {
-        this.performAttack();
-      } else {
-        this.performSpecialMove(time);
-      }
-      this.attackCooldown = this.attackCooldownBase;
-      if (Math.random() < this.superChance) this.performSuper(time);
-      return;
-    }
+    if (
+  canAttackVertically &&
+  this.opponentIsVulnerable() &&
+  distance < this.engageDistance + 40 &&
+  this.attackCooldown <= 0
+) {
+  if (Math.random() < 0.5) {
+    this.performAttack();
+  } else {
+    this.performSpecialMove(time);
+  }
+
+  this.attackCooldown = this.attackCooldownBase;
+
+  if (Math.random() < this.superChance) {
+    this.performSuper(time);
+  }
+  return;
+}
+
+if (!canAttackVertically) {
+  this.resetInputs();
+
+  const state = this.fighter.currentState;
+
+  const isGrounded =
+    state.includes(FighterState.IDLE) ||
+    state.includes(FighterState.WALK_FORWARD) ||
+    state.includes(FighterState.WALK_BACKWARD) ||
+    state.includes(FighterState.CROUCH);
+
+  if (dy > 0 && isGrounded) {
+    this.press(Control.UP);
+  }
+
+  if (dy < 0) {
+    this.press(Control.DOWN);
+  }
+
+  return;
+}
+
 
     // Aggressive positioning
     this.chaseOrMixup(dx, distance);
@@ -271,6 +342,7 @@ export class EnemyAI {
 
 
   performSuper(time) {
+    const enemySkillNumber = gameState.fighters[this.fighter.playerId].skillNumber;
     const moves = [FighterState.HYPERSKILL_1, FighterState.HYPERSKILL_2, FighterState.SPECIAL_1, FighterState.SPECIAL_2];
     const move = moves[Math.floor(Math.random() * moves.length)];
     const defaultStrength = 1;
@@ -278,19 +350,23 @@ export class EnemyAI {
     this.resetInputs(); // Make sure skill triggers
     switch (move) {
       case FighterState.SPECIAL_1:
-        if(this.fighter.skillNumber > 0) return;
+        if(enemySkillNumber < 1) return;
+        this.fighter.skillNumber -= 1;
         this.fighter.performSpecial1?.(time, defaultStrength) ??  this.safeChangeState(FighterState.SPECIAL_1, time, defaultStrength);
         break;
       case FighterState.SPECIAL_2:
-        if(this.fighter.skillNumber > 0) return;
+        if(enemySkillNumber < 1) return;
+        this.fighter.skillNumber -= 1;
         this.fighter.performSpecial2?.(time, defaultStrength) ??  this.safeChangeState(FighterState.SPECIAL_2, time, 300);
         break;
       case FighterState.HYPERSKILL_1:
-        if(this.fighter.skillNumber > 2) return;
+        if(enemySkillNumber < 3) return;
+        this.fighter.skillNumber -= 3;
         this.fighter.performHyperSkill1?.(time, defaultStrength) ??  this.safeChangeState(FighterState.HYPERSKILL_1, time, defaultStrength);
         break;
       case FighterState.HYPERSKILL_2:
-        if(this.fighter.skillNumber > 2) return;
+        if(enemySkillNumber < 3) return;
+        this.fighter.skillNumber -= 3;
         this.fighter.performHyperSkill2?.(time, defaultStrength) ??  this.safeChangeState(FighterState.HYPERSKILL_2, time, defaultStrength);
         break;
       default:
@@ -308,6 +384,7 @@ export class EnemyAI {
 
   // Long distance move: ranged attacks for when opponent is far
   performLongDistanceMove(time) {
+    const enemySkillNumber = gameState.fighters[this.fighter.playerId].skillNumber;
     const moves = [FighterState.HEADBUTT, FighterState.SPECIAL_1, FighterState.SPECIAL_2, FighterState.SPECIAL_2_ROCKRELEASE, FighterState.TORNADO_DIG,FighterState.KNEEDASH, FighterState.HEADBUTT_DOWN];
     const move = moves[Math.floor(Math.random() * moves.length)];
     const defaultStrength = 1;
@@ -315,23 +392,28 @@ export class EnemyAI {
     this.resetInputs(); // Make sure move triggers
     switch (move) {
       case FighterState.SPECIAL_1:
-        if(this.fighter.skillNumber > 0) return;
+        if(enemySkillNumber < 1) return;
+        this.fighter.skillNumber -= 1;
         this.fighter.performSpecial1?.(time, defaultStrength) ?? this.safeChangeState(FighterState.SPECIAL_1, time, defaultStrength);
         break;
       case FighterState.SPECIAL_2:
-        if(this.fighter.skillNumber > 0) return;
+        if(enemySkillNumber < 1) return;
+        this.fighter.skillNumber -= 1;
         this.fighter.performSpecial2?.(time, defaultStrength) ?? this.safeChangeState(FighterState.SPECIAL_2, time, 300);
         break;
       case FighterState.SPECIAL_2_ROCKRELEASE:
-        if(this.fighter.skillNumber > 0) return;
+        if(enemySkillNumber < 1) return;
+        this.fighter.skillNumber -= 1;
         this.fighter.performSpecial2?.(time, defaultStrength) ?? this.safeChangeState(FighterState.SPECIAL_2_ROCKRELEASE, time, 300);
         break;
       case FighterState.HYPERSKILL_1:
-        if(this.fighter.skillNumber > 2) return;
+        if(enemySkillNumber < 3) return;
+        this.fighter.skillNumber -= 3;
         this.fighter.performHyperSkill1?.(time, defaultStrength) ?? this.safeChangeState(FighterState.HYPERSKILL_1, time, defaultStrength);
         break;
       case FighterState.HYPERSKILL_2:
-        if(this.fighter.skillNumber > 2) return;
+        if(enemySkillNumber < 3) return;
+        this.fighter.skillNumber -= 3;
         this.fighter.performHyperSkill2?.(time, defaultStrength) ?? this.safeChangeState(FighterState.HYPERSKILL_2, time, defaultStrength);
         break;
       case FighterState.HEADBUTT:

@@ -573,7 +573,7 @@ handleFlash() {
             // fail silently if camera or shake isn't available
         }
 
-        this.fade.update();
+        this.fade.update(time);
         
         // Handle countdown transition
         if (this.transitionCountdown > 0) {

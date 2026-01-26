@@ -27,18 +27,19 @@ export class FadeEffect {
         this.alpha = this.maxAlpha;
     }
 
-    update() {
+    update(time) {
         if (!this.active) return;
         console.log('fading');
+        const delta = time.secondsPassed * 60; // assuming 60 fps base
         if (this.fadingIn) {
-            this.alpha += this.speed;
+            this.alpha += this.speed * delta;
             if (this.alpha >= this.maxAlpha) {
                 this.alpha = this.maxAlpha;
                 this.fadingIn = false;
                 this.done = true;
             }
         } else if (this.fadingOut) {
-            this.alpha -= this.speed;
+            this.alpha -= this.speed * delta;
             if (this.alpha <= 0) {
                 this.alpha = 0;
                 this.fadingOut = false;

@@ -138,7 +138,7 @@ export class MainMenu {
 
 
     update(time, context) {
-        this.fade.update();
+        this.fade.update(time);
 if(!this.introScreen.vsMode){
  if(this.introScreen.pointer.cursor === 0){
                 if(this.fade.done) this.game.setScene(new Intro(this.game));

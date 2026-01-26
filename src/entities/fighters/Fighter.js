@@ -1483,6 +1483,12 @@ handleHeavyKickState(){
            // this.velocity.y = 0;
           //  console.log("Gravity falling");
         }
+
+        // Prevent going too high to avoid spamming
+        if(this.position.y <= -15){
+            this.position.y = -15;
+            this.gravity = 1000;
+        }
     }
 
     drawDebugBox(context, camera, dimensions, baseColor){
