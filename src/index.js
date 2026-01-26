@@ -5,6 +5,8 @@ import { heldKeys } from './inputHandler.js';
 import { state as controlHold } from './inputHandler.js';
 import { gameState } from './state/gameState.js';
 import { initOnscreenControlsSliders, updateOnscreenControls } from './onscreenControlsSlider.js';
+import { unlockAudio } from './inputHandler.js';
+
 
 
 function populateMoveDropdown(){
@@ -19,17 +21,30 @@ function populateMoveDropdown(){
 }
 
 
-window.addEventListener('load', function (){
-    // Initialize onscreen control sliders
+window.addEventListener('load', function () {
     initOnscreenControlsSliders();
     updateOnscreenControls();
-    
-    window.addEventListener('click', function (){
+
+    function startOnce(e) {
+        unlockAudio(); // 🔓 audio is now legal
+
+        console.log('🎮 User interaction detected — Starting Game');
+
         populateMoveDropdown();
         new StreetFighterGame().start();
-        // new Intro().start();
-    }, {once: true});
+
+        window.removeEventListener('keydown', startOnce);
+        window.removeEventListener('mousedown', startOnce);
+        window.removeEventListener('touchstart', startOnce);
+    }
+
+    // Valid user gestures
+    window.addEventListener('keydown', startOnce, { once: true });
+    window.addEventListener('mousedown', startOnce, { once: true });
+    window.addEventListener('touchstart', startOnce, { once: true });
 });
+
+
 
 
 // Onscreen Joystick
