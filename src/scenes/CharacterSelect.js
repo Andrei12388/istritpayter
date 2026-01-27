@@ -34,14 +34,14 @@ export class CharacterSelect {
 
     characters = [
         { name: "Malupiton", color: "gray", imageSml: 'malupitonSmall', imageBig: 'malupitonBig', namePos: 5, sayings: 'Sabi ko naman sayo burger ka saken',voice: 'voice-malupiton', },
-        { name: "Babygiant", color: "gray",  imageSml: 'babygiantSmall', imageBig: 'babygiantBig', namePos: 5, sayings: 'None',voice: 'voice-babygiant',},
+        { name: "Baby Giant", color: "gray",  imageSml: 'babygiantSmall', imageBig: 'babygiantBig', namePos: 5, sayings: 'None',voice: 'voice-babygiant',},
         { name: "Unknown1", color: "gray", imageSml: 'unknownSmall?', imageBig: 'unknownBig', namePos: 5, sayings: 'None',voice: 'voice-dambi', },
         { name: "Otlum", color: "gray", imageSml: 'otlumSmall', imageBig: 'otlumBig', namePos: 20, sayings: 'None',voice: 'voice-otlum', },
         { name: "Golem", color: "gray", imageSml: 'golemSmall', imageBig: 'golemBig', namePos: 20, sayings: 'Dimo ko kaya itaob men',voice: 'voice-golem', },
         { name: "Lamok", color: "gray",  imageSml: 'lamokSmall', imageBig: 'lamokBig', namePos: 20, sayings: 'None',voice: 'voice-lamok', },
-        { name: "Pinuno", color: "gray",  imageSml: 'pinunoSmall', imageBig: 'pinunoBig', namePos: 5, sayings: 'None',voice: 'voice-pinunongpuds', },
-        { name: "Toni", color: "gray",  imageSml: 'toniSmall', imageBig: 'toniBig', namePos: 20, sayings: 'None',voice: 'voice-mamaoni', },
-        { name: "Tyga", color: "gray",  imageSml: 'tygaSmall', imageBig: 'tygaBig', namePos: 20, sayings: 'None',voice: 'voice-daddytyga', },
+        { name: "Pinunong Puds", color: "gray",  imageSml: 'pinunoSmall', imageBig: 'pinunoBig', namePos: 5, sayings: 'None',voice: 'voice-pinunongpuds', },
+        { name: "Mama Oni", color: "gray",  imageSml: 'toniSmall', imageBig: 'toniBig', namePos: 20, sayings: 'None',voice: 'voice-mamaoni', },
+        { name: "Daddy Tyga", color: "gray",  imageSml: 'tygaSmall', imageBig: 'tygaBig', namePos: 20, sayings: 'None',voice: 'voice-daddytyga', },
         { name: "Nabunturan", color: "gray",  imageSml: 'nabunturanSmall', imageBig: 'nabunturanBig', namePos: 5 , sayings: 'None',voice: 'voice-nabunturan',},
     ];
 

@@ -85,18 +85,11 @@ export class EnemyAI {
     this.isBlocking = false;
     this.blockUntil = 0;
     this.nextDecisionTime = 0;
+    // Enable to log slow AI frames (ms)
+    this.debugProfiling = true;
   }
 
-  isVerticallyAlignedForAttack() {
-  const dy = Math.abs(this.opponent.position.y - this.fighter.position.y);
   
-  const tolerance =
-    this.settings === DIFFICULTY_PRESETS.insane ? 60 :
-    this.settings === DIFFICULTY_PRESETS.expert ? 45 :
-    30;
-
-  return dy <= tolerance;
-}
 
 
 
@@ -141,9 +134,10 @@ export class EnemyAI {
 
   // -------------------- MAIN UPDATE --------------------
   update(time) {
-   
-    const now = time.now || performance.now();
-    const delta = (time.secondsPassed || 0) * 1000;
+    const tStart = this.debugProfiling ? performance.now() : 0;
+    try {
+      const now = time.now || performance.now();
+      const delta = (time.secondsPassed || 0) * 1000;
      
 
     if (this.fighter.hitPoints <= 0) {
@@ -173,11 +167,20 @@ export class EnemyAI {
     }
 
     if (!this.nextDecisionTime || now >= this.nextDecisionTime) {
-      this.nextDecisionTime = now + randomBetween(this.reactionDelay[0], this.reactionDelay[1]);
+      // Cap minimum reaction delay to avoid extremely-frequent decisions
+      const rawDelay = randomBetween(this.reactionDelay[0], this.reactionDelay[1]);
+      const delay = Math.max(rawDelay, 50); // ms
+      this.nextDecisionTime = now + delay;
       this.makeDecision(time, now);
     } else {
     // if(this.fighter.position.y >= 200)this.faceOpponent();
-    }
+      }
+      } finally {
+        if (this.debugProfiling) {
+          const elapsed = performance.now() - tStart;
+          if (elapsed > 8) console.warn(`EnemyAI.update (${this.fighter.playerId}) took ${elapsed.toFixed(2)}ms`);
+        }
+      }
   }
 
   isInLockedState() {
@@ -200,9 +203,7 @@ export class EnemyAI {
   const dy = this.opponent.position.y - this.fighter.position.y;
 
   const distance = Math.abs(dx);
-  const verticalDistance = Math.abs(dy);
 
-  const canAttackVertically = this.isVerticallyAlignedForAttack();
 
     // if(this.fighter.position.y >= 200)this.faceOpponent();
 
@@ -218,7 +219,6 @@ export class EnemyAI {
 
     // Long distance move if opponent is far away
    if (
-  canAttackVertically &&
   distance > this.engageDistance + 100 &&
   this.attackCooldown <= 0 &&
   Math.random() < 0.4
@@ -230,7 +230,6 @@ export class EnemyAI {
 
     // Attack or special move if opponent vulnerable
     if (
-  canAttackVertically &&
   this.opponentIsVulnerable() &&
   distance < this.engageDistance + 40 &&
   this.attackCooldown <= 0
@@ -248,33 +247,6 @@ export class EnemyAI {
   }
   return;
 }
-
-if (!canAttackVertically) {
-  this.resetInputs();
-
-  const state = this.fighter.currentState;
-
-  const isGrounded =
-    state.includes(FighterState.IDLE) ||
-    state.includes(FighterState.WALK_FORWARD) ||
-    state.includes(FighterState.WALK_BACKWARD) ||
-    state.includes(FighterState.CROUCH);
-
-  if (dy > 0 && isGrounded) {
-    this.press(Control.UP);
-    // const back = this.fighter.direction === 1 ? Control.LEFT : Control.RIGHT;
-       // this.press(back);
-  }
-
-  if (dy < 0) {
-    this.press(Control.DOWN);
-    // const back = this.fighter.direction === 1 ? Control.LEFT : Control.RIGHT;
-     // this.press(back);
-  }
-
-  return;
-}
-
 
     // Aggressive positioning
     this.chaseOrMixup(dx, distance);

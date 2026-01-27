@@ -509,7 +509,7 @@ drawDisclaimer(context){
          this.drawTextLabel(context, 'ON ITCH FOR MORE INFO.', 5,95, 1, 0.8);
 
          this.drawTextLabel(context, 'DEVELOPMENT STARTED: SEPTEMBER 2025', 5,135, 1, 0.8);
-         this.drawTextLabel(context, 'LATEST UPDATE: JANUARY 26 2026', 5,155, 1, 0.8);
+         this.drawTextLabel(context, 'LATEST UPDATE: JANUARY 28 2026', 5,155, 1, 0.8);
          
          this.drawTextLabel(context, 'ANDREI12388.ITCH.IO/ISTRIT-PAYTER-2025', 5,175, 1, 0.8);
          this.drawTextLabel(context, 'PRESS START TO CONTINUE', 90,205, 1, 0.8);

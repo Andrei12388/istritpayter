@@ -90,6 +90,8 @@ export class PracticeBattleScene {
         gameState.fighters[1].hitPoints = HEALTH_MAX_HIT_POINTS;
 
         this.fade = new FadeEffect({ color: 'white', speed: 0.005 });
+        this.hyperSkillFlash = new FadeEffect({ color: 'white', speed: 0.035 });
+        this.hyperSkillTriggered = false;
 
         this.soundSelect = document.querySelector('audio#sound-select');
         this.soundChoose = document.querySelector('audio#sound-choose');
@@ -294,6 +296,9 @@ export class PracticeBattleScene {
 
 handleFlash() {
         this.fade.fadeIn(); 
+    }
+    handleHyperSkillFlash() {
+        this.hyperSkillFlash.fadeIn(); 
     }
 
 
@@ -577,7 +582,27 @@ handleFlash() {
             // fail silently if camera or shake isn't available
         }
 
-        this.fade.update(time);
+          this.fade.update(time);
+         this.hyperSkillFlash.update(time);
+
+        
+        if (gameState.flash) {
+            if (!this.hyperSkillTriggered && !this.hyperSkillFlash.active) {
+                this.handleHyperSkillFlash();
+                console.log('Hyper-skill flash fade-in triggered');
+                this.hyperSkillTriggered = true;
+            }
+        }
+
+        // If fade-in completed, ensure we fade out
+        if (!gameState.flash) {
+            if (this.hyperSkillTriggered && this.hyperSkillFlash.active) {
+            
+            this.hyperSkillFlash.fadeOut();
+            console.log('Hyper-skill flash fade-out triggered');
+            this.hyperSkillTriggered = false; // reset for next time
+        }
+    }
         
         // Handle countdown transition
         if (this.transitionCountdown > 0) {
@@ -873,11 +898,7 @@ winFlash(time){
         this.drawBigImage(context);
         
         this.drawShadows(context);
-        if(gameState.flash){
-                context.fillStyle = 'rgba(255, 255, 255, 1)';
-              context.fillRect(0, 0, 400, 400);
-               
-        }
+        if(this.hyperSkillFlash.active)this.hyperSkillFlash.draw(context, 400, 400);
         if(this.winFlashred){
             if(this.useFlashFrames){
                 context.fillStyle = 'rgba(255, 0, 0, 1)';

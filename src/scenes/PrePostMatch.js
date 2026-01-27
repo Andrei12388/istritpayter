@@ -48,10 +48,12 @@ export class PrePostMatch {
         { name: "Unknown6", color: "gray",  imageSml: 'unknownSmall', imageBig: 'unknownBig' },
     ];
 
-    stage = [
-        { name: 'CUBAO', pointerX: 130, pointerY: 25},
-        { name: 'LITEX', pointerX: 150, pointerY: 35},
-        { name: 'BOHOL', pointerX: 210, pointerY: 38},
+   stage = [
+        { name: 'PASAY', pointerX: 130, pointerY: 25, voice: 'voice-pasay' },
+        { name: 'LITEX', pointerX: 150, pointerY: 35, voice: 'voice-litex' },
+        { name: 'BOHOL', pointerX: 210, pointerY: 38, voice: 'voice-bohol' },
+        { name: 'TONDO', pointerX: 145, pointerY: 57, voice: 'voice-tondo' },
+        { name: 'FINAL', pointerX: 310, pointerY: 39, voice: 'voice-final' },
     ];
 
     cursorIndices = [0, 4]; // P1 and P2 starting positions
@@ -247,17 +249,34 @@ export class PrePostMatch {
                     ['score- ', [105,54, 18, 12]], 
 
                     //Name tags Alphabet
-                    ['name-A', [27,56, 8, 9]],
-                    ['name-E', [44,206, 8, 9]],
-                    ['name-G', [17,206, 9, 9]],
-                    ['name-I', [64,56, 5, 9]],
-                    ['name-L', [35,206, 8, 9]],
-                    ['name-M', [53,206, 11, 9]],
-                    ['name-N', [89,56, 9, 9]],
-                    ['name-O', [26,206, 8, 9]],
-                    ['name-P', [54,56, 9, 9]],
-                    ['name-T', [70,56, 9, 9]],
-                    ['name-U', [44,56, 9, 9]],
+                    ['name-A', [14,218, 15, 9]],
+                    ['name-B', [28,218, 11, 9]],
+                    ['name-C', [43,218, 9, 9]],
+                    ['name-D', [55,218, 11, 9]],
+                    ['name-E', [70,218, 9, 9]],
+                    ['name-F', [82,218, 8, 9]],
+                    ['name-G', [94,218, 11, 9]],
+                    ['name-H', [107,218, 12, 9]],
+                    ['name-I', [119,218, 10, 9]],
+                    ['name-J', [128,218, 7, 11]],
+                    ['name-K', [138,218, 11, 9]],
+                    ['name-L', [150,218, 10, 10]],
+                    ['name-M', [161,218, 13, 9]],
+                    ['name-N', [176,218, 14, 9]],
+                    ['name-O', [193,218, 10, 9]],
+                    ['name-P', [207,218, 9, 9]],
+                    ['name-Q', [220,218, 10, 12]],
+                    ['name-R', [234,218, 11, 9]],
+                    ['name-S', [247,218, 8, 9]],
+                    ['name-T', [258,218, 11, 10]],
+                    ['name-U', [271,218, 11, 9]],
+                    ['name-V', [285,218, 11, 9]],
+                    ['name-W', [298,218, 16, 9]],
+                    ['name-X', [317,218, 10, 9]],
+                    ['name-Y', [330,218, 9, 9]],
+                    ['name-Z', [341,218, 10, 10]],
+                    ['name- ', [353,218, 9, 9]],
+                   
         
                     //Character Names
                     ['tag-malupiton', [15,56,83,9]],

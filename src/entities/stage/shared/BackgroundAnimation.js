@@ -1,3 +1,5 @@
+import { gameState } from "../../../state/gameState.js";
+
 export class BackgroundAnimation {
     constructor(image, frames, animation, startFrame = 0) {
         this.image = image;
@@ -9,6 +11,7 @@ export class BackgroundAnimation {
     }
 
     update(time) {
+        if(gameState.pauseMenu.pauseGame || gameState.pause) return;
         this.animationTimer += time.secondsPassed;
         if (this.animationTimer < this.frameDelay / 1000) return;
         this.animationFrame += 1;
