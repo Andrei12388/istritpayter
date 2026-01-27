@@ -1108,11 +1108,9 @@ handleHeavyKickState(){
         }else if (control.isForward(this.playerId, this.direction) && this.position.y >= STAGE_FLOOR) {
             this.changeState(FighterState.WALK_FORWARD);
         }else if(control.isLightPunch(this.playerId)){
-           //this.changeState(FighterState.LIGHT_PUNCH);
-           this.changeState(FighterState.SPECIAL_1);
+           this.changeState(FighterState.LIGHT_PUNCH);
         }else if(control.isHeavyPunch(this.playerId)){
-           // this.changeState(FighterState.HEAVY_PUNCH);
-           this.changeState(FighterState.SPECIAL_2);
+            this.changeState(FighterState.HEAVY_PUNCH);
         }else if(control.isLightKick(this.playerId)){
             this.changeState(FighterState.LIGHT_KICK);
         }else if(control.isHeavyKick(this.playerId)){
