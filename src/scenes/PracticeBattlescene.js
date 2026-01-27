@@ -169,7 +169,8 @@ export class PracticeBattleScene {
             case FighterId.GOLEM:
                 return Golem;
             default:
-                throw new Error('Unimplemented fighter entity request!');
+                 control.showNotice(`${id} not yet available.`);
+                 throw new Error('Unimplemented fighter entity request!');
         }
     }
 

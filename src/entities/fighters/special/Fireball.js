@@ -85,8 +85,7 @@ getCollisionHitBox() {
         const actualHitBox = getActualBoxDimensions(this.position, this.direction, {x, y, width, height});
        
 
-        return checkProjectileCollision(this, actualHitBox);
-        
+        return checkProjectileCollision(this, actualHitBox);  
     }
 
     updateMovement(time,camera){
