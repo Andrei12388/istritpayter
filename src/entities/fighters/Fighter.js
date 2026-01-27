@@ -1485,9 +1485,9 @@ handleHeavyKickState(){
         }
 
         // Prevent going too high to avoid spamming
-        if(this.position.y <= -15){
-            this.position.y = -15;
-            this.gravity = 1000;
+        if(this.position.y <= -80){
+            this.position.y = -80;
+            this.gravity = 2000;
         }
     }
 

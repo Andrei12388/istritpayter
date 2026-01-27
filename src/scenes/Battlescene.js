@@ -34,6 +34,7 @@ import { finalStage } from "../entities/stage/finalStage.js";
 import { Control } from "../constants/control.js";
 import * as control from '../inputHandler.js'; 
 import { MainMenu } from "./MainMenu.js";
+import { tondoStage } from "../entities/stage/tondoStage.js";
 
 
 
@@ -178,6 +179,8 @@ export class BattleScene {
                 return new pasayStage;
             case 'bohol':
                 return new boholStage;
+            case 'tondo':
+                return new tondoStage;
             case 'final':
                 return new finalStage;
             default:

@@ -95,8 +95,8 @@ export class boholStage {
          this.drawFrame(context, 'carabaoShadow', Math.floor(this.carabaoPosition.x - (camera.position.x/ 2.157303)), 180 -camera.position.y, this.carabaoFlip, 0.5);
         
          this.carabao.draw(context,  Math.floor(this.carabaoPosition.x - (camera.position.x/ 2.157303)), 110 -camera.position.y, this.carabaoFlip);
-          this.drawFrame(context, 'carabaoPoo', Math.floor(400 - (camera.position.x/ 2.157303)), 180 -camera.position.y, 1, 1);
-          this.pooSmoke.draw(context,  Math.floor(403 - (camera.position.x/ 2.157303)), 99 -camera.position.y, 1);
+          this.drawFrame(context, 'carabaoPoo', Math.floor(400 - (camera.position.x/ 2.157303)), 170 -camera.position.y, 1, 1);
+          this.pooSmoke.draw(context,  Math.floor(403 - (camera.position.x/ 2.157303)), 89 -camera.position.y, 1);
          
     }
 

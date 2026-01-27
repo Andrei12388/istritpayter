@@ -29,7 +29,7 @@ export const gameState = {
     difficultyIndex: 1,
     difficulty: 'normal',
     buttonHold: false,
-    stage: 'final',
+    stage: 'tondo',
     flash: false,
     characterSelectMode: true,
     hyperSkill: false,

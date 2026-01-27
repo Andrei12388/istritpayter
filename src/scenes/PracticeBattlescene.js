@@ -33,6 +33,7 @@ import { finalStage } from "../entities/stage/finalStage.js";
 import { Control } from "../constants/control.js";
 import * as control from '../inputHandler.js'; 
 import { MainMenu } from "./MainMenu.js";
+import { tondoStage } from "../entities/stage/tondoStage.js";
 
 
 
@@ -183,6 +184,8 @@ export class PracticeBattleScene {
                 return new boholStage;
             case 'final':
                 return new finalStage;
+            case 'tondo':
+                return new tondoStage;
             default:
                 throw new Error('Unimplemented Map entity request!');
         }
