@@ -1,3 +1,5 @@
+import { gameState } from "./state/gameState.js";
+
 export class EntityList {
     entities = [];
 
@@ -19,6 +21,15 @@ export class EntityList {
      draw(context, camera){
         for(const entity of this.entities){
         entity.draw(context, camera);
+    }
+
+    // Draw debug information for all entities if debug is enabled
+    if(gameState.debug.entities){
+        for(const entity of this.entities){
+            if(entity.drawDebug){
+                entity.drawDebug(context, camera);
+            }
+        }
     }
     }
 }

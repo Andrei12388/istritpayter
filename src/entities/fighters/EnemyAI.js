@@ -263,11 +263,16 @@ if (!canAttackVertically) {
     state.includes(FighterState.CROUCH);
 
   if (dy > 0 && isGrounded) {
-    this.press(Control.UP);
+  //  this.press(Control.UP);
+     const back = this.fighter.direction === 1 ? Control.LEFT : Control.RIGHT;
+        this.press(back);
   }
 
   if (dy < 0) {
-    this.press(Control.DOWN);
+   // this.press(Control.DOWN);
+     const back = this.fighter.direction === 1 ? Control.LEFT : Control.RIGHT;
+      this.press(back);
+    
   }
 
   return;

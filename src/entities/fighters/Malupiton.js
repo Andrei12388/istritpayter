@@ -99,7 +99,7 @@ export class Malupiton extends Fighter {
             //Headbutt
             ['headbutt-1', [[[264, 957, 93, 75], [46,73]], PushBox.JUMP, HurtBox.JUMP]],
             ['headbutt-2', [[[367, 970, 100, 59], [50,59]], PushBox.JUMP, HurtBox.JUMP]],
-            ['headbutt-3', [[[477, 980, 116, 39], [58,37]], [0,-32,26,22], [[-52,-26,24,24],[-28,-26,45,28],[17,-26,30,27]],[38,-25,20,15]]],
+            ['headbutt-3', [[[477, 980, 116, 39], [58,37]], [0,-32,26,22], [[-52,-26,40,24],[-28,-26,45,28],[28,-34,30,27]],[38,-25,20,15]]],
 
             //Headbutt Up
             ['headbutt-up-1', [[[277, 1052, 60, 89], [30,87]], PushBox.JUMP, HurtBox.JUMP]],
@@ -1015,7 +1015,8 @@ export class Malupiton extends Fighter {
     fighter.skillNumber -= 3; // 🛡️ immediately spend skill
     fighter.resetSkillBar = true;
 
-    this.voiceHyperSkill1.play();
+   // this.voiceHyperSkill1.play();
+    playSound(this.voiceHyperSkill1, 1);
     this.fireball = { fired: false, strength };
     this.soundSuperLaunch.play();
 
@@ -1069,7 +1070,8 @@ export class Malupiton extends Fighter {
     fighter.skillNumber -= 3;
     fighter.resetSkillBar = true;
 
-    this.voiceSpecial1.play();
+    //this.voiceSpecial1.play();
+    playSound(this.voiceSpecial1, 1);
     this.soundSuperLaunch.play();
 
     fighter.superAcivated = true;
@@ -1122,7 +1124,8 @@ export class Malupiton extends Fighter {
 
     if (fighter.skillNumber === 2) fighter.resetSkillBar = true;
 
-    this.voiceSpecial3.play();
+  //  this.voiceSpecial3.play();
+    playSound(this.voiceSpecial3,1);
     this.fireball = { fired: false, strength };
     this.soundSuperLaunch.play();
 
@@ -1171,7 +1174,8 @@ export class Malupiton extends Fighter {
 
     if (fighter.skillNumber === 2) fighter.resetSkillBar = true;
 
-    this.voiceSpecial2.play();
+   // this.voiceSpecial2.play();
+    playSound(this.voiceSpecial2,1);
     this.fireball = { fired: false, strength };
     this.soundSuperLaunch.play();
 
