@@ -156,7 +156,7 @@ export class PrePostMatch {
                     //Char Select Big imgs
                     ['unknownBig', [16, 739, 100, 100]],
                     ['malupitonBig', [117, 739, 100, 100]],
-                    ['babygiantBig', [218, 739, 100, 100]],
+                    ['babygiantBig', [218, 739, 96, 100]],
                     ['otlumBig', [313, 739, 100, 100]],
                     ['golemBig', [17, 841, 100, 100]],
                     ['lamokBig', [116, 841, 100, 100]],

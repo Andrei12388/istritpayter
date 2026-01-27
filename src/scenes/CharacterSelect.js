@@ -35,7 +35,7 @@ export class CharacterSelect {
     characters = [
         { name: "Malupiton", color: "gray", imageSml: 'malupitonSmall', imageBig: 'malupitonBig', namePos: 5, sayings: 'Sabi ko naman sayo burger ka saken',voice: 'voice-malupiton', },
         { name: "Babygiant", color: "gray",  imageSml: 'babygiantSmall', imageBig: 'babygiantBig', namePos: 5, sayings: 'None',voice: 'voice-babygiant',},
-        { name: "Unknown1", color: "gray", imageSml: 'unknownSmall?', imageBig: 'unknownBig', namePos: 5, sayings: 'None',voice: 'voice-malupiton', },
+        { name: "Unknown1", color: "gray", imageSml: 'unknownSmall?', imageBig: 'unknownBig', namePos: 5, sayings: 'None',voice: 'voice-dambi', },
         { name: "Otlum", color: "gray", imageSml: 'otlumSmall', imageBig: 'otlumBig', namePos: 20, sayings: 'None',voice: 'voice-otlum', },
         { name: "Golem", color: "gray", imageSml: 'golemSmall', imageBig: 'golemBig', namePos: 20, sayings: 'Dimo ko kaya itaob men',voice: 'voice-golem', },
         { name: "Lamok", color: "gray",  imageSml: 'lamokSmall', imageBig: 'lamokBig', namePos: 20, sayings: 'None',voice: 'voice-lamok', },
@@ -55,6 +55,7 @@ export class CharacterSelect {
     selectedCharacters = [null, null];
 
     constructor(game) {
+        this.image = document.querySelector('img[alt="misc"]');
         this.musicCharSelect = document.querySelector('audio#music-character-select');
         this.soundChoose = document.querySelector('audio#sound-choose');
         this.soundSelect = document.querySelector('audio#sound-select');
@@ -102,8 +103,7 @@ export class CharacterSelect {
             false,
             false,
            ];
-        
-        this.image = document.querySelector('img[alt="misc"]');
+       
          this.frames = new Map([
                     ['kapecom', [359,163,127,35]],
                     ['push-start', [369,8,110,14]],
@@ -133,7 +133,7 @@ export class CharacterSelect {
                     //Char Select Big imgs
                     ['unknownBig', [16, 739, 100, 100]],
                     ['malupitonBig', [117, 739, 100, 100]],
-                    ['babygiantBig', [218, 739, 100, 100]],
+                    ['babygiantBig', [218, 739, 96, 100]],
                     ['otlumBig', [313, 739, 100, 100]],
                     ['golemBig', [17, 841, 100, 100]],
                     ['lamokBig', [116, 841, 100, 100]],

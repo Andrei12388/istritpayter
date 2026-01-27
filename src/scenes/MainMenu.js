@@ -69,8 +69,9 @@ export class MainMenu {
 
     if(!this.introScreen.vsMode){
             if(this.introScreen.pointer.cursor === 0){
-                if(this.fade.done) this.game.setScene(new Intro(this.game));
-                this.handleFlash();
+                //if(this.fade.done) this.game.setScene(new Intro(this.game));
+                //this.handleFlash();
+                control.showNotice(`Story Mode not yet available.`);
                  console.log("Start mode selected");
             } else if (this.introScreen.pointer.cursor === 1){
                //if(this.fade.done) this.game.setScene(new CharacterSelect(this.game));
