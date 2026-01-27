@@ -107,6 +107,7 @@ export class Disclaimer {
         this.stageSelectEnable = false;
 
         this.presentDonation = false;
+        this.startPressed = false;
         
         
 
@@ -342,17 +343,19 @@ export class Disclaimer {
       
         updateTime(time){
              if (control.isControlPressed(0, Control.START) || control.isControlPressed(1, Control.START)) {
-                playSound(this.soundStart, 1);
-               
+                if(!this.startPressed) {
+                    playSound(this.soundStart, 1);
+                this.startPressed = true;
+                }
                 this.countdown = true;
                 this.presentDonation = true;
              } 
-             if(this.countdownTime === 10) this.handleFlash();
-         if(this.countdownTime === 13 && gameState.gameScene === 'prematch') {
+             if(this.countdownTime === 12) this.handleFlash();
+         if(this.countdownTime === 15 && gameState.gameScene === 'prematch') {
            console.log("loading game to intro");
             
             this.game.setScene(new Intro(this.game, this.selectedCharacters));
-         }else if(this.countdownTime === 13 && gameState.gameScene === 'postmatch'){
+         }else if(this.countdownTime === 15 && gameState.gameScene === 'postmatch'){
            
             this.game.setScene(new CharacterSelect(this.game));
          }

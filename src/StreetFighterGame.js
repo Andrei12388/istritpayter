@@ -48,8 +48,8 @@ export class StreetFighterGame{
         
         //Mainscenes
 //this.scene = new Intro(this);
-this.scene = new Disclaimer(this, selectedCharacters);
-//this.scene = new MainMenu(this);
+//this.scene = new Disclaimer(this, selectedCharacters);
+this.scene = new MainMenu(this);
 //this.scene = new OptionsMenu(this);
 //this.scene = new BattleScene(this, selectedCharacters);
  //this.scene = new CharacterSelect(this);

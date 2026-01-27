@@ -89,7 +89,7 @@ export class EnemyAI {
 
   isVerticallyAlignedForAttack() {
   const dy = Math.abs(this.opponent.position.y - this.fighter.position.y);
-    console.log("Vertical Distance:", dy);
+  
   const tolerance =
     this.settings === DIFFICULTY_PRESETS.insane ? 60 :
     this.settings === DIFFICULTY_PRESETS.expert ? 45 :
@@ -141,8 +141,7 @@ export class EnemyAI {
 
   // -------------------- MAIN UPDATE --------------------
   update(time) {
-     console.log(`Skill energy of ${this.fighter.playerId}`, gameState.fighters[this.fighter.playerId].skillNumber);
-   // console.log("AI Update", this.fighter.position.y, this.opponent.position.y);
+   
     const now = time.now || performance.now();
     const delta = (time.secondsPassed || 0) * 1000;
      

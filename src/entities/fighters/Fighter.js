@@ -1258,7 +1258,7 @@ handleHeavyKickState(){
         if (this.position.x > camera.position.x-fighterBox + context.canvas.width ) {
             this.position.x = camera.position.x-fighterBox + context.canvas.width ;
            //  this.touchedCamera = true;
-            console.log("out of bounds right", this.playerId, this.touchedCamera);
+            //console.log("out of bounds right", this.playerId, this.touchedCamera);
             
             this.velocity.x = 0;
 
@@ -1268,7 +1268,7 @@ handleHeavyKickState(){
         if (this.position.x < camera.position.x+fighterBox ){
             this.position.x = camera.position.x+fighterBox ;
           //  this.touchedCamera = true;
-             console.log("out of bounds left", this.playerId, this.touchedCamera);
+           //  console.log("out of bounds left", this.playerId, this.touchedCamera);
             
             this.velocity.x = 0;
              this.resetSlide(true);

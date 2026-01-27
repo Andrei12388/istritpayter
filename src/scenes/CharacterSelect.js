@@ -49,8 +49,8 @@ export class CharacterSelect {
         { name: 'PASAY', pointerX: 130, pointerY: 25, voice: 'voice-pasay' },
         { name: 'LITEX', pointerX: 150, pointerY: 35, voice: 'voice-litex' },
         { name: 'BOHOL', pointerX: 210, pointerY: 38, voice: 'voice-bohol' },
-        { name: 'TONDO', pointerX: 250, pointerY: 27, voice: 'voice-tondo' },
-        { name: 'FINAL', pointerX: 240, pointerY: 27, voice: 'voice-final' },
+        { name: 'TONDO', pointerX: 145, pointerY: 57, voice: 'voice-tondo' },
+        { name: 'FINAL', pointerX: 310, pointerY: 39, voice: 'voice-final' },
     ];
 
     cursorIndices = [0, 4]; // P1 and P2 starting positions
