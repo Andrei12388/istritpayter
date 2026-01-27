@@ -67,6 +67,7 @@ export class PrePostMatch {
         this.game = game;
         this.fade = new FadeEffect({ color: 'black', speed: 0.05 });
         
+        
 
         this.selectedCharacters = selectedCharacters;
         this.selectedCharacterP1 = selectedCharacters[0].name;
