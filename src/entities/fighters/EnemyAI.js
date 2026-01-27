@@ -210,8 +210,7 @@ export class EnemyAI {
     // Dodge or block
     if (
   this.opponentIsAttacking() &&
-  distance < this.dodgeDistance &&
-  canAttackVertically
+  distance < this.dodgeDistance
 ) {
       if (Math.random() < this.blockChance) this.performBlockOrBackstep(now, dx);
       if (Math.random() < this.dodgeChance) this.performDodge(dx);
@@ -263,16 +262,15 @@ if (!canAttackVertically) {
     state.includes(FighterState.CROUCH);
 
   if (dy > 0 && isGrounded) {
-  //  this.press(Control.UP);
-     const back = this.fighter.direction === 1 ? Control.LEFT : Control.RIGHT;
-        this.press(back);
+    this.press(Control.UP);
+    // const back = this.fighter.direction === 1 ? Control.LEFT : Control.RIGHT;
+       // this.press(back);
   }
 
   if (dy < 0) {
-   // this.press(Control.DOWN);
-     const back = this.fighter.direction === 1 ? Control.LEFT : Control.RIGHT;
-      this.press(back);
-    
+    this.press(Control.DOWN);
+    // const back = this.fighter.direction === 1 ? Control.LEFT : Control.RIGHT;
+     // this.press(back);
   }
 
   return;
@@ -407,8 +405,6 @@ if (!canAttackVertically) {
         this.fighter.performSpecial2?.(time, defaultStrength) ?? this.safeChangeState(FighterState.SPECIAL_2, time, 300);
         break;
       case FighterState.SPECIAL_2_ROCKRELEASE:
-        if(enemySkillNumber < 1) return;
-        this.fighter.skillNumber -= 1;
         this.fighter.performSpecial2?.(time, defaultStrength) ?? this.safeChangeState(FighterState.SPECIAL_2_ROCKRELEASE, time, 300);
         break;
       case FighterState.HYPERSKILL_1:
