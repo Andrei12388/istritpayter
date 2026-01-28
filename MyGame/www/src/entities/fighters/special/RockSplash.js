@@ -6,6 +6,7 @@ import {
 } from "../../../constants/fireball.js";
 import { STAGE_FLOOR } from "../../../constants/stage.js";
 import { gameState } from "../../../state/gameState.js";
+import { DebugBox } from "../../../utils/DebugBox.js";
 
 // Frame data
 const frames = new Map([
@@ -98,53 +99,13 @@ export class RockSplash {
 
     
 
-    // 🧭 Draw individual debug boxes
-    drawDebugBox(context, camera, dimensions, baseColor) {
-        if (!Array.isArray(dimensions)) return;
-
-        const [x = 0, y = 0, width = 0, height = 0] = dimensions;
-        const finalWidth = Math.abs(width);
-
-        context.beginPath();
-        context.strokeStyle = baseColor + 'AA';
-        context.fillStyle = baseColor + '33';
-
-        const drawX = Math.floor(this.position.x + (x * this.direction) - camera.position.x) + 0.5;
-        const drawY = Math.floor(this.position.y + y - camera.position.y) + 0.5;
-
-        context.fillRect(drawX, drawY, finalWidth, height);
-        context.rect(drawX, drawY, finalWidth, height);
-        context.stroke();
-    }
-
     // 🔍 Draw all debug boxes
     drawDebug(context, camera) {
         const [frameKey] = animations[FireballState.ACTIVE][this.animationFrame];
         const frameData = frames.get(frameKey);
         if (!frameData) return;
 
-        const boxes = {
-            hit: frameData[1],
-            hurt: frameData[2] || [],
-        };
-
-        context.lineWidth = 1;
-
-        this.drawDebugBox(context, camera, boxes.hit, '#FF0000');
-        if (Array.isArray(boxes.hurt)) {
-            this.drawDebugBox(context, camera, boxes.hurt, '#7777FF');
-        }
-
-        // Draw origin
-        const originX = Math.floor(this.position.x - camera.position.x);
-        const originY = Math.floor(this.position.y - camera.position.y);
-        context.beginPath();
-        context.strokeStyle = 'red';
-        context.moveTo(originX - 4, originY);
-        context.lineTo(originX + 5, originY);
-        context.moveTo(originX, originY - 5);
-        context.lineTo(originX, originY + 4);
-        context.stroke();
+        DebugBox.drawForSpecialEntity(context, camera, this, frameData);
     }
 
    
@@ -176,7 +137,6 @@ export class RockSplash {
 
         context.restore();
        
-        //this.drawDebug(context, camera);
     }
 
     // ⏱️ Main update loop

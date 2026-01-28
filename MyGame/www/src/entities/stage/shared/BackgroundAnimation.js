@@ -1,3 +1,5 @@
+import { gameState } from "../../../state/gameState.js";
+
 export class BackgroundAnimation {
     constructor(image, frames, animation, startFrame = 0) {
         this.image = image;
@@ -9,17 +11,38 @@ export class BackgroundAnimation {
     }
 
     update(time) {
-        if (time.previous > this.animationTimer + this.frameDelay) {
-            this.animationFrame += 1;
+        if(gameState.pauseMenu.pauseGame || gameState.pause) return;
+        this.animationTimer += time.secondsPassed;
+        if (this.animationTimer < this.frameDelay / 1000) return;
+        this.animationFrame += 1;
 
-            if (this.animationFrame >= this.animation.length) {
-                this.animationFrame = 0;
-            }
-
-            this.frameDelay = this.animation[this.animationFrame][1]; // ✅ Fixed
-            this.animationTimer = time.previous;
+        if (this.animationFrame >= this.animation.length) {
+            this.animationFrame = 0;
         }
+
+        this.frameDelay = this.animation[this.animationFrame][1]; 
+        this.animationTimer = 0;
     }
+
+     drawWithOrigin(context, x, y, direction = 1, scaleY = 1) {
+    const [frameKey] = this.animation[this.animationFrame];
+    const [[frameX, frameY, frameWidth, frameHeight], [originX, originY]] =
+        this.frames.get(frameKey);
+
+    context.save();
+    context.scale(direction, scaleY);
+
+    context.drawImage(
+        this.image,
+        frameX, frameY, frameWidth, frameHeight,
+        Math.floor(x * direction - originX),
+        Math.floor(y - originY),
+        frameWidth, frameHeight
+    );
+
+    context.restore(); 
+}
+
 
     draw(context, x, y, direction = 1) {
         const [frameKey] = this.animation[this.animationFrame];

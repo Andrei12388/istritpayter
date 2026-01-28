@@ -48,10 +48,12 @@ export class PrePostMatch {
         { name: "Unknown6", color: "gray",  imageSml: 'unknownSmall', imageBig: 'unknownBig' },
     ];
 
-    stage = [
-        { name: 'CUBAO', pointerX: 130, pointerY: 25},
-        { name: 'LITEX', pointerX: 150, pointerY: 35},
-        { name: 'BOHOL', pointerX: 210, pointerY: 38},
+   stage = [
+        { name: 'PASAY', pointerX: 130, pointerY: 25, voice: 'voice-pasay' },
+        { name: 'LITEX', pointerX: 150, pointerY: 35, voice: 'voice-litex' },
+        { name: 'BOHOL', pointerX: 210, pointerY: 38, voice: 'voice-bohol' },
+        { name: 'TONDO', pointerX: 145, pointerY: 57, voice: 'voice-tondo' },
+        { name: 'FINAL', pointerX: 310, pointerY: 39, voice: 'voice-final' },
     ];
 
     cursorIndices = [0, 4]; // P1 and P2 starting positions
@@ -67,6 +69,7 @@ export class PrePostMatch {
         this.game = game;
         this.fade = new FadeEffect({ color: 'black', speed: 0.05 });
         
+        
 
         this.selectedCharacters = selectedCharacters;
         this.selectedCharacterP1 = selectedCharacters[0].name;
@@ -78,10 +81,14 @@ export class PrePostMatch {
 
         console.log(this.selectedCharacterP1, this.selectedCharacterP2);
         console.log(this.selectedCharacterP1NamePos, this.selectedCharacterP2NamePos);
-        gameState.fighters = [createDefaultFighterState(this.selectedCharacterP1),createDefaultFighterState(this.selectedCharacterP2)];
+        if(gameState.gameScene === 'prematch') {
+            gameState.fighters = [createDefaultFighterState(this.selectedCharacterP1),createDefaultFighterState(this.selectedCharacterP2)];
+        }
 
         this.time = 0;
         this.timeTimer = 0;
+        this.blackNwhiteP1 = false;
+        this.blackNwhiteP2 = false;
 
         this.indexImg = 0;
         this.flashAlpha = 0;
@@ -152,7 +159,7 @@ export class PrePostMatch {
                     //Char Select Big imgs
                     ['unknownBig', [16, 739, 100, 100]],
                     ['malupitonBig', [117, 739, 100, 100]],
-                    ['babygiantBig', [218, 739, 100, 100]],
+                    ['babygiantBig', [218, 739, 96, 100]],
                     ['otlumBig', [313, 739, 100, 100]],
                     ['golemBig', [17, 841, 100, 100]],
                     ['lamokBig', [116, 841, 100, 100]],
@@ -242,17 +249,34 @@ export class PrePostMatch {
                     ['score- ', [105,54, 18, 12]], 
 
                     //Name tags Alphabet
-                    ['name-A', [27,56, 8, 9]],
-                    ['name-E', [44,206, 8, 9]],
-                    ['name-G', [17,206, 9, 9]],
-                    ['name-I', [64,56, 5, 9]],
-                    ['name-L', [35,206, 8, 9]],
-                    ['name-M', [53,206, 11, 9]],
-                    ['name-N', [89,56, 9, 9]],
-                    ['name-O', [26,206, 8, 9]],
-                    ['name-P', [54,56, 9, 9]],
-                    ['name-T', [70,56, 9, 9]],
-                    ['name-U', [44,56, 9, 9]],
+                    ['name-A', [14,218, 15, 9]],
+                    ['name-B', [28,218, 11, 9]],
+                    ['name-C', [43,218, 9, 9]],
+                    ['name-D', [55,218, 11, 9]],
+                    ['name-E', [70,218, 9, 9]],
+                    ['name-F', [82,218, 8, 9]],
+                    ['name-G', [94,218, 11, 9]],
+                    ['name-H', [107,218, 12, 9]],
+                    ['name-I', [119,218, 10, 9]],
+                    ['name-J', [128,218, 7, 11]],
+                    ['name-K', [138,218, 11, 9]],
+                    ['name-L', [150,218, 10, 10]],
+                    ['name-M', [161,218, 13, 9]],
+                    ['name-N', [176,218, 14, 9]],
+                    ['name-O', [193,218, 10, 9]],
+                    ['name-P', [207,218, 9, 9]],
+                    ['name-Q', [220,218, 10, 12]],
+                    ['name-R', [234,218, 11, 9]],
+                    ['name-S', [247,218, 8, 9]],
+                    ['name-T', [258,218, 11, 10]],
+                    ['name-U', [271,218, 11, 9]],
+                    ['name-V', [285,218, 11, 9]],
+                    ['name-W', [298,218, 16, 9]],
+                    ['name-X', [317,218, 10, 9]],
+                    ['name-Y', [330,218, 9, 9]],
+                    ['name-Z', [341,218, 10, 10]],
+                    ['name- ', [353,218, 9, 9]],
+                   
         
                     //Character Names
                     ['tag-malupiton', [15,56,83,9]],
@@ -342,10 +366,11 @@ export class PrePostMatch {
             this.game.setScene(new CharacterSelect(this.game));
          }
 
-        if(time.previous > this.timeTimer + TIME_DELAY){
+        this.timeTimer += time.secondsPassed;
+        if(this.timeTimer >= TIME_DELAY / 1000){
             this.time +=1;
             console.log('time', this.time);
-            this.timeTimer = time.previous;
+            this.timeTimer -= TIME_DELAY / 1000;
             this.stopwatch += 1;
             
             if (this.alphaSet <= 0.1) {
@@ -371,7 +396,7 @@ export class PrePostMatch {
         this.updateTime(time);
         this.updateEntities(time, context);
         this.updateImports();
-        this.fade.update();
+        this.fade.update(time);
         this.screenAnimation(time);
         if(this.flashScreen)this.startTimer(time);
 
@@ -432,13 +457,50 @@ drawFrame(context, frameKey, x, y, direction = 1, scale = 1, alpha = 1) {
     context.restore();
 }
 
+drawFrameCharacter(context, frameKey, x, y, direction = 1, scale = 1, blackWhite = false) {
+    const frame = this.frames.get(frameKey);
+    if (!frame) {
+        console.error(`Frame key "${frameKey}" not found in frames map.`);
+        return;
+    }
+    if (!this.image) {
+        console.error('Image not loaded.');
+        return;
+    }
+    const [sourceX, sourceY, sourceWidth, sourceHeight] = frame;
+
+    context.save();
+    if (blackWhite) {
+        context.filter = 'grayscale(100%)';
+    }
+
+    // Translate to drawing position, then scale
+    context.translate(x, y);
+    context.scale(direction * scale, scale); // scale x and y
+
+    // Since we already translated, draw at (0, 0) relative to transform
+    context.drawImage(
+        this.image,
+        sourceX, sourceY, sourceWidth, sourceHeight,
+        0, 0, sourceWidth, sourceHeight
+    );
+
+    context.restore();
+}
+
 //draw sayings
 drawSayings(context){
      const player1Saying = this.selectedCharacterP1Saying;
      const player2Saying = this.selectedCharacterP2Saying;
 
-        if(gameState.gamePlayerWinned === 'P1') this.drawPlayerSaying(context, player1Saying, 40);
-        else if(gameState.gamePlayerWinned === 'P2') this.drawPlayerSaying(context, player2Saying, 40);
+        if(gameState.gamePlayerWinned === 'P1'){
+             this.drawPlayerSaying(context, player1Saying, 40);
+             this.blackNwhiteP2 = true;
+        }
+        else if(gameState.gamePlayerWinned === 'P2'){
+            this.drawPlayerSaying(context, player2Saying, 40);
+            this.blackNwhiteP1 = true;
+        } 
 }
 
 drawPlayerSaying(context, sayings, x){
@@ -487,8 +549,8 @@ drawNameTags(context){
 drawImageBig(context){
         const x = this.screenanim2.x + 0;
         const y = this.screenanim2.y + 50;
-        this.drawFrame(context,  this.imageBigP[0], x, y, 1);
-        this.drawFrame(context,  this.imageBigP[1], x + 384, y, -1);
+        this.drawFrameCharacter(context,  this.imageBigP[0], x, y, 1, 1, this.blackNwhiteP1);
+        this.drawFrameCharacter(context,  this.imageBigP[1], x + 384, y, -1, 1, this.blackNwhiteP2);
 }
 
 drawVsScreen(context){

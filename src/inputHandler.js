@@ -5,6 +5,8 @@ import { gameState } from './state/gameState.js';
 
 let audioCtx;
 let audioUnlocked = false;
+console.count('keydown');
+
 
 export function unlockAudio() {
   if (audioUnlocked) return;
@@ -72,6 +74,7 @@ export function showNotice(message) {
 --------------------------------------------------*/
 function handleKeyDown(event) {
   unlockAudio();
+  console.count('keydown');
   event.preventDefault();
   heldKeys.add(event.code);
   gameState.buttonHold = true;

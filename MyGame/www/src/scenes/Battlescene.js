@@ -34,6 +34,7 @@ import { finalStage } from "../entities/stage/finalStage.js";
 import { Control } from "../constants/control.js";
 import * as control from '../inputHandler.js'; 
 import { MainMenu } from "./MainMenu.js";
+import { tondoStage } from "../entities/stage/tondoStage.js";
 
 
 
@@ -85,6 +86,8 @@ export class BattleScene {
         gameState.fighters[1].hitPoints = HEALTH_MAX_HIT_POINTS;
 
         this.fade = new FadeEffect({ color: 'white', speed: 0.005 });
+        this.hyperSkillFlash = new FadeEffect({ color: 'white', speed: 0.035 });
+        this.hyperSkillTriggered = false;
 
         this.soundSelect = document.querySelector('audio#sound-select');
         this.soundChoose = document.querySelector('audio#sound-choose');
@@ -164,6 +167,7 @@ export class BattleScene {
             case FighterId.GOLEM:
                 return Golem;
             default:
+                 control.showNotice(`${id} not yet available.`);
                 throw new Error('Unimplemented fighter entity request!');
         }
     }
@@ -173,10 +177,12 @@ export class BattleScene {
         switch (stage) {
             case 'litex':
                 return new payatasStage;
-            case 'cubao':
+            case 'pasay':
                 return new pasayStage;
             case 'bohol':
                 return new boholStage;
+            case 'tondo':
+                return new tondoStage;
             case 'final':
                 return new finalStage;
             default:
@@ -245,6 +251,7 @@ export class BattleScene {
    // this.camera = new Camera(STAGE_MID_POINT + STAGE_PADDING - 192, 16, this.fighters);
     // this.shadows = this.fighters.map(fighter => new Shadow(fighter));
     this.hurtTimer = undefined;
+    this.hyperSkillTriggered = false;
     this.fighterDrawOrder = [0, 1];
   //  this.enemyAI = new EnemyAI(this.fighters[1], this.fighters[0]);
    // this.statsBar = new StatusBar(this.game, this.fighters);
@@ -286,6 +293,9 @@ export class BattleScene {
 
 handleFlash() {
         this.fade.fadeIn(); 
+    }
+    handleHyperSkillFlash() {
+        this.hyperSkillFlash.fadeIn(); 
     }
 
 
@@ -566,13 +576,45 @@ handleFlash() {
             // fail silently if camera or shake isn't available
         }
 
-         this.fade.update();
+         this.fade.update(time);
+         this.hyperSkillFlash.update(time);
+
+        
+        if (gameState.flash) {
+            if (!this.hyperSkillTriggered && !this.hyperSkillFlash.active) {
+                this.handleHyperSkillFlash();
+                console.log('Hyper-skill flash fade-in triggered');
+                this.hyperSkillTriggered = true;
+            }
+        }
+
+        // If fade-in completed, ensure we fade out
+        if (!gameState.flash) {
+            if (this.hyperSkillTriggered && this.hyperSkillFlash.active) {
+            
+            this.hyperSkillFlash.fadeOut();
+            console.log('Hyper-skill flash fade-out triggered');
+            this.hyperSkillTriggered = false; // reset for next time
+        }
+    }
+
 
         // Handle countdown transition
         if (this.transitionCountdown > 0) {
             this.transitionCountdown -= time.secondsPassed;
             gameState.inputEnable = false;
             if (this.transitionCountdown <= 0 && this.sceneChangeInfo) {
+                // Clear any lingering held inputs (safeguard in case inputs were left active)
+                    try {
+                        heldKeys.clear();
+                        pressedKeys.clear();
+                        console.log('Cleared held and pressed keys during scene transition');
+                    } catch (e) {
+                        // ignore
+                        console.log('No held/pressed keys to clear during scene transition');
+                    }
+                    if (this.enemyAI && typeof this.enemyAI.resetInputs === 'function') this.enemyAI.resetInputs();
+                    if (this.enemyAI2 && typeof this.enemyAI2.resetInputs === 'function') this.enemyAI2.resetInputs();
                 // Only create the scene instance when countdown completes
                 const newScene = new this.sceneChangeInfo.SceneClass(...this.sceneChangeInfo.args);
                 this.game.setScene(newScene);
@@ -760,6 +802,7 @@ winFlash(time){
 
         //deadState
         gameState.fighters[1].dead = "dead";
+        if(gameState.fighters[0].hitPoints === HEALTH_MAX_HIT_POINTS) gameState.fighters[0].perfectHP = true;
         return;
     }
     if (gameState.fighters[0].hitPoints <= 0 && !this.statsBar.fightOver && !this.fightOver) {
@@ -778,6 +821,7 @@ winFlash(time){
 
         //deadState
         gameState.fighters[0].dead = "dead";
+        if(gameState.fighters[1].hitPoints === HEALTH_MAX_HIT_POINTS) gameState.fighters[1].perfectHP = true;
         return;
     }
 
@@ -850,11 +894,9 @@ winFlash(time){
         this.drawBigImage(context);
         
         this.drawShadows(context);
-        if(gameState.flash){
-                context.fillStyle = 'rgba(255, 255, 255, 1)';
-              context.fillRect(0, 0, 400, 400);
-               
-        }
+        // Draw hyperskill flash effect when active (triggered in update())
+        if(this.hyperSkillFlash.active)this.hyperSkillFlash.draw(context, 400, 400);
+        
         if(this.winFlashred){
             if(this.useFlashFrames){
                 context.fillStyle = 'rgba(255, 0, 0, 1)';

@@ -99,7 +99,7 @@ export class Malupiton extends Fighter {
             //Headbutt
             ['headbutt-1', [[[264, 957, 93, 75], [46,73]], PushBox.JUMP, HurtBox.JUMP]],
             ['headbutt-2', [[[367, 970, 100, 59], [50,59]], PushBox.JUMP, HurtBox.JUMP]],
-            ['headbutt-3', [[[477, 980, 116, 39], [58,37]], [0,-32,26,22], [[-52,-26,24,24],[-28,-26,45,28],[17,-26,30,27]],[38,-25,20,15]]],
+            ['headbutt-3', [[[477, 980, 116, 39], [58,37]], [0,-32,26,22], [[-52,-26,40,24],[-28,-26,45,28],[28,-34,30,27]],[38,-25,20,15]]],
 
             //Headbutt Up
             ['headbutt-up-1', [[[277, 1052, 60, 89], [30,87]], PushBox.JUMP, HurtBox.JUMP]],
@@ -231,6 +231,12 @@ export class Malupiton extends Fighter {
             ['getUp-1', [[[11,955,53,55],[27,53]], [-20,-50,36,46], [[0,-500,0,0],[0,-500,0,0],[0,-500,0,0]], [0,-500,0,0]]],
             ['getUp-2', [[[82,959,63,50],[31,48]], [-19,-43,37,37], [[0,-500,0,0],[0,-500,0,0],[0,-500,0,0]], [0,-500,0,0]]],
             ['getUp-3', [[[160,959,60,59],[30,57]], [-18,-57,46,47], [[0,-500,0,0],[0,-500,0,0],[0,-500,0,0]], [0,-500,0,0]]],
+
+            //fall state
+            ['fall-4', [[[234,852,77,76],[38,74]], [0,0,0,0], [[-28,-77,25,25],[-37,-71,40,41],[0,-57,33,53]], [0,-500,0,0]]],
+            ['fall-5', [[[321,855,101,51],[50,49]], [0,0,0,0], [[-47,-39,31,32],[-44,-33,52,34],[-4,-43,30,41]], [0,-500,0,0]]],
+            ['fall-6', [[[433,870,99,37],[49,35]], [0,0,0,0], [[-48,-39,30,30],[-44,-31,45,32],[-4,-32,30,30]], [0,-500,0,0]]],
+            ['fall-7', [[[537,867,116,37],[58,35]], [0,0,0,0], [[-52,-26,24,24],[-28,-26,45,28],[17,-26,30,27]], [0,-500,0,0]]],
 
   
 
@@ -470,9 +476,9 @@ export class Malupiton extends Fighter {
                 ['death-7', FrameDelay.FREEZE],
             ],
             [FighterState.FALL]:[
-                ['death-4', 100], ['death-5', 100], ['death-6', 100], 
-                ['death-7', 100],
-                ['death-7', FrameDelay.TRANSITION],
+                ['fall-4', 100], ['fall-5', 100], ['fall-6', 100], 
+                ['fall-7', 100],
+                ['fall-7', FrameDelay.TRANSITION],
             ],
              [FighterState.GETUP]:[
                 ['death-8', 300], ['getUp-1', 120], ['getUp-2', 120], ['getUp-3', 120],
@@ -1009,7 +1015,8 @@ export class Malupiton extends Fighter {
     fighter.skillNumber -= 3; // 🛡️ immediately spend skill
     fighter.resetSkillBar = true;
 
-    this.voiceHyperSkill1.play();
+   // this.voiceHyperSkill1.play();
+    playSound(this.voiceHyperSkill1, 1);
     this.fireball = { fired: false, strength };
     this.soundSuperLaunch.play();
 
@@ -1063,7 +1070,8 @@ export class Malupiton extends Fighter {
     fighter.skillNumber -= 3;
     fighter.resetSkillBar = true;
 
-    this.voiceSpecial1.play();
+    //this.voiceSpecial1.play();
+    playSound(this.voiceSpecial1, 1);
     this.soundSuperLaunch.play();
 
     fighter.superAcivated = true;
@@ -1116,7 +1124,8 @@ export class Malupiton extends Fighter {
 
     if (fighter.skillNumber === 2) fighter.resetSkillBar = true;
 
-    this.voiceSpecial3.play();
+  //  this.voiceSpecial3.play();
+    playSound(this.voiceSpecial3,1);
     this.fireball = { fired: false, strength };
     this.soundSuperLaunch.play();
 
@@ -1165,7 +1174,8 @@ export class Malupiton extends Fighter {
 
     if (fighter.skillNumber === 2) fighter.resetSkillBar = true;
 
-    this.voiceSpecial2.play();
+   // this.voiceSpecial2.play();
+    playSound(this.voiceSpecial2,1);
     this.fireball = { fired: false, strength };
     this.soundSuperLaunch.play();
 
@@ -1195,6 +1205,7 @@ export class Malupiton extends Fighter {
       fighter.skillConsumed = true;
       fighter.superAcivated = false;
       fighter.skillUsedThisFrame = false;
+       this.changeState(FighterState.HEAVY_PUNCH);
     }else this.changeState(FighterState.IDLE);
 
     this.changeState(FighterState.HEAVY_PUNCH);

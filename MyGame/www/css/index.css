@@ -31,7 +31,7 @@ body {
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
     -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
     background-color:#E4E4E4;
-    background-image:linear-gradient(to bottom, #A7A7A7 0%, #E4E4E4 51%);
+    background-image:linear-gradient(to bottom, #000000 0%, #000000 51%);
     font-family: system-ui, -apple-system, -apple-system-font, 'Segoe UI', 'Roboto', sans-serif;
     font-size:12px;
     height:100vh;
@@ -80,7 +80,7 @@ h1 {
 
 .event {
     border-radius:4px;
-    color:#FFFFFF;
+    color:#000000;
     font-size:12px;
     margin:0px 30px;
     padding:2px 0px;

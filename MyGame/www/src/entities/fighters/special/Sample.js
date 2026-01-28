@@ -65,23 +65,49 @@ export class Fireball {
             }
     }
 
-    hasCollidedWithOtherFireball(hitbox){
-        const otherFireballs = this.entityList.entities.filter((fireball) => fireball instanceof Fireball && fireball != this);
-        if (otherFireballs.length === 0) return;
+    hasCollidedWithOtherEntity(hitbox){
+        const others = this.entityList.entities.filter(
+            (entity) => entity !== this && entity.position && (entity.boxes?.hit || entity.frames)
+        );
 
-        for (const fireball of otherFireballs){
-        const [x, y, width, height] = frames.get(animations[fireball.state][fireball.animationFrame][0])[1];
-        const otherActualHitBox = getActualBoxDimensions(fireball.position, fireball.direction, {x, y, width, height});
+        for (const other of others) {
+            let otherHitBox = null;
 
-        if (boxOverlap(hitbox, otherActualHitBox)) return FireballCollidedState.FIREBALL;
+            // Check if it's a fighter with boxes.hit
+            if (other.boxes?.hit) {
+                otherHitBox = getActualBoxDimensions(other.position, other.direction, other.boxes.hit);
+            }
+            // Check if it's a special entity with frame data
+            else if (other.frames && other.animations && other.animationFrame !== undefined) {
+                try {
+                    // Try to get hit box from frame data
+                    const currentAnim = other.animations[other.state] || other.animations[Object.keys(other.animations)[0]];
+                    if (currentAnim && currentAnim[other.animationFrame]) {
+                        const [frameKey] = currentAnim[other.animationFrame];
+                        const frameData = other.frames.get(frameKey);
+                        if (frameData && frameData[1]) {
+                            const [x, y, width, height] = frameData[1];
+                            otherHitBox = getActualBoxDimensions(other.position, other.direction, { x, y, width, height });
+                        }
+                    }
+                } catch (error) {
+                    // If we can't get frame data, skip this entity
+                    continue;
+                }
+            }
+
+            if (otherHitBox && boxOverlap(hitbox, otherHitBox)) {
+                return FireballCollidedState.FIREBALL;
+            }
         }
+        return null;
     }
 
     hasCollided(){
          const [x, y, width, height] = frames.get(animations[this.state][this.animationFrame][0])[1];
         const actualHitBox = getActualBoxDimensions(this.position, this.direction, {x, y, width, height});
 
-        return this.hasCollidedWithOpponent(actualHitBox) ?? this.hasCollidedWithOtherFireball(actualHitBox);
+        return this.hasCollidedWithOpponent(actualHitBox) ?? this.hasCollidedWithOtherEntity(actualHitBox);
         
     }
 

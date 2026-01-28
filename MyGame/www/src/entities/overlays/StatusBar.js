@@ -1,4 +1,4 @@
-import { HEALTH_CRITICAL_HIT_POINTS, HEALTH_DAMAGE_COLOR, HEALTH_MAX_HIT_POINTS, KO_ANIMATION, KO_FLASH_DELAY, SKILL_MAX_POINTS, SKILL_POINTS, SKILL_POINTS1_COLOR, SKILL_POINTS2_COLOR, SKILL_POINTS3_COLOR, SKILL_POINTSMAX_COLOR, TIME_DELAY, TIME_FLASH_DELAY, TIME_FRAME_KEYS } from "../../constants/battle.js";
+import { HEALTH_CRITICAL_HIT_POINTS, HEALTH_DAMAGE_COLOR, HEALTH_MAX_HIT_POINTS, KO_ANIMATION, KO_FLASH_DELAY, SKILL_EMPTY_POINTS, SKILL_MAX_NUMBER, SKILL_MAX_POINTS, SKILL_POINTS, SKILL_POINTS1_COLOR, SKILL_POINTS2_COLOR, SKILL_POINTS3_COLOR, SKILL_POINTS4_COLOR, SKILL_POINTS5_COLOR, SKILL_POINTSMAX_COLOR, TIME_DELAY, TIME_FLASH_DELAY, TIME_FRAME_KEYS } from "../../constants/battle.js";
 import { FPS } from "../../constants/game.js";
 import { BattleScene } from "../../scenes/Battlescene.js";
 import { CharacterSelect } from "../../scenes/CharacterSelect.js";
@@ -35,12 +35,15 @@ export class StatusBar {
 
         gameState.fighters[0].wins = 0;
         gameState.fighters[1].wins = 0;
+        gameState.fighters[0].perfectHP = false;
+        gameState.fighters[1].perfectHP = false;
         gameState.rounds = 0;
         gameState.fighterNotIdle = false;
         this.music.currentTime = 0;
 
         this.soundWin = document.querySelector('audio#sound-win');
         this.soundLose = document.querySelector('audio#sound-lose');
+        this.soundPerfect = document.querySelector('audio#sound-perfect');
        
         this.image = document.querySelector('img[alt="misc"]');
 
@@ -49,6 +52,7 @@ export class StatusBar {
         this.timeCount = 90;
         this.timeTimer = 0;
         this.soundEnable = true;
+        this.soundPerfectEnable = true;
         this.blinkMax = false;
         this.updateSkill = false;
         this.enemyStart = false;
@@ -108,6 +112,8 @@ export class StatusBar {
         
         this.frames = new Map([
             ['pointer', [498,7,26,18]],
+            ['maximum', [494,215,60,15]],
+            ['maximum-white', [494,232,60,15]],
 
             ['health-bar', [16,18, 145, 11]],
             ['skill-bar', [222,157, 72, 9]],
@@ -141,7 +147,7 @@ export class StatusBar {
             //Char Select Big imgs
              ['unknownBig', [16, 739, 100, 100]],
              ['malupitonBig', [117, 739, 100, 100]],
-             ['babygiantBig', [218, 739, 100, 100]],
+             ['babygiantBig', [218, 739, 96, 100]],
              ['otlumBig', [313, 739, 100, 100]],
              ['golemBig', [17, 841, 100, 100]],
 
@@ -299,6 +305,7 @@ export class StatusBar {
         this.timeCount = 90;
         this.timeTimer = 0;
         this.soundEnable = true;
+        this.soundPerfectEnable = true;
         this.blinkMax = false;
         this.updateSkill = false;
         this.inputRegistered = false;
@@ -320,6 +327,9 @@ export class StatusBar {
                 skillColor: SKILL_POINTS1_COLOR,
             },
         }];
+
+        gameState.fighters[0].perfectHP = false;
+        gameState.fighters[1].perfectHP = false;
         
         this.fightOver = false;
         this.fightOverEnable = false;
@@ -403,7 +413,7 @@ export class StatusBar {
         const playerKey = i === 0 ? 'player1' : 'player2';
         if(gameState.practiceMode.infiniteSkill) {
             this.SkillBars[i].skillPoints = SKILL_MAX_POINTS;
-            gameState.fighters[i].skillNumber = 3;
+            gameState.fighters[i].skillNumber = SKILL_MAX_NUMBER;
         }
 
         // 1st skill trigger
@@ -414,6 +424,10 @@ export class StatusBar {
         } else if(gameState.fighters[i].skillNumber === 2){
             this.skillReady[0][playerKey].skillColor = SKILL_POINTS3_COLOR;
         } else if(gameState.fighters[i].skillNumber === 3){
+            this.skillReady[0][playerKey].skillColor = SKILL_POINTS4_COLOR;
+        } else if(gameState.fighters[i].skillNumber === 4){
+            this.skillReady[0][playerKey].skillColor = SKILL_POINTS5_COLOR;
+        } else if(gameState.fighters[i].skillNumber === 5){
             this.skillReady[0][playerKey].skillColor = SKILL_POINTSMAX_COLOR;
         }
         
@@ -432,7 +446,7 @@ export class StatusBar {
              playSound(this.soundSkillAdd, 0.7);
             this.SkillBars[i].skillPoints = 0;
             gameState.fighters[i].skillPoints = 0;
-            this.skillReady[0][playerKey].skillColor = SKILL_POINTSMAX_COLOR;
+            this.skillReady[0][playerKey].skillColor = SKILL_POINTS3_COLOR;
             gameState.fighters[i].skillNumber += 1;
             
           
@@ -443,6 +457,28 @@ export class StatusBar {
              playSound(this.soundSkillAdd, 0.7);
             this.SkillBars[i].skillPoints = 0;
             gameState.fighters[i].skillPoints = 0;
+            this.skillReady[0][playerKey].skillColor = SKILL_POINTS4_COLOR;
+            gameState.fighters[i].skillNumber += 1;
+            
+           
+        }
+
+        // 4th skill trigger
+        if (gameState.fighters[i].skillNumber === 3 && this.SkillBars[i].skillPoints >= 67) {
+             playSound(this.soundSkillAdd, 0.7);
+            this.SkillBars[i].skillPoints = 0;
+            gameState.fighters[i].skillPoints = 0;
+            this.skillReady[0][playerKey].skillColor = SKILL_POINTS5_COLOR;
+            gameState.fighters[i].skillNumber += 1;
+            
+           
+        }
+
+        // 5th skill trigger
+        if (gameState.fighters[i].skillNumber === 4 && this.SkillBars[i].skillPoints >= 67) {
+             playSound(this.soundSkillAdd, 0.7);
+            this.SkillBars[i].skillPoints = 0;
+            gameState.fighters[i].skillPoints = 0;
             this.skillReady[0][playerKey].skillColor = SKILL_POINTSMAX_COLOR;
             gameState.fighters[i].skillNumber += 1;
             
@@ -450,13 +486,13 @@ export class StatusBar {
         }
 
         
-         // 3rd skill trigger
-        if (gameState.fighters[i].skillNumber >= 3 && this.SkillBars[i].skillPoints >= 67) {
+         // max skill trigger
+        if (gameState.fighters[i].skillNumber >= SKILL_MAX_NUMBER && this.SkillBars[i].skillPoints >= 67) {
            
             this.SkillBars[i].skillPoints = 66;
             gameState.fighters[i].skillPoints = 66;
             this.skillReady[0][playerKey].skillColor = SKILL_POINTSMAX_COLOR;
-            gameState.fighters[i].skillNumber = 3;
+            gameState.fighters[i].skillNumber = SKILL_MAX_NUMBER;
            
         }
         if(gameState.fighters[i].resetSkillBar){
@@ -514,7 +550,7 @@ export class StatusBar {
             this.updateSkillBars(time);
         }
         
-        this.fade.update();
+        this.fade.update(time);
         if(this.flashScreen)this.startTimer(time);
     }
 
@@ -592,42 +628,53 @@ drawSkillNum(context, label, x, y){
         this.drawSkillNum(context, gameState.fighters[0].skillNumber, 107,205);
         this.drawSkillNum(context, gameState.fighters[1].skillNumber, 270,205);
 
-        context.fillStyle =  this.skillReady[0]['player1'].skillColor;
+        if(gameState.fighters[0].skillNumber >= 3){
+            context.fillStyle = this.blinkMax ? SKILL_POINTSMAX_COLOR : this.skillReady[0]['player1'].skillColor;
+        } else {
+            context.fillStyle = this.skillReady[0]['player1'].skillColor;
+        }
 
         context.beginPath();
         context.fillRect(
             36, 207,
             SKILL_POINTS + Math.floor(this.SkillBars[0].skillPoints), 5,
         );
-        if(gameState.fighters[0].skillNumber === 3){
-           if(this.blinkMax){
-            this.soundSkillMax.volume = 0.15;
-                this.soundSkillMax.play();
-                context.fillStyle = SKILL_POINTS3_COLOR;
-            }
+        if(gameState.fighters[0].skillNumber === SKILL_MAX_NUMBER){
+            context.fillStyle = this.blinkMax ? SKILL_EMPTY_POINTS : this.skillReady[0]['player1'].skillColor;
             context.fillRect(
             36, 207,
             SKILL_POINTS + 66, 5,
         );
+        if(this.blinkMax) this.drawFrame(context, 'maximum', 42,202, 1, 0.9);
+        else if (!this.blinkMax) this.drawFrame(context, 'maximum-white', 42,202, 1, 0.9);
+        }
+        if(gameState.fighters[0].skillNumber >= 3 && this.blinkMax){
+            this.soundSkillMax.volume = 0.15;
+            this.soundSkillMax.play();
         }
 
-        context.fillStyle =  this.skillReady[0]['player2'].skillColor;
+        if(gameState.fighters[1].skillNumber >= 3){
+            context.fillStyle = this.blinkMax ? SKILL_POINTSMAX_COLOR : this.skillReady[0]['player2'].skillColor;
+        } else {
+            context.fillStyle = this.skillReady[0]['player2'].skillColor;
+        }
 
          context.fillRect(
             349, 207,
             SKILL_POINTS - Math.floor(this.SkillBars[1].skillPoints) , 5,
         );
-        if(gameState.fighters[1].skillNumber === 3){
-            
-            if(this.blinkMax){
-                this.soundSkillMax.volume = 0.15;
-                this.soundSkillMax.play();
-                context.fillStyle = SKILL_POINTS3_COLOR;
-            }
+        if(gameState.fighters[1].skillNumber === SKILL_MAX_NUMBER){
+            context.fillStyle = this.blinkMax ? SKILL_EMPTY_POINTS : this.skillReady[0]['player2'].skillColor;
             context.fillRect(
             349, 207,
             SKILL_POINTS - 66, 5,
         );
+        if(this.blinkMax) this.drawFrame(context, 'maximum', 288,202, 1, 0.9);
+        else if (!this.blinkMax) this.drawFrame(context, 'maximum-white', 288,202, 1, 0.9);
+        }
+        if(gameState.fighters[1].skillNumber >= 3 && this.blinkMax){
+            this.soundSkillMax.volume = 0.15;
+            this.soundSkillMax.play();
         }
 
         
@@ -697,6 +744,8 @@ drawSkillNum(context, label, x, y){
         if(this.fightOverTimer >= 4 && this.fightOverTimer <= 6){
              
             if(this.winSituation === 'DRAW')this.drawFrame(context, 'draw-game', 158,103);
+            
+           
             if(this.winSituation === 'P1WIN'){
                 if(!this.soundEnable && this.fightOverTimer <=4){
                 playSound(this.soundWin, 1);
@@ -718,9 +767,13 @@ drawSkillNum(context, label, x, y){
                 this.drawScoreLabel(context, 'WINNER!', 299, 90);
             } 
         }
+        
+        if(this.fightOverTimer >= 6 && this.fightOverTimer <= 10) this.drawPerfect(context);
+        
 
          if(this.fightOverTimer >= 8 && this.fightOverTimer <= 10 && !this.fightOverEnable){
             console.log('Next round');
+             this.drawPerfect(context);
             this.fightOverEnable = true;
             this.screenFlashTrigger = true;
             this.flashScreen = true
@@ -856,6 +909,17 @@ drawCredits(context){
                   
     }
 
+    drawPerfect(context){
+         if(gameState.fighters[1].perfectHP || gameState.fighters[0].perfectHP){
+        this.drawScoreLabel(context, 'PERFECT!', 158, 90);
+
+         if(this.soundPerfectEnable){
+            playSound(this.soundPerfect, 1);
+            this.soundPerfectEnable = false;
+         } 
+         }
+    }
+
     drawMoveList(context, time){
         const nameP2 = gameState.fighters[1].id.toUpperCase();
         const nameP1 = gameState.fighters[0].id.toUpperCase();
@@ -937,7 +1001,7 @@ drawCredits(context){
     
 
     draw(context, time){
-       
+      
         if(this.time===this.timeCount - 1 && this.soundEnable){
              console.log('Round 1');
              gameState.fighters[0].hitPoints = HEALTH_MAX_HIT_POINTS;
@@ -1025,12 +1089,14 @@ drawCredits(context){
         }
          if(this.fightOver){
              this.timerDelay = 0;
-            this.drawFightOver(context);
+           if(!(gameState.fighters[0].wins === 2 || gameState.fighters[1].wins === 2)) this.drawFightOver(context);
+           
         }
         if(this.flashScreen)this.drawFlash(context, time);
        //  this.drawMenu(context, time);
          this.drawConfirmSelection(context, time);
          if(gameState.pauseMenu.showMoveList)this.drawMoveList(context,time);
         }
+        
     }
     

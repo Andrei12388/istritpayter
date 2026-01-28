@@ -38,9 +38,10 @@ export class HitSplash {
     }
 
     update(time){
-        if (time.previous < this.animationTimer + 4 * FRAME_TIME) return;
+        this.animationTimer += time.secondsPassed;
+        if (this.animationTimer < 4 * FRAME_TIME / 1000) return;
         this.animationFrame += 1;
-        this.animationTimer = time.previous;
+        this.animationTimer -= 4 * FRAME_TIME / 1000;
 
         if (this.animationFrame >= this.frameNumber) this.entityList.remove.call(this.entityList, this);
     }

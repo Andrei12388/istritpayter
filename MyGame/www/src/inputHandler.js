@@ -59,7 +59,7 @@ function checkAxisTap(padId, axeId, positive, threshold) {
   return crossed;
 }
 
-function showNotice(message) {
+export function showNotice(message) {
   const el = document.getElementById('notice');
   el.textContent = message;      // <-- change the text here
   el.style.display = 'block';

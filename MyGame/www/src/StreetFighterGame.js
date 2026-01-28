@@ -16,20 +16,22 @@ import { PracticeBattleScene } from './scenes/PracticeBattlescene.js';
 
 const selectedCharacters = [
     { 
-        name: "Golem", 
+        name: "Malupiton", 
         namePos: 5,
         sayings: 'Sabi ko naman sayo burger ka saken',
         color: "gray", 
         imageSml: 'malupitonSmall', 
-        imageBig: 'malupitonBig' 
+        imageBig: 'malupitonBig',
+        voice: 'voice-malupiton',
     },
     { 
-        name: "Malupiton", 
+        name: "Golem", 
         color: "gray", 
         namePos: 5,
         sayings: 'Sabi ko naman sayo burger ka saken',
         imageSml: 'malupitonSmall', 
-        imageBig: 'malupitonBig' 
+        imageBig: 'malupitonBig',
+        voice: 'voice-malupiton',
     }
 ];
 
@@ -50,7 +52,7 @@ this.scene = new Disclaimer(this, selectedCharacters);
 //this.scene = new MainMenu(this);
 //this.scene = new OptionsMenu(this);
 //this.scene = new BattleScene(this, selectedCharacters);
-// this.scene = new CharacterSelect(this);
+ //this.scene = new CharacterSelect(this);
 // this.scene = new PrePostMatch(this, selectedCharacters);
 
 //practice mode scene

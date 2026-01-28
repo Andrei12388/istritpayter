@@ -15,11 +15,13 @@ import {
     FighterState
 } from "../../../constants/fighter.js";
 import { gameState } from "../../../state/gameState.js";
+import { DebugBox } from "../../../utils/DebugBox.js";
 import { LightHitSplash } from "../shared/LightHitSplash.js";
 import { HeavyHitSplash } from "../shared/HeavyHitSplash.js";
 import { SuperHitSplash } from "../shared/SuperHitSplash.js";
 import { BlockHitSplash } from "../shared/BlockHitSplash.js";
 import { GreenHitSplash } from "../shared/GreenHitSplash.js";
+import { checkProjectileCollision } from "../../../utils/projectileCollisions.js";
 
 // Frame data
 const frames = new Map([
@@ -83,39 +85,16 @@ export class Rock {
         this.crackAnimationTimer = time.previous ?? 0;
     }
 
-    // 🧩 Check collision with opponent
-    hasCollidedWithOpponent(hitBox) {
-        for (const [, hurtBox] of Object.entries(this.fighter.opponent.boxes.hurt)) {
-            const [x, y, width, height] = hurtBox;
-            const actualHurtBox = getActualBoxDimensions(
-                this.fighter.opponent.position,
-                this.fighter.opponent.direction,
-                { x, y, width, height }
-            );
+    getCollisionHitBox() {
+    const [frameKey] = animations[this.state][this.animationFrame];
+    const frameData = frames.get(frameKey);
+    if (!frameData || !frameData[1]) return null;
 
-            if (boxOverlap(hitBox, actualHurtBox)) {
-                return FireballCollidedState.OPPONENT;
-            }
-        }
-        return null;
-    }
-
-    // 🧩 Check collision with other fireballs
-    hasCollidedWithOtherFireball(hitBox) {
-        const others = this.entityList.entities.filter(
-            (entity) => entity instanceof Rock && entity !== this
-        );
-        for (const other of others) {
-            const [x, y, width, height] = frames.get(
-                animations[other.state][other.animationFrame][0]
-            )[1];
-            const otherHitBox = getActualBoxDimensions(other.position, other.direction, { x, y, width, height });
-            if (boxOverlap(hitBox, otherHitBox)) {
-                return FireballCollidedState.OPPONENT;
-            }
-        }
-        return null;
-    }
+    const [x, y, width, height] = frameData[1];
+    return getActualBoxDimensions(this.position, this.direction, {
+        x, y, width, height
+    });
+}
 
     // 🧩 Determine collision type
     hasCollided() {
@@ -124,7 +103,7 @@ export class Rock {
         )[1];
         const hitBox = getActualBoxDimensions(this.position, this.direction, { x, y, width, height });
 
-        return this.hasCollidedWithOpponent(hitBox) || this.hasCollidedWithOtherFireball(hitBox);
+        return checkProjectileCollision(this, hitBox);
     }
 
     // 🚀 Update movement and handle collisions
@@ -195,53 +174,13 @@ export class Rock {
         this.crackAnimationTimer = time.previous + animations[FireballState.CRACK][this.crackAnimationFrame][1] * FRAME_TIME;
     }
 
-    // 🧭 Draw individual debug boxes
-    drawDebugBox(context, camera, dimensions, baseColor) {
-        if (!Array.isArray(dimensions)) return;
-
-        const [x = 0, y = 0, width = 0, height = 0] = dimensions;
-        const finalWidth = Math.abs(width);
-
-        context.beginPath();
-        context.strokeStyle = baseColor + 'AA';
-        context.fillStyle = baseColor + '33';
-
-        const drawX = Math.floor(this.position.x + (x * this.direction) - camera.position.x) + 0.5;
-        const drawY = Math.floor(this.position.y + y - camera.position.y) + 0.5;
-
-        context.fillRect(drawX, drawY, finalWidth, height);
-        context.rect(drawX, drawY, finalWidth, height);
-        context.stroke();
-    }
-
     // 🔍 Draw all debug boxes
     drawDebug(context, camera) {
         const [frameKey] = animations[FireballState.ACTIVE][this.animationFrame];
         const frameData = frames.get(frameKey);
         if (!frameData) return;
 
-        const boxes = {
-            hit: frameData[1],
-            hurt: frameData[2] || [],
-        };
-
-        context.lineWidth = 1;
-
-        this.drawDebugBox(context, camera, boxes.hit, '#FF0000');
-        if (Array.isArray(boxes.hurt)) {
-            this.drawDebugBox(context, camera, boxes.hurt, '#7777FF');
-        }
-
-        // Draw origin
-        const originX = Math.floor(this.position.x - camera.position.x);
-        const originY = Math.floor(this.position.y - camera.position.y);
-        context.beginPath();
-        context.strokeStyle = 'red';
-        context.moveTo(originX - 4, originY);
-        context.lineTo(originX + 5, originY);
-        context.moveTo(originX, originY - 5);
-        context.lineTo(originX, originY + 4);
-        context.stroke();
+        DebugBox.drawForSpecialEntity(context, camera, this, frameData);
     }
 
     // 🖼️ Draw fireball sprite
@@ -294,7 +233,6 @@ export class Rock {
 
         context.restore();
        
-        //this.drawDebug(context, camera);
     }
 
     // ⏱️ Main update loop

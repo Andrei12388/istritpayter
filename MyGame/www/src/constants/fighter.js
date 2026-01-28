@@ -25,6 +25,7 @@ export const FighterAttackStrength = {
    KNOCKLIFTDOWN: 'knockliftdown',
    SUPER1: 'super1',
    SUPER2: 'super2',
+   SUPER3: 'super3',
    SLASH: 'slash',
    BLOCK: 'block',
 };
@@ -143,6 +144,7 @@ export const FighterAttackBaseData = {
     },
     effect: { type: 'stun', duration: 1500 },
  },
+ 
  [FighterAttackStrength.SUPER2]: {
     score: 1000,
     skill: 3,
@@ -158,6 +160,22 @@ export const FighterAttackBaseData = {
         friction: 500,
     },
     effect: { type: 'burn', duration: 1200 },
+ },
+ [FighterAttackStrength.SUPER3]: {
+    score: 1000,
+    skill: 3,
+  
+    knockup: true,
+    thrust: {
+        x: -120,
+        y: -200,
+    },
+    damage: 4,
+    slide: {
+        velocity: -1 * FRAME_TIME,
+        friction: 500,
+    },
+    effect: { type: 'stun', duration: 1500 },
  },
  [FighterAttackStrength.SLASH]: {
     score: 100,
@@ -245,6 +263,7 @@ HEADBUTT_DOWN: 'headbutt-down',
 KNEEDASH: 'knee-dash',
 TORNADO_DIG: 'tornado-dig',
 PICKUP: 'pickup',
+TOSS: 'toss',
 };
 
 export const FrameDelay = {
@@ -297,7 +316,8 @@ export const hurtStateValidFrom = [
     FighterState.JUMP_HEAVYKICK, FighterState.JUMP_LIGHTKICK,
     FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.HYPERSKILL_2, 
     FighterState.DIE, FighterState.DEATH, FighterState.KNOCKUP, FighterState.SPECIAL_2_MOVEFIGHTER,
-    FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN, FighterState.HEADBUTT, FighterState.KNEEDASH, FighterState.HEADBUTT_DOWN,FighterState.HEADBUTT_UP, FighterState.TORNADO_DIG, FighterState.PICKUP
+    FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN, FighterState.HEADBUTT, FighterState.KNEEDASH, FighterState.HEADBUTT_DOWN,FighterState.HEADBUTT_UP, FighterState.TORNADO_DIG, FighterState.PICKUP, 
+    FighterState.TOSS, FighterState.KNEEDASH,
 ];
 
 export const knockUpStateValidFrom = [
@@ -312,7 +332,7 @@ export const knockUpStateValidFrom = [
     FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.HYPERSKILL_2, FighterState.KNOCKUP,
     FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN, FighterState.HEADBUTT, 
     FighterState.SPECIAL_2_MOVEFIGHTER, FighterState.LAYDOWN_GROUND, FighterState.KNEEDASH, FighterState.HEADBUTT_DOWN,FighterState.HEADBUTT_UP, 
-    FighterState.FALL, FighterState.TORNADO_DIG, FighterState.PICKUP
+    FighterState.FALL, FighterState.TORNADO_DIG, FighterState.PICKUP, FighterState.TOSS, FighterState.KNEEDASH,
 ];
 
 export const SpecialMoveDirection = {

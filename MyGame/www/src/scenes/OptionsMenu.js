@@ -117,7 +117,7 @@ export class OptionsMenu {
 
 
     update(time, context) {
-        this.fade.update();
+        this.fade.update(time);
         
         if(this.difficulty === 0) gameState.difficulty = 'easy';
         else if(this.difficulty === 1) gameState.difficulty = 'normal';

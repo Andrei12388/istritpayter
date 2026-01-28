@@ -44,6 +44,7 @@ export class EffectSplash {
     }
 
     update(time){
+        
         // apply horizontal velocity taking facing direction into account
         this.position.x += (this.direction) * (this.velocity?.x ?? 0) * time.secondsPassed;
         if (time.previous < this.animationTimer + 4 * FRAME_TIME) return;

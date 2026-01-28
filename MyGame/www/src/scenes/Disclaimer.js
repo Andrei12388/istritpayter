@@ -105,6 +105,9 @@ export class Disclaimer {
         this.stageDropY = -100;
         this.pointerTimer = 0;
         this.stageSelectEnable = false;
+
+        this.presentDonation = false;
+        this.startPressed = false;
         
         
 
@@ -172,6 +175,7 @@ export class Disclaimer {
                     //Vs Screen
                     ['vs-screen', [799, 2530, 384, 224]],
                     ['post-screen', [799, 2756, 384, 224]],
+                    ['donation-screen', [15, 2989, 384, 224]],
                      
 
                                
@@ -339,23 +343,29 @@ export class Disclaimer {
       
         updateTime(time){
              if (control.isControlPressed(0, Control.START) || control.isControlPressed(1, Control.START)) {
-                playSound(this.soundStart, 1);
-                this.handleFlash();
+                if(!this.startPressed) {
+                    playSound(this.soundStart, 1);
+                this.startPressed = true;
+                }
                 this.countdown = true;
+                this.presentDonation = true;
              } 
-         if(this.countdownTime === 3 && gameState.gameScene === 'prematch') {
-           
+             if(this.countdownTime === 12) this.handleFlash();
+         if(this.countdownTime === 15 && gameState.gameScene === 'prematch') {
+           console.log("loading game to intro");
+            
             this.game.setScene(new Intro(this.game, this.selectedCharacters));
-         }else if(this.countdownTime === 3 && gameState.gameScene === 'postmatch'){
+         }else if(this.countdownTime === 15 && gameState.gameScene === 'postmatch'){
            
             this.game.setScene(new CharacterSelect(this.game));
          }
 
-        if(time.previous > this.timeTimer + TIME_DELAY){
+        this.timeTimer += time.secondsPassed;
+        if(this.timeTimer >= TIME_DELAY / 1000){
             if(this.countdown)this.countdownTime +=1;
             console.log('time', this.time);
             this.time += 1;
-            this.timeTimer = time.previous;
+            this.timeTimer -= TIME_DELAY / 1000;
             this.stopwatch += 1;
             
             if (this.alphaSet <= 0.1) {
@@ -381,7 +391,7 @@ export class Disclaimer {
         this.updateTime(time);
         this.updateEntities(time, context);
         this.updateImports();
-        this.fade.update();
+        this.fade.update(time);
         this.screenAnimation(time);
         if(this.flashScreen)this.startTimer(time);
 
@@ -499,7 +509,7 @@ drawDisclaimer(context){
          this.drawTextLabel(context, 'ON ITCH FOR MORE INFO.', 5,95, 1, 0.8);
 
          this.drawTextLabel(context, 'DEVELOPMENT STARTED: SEPTEMBER 2025', 5,135, 1, 0.8);
-         this.drawTextLabel(context, 'LATEST UPDATE: JANUARY 13 2026', 5,155, 1, 0.8);
+         this.drawTextLabel(context, 'LATEST UPDATE: JANUARY 28 2026', 5,155, 1, 0.8);
          
          this.drawTextLabel(context, 'ANDREI12388.ITCH.IO/ISTRIT-PAYTER-2025', 5,175, 1, 0.8);
          this.drawTextLabel(context, 'PRESS START TO CONTINUE', 90,205, 1, 0.8);
@@ -527,9 +537,8 @@ drawVsScreen(context){
         
         
         this.drawDisclaimer(context);
-       
-        this.fade.draw(context, 400, 400);
-      
+        if(this.presentDonation) this.drawFrame(context, 'donation-screen', 0, 0);
+      this.fade.draw(context, 400, 400);
         
     }
 }

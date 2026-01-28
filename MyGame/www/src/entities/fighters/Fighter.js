@@ -49,6 +49,7 @@ export class Fighter {
         this.hurtShakeTimer = 0;
         this.slideVelocity = 0;
         this.slideFriction = 0;
+        this.touchedCamera = false;
         
         this.frames = new Map();
         this.animationFrame = 0;
@@ -300,6 +301,7 @@ export class Fighter {
         [FighterAttackStrength.KNOCKLIFTDOWN]: document.querySelector('audio#sound-fighter-heavy-attack'),
         [FighterAttackStrength.SUPER1]: document.querySelector('audio#sound-fighter-heavy-attack'),
         [FighterAttackStrength.SUPER2]: document.querySelector('audio#sound-fighter-heavy-attack'),
+        [FighterAttackStrength.SUPER3]: document.querySelector('audio#sound-fighter-heavy-attack'),
         [FighterAttackStrength.SLASH]: document.querySelector('audio#sound-slash'),
     }
 
@@ -333,6 +335,10 @@ export class Fighter {
             [FighterAttackType.KICK]: document.querySelector('audio#sound-fighter-heavy-kick-hit'),
         },
         [FighterAttackStrength.SUPER2]:{
+            [FighterAttackType.PUNCH]: document.querySelector('audio#sound-fighter-heavy-punch-hit'),
+            [FighterAttackType.KICK]: document.querySelector('audio#sound-fighter-heavy-kick-hit'),
+        },
+        [FighterAttackStrength.SUPER3]:{
             [FighterAttackType.PUNCH]: document.querySelector('audio#sound-fighter-heavy-punch-hit'),
             [FighterAttackType.KICK]: document.querySelector('audio#sound-fighter-heavy-kick-hit'),
         },
@@ -413,6 +419,9 @@ export class Fighter {
             case FighterAttackStrength.SUPER2:
                 if(hitLocation === FighterHurtBox.HEAD) return FighterState.HURT_HEAD_HEAVY;
                 return FighterState.HURT_BODY_HEAVY;
+             case FighterAttackStrength.SUPER3:
+                if(hitLocation === FighterHurtBox.HEAD) return FighterState.HURT_HEAD_HEAVY;
+                return FighterState.HURT_BODY_HEAVY;
             case FighterAttackStrength.SLASH:
                 if(hitLocation === FighterHurtBox.BODY) return FighterState.HURT_HEAD_HEAVY;
                 return FighterState.HURT_BODY_HEAVY;
@@ -445,7 +454,7 @@ export class Fighter {
 
   changeState(newState, ...args) {
     if (!this.states[newState].validFrom.includes(this.currentState)) return;
-
+    this.attackStruck = false;
     const state = this.states[newState];
     this.currentState = newState;
     this.animationFrame = 0;
@@ -1045,6 +1054,7 @@ handleHeavyKickState(){
 
 
     handleFallState(){
+      
         if(this.isAnimationKnockUp()) gameState.fighters[this.playerId].dead = "invulnerable";
          
         if (!this.isAnimationCompleted()) return;
@@ -1087,6 +1097,8 @@ handleHeavyKickState(){
         }
         
         if(!gameState.fighterNotIdle) return;
+          this.touchedCamera = false;
+ 
         if (control.isUp(this.playerId) && this.position.y >= STAGE_FLOOR) {
             this.changeState(FighterState.JUMP_START);
         } else if (control.isDown(this.playerId) && this.position.y >= STAGE_FLOOR) {
@@ -1240,18 +1252,27 @@ handleHeavyKickState(){
 //Main Functions
 
     updateStageConstraints(time, context, camera){
-       
-        if (this.position.x > camera.position.x + context.canvas.width - this.boxes.push.width) {
-            this.position.x = camera.position.x + context.canvas.width - this.boxes.push.width;
-          
-            this.resetSlide(true);
-        } 
+       //- this.boxes.push.width
+       //+ this.boxes.push.width
+       const fighterBox = 25;
+        if (this.position.x > camera.position.x-fighterBox + context.canvas.width ) {
+            this.position.x = camera.position.x-fighterBox + context.canvas.width ;
+           //  this.touchedCamera = true;
+            //console.log("out of bounds right", this.playerId, this.touchedCamera);
+            
+            this.velocity.x = 0;
 
-        if (this.position.x < camera.position.x + this.boxes.push.width){
-            this.position.x = camera.position.x + this.boxes.push.width;
-           
+            this.resetSlide(true);
+        }
+
+        if (this.position.x < camera.position.x+fighterBox ){
+            this.position.x = camera.position.x+fighterBox ;
+          //  this.touchedCamera = true;
+           //  console.log("out of bounds left", this.playerId, this.touchedCamera);
+            
+            this.velocity.x = 0;
              this.resetSlide(true);
-        } 
+        }
      if(gameState.dodging) return;
         if (this.hasCollidedWithOpponent()) {
             if (this.position.x <= this.opponent.position.x){
@@ -1423,7 +1444,11 @@ handleHeavyKickState(){
     }
 
     updatePosition(time){
-        this.position.x += ((this.velocity.x + this.slideVelocity) * this.direction) * time.secondsPassed;
+        if(!this.touchedCamera) this.position.x += ((this.velocity.x + this.slideVelocity) * this.direction) * time.secondsPassed;
+        else {
+            this.velocity.x = 0;
+            this.position.x += (this.velocity.x * this.direction) * time.secondsPassed;
+        }
         this.position.y += this.velocity.y * time.secondsPassed;
     }
 
@@ -1457,6 +1482,12 @@ handleHeavyKickState(){
             this.position.y = STAGE_FLOOR;
            // this.velocity.y = 0;
           //  console.log("Gravity falling");
+        }
+
+        // Prevent going too high to avoid spamming
+        if(this.position.y <= -80){
+            this.position.y = -80;
+            this.gravity = 2000;
         }
     }
 
@@ -1645,6 +1676,14 @@ else this.colorSwappedImage = hueShiftSprite(this.image, 340, 2, 1);
         
         context.save();
 
+         //fade effect
+
+         if (gameState.fighters[this.playerId].alpha >= 1) gameState.fighters[this.playerId].alpha = 1;
+         if (gameState.fighters[this.playerId].alpha <= 0) gameState.fighters[this.playerId].alpha = 0;
+        context.globalAlpha = gameState.fighters[this.playerId].alpha;
+     
+        //end fade effect
+
        if (status) {
 
     const flicker = Math.random() > 0.5 
@@ -1773,7 +1812,7 @@ if (!spriteToDraw) return; // avoid crashes
 
         context.restore();
        
-  //  this.drawDebug(context, camera);
+    if(gameState.debug.fighters)this.drawDebug(context, camera);
     }
     }
 }
