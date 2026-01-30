@@ -1,0 +1,202 @@
+for itch io compression:
+
+run in terminal:
+npx esbuild src/index.js --bundle --minify --outfile=game.js
+
+change in html:
+<script src="game.js"></script>
+
+include only in zip:
+itch-build/
+├─ index.html
+├─ game.js
+├─ images/
+├─ sounds/
+------------------------------
+for Apk cordova command:
+cordova platform remove android
+cordova platform add android
+cordova build android
+
+
+------------------------------
+
+For Livestream:
+Game Link: https://andrei12388.itch.io/istrit-payter-2025
+
+Like, Sub, and leave a comment on itch for your suggestions <3
+
+You can follow me also on my:
+
+Tiktok: https://www.tiktok.com/@.alyaskulot
+
+Facebook: https://www.facebook.com/robertandrei.bardoquillo
+
+Instagram: https://www.instagram.com/andreibardoquillo/
+
+Youtube: https://www.youtube.com/@robertbardoquillo5356
+
+--------------------------------------
+
+
+Day 24: 10 21 2025
+- Death (ok) (Fix when player hp belows 0)
+- Get Up State (ok)
+
+- Knock Up State (ok) 
+
+
+- Stage update
+
+Day 25: 10 22 2025
+- Knock Up and Get Up state on fighters (done)
+- Invulnerability
+	-knock up (Hit available) (Done)
+	-on air (Hit available) (Done)
+	-on ground (Invulnerable) (Done)
+
+-Death State (Fixed)
+
+
+-----------------------------
+
+
+Day 26: 10 24 2025
+fix velocity y of knock up per strength (done)
+death state (fix)
+
+Super 1 Damage (done)
+
+vs/post match Scene 
+
+Name Positions:
+Malupiton: 5
+Golem: 20
+
+Image fix (done)
+
+
+----------------------------
+Day 27 Oct 29 2025
+
+Update Stages:
+
+Samples
+Pasay (MOA) -- done
+Litex -- Done
+Bohol -- done
+etc
+
+
+-----------------
+
+Day 28 Nov 7 2025
+Bohol Stage (Carabao walking entity) -- done
+Stage Music - Done
+I II III 
+
+
+------------------------------
+Day 29 Nov 10 2025
+
+Character create:
+Golem
+
+Baby Giant
+Otlum
+
+-------------------------------
+Day 33 Nov 26 2025
+knock up bounce effect
+Skill sfx (max and when increased)
+fixed slow effect when winning
+
+----------------------------------
+day 34 Nov 27 2025
+Hit box collision fixed (no origin hitbox) (done)
+Combo display (done)
+
+----------------------------
+day 35 Nov 28 2025
+Realistic Shadow Attempt (done)
+
+-------------------------------
+day 36 Dec 2 2025
+
+Main Menu (
+Story, 
+vs mode including cpu vs cpu,
+Options,
+exit)
+
+---------------------------------
+Day 37 Dec 3 2025
+Refine Main Menu and Options choices
+Fixed hold inputs on onscreen buttons
+
+---------------------------------
+
+Day 38 Dec 5 2025
+added special moves malupiton, 
+fixed enemy ai by vulnerabilities, 
+fixed changestate, added hitsplash, 
+and passing attacktype dec 5 2025
+
+Malupiton Special Skills:
+Knocklift and Down
+HeadButt
+Slide kick
+
+day 39 Dec 10 2025
+added control panel, fixed knocklift sprites, 
+and attempt change pallete.
+
+Day 40 Dec 16 2025
+Push, hurt, and hitbox Mapping Teknik
+golem crouch kicks
+
+Day 41 Dec 17 2025
+done - Golem Final
+done - fix full screen mode on hopweb
+enemy ai fix
+
+Day 42 Dec 18 2025
+fix fighter sizes
+menu selections
+
+Day 46 Jan 10 2026
+
+-Practice Mode
+	:characterselect (change mode gamestate global
+variable to practice)
+	:Prepost match(redirect to practicebattlescene)
+	:test unlimited health, skills, and time
+-----------
+
+Day 47 Jan 12 2026
+
+-Pause/Menu when hold start (show who pause the game)
+  either use context.draw or use ps for layout menu
+
+-add transitions on selections.
+
+Day 48 Jan 13 2026
+
+-After match, player must have a choice to retry, goto character select, and exit to main menu.
+-4th Skill Golem
+-show movelists (base on the fighter of the player who pause the game)
+
+-fix disable attack on countdown
+
+Day 49 Jan 15 2026
+- Golem spin special move 
+- Malupiton special moves (headbutt up and down)
+  also fix combo.
+
+Day 50 Jan 16 2026
+
+
+
+
+
+

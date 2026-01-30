@@ -1,0 +1,13 @@
+python3 -m http.server --bind 0.0.0.0 8000
+
+expo go : npx expo start --tunnel
+
+-create expo app React Native
+npx create-expo-app .
+
+Reset Project:
+npm run reset-project
+
+
+------------------------------------
+Foreshadowing na ba to ni Ej power. Panay kuda tong mga senator nato di nakikipagcoordinate sa DFA
