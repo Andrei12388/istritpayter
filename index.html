@@ -653,24 +653,26 @@ const joystick = document.getElementById("joystick");
 let activeTab = null;
 let settingsOpen = false;
 
+// Toggle side menu
+menuBtn.onclick = (e) => {
+  e.stopPropagation(); // prevent triggering document click
+  menu.classList.toggle("open");
+};
+
+// Tab buttons
 document.querySelectorAll(".tabBtn").forEach(btn => {
-  btn.onclick = () => {
+  btn.onclick = (e) => {
+    e.stopPropagation(); // prevent triggering document click
     const tab = btn.dataset.tab;
 
-  
     if (tab === "settings") {
       settingsOpen = !settingsOpen;
-      if (settingsOpen) {
-        controlPanel.classList.add("show");
-      } else {
-        controlPanel.classList.remove("show");
-      }
-      return; 
+      if (settingsOpen) controlPanel.classList.add("show");
+      else controlPanel.classList.remove("show");
+      return;
     }
 
-   
     if (activeTab === tab) {
-      
       p1Controls.style.display = "none";
       p2Controls.style.display = "none";
       joystick.style.display = "none";
@@ -680,7 +682,6 @@ document.querySelectorAll(".tabBtn").forEach(btn => {
 
     activeTab = tab;
 
-   
     p1Controls.style.display = "none";
     p2Controls.style.display = "none";
     joystick.style.display = "none";
@@ -694,6 +695,20 @@ document.querySelectorAll(".tabBtn").forEach(btn => {
       p2Controls.style.display = "flex";
     }
   };
+});
+
+// Click outside to close menu and control panel
+document.addEventListener("click", (e) => {
+  // If click outside menu, hide it
+  if (!menu.contains(e.target) && !menuBtn.contains(e.target)) {
+    menu.classList.remove("open");
+  }
+
+  // If click outside control panel, hide it
+  if (!controlPanel.contains(e.target)) {
+    controlPanel.classList.remove("show");
+    settingsOpen = false;
+  }
 });
 </script>
    
