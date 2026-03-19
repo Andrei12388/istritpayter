@@ -173,6 +173,233 @@ knob.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
     }
 }
 
+
+// ------------------- Layout Edit -------------------
+let layoutEditMode = false;
+let draggables = [];
+let saveLayoutBtn = null;
+let restoreLayoutBtn = null;
+
+
+function makeElementDraggable(el, id) {
+    if (!el) return;
+    let offsetX = 0, offsetY = 0, isDragging = false;
+
+    function onPointerDown(e) {
+        e.preventDefault();
+        isDragging = true;
+        const rect = el.getBoundingClientRect();
+        const touch = e.touches ? e.touches[0] : e;
+        offsetX = touch.clientX - rect.left;
+        offsetY = touch.clientY - rect.top;
+        activePointerId = touch.identifier ?? "mouse";
+        el.setPointerCapture?.(e.pointerId);
+        el.classList.add('dragging');
+    }
+
+    function onPointerMove(e) {
+        if (!isDragging) return;
+        let touch;
+        if (e.touches) {
+            touch = [...e.touches].find(t => t.identifier === activePointerId);
+            if (!touch) return;
+        } else if (activePointerId !== "mouse") return;
+        else touch = e;
+
+        const scale = el.getBoundingClientRect().width / el.offsetWidth;
+        el.style.left = `${(touch.clientX - offsetX)/scale}px`;
+        el.style.top = `${(touch.clientY - offsetY)/scale}px`;
+    }
+
+    function onPointerUp(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        el.releasePointerCapture?.(e.pointerId);
+        el.classList.remove('dragging');
+        saveControlPosition(id ?? el.id);
+    }
+
+    el.addEventListener('pointerdown', onPointerDown);
+    el.addEventListener('pointermove', onPointerMove);
+    el.addEventListener('pointerup', onPointerUp);
+    el.addEventListener('touchstart', onPointerDown, { passive: false });
+    el.addEventListener('touchmove', onPointerMove, { passive: false });
+    el.addEventListener('touchend', onPointerUp);
+
+    draggables.push({ el, onPointerDown, onPointerMove, onPointerUp });
+}
+
+function createSaveLayoutBtn() {
+    if (saveLayoutBtn) return saveLayoutBtn;
+    saveLayoutBtn = document.createElement('button');
+    saveLayoutBtn.innerText = '💾 Save Layout';
+    Object.assign(saveLayoutBtn.style, {
+        position: 'fixed',
+        top: '15px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 4000,
+        padding: '10px 20px',
+        fontSize: '16px',
+        backgroundColor: '#40ff00',
+        color: 'black',
+        border: '2px solid #40ff00',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        boxShadow: '0 0 10px #40ff00',
+        display: 'none'
+    });
+    document.body.appendChild(saveLayoutBtn);
+    return saveLayoutBtn;
+}
+
+
+function createRestoreLayoutBtn() {
+    if (restoreLayoutBtn) return restoreLayoutBtn;
+    restoreLayoutBtn = document.createElement('button');
+    restoreLayoutBtn.innerText = '♻️ Restore DefaultLayout';
+    Object.assign(restoreLayoutBtn.style, {
+        position: 'fixed',
+        top: '15px',
+        left: '80%',
+        transform: 'translateX(-50%)',
+        zIndex: 4000,
+        padding: '10px 20px',
+        fontSize: '16px',
+        backgroundColor: '#858684',
+        color: 'black',
+        border: '2px solid #6a6c69',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        boxShadow: '0 0 10px #606160',
+        display: 'none'
+    });
+    document.body.appendChild(restoreLayoutBtn);
+    return restoreLayoutBtn;
+}
+
+export function enableLayoutEdit() {
+    if (layoutEditMode) return;
+    layoutEditMode = true;
+
+    restoreControlPositions();
+
+    // Show draggable controls
+    const joystick = document.getElementById('joystick');
+    joystick.style.display = 'block';
+    makeElementDraggable(joystick, 'joystick');
+
+    const p1Controls = document.querySelector('.moveLists');
+    
+    p1Controls.style.display = 'flex';
+    
+    makeElementDraggable(p1Controls, 'buttonsP1');
+    
+
+    // Hide menu & control panel
+    document.getElementById('menuBtn').style.display = 'none';
+    document.getElementById('emulatorMenu').style.display = 'none';
+    document.querySelector('.onscreen-controls-panel').style.display = 'none';
+
+    // Show save button
+    createSaveLayoutBtn().style.display = 'block';
+    createRestoreLayoutBtn().style.display = 'block';
+}
+
+export function disableLayoutEdit() {
+    layoutEditMode = false;
+
+    // Remove draggable listeners
+    draggables.forEach(d => {
+        d.el.removeEventListener('pointerdown', d.onPointerDown);
+        d.el.removeEventListener('pointermove', d.onPointerMove);
+        d.el.removeEventListener('pointerup', d.onPointerUp);
+        d.el.removeEventListener('touchstart', d.onPointerDown);
+        d.el.removeEventListener('touchmove', d.onPointerMove);
+        d.el.removeEventListener('touchend', d.onPointerUp);
+    });
+    draggables = [];
+
+    // Hide save button
+    createSaveLayoutBtn().style.display = 'none';
+    const controlPanel = document.querySelector('.onscreen-controls-panel');
+    controlPanel.style.display = 'flex';
+
+    // Restore menu & panel
+    document.getElementById('menuBtn').style.display = 'block';
+    document.getElementById('emulatorMenu').style.display = 'block';
+    document.querySelector('.onscreen-controls-panel').style.display = 'block';
+
+   
+}
+
+function saveControlPosition(id) {
+    const el = document.getElementById(id) || document.querySelector(`.${id}`);
+    if (!el) return;
+    gameState.controlPositions[id] = { x: el.style.left, y: el.style.top };
+}
+
+export function restoreControlPositions() {
+    Object.entries(gameState.controlPositions).forEach(([id, pos]) => {
+        const el = document.getElementById(id) || document.querySelector(`.${id}`);
+        if (!el) return;
+        el.style.position = 'fixed';
+        el.style.left = pos.x;
+        el.style.top = pos.y;
+    });
+}
+
+const defaultControlPositions = {
+    joystick: { x: '15vw', y: '60vh' },
+    buttonsP1: { x: '2.5vw', y: '65%' },
+    buttonsP2: { x: '8vw', y: '30vh' }
+};
+
+const controlElementsMap = {
+    joystick: document.getElementById('joystick'),
+    buttonsP1: document.querySelector('.moveLists'),
+    buttonsP2: document.querySelector('.moveListsP2')
+};
+
+export function restoreDefaultLayout() {
+    Object.entries(defaultControlPositions).forEach(([key, pos]) => {
+        const el = controlElementsMap[key];
+        if (!el) return;
+        el.style.position = 'fixed';
+        el.style.left = pos.x;
+        el.style.top = pos.y;
+    });
+
+    gameState.controlPositions = { ...defaultControlPositions };
+}
+
+// ------------------- Edit Layout Button Hook -------------------
+document.getElementById('editLayoutBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!layoutEditMode) enableLayoutEdit();
+    else alert('Layout edit active. Use 💾 Save Layout to finish.');
+});
+
+// Attach Save Layout button
+createSaveLayoutBtn().addEventListener('click', () => {
+    disableLayoutEdit();
+
+    // Restore menu & onscreen panel
+    const menuBtn = document.getElementById('menuBtn');
+    const emulatorMenu = document.getElementById('emulatorMenu');
+    const controlPanel = document.querySelector('.onscreen-controls-panel');
+
+    menuBtn.style.display = 'block';
+    emulatorMenu.style.display = 'block';
+    controlPanel.style.display = 'block';
+});
+
+document.getElementById('restoreLayoutBtn').addEventListener('click', () => {
+    restoreDefaultLayout();
+});
+
+window.addEventListener('load', restoreControlPositions);
+
 function resetKnob() {
     holdTimer = 0;
     state.tapped = false;
@@ -223,6 +450,7 @@ radios.forEach(radio => {
             scrbuttons1.style.display = "block";
             display1.style.display = "block";
             display2.style.display = "block";
+            restoreControlPositions();
         } else {
             joystick.style.display = "none";
             scrbuttons1.style.display = "none";

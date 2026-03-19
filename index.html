@@ -466,6 +466,38 @@ top: 40vh;
 
     </style>
 <button id="menuBtn">☰</button>
+<button id="saveLayoutBtn" style="
+    display:none;
+    position:fixed;
+    top:15px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:4000;
+    padding:10px 20px;
+    font-size:16px;
+    background-color:#40ff00;
+    color:black;
+    border:2px solid #40ff00;
+    border-radius:6px;
+    cursor:pointer;
+    box-shadow:0 0 10px #40ff00;
+">💾 Save Layout</button>
+<button id="restoreLayoutBtn"  style="
+    display:none;
+    position:fixed;
+    top:15px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:4000;
+    padding:10px 20px;
+    font-size:16px;
+    background-color:#40ff00;
+    color:black;
+    border:2px solid #40ff00;
+    border-radius:6px;
+    cursor:pointer;
+    box-shadow:0 0 10px #40ff00;
+">♻️ Restore Default</button>
     <div id="emulatorMenu">
   <h3 style="text-align: center;">GAME MENU</h3>
 
@@ -516,6 +548,7 @@ top: 40vh;
 <label>
   <input type="radio" name="controlPanelToggle" value="off" checked> Off
 </label>
+
     </div>
   </div>
 </div>
@@ -635,6 +668,8 @@ top: 40vh;
           step="10"
         />
       </div>
+      
+ <button id="editLayoutBtn">Edit Layout</button>
     </div>
     </div>
 
@@ -709,6 +744,30 @@ document.addEventListener("click", (e) => {
     controlPanel.classList.remove("show");
     settingsOpen = false;
   }
+});
+
+document.getElementById('editLayoutBtn').addEventListener('click', () => {
+  if (!layoutEditMode) {
+    enableLayoutEdit();
+   
+  } else {
+    disableLayoutEdit();
+   
+  }
+});
+
+document.getElementById('joystickAlign').addEventListener('change', e => {
+    const val = e.target.value;
+    const joystick = document.getElementById('joystick');
+
+    switch(val){
+        case 'bottom-left': joystick.style.left='15vw'; joystick.style.top='75vh'; break;
+        case 'bottom-right': joystick.style.left='80vw'; joystick.style.top='75vh'; break;
+        case 'top-left': joystick.style.left='15vw'; joystick.style.top='15vh'; break;
+        case 'top-right': joystick.style.left='80vw'; joystick.style.top='15vh'; break;
+    }
+
+    saveControlPosition('joystick');
 });
 </script>
    

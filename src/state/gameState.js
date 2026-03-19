@@ -58,6 +58,12 @@ export const gameState = {
     gamepadSwitchPlayer: true,
     FpsCounterEnable: false,
 
+    controlPositions: {
+    joystick: { x: '15vw', y: '60vh' }, 
+    buttonsP1: { x: '2.5vw', y: '65%' },
+    buttonsP2: { x: '8vw', y: '30vh' }
+    },
+
     //for practice mode
     practiceMode: {
         enabled: false,
