@@ -28,20 +28,27 @@ main{
   align-items: center;
 }
         canvas {
-          transform: scale(1.5) translateY(50%);
-          background-color: black;
-          object-fit: contain;
-          image-rendering: crisp-edges;
-          image-rendering: pixelated;
-          position: absolute ;
-          z-index: 101;
-          width: 50vw;
-          height: 61vh;
-          margin-top: 30px;
-          border: solid 1px blue;
-          border-radius: 5px;
-          font-family: "Arcade Interlaced";
-        }
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  image-rendering: pixelated;
+  background: black;
+  z-index: 1;
+}
+#menuBtn {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1000;
+  background: rgba(0,0,0,0.8);
+  color: #40ff00;
+  border: 2px solid #40ff00;
+  font-size: 20px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
           img{
             display: none;
           }
@@ -59,20 +66,29 @@ main{
           }
 
           /* Onscreen Controls Settings Panel */
-          .onscreen-controls-panel {
+         .onscreen-controls-panel {
             position: fixed;
-            display: none;
-            top: 10px;
-            left: 25vw;
-            background-color: rgba(0, 0, 0, 0.9);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background-color: rgba(0,0,0,0.9);
             border: 2px solid rgb(64, 255, 0);
             border-radius: 5px;
             padding: 15px;
-            z-index: 500;
+            z-index: 3000;
             min-width: 300px;
             font-family: Arial, Helvetica, sans-serif;
             color: rgb(64, 255, 0);
-          }
+            opacity: 0;
+            pointer-events: none; /* prevent clicks when hidden */
+            transition: all 0.2s ease;
+        }
+
+        .onscreen-controls-panel.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            pointer-events: auto; /* enable clicks when shown */
+        }
 
           .onscreen-controls-panel h3 {
             margin: 0 0 15px 0;
@@ -138,7 +154,7 @@ main{
           .moveLists {
             top: 65%;
             transform: scale(0.5);
-            display: flex;
+            display: none;
             flex-wrap: wrap;           /* allow items to wrap to new rows */
             position: fixed;
             left: 2.5vw;
@@ -313,11 +329,76 @@ main{
         cursor: not-allowed;    /* optional, shows user can't click */
     }
 
-        
+
+/* ===== MENU BUTTON ===== */
+#menuBtn {
+  position: fixed;
+  top: 15px;
+  left: auto;
+  right: 15px;
+  z-index: 2000;
+  
+  color: #40ff00;
+  border: 2px solid #40ff00;
+  padding: 10px 14px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 6px;
+  box-shadow: 0 0 10px #40ff00;
+}
+
+#menuBtn:hover {
+  background: #40ff00;
+  color: black;
+}
+
+/* ===== SIDE MENU ===== */
+#emulatorMenu {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 300px;
+  height: 100vh;
+
+  color: #40ff00;
+  z-index: 1500;
+  padding: 15px;
+  transition: 0.3s;
+}
+
+#emulatorMenu.open {
+  right: 0;
+  background: rgba(0,0,0,0.95);
+}
+
+.tabBtn {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  background: black;
+  color: #40ff00;
+  border: 1px solid #40ff00;
+  cursor: pointer;
+}
+
+.tabBtn:hover {
+  background: #40ff00;
+  color: black;
+}
+
+.tabContent {
+  display: none;
+}
+
+.tabContent.active {
+  display: block;
+}
+
   #joystick {
   
-  width: 6vw;
-  height: 12vh;
+  width: 16vh;  
+  height: 16vh;
+
   background: rgba(255,255,255,0.2);
   border: 2px solid white;
   border-radius: 50%;
@@ -336,19 +417,18 @@ main{
 
 #knob {
   content: url('./images/joystick/handle.png');
-  width: 8vw;
-  height: 15vh;
-  
+  width: 100%;   
+  height: 100%;
   background: yellow;
   border: 2px solid black;
   border-radius: 50%;
   position: absolute;
-  opacity: 100%;
-  top: 18%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 205;
-  left: 24%;
-  transform: translate(-25.5%, -20%);
 }
+
 .screenJoystick{
   position: fixed;
  z-index: 105;
@@ -385,18 +465,49 @@ top: 40vh;
 }
 
     </style>
-<div id="notice" style="
-     display:none;
-     background:#020fff;
-     color:white;
-     padding:12px;
-     font-family: 'Courier New', Courier, monospace;
-     position:fixed;
-     z-index: 1005;
-     top:20px; right:20px;
-     border-radius:6px;">
-</div>
-    <div class="screenJoystick">
+<button id="menuBtn">☰</button>
+<button id="saveLayoutBtn" style="
+    display:none;
+    position:fixed;
+    top:15px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:4000;
+    padding:10px 20px;
+    font-size:16px;
+    background-color:#40ff00;
+    color:black;
+    border:2px solid #40ff00;
+    border-radius:6px;
+    cursor:pointer;
+    box-shadow:0 0 10px #40ff00;
+">💾 Save Layout</button>
+<button id="restoreLayoutBtn"  style="
+    display:none;
+    position:fixed;
+    top:15px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:4000;
+    padding:10px 20px;
+    font-size:16px;
+    background-color:#40ff00;
+    color:black;
+    border:2px solid #40ff00;
+    border-radius:6px;
+    cursor:pointer;
+    box-shadow:0 0 10px #40ff00;
+">♻️ Restore Default</button>
+    <div id="emulatorMenu">
+  <h3 style="text-align: center;">GAME MENU</h3>
+
+  <button class="tabBtn" data-tab="p1">Player 1</button>
+  <button class="tabBtn" data-tab="p2">Player 2</button>
+  <button class="tabBtn" data-tab="settings">Settings</button>
+
+  <div class="tabContent" id="tab-p1">
+    <!-- Move your P1 controls here -->
+     <div class="screenJoystick">
 <label>
    P1 Control
   <br>
@@ -408,7 +519,11 @@ top: 40vh;
 </label>
     </div>
 
-    <div class="screenJoystickP2">
+  </div>
+
+  <div class="tabContent" id="tab-p2">
+    <!-- Move your P2 controls here -->
+     <div class="screenJoystickP2">
 <label>
    P2 Control
   <br>
@@ -419,8 +534,11 @@ top: 40vh;
   <input type="radio" name="joystick2Toggle" value="off" checked> Off
 </label>
     </div>
+  </div>
 
-    <div class="screenJoystickController">
+  <div class="tabContent" id="tab-settings">
+    <!-- Move your sliders here -->
+     <div class="screenJoystickController">
 <label>
   Control Panel
   <br>
@@ -430,13 +548,29 @@ top: 40vh;
 <label>
   <input type="radio" name="controlPanelToggle" value="off" checked> Off
 </label>
+
     </div>
+  </div>
+</div>
+<div id="notice" style="
+     display:none;
+     background:#020fff;
+     color:white;
+     padding:12px;
+     font-family: 'Courier New', Courier, monospace;
+     position:fixed;
+     z-index: 1005;
+     top:20px; right:20px;
+     border-radius:6px;">
+</div>
     
         <script defer type="module"src="./src/index.js"></script>
   </head>
   <body>
     <main>
+      <div id="gameWrapper">
       <canvas width="384" height="224"></canvas>
+      </div>
     <img src="./arcade.png" alt="arcade" class="arcade"/>
   </main>
  
@@ -444,7 +578,7 @@ top: 40vh;
   <div id="knob"></div>
 </div>
   
-  <div class="scrninput" style="display:none">
+  <div class="scrninput">
   <div class="moveLists">
     <div class="moveTitle"> </div>
     <div class="movePlayer">
@@ -534,8 +668,119 @@ top: 40vh;
           step="10"
         />
       </div>
+      
+ <button id="editLayoutBtn" style="
+    display:block;
+  
+    padding:10px 20px;
+    font-size:16px;
+    background-color:#40ff00;
+    color:black;
+    border:2px solid #40ff00;
+    border-radius:6px;
+    cursor:pointer;
+    box-shadow:0 0 10px #40ff00;
+">Edit Layout</button>
     </div>
     </div>
+
+    <script>
+const menuBtn = document.getElementById("menuBtn");
+const menu = document.getElementById("emulatorMenu");
+
+menuBtn.onclick = () => {
+  menu.classList.toggle("open");
+};
+
+const p1Controls = document.querySelector(".moveLists");
+const p2Controls = document.querySelector(".moveListsP2");
+const controlPanel = document.querySelector(".onscreen-controls-panel");
+const joystick = document.getElementById("joystick");
+
+let activeTab = null;
+let settingsOpen = false;
+
+// Toggle side menu
+menuBtn.onclick = (e) => {
+  e.stopPropagation(); 
+  menu.classList.toggle("open");
+};
+
+// Tab buttons
+document.querySelectorAll(".tabBtn").forEach(btn => {
+  btn.onclick = (e) => {
+    e.stopPropagation(); 
+    const tab = btn.dataset.tab;
+
+    if (tab === "settings") {
+      settingsOpen = !settingsOpen;
+      if (settingsOpen) controlPanel.classList.add("show");
+      else controlPanel.classList.remove("show");
+      return;
+    }
+
+    if (activeTab === tab) {
+      p1Controls.style.display = "none";
+      p2Controls.style.display = "none";
+      joystick.style.display = "none";
+      activeTab = null;
+      return;
+    }
+
+    activeTab = tab;
+
+    p1Controls.style.display = "none";
+    p2Controls.style.display = "none";
+    joystick.style.display = "none";
+
+    if (tab === "p1") {
+      p1Controls.style.display = "flex";
+      joystick.style.display = "block";
+    }
+
+    if (tab === "p2") {
+      p2Controls.style.display = "flex";
+    }
+  };
+});
+
+
+document.addEventListener("click", (e) => {
+
+  if (!menu.contains(e.target) && !menuBtn.contains(e.target)) {
+    menu.classList.remove("open");
+  }
+
+  if (!controlPanel.contains(e.target)) {
+    controlPanel.classList.remove("show");
+    settingsOpen = false;
+  }
+});
+
+document.getElementById('editLayoutBtn').addEventListener('click', () => {
+  if (!layoutEditMode) {
+    enableLayoutEdit();
+   
+  } else {
+    disableLayoutEdit();
+   
+  }
+});
+
+document.getElementById('joystickAlign').addEventListener('change', e => {
+    const val = e.target.value;
+    const joystick = document.getElementById('joystick');
+
+    switch(val){
+        case 'bottom-left': joystick.style.left='15vw'; joystick.style.top='75vh'; break;
+        case 'bottom-right': joystick.style.left='80vw'; joystick.style.top='75vh'; break;
+        case 'top-left': joystick.style.left='15vw'; joystick.style.top='15vh'; break;
+        case 'top-right': joystick.style.left='80vw'; joystick.style.top='15vh'; break;
+    }
+
+    saveControlPosition('joystick');
+});
+</script>
    
     <img src="./images/malupiton2.png" alt="malupiton" />
    
