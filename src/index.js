@@ -51,7 +51,7 @@ window.addEventListener('load', function () {
 
 const joystick = document.getElementById('joystick');
 const knob = document.getElementById('knob');
-const maxDistance = 60;
+const maxDistance = 70;
 
 export const state = {
     tapped: false
@@ -110,9 +110,9 @@ function onDrag(e) {
     const angle = Math.atan2(dy, dx);
 
     // move knob visually
-    const x = -15 + distance * Math.cos(angle);
-    const y = -12 + distance * Math.sin(angle);
-    knob.style.transform = `translate(${x}px, ${y}px)`;
+   const x = distance * Math.cos(angle);
+const y = distance * Math.sin(angle);
+knob.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
 
     // clear previous active states
     ['jump','mFor','mBack','crouchDown'].forEach(id => {
@@ -176,9 +176,7 @@ function onDrag(e) {
 function resetKnob() {
     holdTimer = 0;
     state.tapped = false;
-    knob.style.left = '18%';
-    knob.style.top = '24%';
-    knob.style.transform = 'translate(-18%, -24%)';
+    knob.style.transform = 'translate(-50%, -50%)';
 }
 
 function endDrag(e) {
