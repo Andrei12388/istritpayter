@@ -334,7 +334,8 @@ main{
 #menuBtn {
   position: fixed;
   top: 15px;
-  left: 15px;
+  left: auto;
+  right: 15px;
   z-index: 2000;
   
   color: #40ff00;
@@ -355,7 +356,7 @@ main{
 #emulatorMenu {
   position: fixed;
   top: 0;
-  left: -320px;
+  right: -320px;
   width: 300px;
   height: 100vh;
 
@@ -366,7 +367,7 @@ main{
 }
 
 #emulatorMenu.open {
-  left: 0;
+  right: 0;
   background: rgba(0,0,0,0.95);
 }
 
@@ -655,14 +656,14 @@ let settingsOpen = false;
 
 // Toggle side menu
 menuBtn.onclick = (e) => {
-  e.stopPropagation(); // prevent triggering document click
+  e.stopPropagation(); 
   menu.classList.toggle("open");
 };
 
 // Tab buttons
 document.querySelectorAll(".tabBtn").forEach(btn => {
   btn.onclick = (e) => {
-    e.stopPropagation(); // prevent triggering document click
+    e.stopPropagation(); 
     const tab = btn.dataset.tab;
 
     if (tab === "settings") {
@@ -697,14 +698,13 @@ document.querySelectorAll(".tabBtn").forEach(btn => {
   };
 });
 
-// Click outside to close menu and control panel
+
 document.addEventListener("click", (e) => {
-  // If click outside menu, hide it
+
   if (!menu.contains(e.target) && !menuBtn.contains(e.target)) {
     menu.classList.remove("open");
   }
 
-  // If click outside control panel, hide it
   if (!controlPanel.contains(e.target)) {
     controlPanel.classList.remove("show");
     settingsOpen = false;
