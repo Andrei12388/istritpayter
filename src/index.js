@@ -240,7 +240,7 @@ function createSaveLayoutBtn() {
         transform: 'translateX(-50%)',
         zIndex: 4000,
         padding: '10px 20px',
-        fontSize: '16px',
+        fontSize: '12px',
         backgroundColor: '#40ff00',
         color: 'black',
         border: '2px solid #40ff00',
@@ -253,28 +253,38 @@ function createSaveLayoutBtn() {
     return saveLayoutBtn;
 }
 
-
 function createRestoreLayoutBtn() {
     if (restoreLayoutBtn) return restoreLayoutBtn;
+
     restoreLayoutBtn = document.createElement('button');
-    restoreLayoutBtn.innerText = '♻️ Restore DefaultLayout';
+    restoreLayoutBtn.id = 'restoreLayoutBtn'; // ✅ assign an ID
+    restoreLayoutBtn.innerText = '♻️ Restore Default Layout';
     Object.assign(restoreLayoutBtn.style, {
         position: 'fixed',
         top: '15px',
         left: '80%',
         transform: 'translateX(-50%)',
         zIndex: 4000,
-        padding: '10px 20px',
-        fontSize: '16px',
-        backgroundColor: '#858684',
-        color: 'black',
-        border: '2px solid #6a6c69',
-        borderRadius: '6px',
+        padding: '8px 18px',
+        fontSize: '14px',
+        fontWeight: '600',
+        backgroundColor: '#f0f0f0',
+        color: '#333',
+        border: '2px solid #b0b0b0',
+        borderRadius: '8px',
         cursor: 'pointer',
-        boxShadow: '0 0 10px #606160',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+        transition: 'all 0.2s ease-in-out',
         display: 'none'
     });
+
     document.body.appendChild(restoreLayoutBtn);
+
+    // ✅ Attach click listener immediately
+    restoreLayoutBtn.addEventListener('click', () => {
+        restoreDefaultLayout();
+    });
+
     return restoreLayoutBtn;
 }
 
@@ -322,6 +332,7 @@ export function disableLayoutEdit() {
 
     // Hide save button
     createSaveLayoutBtn().style.display = 'none';
+    createRestoreLayoutBtn().style.display = 'none';
     const controlPanel = document.querySelector('.onscreen-controls-panel');
     controlPanel.style.display = 'flex';
 
@@ -392,10 +403,6 @@ createSaveLayoutBtn().addEventListener('click', () => {
     menuBtn.style.display = 'block';
     emulatorMenu.style.display = 'block';
     controlPanel.style.display = 'block';
-});
-
-document.getElementById('restoreLayoutBtn').addEventListener('click', () => {
-    restoreDefaultLayout();
 });
 
 window.addEventListener('load', restoreControlPositions);
