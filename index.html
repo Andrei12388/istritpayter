@@ -66,20 +66,29 @@ main{
           }
 
           /* Onscreen Controls Settings Panel */
-          .onscreen-controls-panel {
+         .onscreen-controls-panel {
             position: fixed;
-            display: none;
-            top: 10px;
-            left: 25vw;
-            background-color: rgba(0, 0, 0, 0.9);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background-color: rgba(0,0,0,0.9);
             border: 2px solid rgb(64, 255, 0);
             border-radius: 5px;
             padding: 15px;
-            z-index: 500;
+            z-index: 3000;
             min-width: 300px;
             font-family: Arial, Helvetica, sans-serif;
             color: rgb(64, 255, 0);
-          }
+            opacity: 0;
+            pointer-events: none; /* prevent clicks when hidden */
+            transition: all 0.2s ease;
+        }
+
+        .onscreen-controls-panel.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            pointer-events: auto; /* enable clicks when shown */
+        }
 
           .onscreen-controls-panel h3 {
             margin: 0 0 15px 0;
@@ -639,44 +648,50 @@ menuBtn.onclick = () => {
 const p1Controls = document.querySelector(".moveLists");
 const p2Controls = document.querySelector(".moveListsP2");
 const controlPanel = document.querySelector(".onscreen-controls-panel");
-const joystick = document.getElementById("joystick"); // 
+const joystick = document.getElementById("joystick");
 
 let activeTab = null;
+let settingsOpen = false;
 
 document.querySelectorAll(".tabBtn").forEach(btn => {
   btn.onclick = () => {
     const tab = btn.dataset.tab;
 
-    // Toggle OFF if same tab
+  
+    if (tab === "settings") {
+      settingsOpen = !settingsOpen;
+      if (settingsOpen) {
+        controlPanel.classList.add("show");
+      } else {
+        controlPanel.classList.remove("show");
+      }
+      return; 
+    }
+
+   
     if (activeTab === tab) {
+      
       p1Controls.style.display = "none";
       p2Controls.style.display = "none";
-      controlPanel.style.display = "none";
-      joystick.style.display = "none"; // 
+      joystick.style.display = "none";
       activeTab = null;
       return;
     }
 
     activeTab = tab;
 
-    // Hide everything first
+   
     p1Controls.style.display = "none";
     p2Controls.style.display = "none";
-    controlPanel.style.display = "none";
-    joystick.style.display = "none"; // 
+    joystick.style.display = "none";
 
-    // Show based on tab
     if (tab === "p1") {
       p1Controls.style.display = "flex";
-      joystick.style.display = "block"; // 
+      joystick.style.display = "block";
     }
 
     if (tab === "p2") {
       p2Controls.style.display = "flex";
-    }
-
-    if (tab === "settings") {
-      controlPanel.style.display = "block";
     }
   };
 });
