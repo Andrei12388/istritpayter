@@ -29,7 +29,7 @@ export const gameState = {
     difficultyIndex: 1,
     difficulty: 'normal',
     buttonHold: false,
-    stage: 'tondo',
+    stage: 'final',
     flash: false,
     characterSelectMode: true,
     hyperSkill: false,
@@ -52,7 +52,7 @@ export const gameState = {
       player2: false,
     },
     // Onscreen controls settings
-    buttonTransparency: 1, // 0 to 1
+    buttonTransparency: .75, // 0 to 1
     buttonSize: 1, // 0.5 to 2 (multiplier)
     //for Gamepad Switch Player
     gamepadSwitchPlayer: true,
