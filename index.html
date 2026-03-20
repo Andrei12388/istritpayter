@@ -619,10 +619,22 @@ top: 40vh;
         <input id="malupiton" type="checkbox" name="fighter" value="Malupiton"/>
         <lagel for="malupiton">P2</lagel>
       </div>
-    <div class="move" style="top:50px;right: 52%" id="jumpP2">Up</div>
-  <div class="move" style="top:160px;right: 30%"  id="mForP2">Right</div>
-  <div class="move" style="top:160px;left: 5%" id="mBackP2">Left</div>
-  <div class="move" style="top:160px;left: 27%" id="crouchDownP2">Down</div>
+    <!-- Player 2 Directional Buttons -->
+
+<div id="p2Controls" style="
+    position: fixed;
+    border: 3px solid red;
+    bottom: 10vh;   /* distance from bottom of screen */
+    left: 5vw;      /* distance from left of screen */
+    width: 150px;   /* container width */
+    height: 150px;  /* container height */
+    pointer-events: all;
+">
+    <div class="move" id="jumpP2" style="position: absolute; top: 0; left: 33%; transform: translateX(-50%);">Up</div>
+    <div class="move" id="mForP2" style="position: absolute; top: 33%; right: 0; transform: translateY(-50%);">Right</div>
+    <div class="move" id="mBackP2" style="position: absolute; top: 33%; left: 0; transform: translateY(-50%);">Left</div>
+    <div class="move" id="crouchDownP2" style="position: absolute; bottom: 0; left: 33%; transform: translateX(-50%);">Down</div>
+</div>
 <div class="movebtnsP1">   <div class="move2"  id="AP2">A</div>
   <div class="move2" id="BP2">B</div>
   <div class="move2"  id="CP2">C</div>

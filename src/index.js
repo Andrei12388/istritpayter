@@ -379,7 +379,16 @@ const defaultControlPositions = {
     CP1: { x: '65vw', y: '78vh' },  // Bottom
 
     start1: { x: '90vw', y: '50vh' },
-    select1: { x: '90vw', y: '70vh' }
+    select1: { x: '90vw', y: '70vh' },
+
+    buttonsP2: { x: '95vw', y: '65%' },  // container
+    BP2: { x: '65vw', y: '48vh' },  // Top
+    DP2: { x: '72vw', y: '63vh' },  // Right
+    AP2: { x: '58vw', y: '63vh' },  // Left
+    CP2: { x: '65vw', y: '78vh' },  // Bottom
+
+    start2: { x: '90vw', y: '50vh' },
+    select2: { x: '90vw', y: '70vh' },
 };
 
 const controlElementsMap = {
@@ -394,13 +403,14 @@ const controlElementsMap = {
     start1: document.getElementById('start1'),
     select1: document.getElementById('select1'),
 
-    // Add P2 buttons if needed
-    // AP2: document.getElementById('AP2'),
-    // BP2: document.getElementById('BP2'),
-    // CP2: document.getElementById('CP2'),
-    // DP2: document.getElementById('DP2'),
-    // start2: document.getElementById('start2'),
-    // select2: document.getElementById('select2'),
+      // Player 2 buttons
+    buttonsP2: document.querySelector('.moveListsP2'),
+    AP2: document.getElementById('AP2'),
+    BP2: document.getElementById('BP2'),
+    CP2: document.getElementById('CP2'),
+    DP2: document.getElementById('DP2'),
+    start2: document.getElementById('start2'),
+    select2: document.getElementById('select2'),
 };
 
 export function restoreDefaultLayout() {

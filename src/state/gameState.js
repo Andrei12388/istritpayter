@@ -70,7 +70,16 @@ export const gameState = {
     CP1: { x: '65vw', y: '78vh' },  // Bottom
 
     start1: { x: '90vw', y: '50vh' },
-    select1: { x: '90vw', y: '70vh' }
+    select1: { x: '90vw', y: '70vh' },
+
+    //player2 placement button
+    buttonsP2: { x: '95vw', y: '65%' },  // container
+    BP2: { x: '65vw', y: '48vh' },  // Top
+    DP2: { x: '72vw', y: '63vh' },  // Right
+    AP2: { x: '58vw', y: '63vh' },  // Left
+    CP2: { x: '65vw', y: '78vh' },  // Bottom
+    start2: { x: '90vw', y: '50vh' },
+    select2: { x: '90vw', y: '70vh' }
     },
 
     //for practice mode
