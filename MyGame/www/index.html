@@ -153,7 +153,7 @@ main{
 
           .moveLists {
             top: 65%;
-            transform: scale(0.5);
+           
             display: none;
             flex-wrap: wrap;           /* allow items to wrap to new rows */
             position: fixed;
@@ -169,25 +169,30 @@ main{
             flex-wrap: wrap;           /* allow items to wrap to new rows */
             position: fixed;
             left: 8vw;
-            transform: scale(0.5);
+           
             z-index: 130;
             width: 480px;              /* 3 items × (100px + 2×10px margin) = ~360px */
             /* adjust width as needed */
 }
           .move{
-            opacity: 100%;
-            position: absolute;
-            font-family: Arial, Helvetica, sans-serif;
-            width: 100px;
-           top:50px;
-            border-radius: 100%;
+            position: fixed; /* 🔥 key fix */
+             width: 50px;
+            height: 50px;
+
+            border-radius: 50%;
             border: 2px solid black;
-            height: 100px;
-            align-content: center;
-            justify-content: center;
-            text-align: center;
-            justify-items: center;
+
+            display: flex;
             align-items: center;
+            justify-content: center;
+
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+            background-size: cover;
+            background-position: center;
+
+            transform: translate(-50%, -50%); /* 🔥 cursor center fix */
+            touch-action: none; /* 🔥 prevent mobile offset */
             
             
             background-image: url("./images/joystick/blue.png");
@@ -204,19 +209,24 @@ main{
           }
 
           .move1{
-            opacity: 20%;
-            font-family: Arial, Helvetica, sans-serif;
-            width: 130px;
-            font-weight: bold;
-            border-radius: 100%;
-            border: 2px solid black;
-            height: 130px;
-            
-            align-content: center;
-            justify-content: center;
-            text-align: center;
-            justify-items: center;
-            align-items: center;
+          position: fixed; /* 🔥 key fix */
+           width: 50px;
+            height: 50px;
+            font-size: 12px;
+          border-radius: 50%;
+          border: 2px solid black;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          font-family: Arial, Helvetica, sans-serif;
+
+          background-size: cover;
+          background-position: center;
+
+          transform: translate(-50%, -50%); /* 🔥 cursor center fix */
+          touch-action: none; /* 🔥 prevent mobile offset */
             
            
 
@@ -241,20 +251,24 @@ main{
           }
 
           .move2{
-            opacity: 100%;
-            font-family: Arial, Helvetica, sans-serif;
-            width: 100px;
-            font-weight: bold;
-            border-radius: 100%;
+            position: fixed; /* 🔥 key fix */
+            width: 50px;
+            height: 50px;
+            font-size: 12px;
+            border-radius: 50%;
             border: 2px solid black;
-            height: 100px;
-            align-content: center;
-            justify-content: center;
-            text-align: center;
-            justify-items: center;
+
+            display: flex;
             align-items: center;
-            background-color: rgb(94, 250, 16);
-           
+            justify-content: center;
+
+            font-family: Arial, Helvetica, sans-serif;
+
+            background-size: cover;
+            background-position: center;
+
+            transform: translate(-50%, -50%); /* 🔥 cursor center fix */
+            touch-action: none; /* 🔥 prevent mobile offset */
             background-image: url("./images/joystick/white.png");
   background-size: cover;     /* Makes the image cover the div */
   background-position: center; /* Centers the image */
@@ -309,19 +323,7 @@ main{
             top: -5vh;
           }
 
-          .movebtnsP1{
-            top: -33vh;
-            display: flex;
-            position: relative;
-            transform: rotate(-45deg);
-            gap: 5vh;
-            right: -125vh;
-            flex-wrap: wrap;           /* allow items to wrap to new rows */
-            position: fixed;
-           
-            z-index: 130;
-            width: 100vh;   
-          }
+        
 
           .move.disabled, .move2.disabled, .move1.disabled, #joystick.disabled {
         pointer-events: none;   /* prevent clicks/taps */
@@ -501,9 +503,10 @@ top: 40vh;
     <div id="emulatorMenu">
   <h3 style="text-align: center;">GAME MENU</h3>
 
-  <button class="tabBtn" data-tab="p1">Player 1</button>
-  <button class="tabBtn" data-tab="p2">Player 2</button>
+  <button class="tabBtn" data-tab="p1">Show Player 1 Control</button>
+  <button class="tabBtn" data-tab="p2">Show Player 2 Control</button>
   <button class="tabBtn" data-tab="settings">Settings</button>
+  <button id="reloadBtn" class="tabBtn">Restart Game</button>
 
   <div class="tabContent" id="tab-p1">
     <!-- Move your P1 controls here -->
@@ -560,7 +563,7 @@ top: 40vh;
      font-family: 'Courier New', Courier, monospace;
      position:fixed;
      z-index: 1005;
-     top:20px; right:20px;
+     top:20px; left:20px;
      border-radius:6px;">
 </div>
     
@@ -580,29 +583,29 @@ top: 40vh;
   
   <div class="scrninput">
   <div class="moveLists">
-    <div class="moveTitle"> </div>
-    <div class="movePlayer">
-        <input id="ken" type="checkbox" name="fighter" value="Ken"/>
-        <lagel for="ken">P1</lagel>
-      </div>
+      <div class="moveTitle"> </div>
       <div class="movePlayer">
-        <input id="malupiton" type="checkbox" name="fighter" value="Malupiton"/>
-        <lagel for="malupiton">P1</lagel>
-        
-      </div>
-      <div class="move1" style="top:-75px;right: -125%; position: absolute; " id="start1">Start</div>
-       <div class="move1"  style="top:75px;right: -125%; position: absolute" id="select1">Select</div>
-      <div class="move" style="top:50px;right: 52%; display: none;" id="jump">Up</div>
-  <div class="move" style="top:160px;right: 30%; display: none;"  id="mFor">Right</div>
-  <div class="move" style="top:160px;left: 5%; display: none;" id="mBack">Left</div>
-  <div class="move" style="top:160px;left: 27%; display: none;" id="crouchDown">Down</div>
-  
-  <div class="movebtnsP1">   <div class="move1" id="AP1">A</div>
-  <div class="move1"  id="BP1">B</div>
-  <div class="move1" id="CP1">C</div>
-  <div class="move1" id="DP1">D</div>
-   
-</div>
+          <input id="ken" type="checkbox" name="fighter" value="Ken"/>
+          <lagel for="ken">P1</lagel>
+        </div>
+        <div class="movePlayer">
+          <input id="malupiton" type="checkbox" name="fighter" value="Malupiton"/>
+          <lagel for="malupiton">P1</lagel>
+          
+        </div>
+        <div class="move1"  id="start1">Start</div>
+        <div class="move1"  id="select1">Select</div>
+          <div class="move" style="display: none;"  id="jump">Up</div>
+    <div class="move" style="display: none;"  id="mFor">Right</div>
+    <div class="move" style="display: none;" id="mBack">Left</div>
+    <div class="move" style="display: none;" id="crouchDown">Down</div>
+       
+    <div class="movebtnsP1">   <div class="move1" id="AP1">A</div>
+    <div class="move1"  id="BP1">B</div>
+    <div class="move1" id="CP1">C</div>
+    <div class="move1" id="DP1">D</div>
+    
+  </div>
 
   </div>
 
@@ -616,10 +619,21 @@ top: 40vh;
         <input id="malupiton" type="checkbox" name="fighter" value="Malupiton"/>
         <lagel for="malupiton">P2</lagel>
       </div>
-    <div class="move" style="top:50px;right: 52%" id="jumpP2">Up</div>
-  <div class="move" style="top:160px;right: 30%"  id="mForP2">Right</div>
-  <div class="move" style="top:160px;left: 5%" id="mBackP2">Left</div>
-  <div class="move" style="top:160px;left: 27%" id="crouchDownP2">Down</div>
+    <!-- Player 2 Directional Buttons -->
+
+<div id="p2Controls" style="
+    position: fixed;
+    bottom: 10vh;   /* distance from bottom of screen */
+    left: 5vw;      /* distance from left of screen */
+    width: 150px;   /* container width */
+    height: 150px;  /* container height */
+    pointer-events: all;
+">
+    <div class="move" id="jumpP2" style="position: absolute; top: 0; left: 33%; transform: translateX(-50%);">Up</div>
+    <div class="move" id="mForP2" style="position: absolute; top: 33%; right: 0; transform: translateY(-50%);">Right</div>
+    <div class="move" id="mBackP2" style="position: absolute; top: 33%; left: 0; transform: translateY(-50%);">Left</div>
+    <div class="move" id="crouchDownP2" style="position: absolute; bottom: 0; left: 33%; transform: translateX(-50%);">Down</div>
+</div>
 <div class="movebtnsP1">   <div class="move2"  id="AP2">A</div>
   <div class="move2" id="BP2">B</div>
   <div class="move2"  id="CP2">C</div>
@@ -681,10 +695,12 @@ top: 40vh;
     cursor:pointer;
     box-shadow:0 0 10px #40ff00;
 ">Edit Layout</button>
+
     </div>
     </div>
 
     <script>
+     
 const menuBtn = document.getElementById("menuBtn");
 const menu = document.getElementById("emulatorMenu");
 
@@ -708,6 +724,7 @@ menuBtn.onclick = (e) => {
 
 // Tab buttons
 document.querySelectorAll(".tabBtn").forEach(btn => {
+  
   btn.onclick = (e) => {
     e.stopPropagation(); 
     const tab = btn.dataset.tab;
@@ -720,12 +737,17 @@ document.querySelectorAll(".tabBtn").forEach(btn => {
     }
 
     if (activeTab === tab) {
-      p1Controls.style.display = "none";
-      p2Controls.style.display = "none";
-      joystick.style.display = "none";
-      activeTab = null;
-      return;
-    }
+  p1Controls.style.display = "none";
+  p2Controls.style.display = "none";
+  joystick.style.display = "none";
+
+  // Reset button text
+  if (tab === "p1") btn.textContent = "Show Player 1 Control";
+  if (tab === "p2") btn.textContent = "Show Player 2 Control";
+
+  activeTab = null;
+  return;
+}
 
     activeTab = tab;
 
@@ -735,10 +757,12 @@ document.querySelectorAll(".tabBtn").forEach(btn => {
 
     if (tab === "p1") {
       p1Controls.style.display = "flex";
+       btn.textContent = "Hide Player 1 Control";
       joystick.style.display = "block";
     }
 
     if (tab === "p2") {
+       btn.textContent = "Hide Player 2 Control";
       p2Controls.style.display = "flex";
     }
   };
@@ -767,19 +791,7 @@ document.getElementById('editLayoutBtn').addEventListener('click', () => {
   }
 });
 
-document.getElementById('joystickAlign').addEventListener('change', e => {
-    const val = e.target.value;
-    const joystick = document.getElementById('joystick');
 
-    switch(val){
-        case 'bottom-left': joystick.style.left='15vw'; joystick.style.top='75vh'; break;
-        case 'bottom-right': joystick.style.left='80vw'; joystick.style.top='75vh'; break;
-        case 'top-left': joystick.style.left='15vw'; joystick.style.top='15vh'; break;
-        case 'top-right': joystick.style.left='80vw'; joystick.style.top='15vh'; break;
-    }
-
-    saveControlPosition('joystick');
-});
 </script>
    
     <img src="./images/malupiton2.png" alt="malupiton" />

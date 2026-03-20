@@ -29,7 +29,7 @@ export const gameState = {
     difficultyIndex: 1,
     difficulty: 'normal',
     buttonHold: false,
-    stage: 'tondo',
+    stage: 'final',
     flash: false,
     characterSelectMode: true,
     hyperSkill: false,
@@ -52,16 +52,34 @@ export const gameState = {
       player2: false,
     },
     // Onscreen controls settings
-    buttonTransparency: 1, // 0 to 1
+    buttonTransparency: .75, // 0 to 1
     buttonSize: 1, // 0.5 to 2 (multiplier)
     //for Gamepad Switch Player
     gamepadSwitchPlayer: true,
     FpsCounterEnable: false,
 
     controlPositions: {
-    joystick: { x: '15vw', y: '60vh' }, 
+    joystick: { x: '15vw', y: '60vh' },
+
+    // container (optional)
     buttonsP1: { x: '2.5vw', y: '65%' },
-    buttonsP2: { x: '8vw', y: '30vh' }
+
+    BP1: { x: '65vw', y: '48vh' },  // Top
+    DP1: { x: '72vw', y: '63vh' },  // Right
+    AP1: { x: '58vw', y: '63vh' },  // Left
+    CP1: { x: '65vw', y: '78vh' },  // Bottom
+
+    start1: { x: '90vw', y: '50vh' },
+    select1: { x: '90vw', y: '70vh' },
+
+    //player2 placement button
+    buttonsP2: { x: '95vw', y: '65%' },  // container
+    BP2: { x: '65vw', y: '48vh' },  // Top
+    DP2: { x: '72vw', y: '63vh' },  // Right
+    AP2: { x: '58vw', y: '63vh' },  // Left
+    CP2: { x: '65vw', y: '78vh' },  // Bottom
+    start2: { x: '90vw', y: '50vh' },
+    select2: { x: '90vw', y: '70vh' }
     },
 
     //for practice mode
