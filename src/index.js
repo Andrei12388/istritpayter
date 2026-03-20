@@ -1,7 +1,7 @@
 import { Intro } from './scenes/Intro.js';
 import { StreetFighterGame } from './StreetFighterGame.js';
 import { FighterState } from './constants/fighter.js';
-import { heldKeys } from './inputHandler.js'; 
+import { heldKeys, showNotice } from './inputHandler.js'; 
 import { state as controlHold } from './inputHandler.js';
 import { gameState } from './state/gameState.js';
 import { initOnscreenControlsSliders, updateOnscreenControls } from './onscreenControlsSlider.js';
@@ -266,12 +266,12 @@ function createRestoreLayoutBtn() {
         transform: 'translateX(-50%)',
         zIndex: 4000,
         padding: '8px 18px',
-        fontSize: '14px',
+        fontSize: '12px',
         fontWeight: '600',
         backgroundColor: '#f0f0f0',
         color: '#333',
         border: '2px solid #b0b0b0',
-        borderRadius: '8px',
+        borderRadius: '6px',
         cursor: 'pointer',
         boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
         transition: 'all 0.2s ease-in-out',
@@ -299,13 +299,19 @@ export function enableLayoutEdit() {
     joystick.style.display = 'block';
     makeElementDraggable(joystick, 'joystick');
 
-    const p1Controls = document.querySelector('.moveLists');
+    
+    p1Controls.style.display = 'flex';
+
+    // select ALL buttons inside
+    const buttons = p1Controls.querySelectorAll('.move, .move1');
+
+    buttons.forEach(btn => {
+        btn.style.position = 'fixed';
+        makeElementDraggable(btn, btn.id);
+    });
     
     p1Controls.style.display = 'flex';
     
-    makeElementDraggable(p1Controls, 'buttonsP1');
-    
-
     // Hide menu & control panel
     document.getElementById('menuBtn').style.display = 'none';
     document.getElementById('emulatorMenu').style.display = 'none';
@@ -318,6 +324,7 @@ export function enableLayoutEdit() {
 
 export function disableLayoutEdit() {
     layoutEditMode = false;
+    showNotice("Layout Saved! ✔️")
 
     // Remove draggable listeners
     draggables.forEach(d => {
@@ -362,17 +369,42 @@ export function restoreControlPositions() {
 
 const defaultControlPositions = {
     joystick: { x: '15vw', y: '60vh' },
+
+    // container (optional)
     buttonsP1: { x: '2.5vw', y: '65%' },
-    buttonsP2: { x: '8vw', y: '30vh' }
+
+    AP1: { x: '10vw', y: '60vh' },
+    BP1: { x: '15vw', y: '65vh' },
+    CP1: { x: '15vw', y: '65vh' },
+    DP1: { x: '10vw', y: '70vh' },
+
+    start1: { x: '90vw', y: '50vh' },
+    select1: { x: '90vw', y: '60vh' }
 };
 
 const controlElementsMap = {
     joystick: document.getElementById('joystick'),
     buttonsP1: document.querySelector('.moveLists'),
-    buttonsP2: document.querySelector('.moveListsP2')
+
+    // Individual P1 buttons
+    AP1: document.getElementById('AP1'),
+    BP1: document.getElementById('BP1'),
+    CP1: document.getElementById('CP1'),
+    DP1: document.getElementById('DP1'),
+    start1: document.getElementById('start1'),
+    select1: document.getElementById('select1'),
+
+    // Add P2 buttons if needed
+    // AP2: document.getElementById('AP2'),
+    // BP2: document.getElementById('BP2'),
+    // CP2: document.getElementById('CP2'),
+    // DP2: document.getElementById('DP2'),
+    // start2: document.getElementById('start2'),
+    // select2: document.getElementById('select2'),
 };
 
 export function restoreDefaultLayout() {
+     showNotice("Restored Default! ♻️")
     Object.entries(defaultControlPositions).forEach(([key, pos]) => {
         const el = controlElementsMap[key];
         if (!el) return;
@@ -406,6 +438,12 @@ createSaveLayoutBtn().addEventListener('click', () => {
 });
 
 window.addEventListener('load', restoreControlPositions);
+
+//reset Game Button
+ document.getElementById("reloadBtn").addEventListener("click", () => {
+         showNotice("Restarting Game...")
+  location.reload();
+});
 
 function resetKnob() {
     holdTimer = 0;

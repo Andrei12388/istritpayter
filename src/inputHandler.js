@@ -65,6 +65,7 @@ export function showNotice(message) {
   const el = document.getElementById('notice');
   el.textContent = message;      // <-- change the text here
   el.style.display = 'block';
+  el.style.zIndex = '9999';
   setTimeout(() => el.style.display = 'none', 3000);
 }
 

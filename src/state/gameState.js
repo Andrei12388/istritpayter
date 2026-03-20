@@ -59,9 +59,18 @@ export const gameState = {
     FpsCounterEnable: false,
 
     controlPositions: {
-    joystick: { x: '15vw', y: '60vh' }, 
+    joystick: { x: '15vw', y: '60vh' },
+
+    // container (optional)
     buttonsP1: { x: '2.5vw', y: '65%' },
-    buttonsP2: { x: '8vw', y: '30vh' }
+
+    BP1: { x: '65vw', y: '48vh' },  // Top
+    DP1: { x: '72vw', y: '63vh' },  // Right
+    AP1: { x: '58vw', y: '63vh' },  // Left
+    CP1: { x: '65vw', y: '78vh' },  // Bottom
+
+    start1: { x: '90vw', y: '50vh' },
+    select1: { x: '90vw', y: '70vh' }
     },
 
     //for practice mode
