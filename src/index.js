@@ -303,7 +303,7 @@ export function enableLayoutEdit() {
     p1Controls.style.display = 'flex';
 
     // select ALL buttons inside
-    const buttons = p1Controls.querySelectorAll('.move, .move1');
+    const buttons = p1Controls.querySelectorAll('.move1');
 
     buttons.forEach(btn => {
         btn.style.position = 'fixed';
@@ -373,13 +373,13 @@ const defaultControlPositions = {
     // container (optional)
     buttonsP1: { x: '2.5vw', y: '65%' },
 
-    AP1: { x: '10vw', y: '60vh' },
-    BP1: { x: '15vw', y: '65vh' },
-    CP1: { x: '15vw', y: '65vh' },
-    DP1: { x: '10vw', y: '70vh' },
+    BP1: { x: '65vw', y: '48vh' },  // Top
+    DP1: { x: '72vw', y: '63vh' },  // Right
+    AP1: { x: '58vw', y: '63vh' },  // Left
+    CP1: { x: '65vw', y: '78vh' },  // Bottom
 
     start1: { x: '90vw', y: '50vh' },
-    select1: { x: '90vw', y: '60vh' }
+    select1: { x: '90vw', y: '70vh' }
 };
 
 const controlElementsMap = {
