@@ -2,6 +2,7 @@ import { Control, controls, GamepadThumbstick } from './constants/control.js';
 import { FighterDirection } from './constants/fighter.js';
 import { state as controlHold } from './index.js';
 import { gameState } from './state/gameState.js';
+import { sendInput } from './socket.js';
 
 let audioCtx;
 let audioUnlocked = false;
@@ -41,6 +42,7 @@ export const state = {
   holding: 0,
 };
 
+
 // CHeck axis
 function checkAxisTap(padId, axeId, positive, threshold) {
   const pad = gamePads.get(padId);
@@ -74,20 +76,28 @@ export function showNotice(message) {
    KEYBOARD
 --------------------------------------------------*/
 function handleKeyDown(event) {
+   const active = document.activeElement;
+    if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) return;
   unlockAudio();
   console.count('keydown');
   event.preventDefault();
+  
   heldKeys.add(event.code);
+  sendInput(event.code, 'down');
   gameState.buttonHold = true;
 }
 
 function handleKeyUp(event) {
+    const active = document.activeElement;
+    if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) return;
+
   controlHold.tapped = false;
   gameState.buttonHold = false;
   holdTimer = 0;
   tapped = true;
   event.preventDefault();
   heldKeys.delete(event.code);
+  sendInput(event.code, 'up');
   pressedKeys.delete(event.code);
 }
 
@@ -194,6 +204,7 @@ export function registerScreenButtonEvents() {
         gameState.buttonHold = true;
         if (!heldKeys.has(virtualKeyCode)) {
           heldKeys.add(virtualKeyCode);
+          sendInput(virtualKeyCode, 'down'); 
           holdTimer += 1;
           if(gameState.characterSelectMode){
             controlHold.tapped = true;
@@ -213,6 +224,7 @@ export function registerScreenButtonEvents() {
         controlHold.tapped = false;
         holdTimer = 0;
         heldKeys.delete(virtualKeyCode);
+        sendInput(virtualKeyCode, 'up');
         pressedKeys.delete(virtualKeyCode);
         buttonEl.classList.remove('clicked');
       };

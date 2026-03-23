@@ -6,7 +6,29 @@ import { state as controlHold } from './inputHandler.js';
 import { gameState } from './state/gameState.js';
 import { initOnscreenControlsSliders, updateOnscreenControls } from './onscreenControlsSlider.js';
 import { unlockAudio } from './inputHandler.js';
+import { connect, sendInput } from './socket.js';
 
+const peerIpInput = document.getElementById('peerIp');
+const connectPeerBtn = document.getElementById('connectPeerBtn');
+const peerStatus = document.getElementById('peerStatus');
+
+connectPeerBtn.addEventListener('click', () => {
+  const ip = peerIpInput.value.trim();
+  if (!ip) return alert('Enter a valid WebSocket IP (e.g., ws://192.168.1.5:8080)');
+  
+  peerStatus.textContent = 'Connecting...';
+  showNotice('Connecting...')
+  
+  try {
+    connect(ip);
+    peerStatus.textContent = 'Connected ✅';
+    showNotice('Connected ✅')
+  } catch (err) {
+    console.error(err);
+    showNotice('Connection failed ❌')
+    peerStatus.textContent = 'Connection failed ❌';
+  }
+});
 
 
 function populateMoveDropdown(){
@@ -114,63 +136,89 @@ function onDrag(e) {
 const y = distance * Math.sin(angle);
 knob.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
 
-    // clear previous active states
-    ['jump','mFor','mBack','crouchDown'].forEach(id => {
-        document.getElementById(id).classList.remove('active');
-        heldKeys.delete(id);
-    });
+   // clear previous active states
+['jump','mFor','mBack','crouchDown'].forEach(id => {
+    const btnEl = document.getElementById(id);
+    btnEl.classList.remove('active');
 
-    if (distance > 10) {
-        if (angle > -Math.PI/8 && angle <= Math.PI/8) {
-            // Right
-            document.getElementById('mFor').classList.add('active');
-            heldKeys.add('mFor');
-            gameState.buttonHold = true;
-        } else if (angle > Math.PI/8 && angle <= 3*Math.PI/8) {
-            // Down-Right
-            document.getElementById('mFor').classList.add('active');
-            document.getElementById('crouchDown').classList.add('active');
-            heldKeys.add('mFor');
-            heldKeys.add('crouchDown');
-            
-        } else if (angle > 3*Math.PI/8 && angle <= 5*Math.PI/8) {
-            // Down
-            document.getElementById('crouchDown').classList.add('active');
-            heldKeys.add('crouchDown');
-            gameState.buttonHold = true;
-        } else if (angle > 5*Math.PI/8 && angle <= 7*Math.PI/8) {
-            // Down-Left
-            document.getElementById('mBack').classList.add('active');
-            document.getElementById('crouchDown').classList.add('active');
-            heldKeys.add('mBack');
-            heldKeys.add('crouchDown');
-            
-        } else if (angle > 7*Math.PI/8 || angle <= -7*Math.PI/8) {
-            // Left
-            document.getElementById('mBack').classList.add('active');
-            heldKeys.add('mBack');
-            gameState.buttonHold = true;
-        } else if (angle > -7*Math.PI/8 && angle <= -5*Math.PI/8) {
-            // Up-Left
-            document.getElementById('mBack').classList.add('active');
-            document.getElementById('jump').classList.add('active');
-            heldKeys.add('mBack');
-            heldKeys.add('jump');
-            
-        } else if (angle > -5*Math.PI/8 && angle <= -3*Math.PI/8) {
-            // Up
-            document.getElementById('jump').classList.add('active');
-            heldKeys.add('jump');
-            gameState.buttonHold = true;
-        } else if (angle > -3*Math.PI/8 && angle <= -Math.PI/8) {
-            // Up-Right
-            document.getElementById('mFor').classList.add('active');
-            document.getElementById('jump').classList.add('active');
-            heldKeys.add('mFor');
-            heldKeys.add('jump');
-            
-        }
+    if (heldKeys.has(id)) {
+        heldKeys.delete(id);
+        sendInput(id, 'up'); // 🔹 send release event
     }
+});
+
+// determine which directions are active
+if (distance > 10) {
+    if (angle > -Math.PI/8 && angle <= Math.PI/8) {
+        // Right
+        document.getElementById('mFor').classList.add('active');
+        if (!heldKeys.has('mFor')) {
+            heldKeys.add('mFor');
+            sendInput('mFor', 'down'); // 🔹 send press event
+        }
+        gameState.buttonHold = true;
+    } else if (angle > Math.PI/8 && angle <= 3*Math.PI/8) {
+        // Down-Right
+        ['mFor','crouchDown'].forEach(key => {
+            document.getElementById(key).classList.add('active');
+            if (!heldKeys.has(key)) {
+                heldKeys.add(key);
+                sendInput(key, 'down');
+            }
+        });
+    } else if (angle > 3*Math.PI/8 && angle <= 5*Math.PI/8) {
+        // Down
+        document.getElementById('crouchDown').classList.add('active');
+        if (!heldKeys.has('crouchDown')) {
+            heldKeys.add('crouchDown');
+            sendInput('crouchDown', 'down');
+        }
+        gameState.buttonHold = true;
+    } else if (angle > 5*Math.PI/8 && angle <= 7*Math.PI/8) {
+        // Down-Left
+        ['mBack','crouchDown'].forEach(key => {
+            document.getElementById(key).classList.add('active');
+            if (!heldKeys.has(key)) {
+                heldKeys.add(key);
+                sendInput(key, 'down');
+            }
+        });
+    } else if (angle > 7*Math.PI/8 || angle <= -7*Math.PI/8) {
+        // Left
+        document.getElementById('mBack').classList.add('active');
+        if (!heldKeys.has('mBack')) {
+            heldKeys.add('mBack');
+            sendInput('mBack', 'down');
+        }
+        gameState.buttonHold = true;
+    } else if (angle > -7*Math.PI/8 && angle <= -5*Math.PI/8) {
+        // Up-Left
+        ['mBack','jump'].forEach(key => {
+            document.getElementById(key).classList.add('active');
+            if (!heldKeys.has(key)) {
+                heldKeys.add(key);
+                sendInput(key, 'down');
+            }
+        });
+    } else if (angle > -5*Math.PI/8 && angle <= -3*Math.PI/8) {
+        // Up
+        document.getElementById('jump').classList.add('active');
+        if (!heldKeys.has('jump')) {
+            heldKeys.add('jump');
+            sendInput('jump', 'down');
+        }
+        gameState.buttonHold = true;
+    } else if (angle > -3*Math.PI/8 && angle <= -Math.PI/8) {
+        // Up-Right
+        ['mFor','jump'].forEach(key => {
+            document.getElementById(key).classList.add('active');
+            if (!heldKeys.has(key)) {
+                heldKeys.add(key);
+                sendInput(key, 'down');
+            }
+        });
+    }
+}
 }
 
 
@@ -481,9 +529,14 @@ function endDrag(e) {
     document.removeEventListener('touchmove', onDrag);
     document.removeEventListener('touchend', endDrag);
 
+    // release all joystick keys
     ['jump','mFor','mBack','crouchDown'].forEach(id => {
         document.getElementById(id).classList.remove('active');
-        heldKeys.delete(id); 
+
+        if (heldKeys.has(id)) {
+            heldKeys.delete(id);
+            sendInput(id, 'up'); // 🔹 send release event
+        }
     });
 }
 

@@ -467,6 +467,7 @@ top: 40vh;
 }
 
     </style>
+    
 <button id="menuBtn">☰</button>
 <button id="saveLayoutBtn" style="
     display:none;
@@ -501,59 +502,60 @@ top: 40vh;
     box-shadow:0 0 10px #40ff00;
 ">♻️ Restore Default</button>
     <div id="emulatorMenu">
+      
   <h3 style="text-align: center;">GAME MENU</h3>
 
   <button class="tabBtn" data-tab="p1">Show Player 1 Control</button>
   <button class="tabBtn" data-tab="p2">Show Player 2 Control</button>
   <button class="tabBtn" data-tab="settings">Settings</button>
   <button id="reloadBtn" class="tabBtn">Restart Game</button>
+  <button class="tabBtn" data-tab="multiplayer">Multiplayer</button>
 
-  <div class="tabContent" id="tab-p1">
-    <!-- Move your P1 controls here -->
-     <div class="screenJoystick">
-<label>
-   P1 Control
-  <br>
-  <input type="radio" name="joystickToggle" value="on" > On
-</label>
-<br>
-<label>
-  <input type="radio" name="joystickToggle" value="off" checked> Off
-</label>
-    </div>
 
-  </div>
-
-  <div class="tabContent" id="tab-p2">
-    <!-- Move your P2 controls here -->
-     <div class="screenJoystickP2">
-<label>
-   P2 Control
-  <br>
-  <input type="radio" name="joystick2Toggle" value="on" > On
-</label>
-<br>
-<label>
-  <input type="radio" name="joystick2Toggle" value="off" checked> Off
-</label>
-    </div>
-  </div>
-
-  <div class="tabContent" id="tab-settings">
-    <!-- Move your sliders here -->
-     <div class="screenJoystickController">
-<label>
-  Control Panel
-  <br>
-  <input type="radio" name="controlPanelToggle" value="on" > On
-</label>
-<br>
-<label>
-  <input type="radio" name="controlPanelToggle" value="off" checked> Off
-</label>
-
-    </div>
-  </div>
+</div>
+<div id="multiplayerPanel" style="
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0,0,0,0.9);
+    border: 2px solid #40ff00;
+    border-radius: 6px;
+    padding: 20px;
+    width: 300px;
+    z-index: 3000;
+    color: #40ff00;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+">
+  <h4 style="margin-bottom:10px;">Multiplayer</h4>
+  <label style="display:block; margin-bottom:10px;">
+    Peer IP/Tailscale IP:
+    <input type="text" id="peerIp" placeholder="ws://192.168.1.5:8080" style="width: 100%; margin-top:5px; padding:5px; border-radius:4px; border:1px solid #40ff00; background:black; color:#40ff00;">
+  </label>
+  <button id="connectPeerBtn" style="
+      width: 100%;
+      padding: 8px;
+      background-color: #40ff00;
+      color: black;
+      border: 2px solid #40ff00;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+  ">Connect</button>
+  <div id="peerStatus" style="margin-top:10px; font-size:12px;">Not connected</div>
+  <button id="closeMultiplayerBtn" style="
+      margin-top:15px;
+      width: 100%;
+      padding: 6px;
+      background-color: black;
+      color: #40ff00;
+      border: 2px solid #40ff00;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+  ">Close</button>
 </div>
 <div id="notice" style="
      display:none;
@@ -700,6 +702,18 @@ top: 40vh;
     </div>
 
     <script>
+      const multiplayerPanel = document.getElementById('multiplayerPanel');
+const closeMultiplayerBtn = document.getElementById('closeMultiplayerBtn');
+
+// Show panel when clicking multiplayer button
+document.querySelector('.tabBtn[data-tab="multiplayer"]').addEventListener('click', () => {
+  multiplayerPanel.style.display = 'block';
+});
+
+// Close button
+closeMultiplayerBtn.addEventListener('click', () => {
+  multiplayerPanel.style.display = 'none';
+});
      
 const menuBtn = document.getElementById("menuBtn");
 const menu = document.getElementById("emulatorMenu");
@@ -792,6 +806,31 @@ document.getElementById('editLayoutBtn').addEventListener('click', () => {
 });
 
 
+</script>
+<script src="/socket.io/socket.io.js"></script>
+ <script type="module">
+  console.log("connection")
+  import { connect } from './src/socket.js';
+
+  const connectBtn = document.getElementById('connectPeerBtn');
+  const peerInput = document.getElementById('peerIp');
+  const peerStatus = document.getElementById('peerStatus');
+
+  connectBtn.addEventListener('click', () => {
+    const ip = peerInput.value.trim();
+    if (!ip) return;
+
+    try {
+      connect(ip);
+      peerStatus.textContent = 'Connecting...';
+      setTimeout(() => {
+        peerStatus.textContent = 'Connected!';
+      }, 500); // optimistic, will update on real connection
+    } catch (err) {
+      console.error(err);
+      peerStatus.textContent = 'Failed to connect';
+    }
+  });
 </script>
    
     <img src="./images/malupiton2.png" alt="malupiton" />
