@@ -29,7 +29,7 @@ export const gameState = {
     difficultyIndex: 1,
     difficulty: 'normal',
     buttonHold: false,
-    stage: 'final',
+    stage: 'test',
     flash: false,
     characterSelectMode: true,
     hyperSkill: false,
@@ -37,8 +37,8 @@ export const gameState = {
     kapeCom: false,
     stageMusic: 'audio#stage-payatas',
     debug: {
-      fighters: false,
-      entities: false,
+      fighters: true,
+      entities: true,
     },
     cameraShake: {
         enable: false,

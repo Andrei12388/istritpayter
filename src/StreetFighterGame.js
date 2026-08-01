@@ -13,6 +13,7 @@ import { OptionsMenu } from './scenes/OptionsMenu.js';
 import { Disclaimer } from './scenes/Disclaimer.js';
 import { FpsCounter } from './entities/FpsCounter.js';
 import { PracticeBattleScene } from './scenes/PracticeBattlescene.js';
+import { PayterDevelopmentTest } from './scenes/PayterDevelopmentTest.js';
 
 const selectedCharacters = [
     { 
@@ -56,7 +57,10 @@ export class StreetFighterGame{
 // this.scene = new PrePostMatch(this, selectedCharacters);
 
 //practice mode scene
-this.scene = new PracticeBattleScene(this, selectedCharacters);
+//this.scene = new PracticeBattleScene(this, selectedCharacters);
+
+//Test Payter in Development
+this.scene = new PayterDevelopmentTest(this, selectedCharacters);
     }
 
     setScene(newScene) {

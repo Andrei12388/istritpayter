@@ -49,7 +49,7 @@ export class KnockLiftSplash extends HitSplash {
     const drawY = Math.floor(this.position.y - camera.position.y - originY);
 
     context.save();
-    context.filter = "saturate(1000%) hue-rotate(-30deg) brightness(100%)";
+    //context.filter = "saturate(1000%) hue-rotate(-30deg) brightness(100%)";
     // choose scale Y based on upside-down flag
     const scaleY = this.flipped;
 
