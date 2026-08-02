@@ -8,8 +8,6 @@ import { Shadow } from "../entities/fighters/Shadow.js";
 
 import { LightHitSplash, HeavyHitSplash, SuperHitSplash, BlockHitSplash, GreenHitSplash, HyperHitSplash, FlameHitSplash, GroundShakeSplash, GroundSmokeSplash } from "../entities/fighters/shared/index.js";
 
-import { FpsCounter } from "../entities/FpsCounter.js";
-import { StatusBar } from "../entities/overlays/StatusBar.js";
 import { ComboOverlay } from "../entities/overlays/ComboOverlay.js";
 
 //stages import
@@ -18,8 +16,8 @@ import { pasayStage } from "../entities/stage/pasayStage.js";
 import { boholStage } from "../entities/stage/boholStage.js";
 
 import { EntityList } from "../EntityList.js";
-import { registerKeyboardEvents, registerScreenButtonEvents, unregisterKeyboardEvents, unregisterScreenButtonEvents, heldKeys, pressedKeys } from "../inputHandler.js";
-import { playSound, stopSound } from "../soundHandler.js";
+import { heldKeys, pressedKeys } from "../inputHandler.js";
+import { playSound } from "../soundHandler.js";
 import { gameState } from "../state/gameState.js";
 import { EnemyAI } from "../entities/fighters/EnemyAI.js";
 import { HEALTH_MAX_HIT_POINTS, TIME_FLASH_DELAY } from "../constants/battle.js";
@@ -49,7 +47,6 @@ export class PayterDevelopmentTest {
     enemyAI = undefined; 
     paused = false;
     timeScale = 1;
-    sceneChangePending = null;
     transitionCountdown = 0;
     sceneChangeInfo = null;
 
@@ -107,7 +104,6 @@ export class PayterDevelopmentTest {
         this.stage = this.getStageMap();
         this.fightOver = false;
         this.statsBar = new PayterTestStatsBar(this.game, this.fighters);
-        this.inGame = true;
         this.winFlashred = false;
         this.timeFlashTimer = 0;
         this.useFlashFrames = false;
@@ -267,7 +263,6 @@ export class PayterDevelopmentTest {
    // this.statsBar = new StatusBar(this.game, this.fighters);
    // this.overlays = [new FpsCounter(), this.statsBar];
     this.fightOver = false;
-    this.inGame = true;
     gameState.fighters[0].skillConsumed = true;
     gameState.fighters[1].skillConsumed = true;
     // reset combo trackers
@@ -424,14 +419,12 @@ handleFlash() {
                                 gameState.pauseMenu.showMoveList = false;
                                 this.keyPressed.start = true;
                                 playSound(this.soundSelect, 1);
-                                gameState.buttonHold = false;
                             }
                              if (selectPressed && !this.keyPressed.select && gameState.buttonHold) {
                                 console.log('Page Next');
                                 this.statsBar.movelistPageIndex += 1;
                                 this.keyPressed.select = true;
                                 playSound(this.soundChoose, 1);
-                                gameState.buttonHold = false;gameState.buttonHold = false;
                             }
                             // SELECT button is handled by StatusBar.drawMoveList for pagination
                             // Reset button pressed states
@@ -445,7 +438,6 @@ handleFlash() {
                             gameState.fighters[fighter.playerId].pause = true;
                             playSound(this.soundSelect, 1);
                             //Reset buttonholds
-                            gameState.buttonHold = false;
                             this.keyPressed.start = true;
                             if(gameState.pauseMenu.confirmSelection && gameState.pauseMenu.selectPosition.y === 0){
                                 gameState.pauseMenu.confirmSelection = false;

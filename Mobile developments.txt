@@ -2,12 +2,27 @@ python3 -m http.server --bind 0.0.0.0 8000
 
 expo go : npx expo start --tunnel
 
+run on expo go android: npx expo start --lan
+
 -create expo app React Native
 npx create-expo-app .
 
 Reset Project:
 npm run reset-project
 
+Build apk -
+cd android
+./gradlew clean
+./gradlew assembleRelease
+
 
 ------------------------------------
 Foreshadowing na ba to ni Ej power. Panay kuda tong mga senator nato di nakikipagcoordinate sa DFA
+
+postinstall prisma on package.json:
+"postinstall": "prisma generate",
+
+Make Code Clean:
+npx prettier . --write
+
+https://www.filecrypt.cc/Container/DAD9D5E058.html

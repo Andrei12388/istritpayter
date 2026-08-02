@@ -195,9 +195,6 @@ Day 49 Jan 15 2026
 
 Day 50 Jan 16 2026
 
-gemini image prompt:
-Make a punch and kick animation. do not make it cartoony, just realistic as this image. make each action a startup(1-3 frame), active(4th frame), and recovery animations(5-8th frame). make it just attack on the right not on front of the screen. make the attack be wide as possible. Do not make it overlap on other frame, it must be contained on their box of frame. make it a whole body
-
 
 
 

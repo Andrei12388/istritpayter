@@ -1,15 +1,9 @@
 import { HEALTH_CRITICAL_HIT_POINTS, HEALTH_DAMAGE_COLOR, HEALTH_MAX_HIT_POINTS, KO_ANIMATION, KO_FLASH_DELAY, SKILL_EMPTY_POINTS, SKILL_MAX_NUMBER, SKILL_MAX_POINTS, SKILL_POINTS, SKILL_POINTS1_COLOR, SKILL_POINTS2_COLOR, SKILL_POINTS3_COLOR, SKILL_POINTS4_COLOR, SKILL_POINTS5_COLOR, SKILL_POINTSMAX_COLOR, TIME_DELAY, TIME_FLASH_DELAY, TIME_FRAME_KEYS } from "../../constants/battle.js";
 import { FPS } from "../../constants/game.js";
-import { BattleScene } from "../../scenes/Battlescene.js";
-import { CharacterSelect } from "../../scenes/CharacterSelect.js";
-import { Intro } from "../../scenes/Intro.js";
-import { playSound, stopSound } from "../../soundHandler.js";
+import { playSound } from "../../soundHandler.js";
 import { gameState } from "../../state/gameState.js";
-import { drawFrame } from "../../utils/context.js";
 import { FadeEffect } from "../../scenes/utils/FadeEffect.js";
 import { GOLEM, MALUPITON } from "../../constants/movelist.js";
-import * as control from '../../inputHandler.js'; 
-import { Control } from "../../constants/control.js";
 
 
 
@@ -726,15 +720,6 @@ drawSkillNum(context, label, x, y){
         }
     }
 
-    drawRound(context, label, x, y){
-    const strLabel = String(label);
-    for (let i = 0; i < strLabel.length; i++) {
-        this.drawFrame(context, `round-${strLabel.charAt(i)}`, x + i * 12, y);
-    }
-}
-
-
-
     drawFightOver(context){
        // this.fightOverTimer = -1 * this.time;
     
@@ -783,25 +768,6 @@ drawSkillNum(context, label, x, y){
        
     }
 
-    drawTextLabel(context, label, x, y, direction, scale){
-        for (const index in label) {
-            this.drawFrame(context, `score-${label.charAt(index)}`, x + index * 9, y, direction, scale);
-        }
-    }
-    
-
-    drawScores(context){
-        this.drawScoreLabel(context, 'P1', 4,1);
-        this.drawScore(context, gameState.fighters[0].score, 45);
-
-        this.drawScoreLabel(context, 'GOLEM', 133, 1);
-        this.drawScore(context, 50000, 190);
-
-        this.drawScoreLabel(context, 'P2', 269, 1);
-        this.drawScore(context, gameState.fighters[1].score, 309);
-
-    }
-
     drawFlash(context, time){
         if (this.flash === true){
             if (!this.fade.active) {
@@ -814,10 +780,6 @@ drawSkillNum(context, label, x, y){
             }
         }
         this.fade.draw(context, 400, 400);
-    }
-
-drawCredits(context){
-        this.drawTextLabel(context, 'CREDITS' + ' ' + `${gameState.credits}`, 270,10, 1, 0.7);
     }
 
     drawWins(context){

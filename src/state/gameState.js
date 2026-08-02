@@ -29,7 +29,7 @@ export const gameState = {
     difficultyIndex: 1,
     difficulty: 'normal',
     buttonHold: false,
-    stage: 'test',
+    stage: 'final',
     flash: false,
     characterSelectMode: true,
     hyperSkill: false,
@@ -37,8 +37,8 @@ export const gameState = {
     kapeCom: false,
     stageMusic: 'audio#stage-payatas',
     debug: {
-      fighters: true,
-      entities: true,
+      fighters: false,
+      entities: false,
     },
     cameraShake: {
         enable: false,
@@ -56,7 +56,7 @@ export const gameState = {
     buttonSize: 1, // 0.5 to 2 (multiplier)
     //for Gamepad Switch Player
     gamepadSwitchPlayer: true,
-    FpsCounterEnable: false,
+    FpsCounterEnable: true,
 
     controlPositions: {
     joystick: { x: '15vw', y: '60vh' },

@@ -6,7 +6,6 @@ import { sendInput } from './socket.js';
 
 let audioCtx;
 let audioUnlocked = false;
-console.count('keydown');
 
 
 export function unlockAudio() {
@@ -76,14 +75,18 @@ export function showNotice(message) {
    KEYBOARD
 --------------------------------------------------*/
 function handleKeyDown(event) {
-   const active = document.activeElement;
-    if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) return;
+  const active = document.activeElement;
+  if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) return;
+
   unlockAudio();
-  console.count('keydown');
   event.preventDefault();
-  
-  heldKeys.add(event.code);
-  sendInput(event.code, 'down');
+
+  if (!heldKeys.has(event.code)) {
+    heldKeys.add(event.code);
+    controlHold.tapped = true;
+    sendInput(event.code, 'down');
+  }
+
   gameState.buttonHold = true;
 }
 
@@ -302,10 +305,28 @@ export const isControlDown = (id, ctl) =>
   isButtonDown(id, controls[id].gamePad[ctl]);
 
 export const isControlPressed = (id, ctl) => {
-  // normal keys/buttons
+  const isActionControl =
+    ctl === Control.START ||
+    ctl === Control.SELECT ||
+    ctl === Control.LIGHT_PUNCH ||
+    ctl === Control.HEAVY_PUNCH ||
+    ctl === Control.LIGHT_KICK ||
+    ctl === Control.HEAVY_KICK ||
+    ctl === Control.MEDIUM_PUNCH ||
+    ctl === Control.MEDIUM_KICK;
+
+  if (isActionControl) {
+    return (
+      isKeyPressed(controls[id].keyboard[ctl]) ||
+      isKeyPressed(controls[id].buttons[ctl]) ||
+      isButtonDown(id, controls[id].gamePad[ctl])
+    );
+  }
+
+  // Movement controls stay held while the direction is down.
   if (
-    isKeyPressed(controls[id].keyboard[ctl]) ||
-    isKeyDown(controls[id].buttons[ctl])    ||
+    isKeyDown(controls[id].buttons[ctl]) ||
+    isKeyDown(controls[id].keyboard[ctl]) ||
     isButtonDown(id, controls[id].gamePad[ctl])
   ) return true;
 
