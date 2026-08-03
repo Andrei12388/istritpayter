@@ -952,9 +952,18 @@ handleHeavyKickState(){
         this.changeState(FighterState.GETUP);
     }
 
+    
+
     //Knock Up States and Init
     handleKnockUpInit(){
          console.log("Knock Up Init !");
+              // Play a random hurt sound
+
+    const randomSound =
+        this.soundPayterHurts[Math.floor(Math.random() * this.soundPayterHurts.length)];
+
+    randomSound.play();
+
         if(gameState.fighters[this.playerId].hitPoints <= 0) {
            playSound(this.deathSound);
           // playSound(this.soundHits.BLOCK);

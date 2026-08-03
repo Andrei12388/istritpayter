@@ -49,7 +49,7 @@ export class StreetFighterGame{
         
         //Mainscenes
 //this.scene = new Intro(this);
-this.scene = new Disclaimer(this, selectedCharacters);
+//this.scene = new Disclaimer(this, selectedCharacters);
 //this.scene = new MainMenu(this);
 //this.scene = new OptionsMenu(this);
 //this.scene = new BattleScene(this, selectedCharacters);
@@ -60,7 +60,7 @@ this.scene = new Disclaimer(this, selectedCharacters);
 //this.scene = new PracticeBattleScene(this, selectedCharacters);
 
 //Test Payter in Development
-//this.scene = new PayterDevelopmentTest(this, selectedCharacters);
+this.scene = new PayterDevelopmentTest(this, selectedCharacters);
     }
 
     setScene(newScene) {

@@ -37,6 +37,13 @@ export class Malupiton extends Fighter {
         this.deathSound = document.querySelector('audio#sound-malupiton-death');
         this.deathSound.volume = 0.9;
         this.soundSuperLaunch = document.querySelector('audio#super-launch');
+  
+        this.soundPayterHurts = [
+            document.querySelector("audio#sound-malupiton-hurt-1"),
+            document.querySelector("audio#sound-malupiton-hurt-2"),
+            document.querySelector("audio#sound-malupiton-hurt-3"),
+        ];
+        
         this.frames = new Map([
            
            //Forwards or Idle

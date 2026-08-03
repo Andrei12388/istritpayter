@@ -35,6 +35,7 @@ import { Control } from "../constants/control.js";
 import * as control from '../inputHandler.js'; 
 import { MainMenu } from "./MainMenu.js";
 import { tondoStage } from "../entities/stage/tondoStage.js";
+import { drawBigImage, drawFighters, drawOverlays, getEffectSplashClass, getFighterEntityClass, getHitSplashClass, getStageMap } from "./utils/getFunctions.js";
 
 
 
@@ -95,7 +96,7 @@ export class BattleScene {
         this.entities = new EntityList();
         this.entitiesBackground = new EntityList();
         this.entitiesForeground = new EntityList();
-        this.stage = this.getStageMap();
+        this.stage = getStageMap();
         this.fightOver = false;
         this.statsBar = new StatusBar(this.game, this.fighters);
         this.inGame = true;
@@ -160,38 +161,9 @@ export class BattleScene {
       
     }
 
-    getFighterEntityClass(id){
-        switch (id) {
-            case FighterId.MALUPITON:
-                return Malupiton;
-            case FighterId.GOLEM:
-                return Golem;
-            default:
-                 control.showNotice(`${id} not yet available.`);
-                throw new Error('Unimplemented fighter entity request!');
-        }
-    }
-
-    getStageMap(){
-        const stage = gameState.stage;
-        switch (stage) {
-            case 'litex':
-                return new payatasStage;
-            case 'pasay':
-                return new pasayStage;
-            case 'bohol':
-                return new boholStage;
-            case 'tondo':
-                return new tondoStage;
-            case 'final':
-                return new finalStage;
-            default:
-                throw new Error('Unimplemented Map entity request!');
-        }
-    }
 
     getFighterEntity(fighterState, index){
-        const FighterEntityClass = this.getFighterEntityClass(fighterState.id, this.game);
+        const FighterEntityClass = getFighterEntityClass(fighterState.id, this.game);
 
         return new FighterEntityClass(index, this.handleAttackHit.bind(this), this.handleEffectSplash.bind(this), this.entities, this.entitiesForeground);
     }
@@ -208,43 +180,6 @@ export class BattleScene {
         return fighterEntities;
     }
 
-    getHitSplashClass(strength){
-        switch(strength){
-            case FighterAttackStrength.LIGHT:
-                return LightHitSplash;
-            case FighterAttackStrength.HEAVY:
-                return HeavyHitSplash;
-            case FighterAttackStrength.HEAVYKICK:
-                return HeavyHitSplash;
-            case FighterAttackStrength.KNOCKLIFT:
-            case FighterAttackStrength.KNOCKUP:
-            case FighterAttackStrength.KNOCKLIFTDOWN:
-                return HeavyHitSplash;
-            case FighterAttackStrength.SUPER1:
-                return GreenHitSplash;
-            case FighterAttackStrength.SUPER2:
-                return FlameHitSplash;
-            case FighterAttackStrength.BLOCK:
-                return BlockHitSplash;
-            case FighterAttackStrength.SLASH:
-                return SlashHitSplash;
-            default:
-                throw new Error('Unknown strength requested');
-
-        }
-    }
-
-    getEffectSplashClass(effect){
-        switch(effect){
-            case "groundShake":
-                return GroundShakeSplash;
-            case "groundSmoke":
-                return GroundSmokeSplash;
-            default:
-                throw new Error('Unknown Effect requested');
-
-        }
-    }
 
     resetBattle() {
    // this.fighters = this.getFighterEntities();
@@ -328,7 +263,7 @@ handleFlash() {
 
         // if position is missing (e.g. special entities), still proceed with combo update
         if (position) {
-            this.entities.add(this.getHitSplashClass(strength), time, position.x, position.y, playerId, direction);
+            this.entities.add(getHitSplashClass(strength), time, position.x, position.y, playerId, direction);
         }
         try {
             const now = time.previous;
@@ -352,8 +287,8 @@ handleFlash() {
        
         this.fighterDrawOrder = [opponentId, playerId];
         if(!position) return;
-        if(display === "foreground") this.entitiesForeground.add(this.getEffectSplashClass(effect), time, position.x, STAGE_FLOOR, playerId, direction);
-        else if(display === "background") this.entitiesBackground.add(this.getEffectSplashClass(effect), time, position.x, STAGE_FLOOR, playerId, direction);
+        if(display === "foreground") this.entitiesForeground.add(getEffectSplashClass(effect), time, position.x, STAGE_FLOOR, playerId, direction);
+        else if(display === "background") this.entitiesBackground.add(getEffectSplashClass(effect), time, position.x, STAGE_FLOOR, playerId, direction);
     }
 
     updateSpriteEntity(time, context){
@@ -678,64 +613,6 @@ handleFlash() {
         }
     }
 
-     drawFrame(context, frameKey, x, y, direction = 1, scale = 1, alpha = 1) {
-    const [sourceX, sourceY, sourceWidth, sourceHeight] = this.frames.get(frameKey);
-
-    context.save();
-    context.globalAlpha = alpha;
-
-    // Translate to drawing position, then scale
-    context.translate(x, y);
-    context.scale(direction * scale, scale); // scale x and y
-
-    // Since we already translated, draw at (0, 0) relative to transform
-    context.drawImage(
-        this.image,
-        sourceX, sourceY, sourceWidth, sourceHeight,
-        0, 0, sourceWidth, sourceHeight
-    );
-
-    context.restore();
-}
-
-    drawFighters(context){
-      for(const fighterId of this.fighterDrawOrder){
-        this.fighters[fighterId].draw(context, this.camera);
-    }
-}
-    drawShadows(context){
-        for(const shadow of this.shadows){
-        //shadow.draw(context, this.camera);
-    }
-    }
-
-    drawOverlays(context){
-        for(const overlay of this.overlays){
-        overlay.draw(context, this.camera);
-    }
-    }
-
-    drawBigImage(context){
-        const x = gameState.pauseFrameMove;
-        const x2 = -gameState.pauseFrameMove;
-        const [name1, name2] = this.names;
-
-   if(gameState.pause) {
-   
-    if(gameState.fighters[0].superAcivated)this.drawFrame(context,  name1, x, 20, 1, 1.5);
-    if(gameState.fighters[1].superAcivated)this.drawFrame(context,  name2, x2 + 360, 20, -1, 1.5);
-   }
-}
-
-drawHyperSkillBG(context){
-        
-        const hyperskillFrames = this.statsBar.hyperskillframe;
-
-   if(gameState.pause) {
-    this.drawFrame(context, `hyper${hyperskillFrames}`, 0, 0, 1);
-   }
-}
-
 winFinish(){
     // Trigger a one-shot slow-motion effect when the match winner reaches 2 wins.
     // We guard so it only triggers once and restores back to normal after a short delay.
@@ -890,10 +767,9 @@ winFlash(time){
                  
                // this.timeScale = 1;
             }
-            if(gameState.hyperSkill) this.drawHyperSkillBG(context);
-        this.drawBigImage(context);
-        
-        this.drawShadows(context);
+            if(gameState.hyperSkill) drawHyperSkillBG(context, this.statsBar, this.frames, this.image);
+        drawBigImage(context, this.names, this.frames, this.image);
+
         // Draw hyperskill flash effect when active (triggered in update())
         if(this.hyperSkillFlash.active)this.hyperSkillFlash.draw(context, 400, 400);
         
@@ -906,12 +782,12 @@ winFlash(time){
             context.fillRect(0, 0, 400, 400);
         }
         this.entitiesBackground.draw(context, this.camera);
-        this.drawFighters(context);
+        drawFighters(context, this.camera, this.fighterDrawOrder, this.fighters);
         this.entitiesForeground.draw(context, this.camera);
         this.entities.draw(context, this.camera);
         this.stage.drawForeground(context, this.camera);
 
-        this.drawOverlays(context);
+        drawOverlays(context, this.overlays, this.camera);
          this.WinCondition({previous: performance.now()});
         this.fade.draw(context, 400, 400);
          //Show when Paused

@@ -44,6 +44,13 @@ export class Golem extends Fighter {
         this.deathSound = document.querySelector('audio#sound-golem-death');
         this.deathSound.volume = 1;
         this.soundSuperLaunch = document.querySelector('audio#super-launch');
+
+        this.soundPayterHurts = [
+                    document.querySelector("audio#sound-golem-hurt-1"),
+                    document.querySelector("audio#sound-golem-hurt-2"),
+                    document.querySelector("audio#sound-golem-hurt-3"),
+                ];
+
         this.frames = new Map([
            
            //Forwards or Idle
