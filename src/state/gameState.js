@@ -48,8 +48,8 @@ export const gameState = {
     shadowInvert: true,
     // for Enemy AI
     bot: {
-      player1: false,
-      player2: false,
+      player1: true,
+      player2: true,
     },
     // Onscreen controls settings
     buttonTransparency: .75, // 0 to 1

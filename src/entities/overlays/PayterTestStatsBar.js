@@ -644,7 +644,7 @@ drawSkillNum(context, label, x, y){
         else if (!this.blinkMax) this.drawFrame(context, 'maximum-white', 42,202, 1, 0.9);
         }
         if(gameState.fighters[0].skillNumber >= 3 && this.blinkMax){
-            this.soundSkillMax.volume = 0.15;
+            this.soundSkillMax.volume = 0.10;
             this.soundSkillMax.play();
         }
 
@@ -668,7 +668,7 @@ drawSkillNum(context, label, x, y){
         else if (!this.blinkMax) this.drawFrame(context, 'maximum-white', 288,202, 1, 0.9);
         }
         if(gameState.fighters[1].skillNumber >= 3 && this.blinkMax){
-            this.soundSkillMax.volume = 0.15;
+            this.soundSkillMax.volume = 0.10;
             this.soundSkillMax.play();
         }
 

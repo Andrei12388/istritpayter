@@ -65,7 +65,7 @@ export class RockSplash {
 
         this.position = {
             x: baseX + 30*(this.direction),
-            y: STAGE_FLOOR,
+            y: STAGE_FLOOR+5,
         };
 
         this.animationTimer = time.previous ?? 0;

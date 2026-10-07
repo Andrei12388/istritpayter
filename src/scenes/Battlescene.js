@@ -35,7 +35,7 @@ import { Control } from "../constants/control.js";
 import * as control from '../inputHandler.js'; 
 import { MainMenu } from "./MainMenu.js";
 import { tondoStage } from "../entities/stage/tondoStage.js";
-import { drawBigImage, drawFighters, drawOverlays, getEffectSplashClass, getFighterEntityClass, getHitSplashClass, getStageMap } from "./utils/getFunctions.js";
+import { drawBigImage, drawFighters, drawHyperSkillBG, drawOverlays, getEffectSplashClass, getFighterEntityClass, getHitSplashClass, getStageMap } from "./utils/getFunctions.js";
 
 
 

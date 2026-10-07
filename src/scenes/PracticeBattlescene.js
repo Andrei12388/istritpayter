@@ -34,6 +34,7 @@ import { Control } from "../constants/control.js";
 import * as control from '../inputHandler.js'; 
 import { MainMenu } from "./MainMenu.js";
 import { tondoStage } from "../entities/stage/tondoStage.js";
+import { Mamaoni } from "../entities/fighters/Mamaoni.js";
 
 
 
@@ -170,6 +171,8 @@ export class PracticeBattleScene {
                 return Malupiton;
             case FighterId.GOLEM:
                 return Golem;
+            case FighterId.MAMAONI:
+                return Mamaoni;
             default:
                  control.showNotice(`${id} not yet available.`);
                  throw new Error('Unimplemented fighter entity request!');

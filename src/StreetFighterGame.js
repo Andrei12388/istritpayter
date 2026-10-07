@@ -26,7 +26,7 @@ const selectedCharacters = [
         voice: 'voice-malupiton',
     },
     { 
-        name: "Golem", 
+        name: "Mamaoni", 
         color: "gray", 
         namePos: 5,
         sayings: 'Sabi ko naman sayo burger ka saken',

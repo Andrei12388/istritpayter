@@ -207,6 +207,7 @@ export const FighterAttackBaseData = {
 export const FighterId = {
     MALUPITON: 'Malupiton',
     GOLEM: 'Golem',
+    MAMAONI: 'Mamaoni',
 }
 
 export const FighterState = {

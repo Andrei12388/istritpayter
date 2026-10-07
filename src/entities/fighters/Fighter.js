@@ -962,7 +962,7 @@ handleHeavyKickState(){
     const randomSound =
         this.soundPayterHurts[Math.floor(Math.random() * this.soundPayterHurts.length)];
 
-    randomSound.play();
+      randomSound.play();
 
         if(gameState.fighters[this.playerId].hitPoints <= 0) {
            playSound(this.deathSound);

@@ -10,6 +10,7 @@ import { testStage } from "../../entities/stage/testStage.js";
 import { tondoStage } from "../../entities/stage/tondoStage.js";
 import { gameState } from "../../state/gameState.js";
 import * as control from '../../inputHandler.js'; 
+import { Mamaoni } from "../../entities/fighters/Mamaoni.js";
 
 export function getFighterEntityClass(id){
         switch (id) {
@@ -17,6 +18,8 @@ export function getFighterEntityClass(id){
                 return Malupiton;
             case FighterId.GOLEM:
                 return Golem;
+            case FighterId.MAMAONI:
+                return Mamaoni;
             default:
                  control.showNotice(`${id} not yet available.`);
                  throw new Error('Unimplemented fighter entity request!');
