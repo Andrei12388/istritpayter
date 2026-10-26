@@ -1022,14 +1022,7 @@ export class Malupiton extends Fighter {
    // this.voiceHyperSkill1.play();
     playSound(this.voiceHyperSkill1, 1);
     this.fireball = { fired: false, strength };
-    this.soundSuperLaunch.play();
-
-    fighter.superAcivated = true;
-    gameState.pauseTimer = 1;
-    gameState.pauseFrameMove = -100;
-    gameState.pause = true;
-    gameState.hyperSkill = true;
-    fighter.hyperSprite += 1;
+    this.triggerSkillActivation({ isHyperSkill: true });
 
     console.log('🔥 Hyper Skill 1 initiated — skill points spent immediately');
   }
@@ -1076,14 +1069,7 @@ export class Malupiton extends Fighter {
 
     //this.voiceSpecial1.play();
     playSound(this.voiceSpecial1, 1);
-    this.soundSuperLaunch.play();
-
-    fighter.superAcivated = true;
-    gameState.pauseTimer = 1;
-    gameState.pauseFrameMove = -100;
-    gameState.pause = true;
-    gameState.hyperSkill = true;
-    fighter.hyperSprite += 1;
+    this.triggerSkillActivation({ isHyperSkill: true });
 
     console.log('🔥 Hyper Skill 2 initiated — skill points spent immediately');
   }
@@ -1131,15 +1117,8 @@ export class Malupiton extends Fighter {
   //  this.voiceSpecial3.play();
     playSound(this.voiceSpecial3,1);
     this.fireball = { fired: false, strength };
-    this.soundSuperLaunch.play();
+    this.triggerSkillActivation();
 
-    fighter.superAcivated = true;
-    gameState.pauseTimer = 1;
-    gameState.pauseFrameMove = -100;
-    gameState.pause = true;
-
-   
-    
     fighter.sprite += 1;
 
     console.log('🔥 Special 1 (Fireball) started — skill spent instantly');
@@ -1181,12 +1160,7 @@ export class Malupiton extends Fighter {
    // this.voiceSpecial2.play();
     playSound(this.voiceSpecial2,1);
     this.fireball = { fired: false, strength };
-    this.soundSuperLaunch.play();
-
-    fighter.superAcivated = true;
-    gameState.pauseTimer = 1;
-    gameState.pauseFrameMove = -100;
-    gameState.pause = true;
+    this.triggerSkillActivation();
 
     this.velocity.x = +300;
     this.velocity.y = -100;

@@ -498,6 +498,27 @@ getNextAttackInput() {
     return null;
 }
 
+//for trigger super and hyper skill
+    triggerSkillActivation({ isHyperSkill = false } = {}) {
+        const fighter = gameState.fighters[this.playerId];
+
+        if (this.soundSuperLaunch && typeof this.soundSuperLaunch.play === 'function') {
+            this.soundSuperLaunch.play();
+        }
+
+        fighter.superAcivated = true;
+        gameState.pauseTimer = 1;
+        gameState.pauseFrameMove = -100;
+        gameState.pause = true;
+
+        if (isHyperSkill) {
+            gameState.hyperSkill = true;
+            fighter.hyperSprite += 1;
+        }
+
+        return fighter;
+    }
+
     
     //Idle
     handleIdleInit(){

@@ -1083,14 +1083,8 @@ export class Golem extends Fighter {
 
     this.voiceSpecial1.play();
     this.fireball = { fired: false, strength };
-    this.soundSuperLaunch.play();
+    this.triggerSkillActivation();
 
-    fighter.superAcivated = true;
-    gameState.pauseTimer = 1;
-    gameState.pauseFrameMove = -100;
-    gameState.pause = true;
-
-    
     this.velocity.x = 330;
     this.velocity.y = -420;
     fighter.sprite += 1;
@@ -1148,13 +1142,7 @@ export class Golem extends Fighter {
     if (fighter.skillNumber === 2) fighter.resetSkillBar = true;
 
     this.voiceSpecial2.play();
-   
-    this.soundSuperLaunch.play();
-
-    fighter.superAcivated = true;
-    gameState.pauseTimer = 1;
-    gameState.pauseFrameMove = -100;
-    gameState.pause = true;
+    this.triggerSkillActivation();
     this.golemEnableMove = false;
     this.gravity = 1300;
     fighter.sprite += 1;
@@ -1303,16 +1291,7 @@ export class Golem extends Fighter {
    
        this.voiceHyperSkill2.play();
        this.fireball = { fired: false, strength };
-       this.soundSuperLaunch.play();
-   
-       fighter.superAcivated = true;
-       gameState.pauseTimer = 1;
-       gameState.pauseFrameMove = -100;
-       gameState.pause = true;
-       gameState.hyperSkill = true;
-       fighter.hyperSprite += 1;
-
-       this.touchedPlayer = false;
+    this.triggerSkillActivation({ isHyperSkill: true });
    
        console.log('🔥 Hyper Skill 1 initiated — skill points spent immediately');
      }
@@ -1410,15 +1389,8 @@ export class Golem extends Fighter {
                fighter.resetSkillBar = true;
            
                this.voiceHyperSkill1.play();
+               this.triggerSkillActivation({ isHyperSkill: true });
                
-               this.soundSuperLaunch.play();
-           
-               fighter.superAcivated = true;
-               gameState.pauseTimer = 1;
-               gameState.pauseFrameMove = -100;
-               gameState.pause = true;
-               gameState.hyperSkill = true;
-               fighter.hyperSprite += 1;
            
            
             fighter.spawnEntity = true;

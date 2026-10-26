@@ -40,7 +40,7 @@ export class CharacterSelect {
         { name: "Golem", color: "gray", imageSml: 'golemSmall', imageBig: 'golemBig', namePos: 20, sayings: 'Dimo ko kaya itaob men',voice: 'voice-golem', },
         { name: "Lamok", color: "gray",  imageSml: 'lamokSmall', imageBig: 'lamokBig', namePos: 20, sayings: 'None',voice: 'voice-lamok', },
         { name: "Pinunong Puds", color: "gray",  imageSml: 'pinunoSmall', imageBig: 'pinunoBig', namePos: 5, sayings: 'None',voice: 'voice-pinunongpuds', },
-        { name: "Mama Oni", color: "gray",  imageSml: 'toniSmall', imageBig: 'toniBig', namePos: 20, sayings: 'None',voice: 'voice-mamaoni', },
+        { name: "Mamaoni", color: "gray",  imageSml: 'toniSmall', imageBig: 'toniBig', namePos: 20, sayings: 'None',voice: 'voice-mamaoni', },
         { name: "Daddy Tyga", color: "gray",  imageSml: 'tygaSmall', imageBig: 'tygaBig', namePos: 20, sayings: 'None',voice: 'voice-daddytyga', },
         { name: "Nabunturan", color: "gray",  imageSml: 'nabunturanSmall', imageBig: 'nabunturanBig', namePos: 5 , sayings: 'None',voice: 'voice-nabunturan',},
     ];

@@ -37,7 +37,7 @@ export const gameState = {
     kapeCom: false,
     stageMusic: 'audio#stage-payatas',
     debug: {
-      fighters: false,
+      fighters: true,
       entities: false,
     },
     cameraShake: {
