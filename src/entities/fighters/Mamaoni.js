@@ -46,7 +46,7 @@ export class Mamaoni extends Fighter {
         
         this.frames = new Map([
            
-           //Idle
+            //Idle
                                  ['idle-1', [[[6,122,52,109],[26,107]], [-19,-106,37,103], [[-12,-107,23,21],[-19,-86,37,44],[-23,-42,43,39]], [0,-500,0,0]]],
                                   ['idle-2', [[[60,121,51,109],[26,107]], [-19,-106,37,103], [[-12,-107,23,21],[-19,-86,37,44],[-23,-42,43,39]], [0,-500,0,0]]],
                                   ['idle-3', [[[116,120,51,110],[26,108]], [-19,-106,37,103], [[-12,-107,23,21],[-19,-86,37,44],[-23,-42,43,39]], [0,-500,0,0]]],
@@ -64,6 +64,8 @@ export class Mamaoni extends Fighter {
           
                               //Stand Block
                                  ['stand-block-1', [[[232,121,58,110],[29,108]], [-19,-108,39,105], [[-12,-109,23,21],[-19,-92,37,53],[-21,-40,41,37]], [0,-500,0,0]]],
+                                //Crouch Block
+                       ['crouch-block-1', [[[491,505,48,69],[24,67]], [-15,-71,41,69], [[9,-73,21,20],[-12,-60,37,53],[-18,-38,41,37]], [0,-500,0,0]]],
                                   //Light Kick
                               ['light-kick-1', [[[6,236,44,112],[19,110]], [-16,-106,33,102], [[-22,-112,24,17],[-19,-95,29,44],[-16,-52,29,49]], [0,-500,0,0]]],
                               ['light-kick-2', [[[53,234,85,114],[52,112]], [-17,-111,34,106], [[-22,-112,24,17],[-19,-95,29,44],[-16,-52,29,49]], [0,-500,0,0]]],
@@ -127,107 +129,187 @@ export class Mamaoni extends Fighter {
                   ['hurt-body-1', [[[255,479,59,90],[30,88]], [-13,-83,28,83], [[12,-86,16,18],[-24,-78,36,36],[-19,-53,26,54]], [0,-500,0,0]]],
                   ['hurt-body-2', [[[331,479,58,92],[29,90]], [-21,-80,34,77], [[10,-88,20,19],[-21,-82,34,39],[-24,-45,29,41]], [0,-500,0,0]]],
                   ['hurt-body-3', [[[400,489,79,82],[39,80]], [-21,-73,42,69], [[22,-71,18,22],[-16,-75,40,30],[-32,-48,29,41]], [0,-500,0,0]]],
+          
+                  ['dodge-start', [[[703,1,64,127],[32,125]], [-26,-120,40,116], [[-21,-123,21,19],[-34,-108,39,48],[-19,-75,45,74]], [0,-500,0,0]]],
+                  //Dodge Forward
+          ['dodge-forward-1', [[[790,4,95,110],[47,108]], [-21,-99,46,96], [[27,-107,21,23],[-18,-100,48,49],[-27,-65,39,59]], [0,-500,0,0]]],
+          ['dodge-forward-2', [[[899,3,104,100],[52,98]], [-17,-88,47,84], [[32,-96,20,25],[-6,-87,40,33],[-22,-67,40,60]], [0,-500,0,0]]],
+          
+                  //Dodge Backward
+          ['dodge-backward-1', [[[587,3,92,104],[46,102]], [-27,-80,36,78], [[-43,-99,20,19],[-39,-80,44,45],[-4,-59,40,57]], [0,-500,0,0]]],
+          ['dodge-backward-2', [[[477,10,108,85],[54,83]], [-41,-59,70,43], [[-53,-83,20,25],[-45,-63,48,41],[4,-54,29,41]], [0,-500,0,0]]],
+          
+        //Death
+['death-1', [[[576,499,67,104],[33,102]], [-20,-94,36,93], [[-34,-101,25,20],[-29,-94,44,45],[-8,-54,32,49]], [0,-500,0,0]]],
+['death-2', [[[651,499,81,99],[40,97]], [-19,-88,43,79], [[-41,-92,21,25],[-26,-84,48,42],[11,-49,28,49]], [0,-500,0,0]]],
+['death-3', [[[738,504,97,85],[48,83]], [-24,-70,61,61], [[-51,-64,25,20],[-38,-69,43,31],[0,-54,39,51]], [0,-500,0,0]]],
+['death-4', [[[837,510,105,64],[52,62]], [-44,-34,94,32], [[-53,-35,23,23],[-45,-38,58,25],[5,-27,46,21]], [0,-500,0,0]]],
+['death-5', [[[582,620,105,53],[52,51]], [-49,-27,100,27], [[-52,-20,14,19],[-38,-37,57,38],[4,-28,47,30]], [0,-500,0,0]]],
+['death-6', [[[699,623,110,48],[55,46]], [-55,-28,108,25], [[-55,-30,19,25],[-42,-33,51,31],[5,-25,46,24]], [0,-500,0,0]]],
+['death-7', [[[830,633,108,36],[54,34]], [-50,-27,101,21], [[-54,-27,17,17],[-45,-32,70,24],[1,-28,49,26]], [0,-500,0,0]]],
+['death-8', [[[673,492,97,103],[48,101]], [-41,-59,70,43], [[-53,-83,20,25],[-45,-63,48,41],[4,-54,29,41]], [0,-500,0,0]]],
+
+//getUp
+['getUp-1', [[[395,595,80,41],[40,39]], [-24,-38,63,37], [[19,-39,21,25],[-21,-38,52,37],[-33,-31,27,34]], [0,-500,0,0]]],
+['getUp-2', [[[491,505,57,74],[28,72]], [-19,-70,40,68], [[1,-71,20,18],[-16,-54,34,26],[-21,-33,46,30]], [0,-500,0,0]]],
+['getUp-3', [[[491,590,65,64],[32,62]], [-27,-60,54,59], [[8,-62,20,25],[-24,-49,48,41],[-23,-33,37,34]], [0,-500,0,0]]],
               ]);
                   
          this.animations = {
-             [FighterState.IDLE]:[ 
-                                    ['idle-1', 85],['idle-2', 85],['idle-3', 85],['idle-4', 85],
-                                    ['idle-3', 85],['idle-2', 85],['idle-1', 85],
+               [FighterState.IDLE]:[ 
+                        ['idle-1', 85],['idle-2', 85],['idle-3', 85],['idle-4', 85],
+                        ['idle-3', 85],['idle-2', 85],['idle-1', 85],
+                    ],
+                     [FighterState.WALK_FORWARD]: [
+                                    ['forwards-1',85],['forwards-2',85],
+                                    ['forwards-3',85],['forwards-4',85],
+                                    ['forwards-5',85],['forwards-6',85],       
+                                ],  
+                                [FighterState.WALK_FORWARD]: [
+                                    ['forwards-1',85],['forwards-2',85],
+                                    ['forwards-3',85],['forwards-4',85],
+                                    ['forwards-5',85],['forwards-6',85],       
+                                ],     
+                                [FighterState.WALK_BACKWARD]: [
+                                    ['backwards-1',85],['backwards-2',85],
+                                    ['backwards-3',85],['backwards-4',85],
+                                    ['backwards-5',85],['backwards-6',85],       
+                                ],      
+                                  [FighterState.DODGE_BACKWARD]:[ 
+                                                ['dodge-start', 40], ['dodge-backward-1', 40],
+                                                ['dodge-backward-2', 150], 
+                                                ['dodge-backward-1', 40],
+                                                ['dodge-start',FrameDelay.TRANSITION],
+                                            ],
+                                             [FighterState.DODGE_FORWARD]:[ 
+                                                ['dodge-start', 40], ['dodge-forward-1', 40],
+                                                ['dodge-forward-2', 150], 
+                                                ['dodge-forward-1', 40],
+                                                ['dodge-start',FrameDelay.TRANSITION],
+                                            ],
+                                [FighterState.CROUCH]:[['crouch-3',FrameDelay.FREEZE]],
+                                            [FighterState.CROUCH_DOWN]:[
+                                                ['crouch-1', 30],['crouch-2', 30],['crouch-3', 30],['crouch-3', FrameDelay.TRANSITION],
+                                            ],
+                                            [FighterState.CROUCH_UP]:[
+                                                ['crouch-3', 30],['crouch-2', 30],['crouch-1', 30],['crouch-1', FrameDelay.TRANSITION],
+                                            ],        
+                     [FighterState.LIGHT_PUNCH]:[
+                        ['light-punch-1', 33],['light-punch-2', 33],['light-punch-3', 66],
+                        ['light-punch-2', 66],['light-punch-1', FrameDelay.TRANSITION],
+                    ],
+                     [FighterState.HEAVY_PUNCH]:[
+                                    ['light-punch-1', 50],['light-punch-1', 50],['heavy-punch-0', 33],['heavy-punch-1', 100],
+                                    ['heavy-punch-0', 250],['light-punch-1', 199],['light-punch-1', FrameDelay.TRANSITION],
                                 ],
-                                 [FighterState.WALK_FORWARD]: [
-                                                ['forwards-1',85],['forwards-2',85],
-                                                ['forwards-3',85],['forwards-4',85],
-                                                ['forwards-5',85],['forwards-6',85],       
-                                            ],  
-                                            [FighterState.WALK_FORWARD]: [
-                                                ['forwards-1',85],['forwards-2',85],
-                                                ['forwards-3',85],['forwards-4',85],
-                                                ['forwards-5',85],['forwards-6',85],       
-                                            ],     
-                                            [FighterState.WALK_BACKWARD]: [
-                                                ['backwards-1',85],['backwards-2',85],
-                                                ['backwards-3',85],['backwards-4',85],
-                                                ['backwards-5',85],['backwards-6',85],       
-                                            ],      
-                                            [FighterState.CROUCH]:[['crouch-3',FrameDelay.FREEZE]],
-                                                        [FighterState.CROUCH_DOWN]:[
-                                                            ['crouch-1', 30],['crouch-2', 30],['crouch-3', 30],['crouch-3', FrameDelay.TRANSITION],
-                                                        ],
-                                                        [FighterState.CROUCH_UP]:[
-                                                            ['crouch-3', 30],['crouch-2', 30],['crouch-1', 30],['crouch-1', FrameDelay.TRANSITION],
-                                                        ],        
-                                 [FighterState.LIGHT_PUNCH]:[
-                                    ['light-punch-1', 33],['light-punch-2', 33],['light-punch-3', 66],
-                                    ['light-punch-2', 66],['light-punch-1', FrameDelay.TRANSITION],
+                                [FighterState.LIGHT_KICK]:[
+                                                ['light-punch-1', 50],['light-kick-1', 50],['light-kick-3', 133],
+                                                ['light-kick-1', 66],['light-kick-1', FrameDelay.TRANSITION],
+                                            ],
+                     [FighterState.HEAVY_KICK]:[
+                                    ['heavy-kick-1', 66],['heavy-kick-1', 78],['heavy-kick-2', 100],
+                                    ['heavy-kick-1', 250],['heavy-kick-1', 106],['light-punch-1', FrameDelay.TRANSITION],
                                 ],
-                                 [FighterState.HEAVY_PUNCH]:[
-                                                ['light-punch-1', 50],['light-punch-1', 50],['heavy-punch-0', 33],['heavy-punch-1', 100],
-                                                ['heavy-punch-0', 250],['light-punch-1', 199],['light-punch-1', FrameDelay.TRANSITION],
+                                [FighterState.JUMP_LIGHTKICK]:[
+                                                ['light-punch-1', 50],['light-kick-1', 50],['light-kick-3', 133],
+                                                ['light-kick-1', 66],['light-kick-1', FrameDelay.TRANSITION],
                                             ],
-                                            [FighterState.LIGHT_KICK]:[
-                                                            ['light-punch-1', 50],['light-kick-1', 50],['light-kick-3', 133],
-                                                            ['light-kick-1', 66],['light-kick-1', FrameDelay.TRANSITION],
-                                                        ],
-                                 [FighterState.HEAVY_KICK]:[
-                                                ['heavy-kick-1', 66],['heavy-kick-1', 78],['heavy-kick-2', 100],
-                                                ['heavy-kick-1', 250],['heavy-kick-1', 106],['light-punch-1', FrameDelay.TRANSITION],
-                                            ],
-                                            [FighterState.CROUCH_LIGHTKICK]:[
-                                             ['crouch-lightkick-1', 33],['crouch-lightkick-1', 33],['crouch-lightkick-2', 106],
-                                              ['crouch-lightkick-1', 66],['crouch-lightkick-1', FrameDelay.TRANSITION],
-                                             ],
-                                             [FighterState.CROUCH_HEAVYKICK]:[
-                                                 ['crouch-lightkick-1', 40],['crouch-heavykick-1', 40],['crouch-heavykick-2', 143],
-                                                   ['crouch-heavykick-1', 166],['crouch-lightkick-1', 196],['crouch-lightkick-1', FrameDelay.TRANSITION],
-                                            ],
-                                 [FighterState.BLOCK]:[
-                                                ['stand-block-1', 60],
-                                                ['stand-block-1', FrameDelay.TRANSITION],
-                                            ],
-                                            [FighterState.JUMP_START]:[
-                                        ['jump-land', 50],['jump-land',FrameDelay.TRANSITION],
-                                        ],
-                                        [FighterState.JUMP_LAND]:[
-                                    ['jump-land', 33],['jump-land',117],['jump-land',FrameDelay.TRANSITION],
-                                   ],
-                                [FighterState.JUMP_UP]:[
-                                 ['jumpup-1', 180],['jumpup-2', 100],
-                                  ['jumpup-3', 100],
+                     [FighterState.JUMP_HEAVYKICK]:[
+                                    ['heavy-kick-1', 66],['heavy-kick-1', 78],['heavy-kick-2', 100],
+                                    ['heavy-kick-1', 250],['heavy-kick-1', 106],['light-punch-1', FrameDelay.TRANSITION],
                                 ],
-                                [FighterState.JUMP_BACKWARD]:[
-                                                ['jump-roll-1', 120],['jump-roll-2', 50],
-                                                ['jump-roll-3', 50],['jump-roll-4', 50],
-                                                ['jump-roll-5', 50],['jump-roll-6', 50],
-                                                ['jump-roll-7', 50],['jump-roll-8', 50],
-                                                ['jump-roll-9', 50],['jump-roll-10', 50],
-                                                ['jump-roll-11', FrameDelay.FREEZE],
+                                
+                                [FighterState.CROUCH_LIGHTKICK]:[
+                                 ['crouch-lightkick-1', 33],['crouch-lightkick-1', 33],['crouch-lightkick-2', 106],
+                                  ['crouch-lightkick-1', 66],['crouch-lightkick-1', FrameDelay.TRANSITION],
+                                 ],
+                                 [FighterState.CROUCH_HEAVYKICK]:[
+                                     ['crouch-lightkick-1', 40],['crouch-heavykick-1', 40],['crouch-heavykick-2', 143],
+                                       ['crouch-heavykick-1', 166],['crouch-lightkick-1', 196],['crouch-lightkick-1', FrameDelay.TRANSITION],
+                                ],
+                     [FighterState.BLOCK]:[
+                                    ['stand-block-1', 60],
+                                    ['stand-block-1', FrameDelay.TRANSITION],
+                                ],
+                                 [FighterState.CROUCH_BLOCK]:[
+                                                ['crouch-block-1', 60],
+                                                ['crouch-block-1', FrameDelay.TRANSITION],
                                             ],
-                                            [FighterState.JUMP_FORWARD]:[
-                                                ['jump-roll-1', 120],['jump-roll-11', 50],
-                                                ['jump-roll-10', 50],['jump-roll-9', 50],
-                                                ['jump-roll-8', 50],['jump-roll-7', 50],
-                                                ['jump-roll-6', 50],['jump-roll-5', 50],
-                                                ['jump-roll-4', 50],['jump-roll-3', 50],
-                                                ['jump-roll-2', 50],['jump-roll-1', 50],
-                                                ['jump-roll-1', FrameDelay.FREEZE],
-                                            ],
-                             [FighterState.HURT_HEAD_LIGHT]:[
-                                ['hurt-face-1', FIGHTER_HURT_DELAY],['hurt-face-1', 30],
-                                ['hurt-face-2', 40],['hurt-face-2', 40], ['hurt-face-2', 20], ['hurt-face-1', 20],
-                                ['hurt-face-1', FrameDelay.TRANSITION],
+                                [FighterState.JUMP_START]:[
+                            ['jump-land', 50],['jump-land',FrameDelay.TRANSITION],
                             ],
-                            [FighterState.HURT_HEAD_HEAVY]:[
-                                ['hurt-face-3', FIGHTER_HURT_DELAY],['hurt-face-3', 80],
-                                ['hurt-face-2', 50],['hurt-face-1', 70],['hurt-face-1', FrameDelay.TRANSITION],
+                            [FighterState.JUMP_LAND]:[
+                        ['jump-land', 33],['jump-land',117],['jump-land',FrameDelay.TRANSITION],
+                       ],
+                    [FighterState.JUMP_UP]:[
+                     ['jumpup-1', 180],['jumpup-2', 100],
+                      ['jumpup-3', 100],
+                    ],
+                    [FighterState.JUMP_BACKWARD]:[
+                                    ['jump-roll-1', 120],['jump-roll-2', 50],
+                                    ['jump-roll-3', 50],['jump-roll-4', 50],
+                                    ['jump-roll-5', 50],['jump-roll-6', 50],
+                                    ['jump-roll-7', 50],['jump-roll-8', 50],
+                                    ['jump-roll-9', 50],['jump-roll-10', 50],
+                                    ['jump-roll-11', FrameDelay.FREEZE],
+                                ],
+                                [FighterState.JUMP_FORWARD]:[
+                                    ['jump-roll-1', 120],['jump-roll-11', 50],
+                                    ['jump-roll-10', 50],['jump-roll-9', 50],
+                                    ['jump-roll-8', 50],['jump-roll-7', 50],
+                                    ['jump-roll-6', 50],['jump-roll-5', 50],
+                                    ['jump-roll-4', 50],['jump-roll-3', 50],
+                                    ['jump-roll-2', 50],['jump-roll-1', 50],
+                                    ['jump-roll-1', FrameDelay.FREEZE],
+                                ],
+                 [FighterState.HURT_HEAD_LIGHT]:[
+                    ['hurt-face-1', FIGHTER_HURT_DELAY],['hurt-face-1', 30],
+                    ['hurt-face-2', 40],['hurt-face-2', 40], ['hurt-face-2', 20], ['hurt-face-1', 20],
+                    ['hurt-face-1', FrameDelay.TRANSITION],
+                ],
+                [FighterState.HURT_HEAD_HEAVY]:[
+                    ['hurt-face-3', FIGHTER_HURT_DELAY],['hurt-face-3', 80],
+                    ['hurt-face-2', 50],['hurt-face-1', 70],['hurt-face-1', FrameDelay.TRANSITION],
+                ],
+                [FighterState.HURT_BODY_LIGHT]:[
+                    ['hurt-body-1', FIGHTER_HURT_DELAY],['hurt-body-1', 30],
+                    ['hurt-body-2', 60], ['hurt-body-1', 60], ['hurt-body-1', FrameDelay.TRANSITION],
+                ],
+                [FighterState.HURT_BODY_HEAVY]:[
+                    ['hurt-body-1', FIGHTER_HURT_DELAY],['hurt-body-2', 80],
+                    ['hurt-body-3', 120],['hurt-body-2', 90],['hurt-body-1', 90],['hurt-body-1', FrameDelay.TRANSITION],
+                ], 
+                [FighterState.DEATH]:[
+                                ['death-1', 300], ['death-2', 120], ['death-3', 120], 
+                                ['death-4', 120], ['death-5', 120], ['death-6', 120], 
+                                ['death-7', 120],
+                                ['death-7', FrameDelay.TRANSITION],
                             ],
-                            [FighterState.HURT_BODY_LIGHT]:[
-                                ['hurt-body-1', FIGHTER_HURT_DELAY],['hurt-body-1', 30],
-                                ['hurt-body-2', 60], ['hurt-body-1', 60], ['hurt-body-1', FrameDelay.TRANSITION],
+                            [FighterState.DIE]:[
+                                ['death-7', 7000],
+                                ['death-7', FrameDelay.TRANSITION],
                             ],
-                            [FighterState.HURT_BODY_HEAVY]:[
-                                ['hurt-body-1', FIGHTER_HURT_DELAY],['hurt-body-2', 80],
-                                ['hurt-body-3', 120],['hurt-body-2', 90],['hurt-body-1', 90],['hurt-body-1', FrameDelay.TRANSITION],
-                            ],         
+                            [FighterState.KNOCKUP]:[
+                                ['death-1', 100], ['death-2', 120], ['death-3', 120], 
+                                ['death-4', 120], ['death-5', 120], ['death-6', 130], 
+                                ['death-7', 120],
+                                ['death-7', FrameDelay.TRANSITION],
+                            ],
+                            [FighterState.LAYDOWN_GROUND]:[
+                                ['death-1', 300], ['death-2', 120], ['death-3', 120], 
+                                ['death-4', 120], ['death-5', 120], ['death-6', 120], 
+                                ['death-7', 120],
+                                ['death-7', FrameDelay.FREEZE],
+                            ],
+                            [FighterState.FALL]:[
+                                ['fall-4', 100], ['fall-5', 100], ['fall-6', 100], 
+                                ['fall-7', 100],
+                                ['fall-7', FrameDelay.TRANSITION],
+                            ],
+                             [FighterState.GETUP]:[
+                                ['death-7', 300], ['getUp-1', 120], ['getUp-2', 120], ['getUp-3', 120],
+                                ['getUp-3', FrameDelay.TRANSITION],
+                            ],           
 
         };
 
@@ -237,9 +319,6 @@ export class Mamaoni extends Fighter {
                 [FighterState.WALK_BACKWARD]: -(2 * 60),
                 [FighterState.JUMP_FORWARD]: ((48 * 3) + (12 * 2)),
                 [FighterState.JUMP_BACKWARD]: -((45 * 4) + (15 * 3)),
-                [FighterState.HEADBUTT]: 600,
-                [FighterState.HEADBUTT_UP]: 600,
-                [FighterState.HEADBUTT_DOWN]: 700,
             },
             jump: -420,
         };
@@ -291,98 +370,11 @@ export class Mamaoni extends Fighter {
                 ],
                 cursor: 0,
             },
-             {
-                state: FighterState.KNOCKLIFT,
-                sequence: 
-                [SpecialMoveDirection.DOWN,SpecialMoveDirection.BACKWARD_DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveButton.HEAVY_KICK,
-                ],
-                cursor: 0,
-            },
-            {
-                state: FighterState.KNOCKLIFTDOWN,
-                sequence: 
-                [SpecialMoveDirection.DOWN, SpecialMoveDirection.FORWARD_DOWN, SpecialMoveDirection.FORWARD, SpecialMoveButton.HEAVY_KICK,
-                ],
-                cursor: 0,
-            },
-           {
-                state: FighterState.HEADBUTT_DOWN,
-                sequence: 
-                [SpecialMoveDirection.DOWN,SpecialMoveDirection.FORWARD_DOWN, SpecialMoveDirection.FORWARD, SpecialMoveDirection.FORWARD, SpecialMoveButton.HEAVY_PUNCH,
-                ],
-                cursor: 0,
-            },
-            {
-                state: FighterState.HEADBUTT_UP,
-                sequence: 
-                [SpecialMoveDirection.DOWN,SpecialMoveDirection.FORWARD_DOWN, SpecialMoveDirection.FORWARD, SpecialMoveDirection.FORWARD, SpecialMoveButton.HEAVY_PUNCH,
-                ],
-                cursor: 0,
-            },
-             {
-                state: FighterState.HEADBUTT,
-                sequence: 
-                [SpecialMoveDirection.DOWN,SpecialMoveDirection.BACKWARD_DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveButton.HEAVY_PUNCH,
-                ],
-                cursor: 0,
-            },
             
         ];
         this.gravity = 1000;
         
         this.fireball = {fired: false, strength: undefined};
-        this.headbuttActivate = false;
-        
-        this.states[FighterState.SPECIAL_1] = {
-            init: this.handleSpecial1Init.bind(this),
-            update: this.handleSpecial1State.bind(this),
-            shadow: [1.6, 1, -40, 0],
-            validFrom: [
-                FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD, FighterState.JUMP_START,
-                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
-                FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
-                FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
-            ],
-        }
-        this.states[FighterState.SPECIAL_2] = {
-            attackType: FighterAttackType.PUNCH,
-            attackStrength: FighterAttackStrength.LIGHT,
-            init: this.handleSpecial2Init.bind(this),
-            update: this.handleSpecial2State.bind(this),
-            shadow: [1.6, 1, -40, 0],
-            validFrom: [
-                FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, 
-                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
-                FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
-                FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
-            ],
-        }
-        this.states[FighterState.HYPERSKILL_1] = {
-            attackType: FighterAttackType.PUNCH,
-            attackStrength: FighterAttackStrength.SUPER2,
-            init: this.handleHyperSkill1Init.bind(this),
-            update: this.handleHyperSkill1State.bind(this),
-            shadow: [1.6, 1, -40, 0],
-            validFrom: [
-                FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.JUMP_UP, FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD, FighterState.JUMP_LAND,
-                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
-                FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
-                FighterState.HEADBUTT, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
-            ],
-        }
-        this.states[FighterState.HYPERSKILL_2] = {
-            attackType: FighterAttackType.PUNCH,
-            attackStrength: FighterAttackStrength.SLASH,
-            init: this.handleHyperSkill2Init.bind(this),
-            update: this.handleHyperSkill2State.bind(this),
-            shadow: [1.6, 1, -40, 0],
-            validFrom: [
-                FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.JUMP_UP, FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD, FighterState.JUMP_LAND,
-                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
-                FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_BLOCK,
-                FighterState.HEADBUTT, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
-            ],
-        }
         
         this.states[FighterState.DODGE_FORWARD] = {
              init: this.handleDodgeForwardInit.bind(this),
@@ -407,75 +399,7 @@ export class Mamaoni extends Fighter {
                 FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD,
                 FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
             ],
-        }
-        this.states[FighterState.KNOCKLIFT] = {
-             attackType: FighterAttackType.PUNCH,
-            attackStrength: FighterAttackStrength.KNOCKLIFT,
-             init: this.handleKnockLiftInit.bind(this),
-             update: this.handleKnockLiftState.bind(this),
-           
-            validFrom: [
-                FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, 
-                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_BLOCK,
-                FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, FighterState.JUMP_LIGHTKICK, FighterState.JUMP_HEAVYKICK,
-                FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD, FighterState.JUMP_START, FighterState.JUMP_LAND, FighterState.KNOCKLIFTDOWN
-                 
-            ],
-        }
-        this.states[FighterState.KNOCKLIFTDOWN] = {
-            attackType: FighterAttackType.KICK,
-            attackStrength: FighterAttackStrength.KNOCKLIFTDOWN,
-             init: this.handleKnockLiftInit.bind(this),
-             update: this.handleKnockLiftState.bind(this),
-           
-            validFrom: [
-                FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, 
-                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_BLOCK,
-                FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, FighterState.JUMP_LIGHTKICK, FighterState.JUMP_HEAVYKICK,
-                FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD, FighterState.JUMP_START, FighterState.JUMP_LAND, FighterState.KNOCKLIFT,
-               
-            ],
-        }
-        this.states[FighterState.HEADBUTT] = {
-            attackType: FighterAttackType.PUNCH,
-            attackStrength: FighterAttackStrength.HEAVY,
-             init: this.handleHeadbuttInit.bind(this),
-             update: this.handleHeadbuttState.bind(this),
-           
-            validFrom: [
-                FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.WALK_BACKWARD,
-                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_BLOCK,
-                FighterState.JUMP_LIGHTKICK, FighterState.JUMP_HEAVYKICK,
-                FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD,
-                FighterState.JUMP_UP, FighterState.JUMP_START, FighterState.JUMP_LAND, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
-            ],
-        }
-        this.states[FighterState.HEADBUTT_UP] = {
-            attackType: FighterAttackType.PUNCH,
-            attackStrength: FighterAttackStrength.HEAVY,
-             init: this.handleHeadbuttUpInit.bind(this),
-             update: this.handleHeadbuttUpState.bind(this),
-           
-            validFrom: [
-                FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.WALK_BACKWARD,
-                FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_BLOCK,
-                FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, 
-                FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
-            ],
-        }
-        this.states[FighterState.HEADBUTT_DOWN] = {
-            attackType: FighterAttackType.PUNCH,
-            attackStrength: FighterAttackStrength.HEAVY,
-             init: this.handleHeadbuttDownInit.bind(this),
-             update: this.handleHeadbuttDownState.bind(this),
-           
-            validFrom: [
-                FighterState.JUMP_LIGHTKICK, FighterState.JUMP_HEAVYKICK,
-                 FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD,
-                FighterState.JUMP_UP, FighterState.JUMP_START, FighterState.JUMP_LAND, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
-            ],
-        }
-        
+        }  
     
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_1];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_2];
@@ -484,104 +408,11 @@ export class Mamaoni extends Fighter {
         //DOdges
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_FORWARD];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_BACKWARD];
-        //special moves
-        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.KNOCKLIFT];
-        
-        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.KNOCKLIFTDOWN];
-        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.HEADBUTT];
-        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.HEADBUTT_UP];
-        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.HEADBUTT_DOWN];
-
-         //headbutt up valid states
-        this.states[FighterState.JUMP_BACKWARD].validFrom = [...this.states[FighterState.JUMP_BACKWARD].validFrom, FighterState.HEADBUTT];
-        this.states[FighterState.JUMP_FORWARD].validFrom = [...this.states[FighterState.JUMP_FORWARD].validFrom, FighterState.HEADBUTT];
-        this.states[FighterState.KNOCKLIFT].validFrom = [...this.states[FighterState.KNOCKLIFT].validFrom, FighterState.HEADBUTT];
-        //headbutt up valid states
-        this.states[FighterState.JUMP_BACKWARD].validFrom = [...this.states[FighterState.JUMP_BACKWARD].validFrom, FighterState.HEADBUTT_UP];
-        this.states[FighterState.JUMP_FORWARD].validFrom = [...this.states[FighterState.JUMP_FORWARD].validFrom, FighterState.HEADBUTT_UP];
-        this.states[FighterState.KNOCKLIFT].validFrom = [...this.states[FighterState.KNOCKLIFT].validFrom, FighterState.HEADBUTT_UP];
-         //headbutt Down valid states
-        this.states[FighterState.JUMP_BACKWARD].validFrom = [...this.states[FighterState.JUMP_BACKWARD].validFrom, FighterState.HEADBUTT_DOWN];
-        this.states[FighterState.JUMP_FORWARD].validFrom = [...this.states[FighterState.JUMP_FORWARD].validFrom, FighterState.HEADBUTT_DOWN];
-        this.states[FighterState.KNOCKLIFT].validFrom = [...this.states[FighterState.KNOCKLIFT].validFrom, FighterState.HEADBUTT_DOWN];
+       
         
     }
 
-    handleKnockLiftInit(time, _, strength, attackType, playerId) {
-   
-     playSound(this.knockliftSound);
-        this.gravity = 1000;
-    if (attackType === FighterAttackType.PUNCH) {
-         playSound(this.knockliftdownSound);
-         this.velocity.x = 150;
-         this.velocity.y = -380;
-        this.entityList.add(KnockLiftSplash, time, this.position.x, this.position.y - 50, this.playerId, 1, this.direction * -1);
-    } else if (attackType === FighterAttackType.KICK) {
-         playSound(this.knockliftdownSound);
-          this.velocity.x = -100;
-          this.velocity.y = -380;
-        this.entityList.add(KnockLiftSplash, time, this.position.x, this.position.y + 50, this.playerId, -1, this.direction * -1);
-        
-    }
-}
-
-
-     handleKnockLiftState(){
-      
-        if (!this.isAnimationCompleted()) return;
-        if(this.position.y >= STAGE_FLOOR)this.changeState(FighterState.IDLE);
-    }
-
-    handleHeadbuttInit(time) {
-       console.log("HEADBUTT INIT");
-        if(this.headbuttActivate){
-            this.gravity = 1000;
-             this.velocity.x = 0;
-            this.changeState(FighterState.IDLE);
-        } else {
-             this.gravity = 0;
-        this.velocity.y = 0;
-        this.position.y -= 25;
-        //this.position.x += 30*this.direction;
-        playSound(this.headbuttDashSound);
-        this.entityList.add(DashEffectSplash, time, this.position.x-30*this.direction, this.position.y-5, this.playerId, 1, this.direction * -1);
-        this.handleMoveInit();
-        }
-       
-    }
-
-    handleHeadbuttUpInit(time) {
-        console.log("HEADBUTT Up INIT");
-        if(this.headbuttActivate){
-            this.gravity = 1000;
-             this.velocity.x = 0;
-            this.changeState(FighterState.IDLE);
-        } else {
-             this.gravity = 0;
-        this.velocity.y = -300;
-       
-        playSound(this.headbuttDashSound);
-        this.entityList.add(DashEffectSplash, time, this.position.x-30*this.direction, this.position.y-5, this.playerId, 1, this.direction * -1);
-        this.handleMoveInit();
-        }
-       
-    }
-    handleHeadbuttDownInit(time) {
-        console.log("HEADBUTT Down INIT");
-        if(this.headbuttActivate){
-            this.gravity = 1000;
-             this.velocity.x = 0;
-            this.changeState(FighterState.IDLE);
-        } else {
-             this.gravity = 0;
-        this.velocity.y = 400;
-       
-        playSound(this.headbuttDashSound);
-        this.entityList.add(DashEffectSplash, time, this.position.x-30*this.direction, this.position.y-5, this.playerId, 1, this.direction * -1);
-        this.handleMoveInit();
-        }
-       
-    }
+  
 
      handleIdleInit(){
             this.resetVelocities();
@@ -589,135 +420,6 @@ export class Mamaoni extends Fighter {
             this.attackStruck = false;
             if(this.position.y >= STAGE_FLOOR)this.headbuttActivate = false;
         }
-
-
-    handleHeadbuttState(time, context, camera){
-        let isTouchingCamera;
-
-        if (this.direction === -1) {
-            isTouchingCamera =
-                this.position.x-5 < camera.position.x + this.boxes.push.width;
-        } else {
-            isTouchingCamera =
-               this.position.x+5 > camera.position.x + context.canvas.width - this.boxes.push.width
-        }
-
-
-       
- 
-        if(this.headbuttActivate){
-            this.gravity = 1000;
-             this.velocity.x = 0;
-            this.changeState(FighterState.JUMP_FORWARD);
-        } 
-       
-        const headbuttHit = this.checkHeadbuttHit(camera, context);
-        
-        if(headbuttHit || this.attackStruck || isTouchingCamera || this.isAnimationCompleted()) {
-            if(isTouchingCamera){
-             this.entityList.add(GreenHitSplash, time, this.position.x+30*this.direction, this.position.y - 30, this.playerId, 1, this.direction * -1);
-             playSound(this.headbuttSound);
-        }
-           this.headbuttActivate = true;
-           this.gravity = 1000;
-           
-           
-             if (control.isBackward(this.playerId, this.direction)) this.changeState(FighterState.JUMP_BACKWARD);
-              else  this.changeState(FighterState.JUMP_FORWARD);
-        }
-    
-    }
-
-    handleHeadbuttUpState(time, context, camera){
-        console.log("HEADBUTT up STATE");
-    let isTouchingCamera;
-
-        if (this.direction === -1) {
-            isTouchingCamera =
-                this.position.x-5 < camera.position.x + this.boxes.push.width;
-        } else {
-            isTouchingCamera =
-               this.position.x+5 > camera.position.x + context.canvas.width - this.boxes.push.width
-        }
- 
-        if(this.headbuttActivate){
-            this.gravity = 1000;
-             this.velocity.x = 0;
-            this.changeState(FighterState.JUMP_FORWARD);
-        } 
-       
-        const headbuttHit = this.checkHeadbuttHit(camera, context);
-        
-        if(headbuttHit || this.attackStruck || isTouchingCamera || this.isAnimationCompleted()) {
-            if(isTouchingCamera){
-             this.entityList.add(GreenHitSplash, time, this.position.x+30*this.direction, this.position.y - 30, this.playerId, 1, this.direction * -1);
-             playSound(this.headbuttSound);
-        }
-           this.headbuttActivate = true;
-           this.gravity = 1000;
-           
-           
-             if (control.isBackward(this.playerId, this.direction)) this.changeState(FighterState.JUMP_BACKWARD);
-              else  this.changeState(FighterState.JUMP_FORWARD);
-        }
-    
-    }
-    handleHeadbuttDownState(time, context, camera){
-       console.log("HEADBUTT DOWN STATE");
-     let isTouchingCamera;
-
-        if (this.direction === -1) {
-            isTouchingCamera =
-                this.position.x-5 < camera.position.x + this.boxes.push.width;
-        } else {
-            isTouchingCamera =
-               this.position.x+5 > camera.position.x + context.canvas.width - this.boxes.push.width
-        }
- 
-        if(this.headbuttActivate){
-            this.gravity = 1000;
-             this.velocity.x = 0;
-            this.changeState(FighterState.JUMP_FORWARD);
-        } 
-       
-        const headbuttHit = this.checkHeadbuttHit(camera, context);
-        
-        if(headbuttHit || this.attackStruck || isTouchingCamera || this.position.y >= STAGE_FLOOR || this.isAnimationCompleted()) {
-            if(isTouchingCamera || this.position.y >= STAGE_FLOOR){
-             this.entityList.add(GreenHitSplash, time, this.position.x+30*this.direction, this.position.y - 30, this.playerId, 1, this.direction * -1);
-             playSound(this.headbuttSound);
-        }
-           this.headbuttActivate = true;
-           this.gravity = 1000;
-           
-           
-             if (control.isBackward(this.playerId, this.direction)) this.changeState(FighterState.JUMP_BACKWARD);
-              else  this.changeState(FighterState.JUMP_FORWARD);
-        }
-    
-    }
-
-    checkHeadbuttHit(camera, context) {
-           // Check if touching camera directly instead of using this.touchingCamera
-        if (!this.boxes?.hit || !this.opponent?.boxes?.hurt) return false;
-        
-        const actualHitBox = getActualBoxDimensions(this.position, this.direction, this.boxes.hit);
-        if (!actualHitBox || actualHitBox.width <= 0 || actualHitBox.height <= 0) return false;
-        
-        for (const [hurtLocation, hurtBox] of Object.entries(this.opponent.boxes.hurt)) {
-            const [x, y, width, height] = hurtBox;
-            const actualOpponentHurtBox = getActualBoxDimensions(
-                this.opponent.position, this.opponent.direction, {x, y, width, height}
-            );
-            if (!actualOpponentHurtBox || actualOpponentHurtBox.width <= 0 || actualOpponentHurtBox.height <= 0) continue;
-            
-            if (boxOverlap(actualHitBox, actualOpponentHurtBox)) {
-                
-                return true;
-            }
-        }
-        return false;
-    }
 
     handleDodgeForwardInit(distance, playerId){
         distance = 100;
@@ -747,203 +449,4 @@ export class Mamaoni extends Fighter {
         this.changeState(FighterState.IDLE);
     }
 
-    
-  // Hyper Skill 1 - Ultimate Blast
-  handleHyperSkill1Init(_, strength) {
-    const fighter = gameState.fighters[this.playerId];
-    
-    // ✅ Ensure enough skill points & prevent double use
-    if (fighter.skillNumber < 3 || fighter.skillUsedThisFrame) return;
-    fighter.skillConsumed = false;
-    fighter.skillUsedThisFrame = true; // guard
-    fighter.skillNumber -= 3; // 🛡️ immediately spend skill
-    fighter.resetSkillBar = true;
-
-   // this.voiceHyperSkill1.play();
-    playSound(this.voiceHyperSkill1, 1);
-    this.fireball = { fired: false, strength };
-    this.triggerSkillActivation({ isHyperSkill: true });
-
-    console.log('🔥 Hyper Skill 1 initiated — skill points spent immediately');
-  }
-
-  handleHyperSkill1State() {
-    const frameActivation = 130;
-    const fighter = gameState.fighters[this.playerId];
-
-    if (fighter.skillNumber >= 0 && !fighter.skillConsumed) {
-      this.gravity = 0;
-      this.velocity.y = 0;
-     // this.opponent.velocity.y = 0;
-      this.position.y -= 0.8;
-      this.changeState(FighterState.HYPERSKILL_1);
-
-      if (this.isHyperSkillEnabled(frameActivation)) {
-        gameState.flash = true;
-        console.log('⚡ Hyper Attack Activated!');
-      }
-
-      if (!this.isAnimationCompleted()) return;
-      fighter.skillConsumed = true;
-      // ✅ Reset guard and state after animation
-      gameState.flash = false;
-      fighter.superAcivated = false;
-      fighter.skillUsedThisFrame = false;
-      this.gravity = 1000;
-    }else this.changeState(FighterState.IDLE);
-
-    this.changeState(FighterState.JUMP_BACKWARD);
-  }
-
-  // ==============================
-  // Hyper Skill 2 - Berserker Barrage
-  // ==============================
-  handleHyperSkill2Init(_, strength) {
-    const fighter = gameState.fighters[this.playerId];
-    
-    if (fighter.skillNumber < 3 || fighter.skillUsedThisFrame) return;
-    fighter.skillConsumed = false;
-    fighter.skillUsedThisFrame = true;
-    fighter.skillNumber -= 3;
-    fighter.resetSkillBar = true;
-
-    //this.voiceSpecial1.play();
-    playSound(this.voiceSpecial1, 1);
-    this.triggerSkillActivation({ isHyperSkill: true });
-
-    console.log('🔥 Hyper Skill 2 initiated — skill points spent immediately');
-  }
-
-  handleHyperSkill2State() {
-    const frameActivation = 140;
-    const frameDeactivation = 60;
-    const fighter = gameState.fighters[this.playerId];
-
-    if (fighter.skillNumber >= 0 && !fighter.skillConsumed) {
-      if (!this.fireball.fired && this.animationFrame === 3) {
-        this.fireball.fired = true;
-        this.changeState(FighterState.HYPERSKILL_2);
-      }
-
-      if (this.isHyperSkillEnabled(frameActivation)) {
-        this.velocity.x = 800;
-        console.log('⚡ Berserker Barrage Activated!');
-      } else if (this.isHyperSkillEnabled(frameDeactivation)) {
-        this.velocity.x = 0;
-        console.log('🛑 Berserker Barrage Deactivated!');
-      }
-
-      if (!this.isAnimationCompleted()) return;
-      fighter.skillConsumed = true;
-      // ✅ Reset guard and flags
-      fighter.superAcivated = false;
-      fighter.skillUsedThisFrame = false;
-    }else this.changeState(FighterState.IDLE);
-
-    this.changeState(FighterState.IDLE);
-  }
-
-  handleSpecial1Init(_, strength) {
-    const fighter = gameState.fighters[this.playerId];
-    this.gravity = 1000;
-    if (fighter.skillNumber < 1 || fighter.skillUsedThisFrame) return;
-
-    fighter.skillUsedThisFrame = true;
-    fighter.skillConsumed = false;
-    fighter.skillNumber -= 1; // 🛡️ spend skill immediately
-
-    if (fighter.skillNumber === 2) fighter.resetSkillBar = true;
-
-  //  this.voiceSpecial3.play();
-    playSound(this.voiceSpecial3,1);
-    this.fireball = { fired: false, strength };
-    this.triggerSkillActivation();
-
-    fighter.sprite += 1;
-
-    console.log('🔥 Special 1 (Fireball) started — skill spent instantly');
-  }
-
-  handleSpecial1State(time) {
-    const fighter = gameState.fighters[this.playerId];
-
-    if (fighter.skillNumber >= 0 && !fighter.skillConsumed) {
-      if (!this.fireball.fired && this.animationFrame === 3) {
-        this.entityList.add.call(this.entityList, Fireball, time, this, this.fireball.strength);
-        this.fireball.fired = true;
-        console.log('🔥 Fireball launched!');
-      }
-
-      if (!this.isAnimationCompleted()) return;
-        fighter.skillConsumed = true;
-      fighter.superAcivated = false;
-      fighter.skillUsedThisFrame = false; // reset guard
-    }else this.changeState(FighterState.IDLE);
-
-    this.changeState(FighterState.IDLE);
-  }
-
-  // ==============================
-  // Special Skill 2 - Roll Attack
-  // ==============================
-  handleSpecial2Init(_, strength) {
-    const fighter = gameState.fighters[this.playerId];
-    this.gravity = 1000;
-    if (fighter.skillNumber < 1 || fighter.skillUsedThisFrame) return;
-
-    fighter.skillUsedThisFrame = true;
-    fighter.skillConsumed = false;
-    fighter.skillNumber -= 1;
-
-    if (fighter.skillNumber === 2) fighter.resetSkillBar = true;
-
-   // this.voiceSpecial2.play();
-    playSound(this.voiceSpecial2,1);
-    this.fireball = { fired: false, strength };
-    this.triggerSkillActivation();
-
-    this.velocity.x = +300;
-    this.velocity.y = -100;
-    fighter.sprite += 1;
-
-    console.log('🔥 Special 2 (Roll Attack) started — skill spent instantly');
-  }
-
-  handleSpecial2State(time) {
-    const fighter = gameState.fighters[this.playerId];
-
-    if (fighter.skillNumber >= 0 && !fighter.skillConsumed) {
-      if (!this.fireball.fired && this.animationFrame === 3) {
-        this.fireball.fired = true;
-        this.changeState(FighterState.SPECIAL_2);
-        console.log('⚡ Rolling Attack in motion');
-      }
-
-      if (!this.isAnimationCompleted()) return;
-      fighter.skillConsumed = true;
-      fighter.superAcivated = false;
-      fighter.skillUsedThisFrame = false;
-       this.changeState(FighterState.HEAVY_PUNCH);
-    }else this.changeState(FighterState.IDLE);
-
-    this.changeState(FighterState.HEAVY_PUNCH);
-  }
-
-  // ==============================
-  // Fireball Spawn (unchanged)
-  // ==============================
-  spawnFireball(time) {
-    if (!this.position || !this.entityList) {
-      console.warn("⚠️ Missing position or entityList in spawnFireball");
-      return;
-    }
-
-    if (!this.fireball.fired && this.canFireball(time)) {
-      const strength = Control.HEAVY_PUNCH;
-      this.entityList.add(Fireball, [this, strength], time, this.entityList);
-      this.fireball.fired = true;
-      this.fireball.lastFired = time.now || performance.now();
-      console.log("🔥 Fireball launched by AI");
-    }
-  }
 }

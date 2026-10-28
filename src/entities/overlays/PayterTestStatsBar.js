@@ -676,15 +676,31 @@ drawSkillNum(context, label, x, y){
 
     }
 
-    drawNameTags(context){
-        const [name1, name2] = this.names;
-        const nameP2 = gameState.fighters[1].id;
-        
+  drawNameTags(context) {
+    const nameP1 = gameState.fighters[0].id;
+    const nameP2 = gameState.fighters[1].id;
 
-         this.drawFrame(context, name1, 32, 33);
-        // this.drawFrame(context, name2, 270, 33);
-         this.drawNameTag(context,nameP2, 293);
+    this.drawNameTag(context, nameP1, 33);
+    this.drawNameTag(context, nameP2, 341, true);
+}
+
+drawNameTag(context, name, x, alignRight = false) {
+    const strValue = String(name).toUpperCase();
+    const charSpacing = 9;
+
+    const startX = alignRight
+        ? x - (strValue.length - 1) * charSpacing
+        : x;
+
+    for (let i = 0; i < strValue.length; i++) {
+        this.drawFrame(
+            context,
+            `name-${strValue[i]}`,
+            startX + i * charSpacing,
+            33
+        );
     }
+}
     
     drawTime(context){
  const timeString = String(Math.max(this.time, 0)).padStart(2,'00');
@@ -704,15 +720,6 @@ drawSkillNum(context, label, x, y){
         }
     }
 
-     drawNameTag(context, nameP2, x){
-        const name = nameP2.toUpperCase();
-        const strValue = String(name);
-        const buffer = ((6*12)) - strValue.length * 12;
-
-        for(let i = 0; i < strValue.length; i++){
-            this.drawFrame(context, `name-${strValue[i]}`, x + buffer + i * 9, 33);
-        }
-    }
 
     drawScoreLabel(context, label, x, y){
         for (const index in label) {
