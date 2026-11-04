@@ -677,8 +677,6 @@ drawSkillNum(context, label, x, y){
             this.soundSkillMax.play();
         }
 
-        
-
     }
 
      drawNameTags(context) {

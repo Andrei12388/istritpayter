@@ -356,9 +356,28 @@ export class Fighter {
     }
 
 
-    isAnimationCompleted = () => this.animations[this.currentState][this.animationFrame][1] === FrameDelay.TRANSITION;
-    isAnimationKnockUp = () => this.animations[this.currentState][this.animationFrame][1] === 130;
-    isHyperSkillEnabled = (frameActivation) => this.animations[this.currentState][this.animationFrame][1] === frameActivation;
+    getCurrentAnimation() {
+        if (this.currentState === FighterState.DODGE_FORWARD || this.currentState === FighterState.DODGE_BACKWARD) {
+            const isForwardInput = control.isForward(this.playerId, this.direction);
+            const isBackwardInput = control.isBackward(this.playerId, this.direction);
+
+            if (this.direction === FighterDirection.RIGHT) {
+                if (isForwardInput) return this.animations[FighterState.DODGE_FORWARD] ?? this.animations[this.currentState] ?? [];
+                if (isBackwardInput) return this.animations[FighterState.DODGE_BACKWARD] ?? this.animations[this.currentState] ?? [];
+            }
+
+            if (this.direction === FighterDirection.LEFT) {
+                if (isForwardInput) return this.animations[FighterState.DODGE_FORWARD] ?? this.animations[this.currentState] ?? [];
+                if (isBackwardInput) return this.animations[FighterState.DODGE_BACKWARD] ?? this.animations[this.currentState] ?? [];
+            }
+        }
+
+        return this.animations[this.currentState] ?? [];
+    }
+
+    isAnimationCompleted = () => this.getCurrentAnimation()[this.animationFrame][1] === FrameDelay.TRANSITION;
+    isAnimationKnockUp = () => this.getCurrentAnimation()[this.animationFrame][1] === 130;
+    isHyperSkillEnabled = (frameActivation) => this.getCurrentAnimation()[this.animationFrame][1] === frameActivation;
 
     hasCollidedWithOpponent = () => rectsOverlap(
         this.position.x + this.boxes.push.x, this.position.y + this.boxes.push.y,
@@ -896,11 +915,12 @@ handleHeavyKickState(){
     if (isLanding) {
 
         // Initialize bounce count if undefined
-       
 
         // Detect a NEW bounce (only when hitting floor from above)
-        if(!this._bounceActive && this._bounceCount < 1) this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundSmoke", "foreground", this.direction);
-           
+        if(!this._bounceActive && this._bounceCount < 1){
+             this.animationFrame = 2;
+            this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundSmoke", "foreground", this.direction);
+        } 
             
         if (!this._bounceActive && this._bounceCount < 2) {
             this._bounceActive = true;
@@ -1026,10 +1046,12 @@ handleHeavyKickState(){
     if (isLanding) {
 
         // Initialize bounce count if undefined
-       
 
         // Detect a NEW bounce (only when hitting floor from above)
-        if(!this._bounceActive && this._bounceCount < 1) this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundSmoke", "foreground", this.direction);
+        if(!this._bounceActive && this._bounceCount < 1){
+               this.animationFrame = 2;
+               this.effectSplash?.(time, this.opponent.playerId, this.playerId, hitPosition, "groundSmoke", "foreground", this.direction);
+        } 
         if (!this._bounceActive && this._bounceCount < 2) {
             this._bounceActive = true;
             this._bounceCount++;
@@ -1335,7 +1357,7 @@ handleHeavyKickState(){
     }
 
     updateAnimation(time){
-        const animation = this.animations[this.currentState];
+        const animation = this.getCurrentAnimation();
         const[, frameDelay] = animation[this.animationFrame];
 
         if(time.previous <= this.animationTimer + frameDelay*gameState.slowFX) return;
@@ -1547,7 +1569,8 @@ handleHeavyKickState(){
 
 
     drawDebug(context, camera){
-        const [frameKey] = this.animations[this.currentState][this.animationFrame];
+        const animation = this.getCurrentAnimation();
+        const [frameKey] = animation[this.animationFrame];
         const boxes = this.getBoxes(frameKey);
 
         context.lineWidth = 1;
@@ -1573,7 +1596,8 @@ handleHeavyKickState(){
     }
 
      drawShadow(context, camera) {
-        const [frameKey] = this.animations[this.currentState][this.animationFrame];
+        const animation = this.getCurrentAnimation();
+        const [frameKey] = animation[this.animationFrame];
 
         const [[
             [x, y, width, height], 
@@ -1603,7 +1627,8 @@ handleHeavyKickState(){
     }
 
    drawShadowInverted(context, camera) {
-    const [frameKey] = this.animations[this.currentState][this.animationFrame];
+    const animation = this.getCurrentAnimation();
+    const [frameKey] = animation[this.animationFrame];
 
     const [[
         [x, y, width, height], 
@@ -1695,7 +1720,8 @@ else this.colorSwappedImage = hueShiftSprite(this.image, 340, 2, 1);
 
         if(!gameState.shadowInvert) this.drawShadow(context, camera);
         else this.drawShadowInverted(context, camera);
-        const [frameKey] = this.animations[this.currentState][this.animationFrame];
+        const animation = this.getCurrentAnimation();
+        const [frameKey] = animation[this.animationFrame];
 
         const [[
             [x, y, width, height], 

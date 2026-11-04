@@ -130,24 +130,24 @@ export class Mamaoni extends Fighter {
                   ['hurt-body-2', [[[331,479,58,92],[29,90]], [-21,-80,34,77], [[10,-88,20,19],[-21,-82,34,39],[-24,-45,29,41]], [0,-500,0,0]]],
                   ['hurt-body-3', [[[400,489,79,82],[39,80]], [-21,-73,42,69], [[22,-71,18,22],[-16,-75,40,30],[-32,-48,29,41]], [0,-500,0,0]]],
           
-                  ['dodge-start', [[[703,1,64,127],[32,125]], [-26,-120,40,116], [[-21,-123,21,19],[-34,-108,39,48],[-19,-75,45,74]], [0,-500,0,0]]],
-                  //Dodge Forward
-          ['dodge-forward-1', [[[790,4,95,110],[47,108]], [-21,-99,46,96], [[27,-107,21,23],[-18,-100,48,49],[-27,-65,39,59]], [0,-500,0,0]]],
-          ['dodge-forward-2', [[[899,3,104,100],[52,98]], [-17,-88,47,84], [[32,-96,20,25],[-6,-87,40,33],[-22,-67,40,60]], [0,-500,0,0]]],
+                  ['dodge-start', [[[651,1,51,115],[25,113]], [-22,-107,34,104], [[-17,-110,20,18],[-24,-93,28,43],[-19,-72,39,71]], [0,-500,0,0]]],
+      //Dodge Backwards
+['dodge-backward-1', [[[561,3,73,94],[36,92]], [-27,-86,34,83], [[-33,-91,20,21],[-32,-71,38,40],[-7,-54,29,52]], [0,-500,0,0]]],
+['dodge-backward-2', [[[474,9,84,77],[42,75]], [-37,-59,59,45], [[-44,-75,20,21],[-30,-51,40,33],[-1,-41,31,38]], [0,-500,0,0]]],
           
-                  //Dodge Backward
-          ['dodge-backward-1', [[[587,3,92,104],[46,102]], [-27,-80,36,78], [[-43,-99,20,19],[-39,-80,44,45],[-4,-59,40,57]], [0,-500,0,0]]],
-          ['dodge-backward-2', [[[477,10,108,85],[54,83]], [-41,-59,70,43], [[-53,-83,20,25],[-45,-63,48,41],[4,-54,29,41]], [0,-500,0,0]]],
+        //Dodge Forward
+['dodge-forward-1', [[[718,4,75,100],[37,98]], [-10,-90,26,80], [[18,-95,20,19],[-13,-79,44,45],[-21,-58,31,57]], [0,-500,0,0]]],
+['dodge-forward-2', [[[803,3,82,91],[41,89]], [-14,-74,38,65], [[21,-88,19,20],[-12,-74,38,30],[-24,-48,33,42]], [0,-500,0,0]]],
           
         //Death
 ['death-1', [[[576,499,67,104],[33,102]], [-20,-94,36,93], [[-34,-101,25,20],[-29,-94,44,45],[-8,-54,32,49]], [0,-500,0,0]]],
 ['death-2', [[[651,499,81,99],[40,97]], [-19,-88,43,79], [[-41,-92,21,25],[-26,-84,48,42],[11,-49,28,49]], [0,-500,0,0]]],
 ['death-3', [[[738,504,97,85],[48,83]], [-24,-70,61,61], [[-51,-64,25,20],[-38,-69,43,31],[0,-54,39,51]], [0,-500,0,0]]],
-['death-4', [[[837,510,105,64],[52,62]], [-44,-34,94,32], [[-53,-35,23,23],[-45,-38,58,25],[5,-27,46,21]], [0,-500,0,0]]],
-['death-5', [[[582,620,105,53],[52,51]], [-49,-27,100,27], [[-52,-20,14,19],[-38,-37,57,38],[4,-28,47,30]], [0,-500,0,0]]],
-['death-6', [[[699,623,110,48],[55,46]], [-55,-28,108,25], [[-55,-30,19,25],[-42,-33,51,31],[5,-25,46,24]], [0,-500,0,0]]],
-['death-7', [[[830,633,108,36],[54,34]], [-50,-27,101,21], [[-54,-27,17,17],[-45,-32,70,24],[1,-28,49,26]], [0,-500,0,0]]],
-['death-8', [[[673,492,97,103],[48,101]], [-41,-59,70,43], [[-53,-83,20,25],[-45,-63,48,41],[4,-54,29,41]], [0,-500,0,0]]],
+['death-4', [[[837,510,105,64],[52,62]], [-44,-38,88,23], [[-53,-35,23,23],[-45,-38,58,25],[5,-27,46,21]], [0,-500,0,0]]],
+['death-5', [[[582,620,105,53],[52,51]], [-50,-35,94,23], [[-52,-20,14,19],[-38,-37,57,38],[4,-28,47,30]], [0,-500,0,0]]],
+['death-6', [[[699,623,110,48],[55,38]], [-53,-33,99,20], [[-55,-30,19,25],[-42,-33,51,31],[5,-25,46,24]], [0,-500,0,0]]],
+['death-7', [[[830,633,108,36],[54,26]], [-50,-27,101,21], [[-54,-27,17,17],[-45,-32,70,24],[1,-28,49,26]], [0,-500,0,0]]],
+['death-8', [[[673,492,97,103],[48,92]], [-41,-59,70,43], [[-53,-83,20,25],[-45,-63,48,41],[4,-54,29,41]], [0,-500,0,0]]],
 
 //getUp
 ['getUp-1', [[[395,595,80,41],[40,39]], [-24,-38,63,37], [[19,-39,21,25],[-21,-38,52,37],[-33,-31,27,34]], [0,-500,0,0]]],
@@ -193,7 +193,15 @@ export class Mamaoni extends Fighter {
                                             ],
                                             [FighterState.CROUCH_UP]:[
                                                 ['crouch-3', 30],['crouch-2', 30],['crouch-1', 30],['crouch-1', FrameDelay.TRANSITION],
-                                            ],        
+                                            ],
+                                             [FighterState.IDLE_TURN]:[
+                                            ['idle-3', 33],['idle-2', 33],
+                                            ['idle-1', 33],['idle-1', FrameDelay.TRANSITION],
+                                            ],
+                                            [FighterState.CROUCH_TURN]:[
+                                            ['crouch-3', 33],['crouch-2', 33],
+                                            ['crouch-1', 33],['crouch-1', FrameDelay.TRANSITION],
+                                             ],                
                      [FighterState.LIGHT_PUNCH]:[
                         ['light-punch-1', 33],['light-punch-2', 33],['light-punch-3', 66],
                         ['light-punch-2', 66],['light-punch-1', FrameDelay.TRANSITION],
@@ -317,6 +325,8 @@ export class Mamaoni extends Fighter {
             x:{
                 [FighterState.WALK_FORWARD]: 3 * 60,
                 [FighterState.WALK_BACKWARD]: -(2 * 60),
+                [FighterState.DODGE_FORWARD]: -((80 * 4) + (12 * 2)),
+                [FighterState.DODGE_BACKWARD]: ((80 * 4) + (12 * 3)),
                 [FighterState.JUMP_FORWARD]: ((48 * 3) + (12 * 2)),
                 [FighterState.JUMP_BACKWARD]: -((45 * 4) + (15 * 3)),
             },
@@ -357,16 +367,16 @@ export class Mamaoni extends Fighter {
                 cursor: 0,
             },
             {
+                            state: FighterState.DODGE_BACKWARD,
+                            sequence: 
+                            [SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD,SpecialMoveButton.BC,
+                            ],
+                            cursor: 0,
+                        },
+            {
                 state: FighterState.DODGE_FORWARD,
                 sequence: 
-                [SpecialMoveDirection.FORWARD, SpecialMoveDirection.FORWARD, SpecialMoveButton.BC,
-                ],
-                cursor: 0,
-            },
-            {
-                state: FighterState.DODGE_BACKWARD,
-                sequence: 
-                [SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveButton.BC,
+                [SpecialMoveDirection.FORWARD,SpecialMoveDirection.FORWARD, SpecialMoveButton.BC,
                 ],
                 cursor: 0,
             },
@@ -376,36 +386,36 @@ export class Mamaoni extends Fighter {
         
         this.fireball = {fired: false, strength: undefined};
         
-        this.states[FighterState.DODGE_FORWARD] = {
+         this.states[FighterState.DODGE_FORWARD] = {
              init: this.handleDodgeForwardInit.bind(this),
              update: this.handleDodgeState.bind(this),
+             shadow: [0, 0, 0, 0],
            
             validFrom: [
                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, 
                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
                 FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD,
-                 FighterState.HEADBUTT, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
             ],
         }
         this.states[FighterState.DODGE_BACKWARD] = {
             init: this.handleDodgeBackwardInit.bind(this),
             update: this.handleDodgeState.bind(this),
+             shadow: [0, 0, 0, 0],
            
             validFrom: [
                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, 
                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
                 FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD,
-                FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
             ],
-        }  
+        }
     
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_1];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_2];
         this.states[FighterState.JUMP_BACKWARD].validFrom = [...this.states[FighterState.JUMP_BACKWARD].validFrom, FighterState.HYPERSKILL_1];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.HYPERSKILL_2];
-        //DOdges
+        //Dodges
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_FORWARD];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_BACKWARD];
        
@@ -413,40 +423,32 @@ export class Mamaoni extends Fighter {
     }
 
   
+ handleIdleInit(){
+                this.resetVelocities();
+                this.gravity = 1000;
+            }
 
-     handleIdleInit(){
-            this.resetVelocities();
-            this.gravity = 1000;
-            this.attackStruck = false;
-            if(this.position.y >= STAGE_FLOOR)this.headbuttActivate = false;
-        }
+   handleDodgeForwardInit() {
+    this.gravity = 1000;
+    this.velocity.y = 0;
+    this.velocity.x = this.direction * (this.initialVelocity.x[FighterState.DODGE_FORWARD] ?? 0);
+}
 
-    handleDodgeForwardInit(distance, playerId){
-        distance = 100;
-        this.gravity = 1000;
-        this.position.x -= distance;
-
-       // gameState.fighters[this.playerId].sprite += 1;
-
-        playSound(this.soundTeleport);
-        this.handleMoveInit();
-    }
-
-     handleDodgeBackwardInit(distance, playerId){
-        distance = 100;
-        this.gravity = 1000;
-        this.position.x += distance;
-
-      //  gameState.fighters[this.playerId].sprite += 1;
- 
-        playSound(this.soundTeleport);
-        this.handleMoveInit();
-    }
-
-     handleDodgeState(){
+   handleDodgeBackwardInit() {
+    this.gravity = 1000;
+    this.velocity.y = 0;
+    this.velocity.x = this.direction * (this.initialVelocity.x[FighterState.DODGE_BACKWARD] ?? 0);
+}
        
-        if (!this.isAnimationCompleted()) return;
-        this.changeState(FighterState.IDLE);
-    }
+   handleDodgeState() {
+    gameState.dodging = true;
+
+    if (!this.isAnimationCompleted()) return;
+
+    gameState.dodging = false;
+    this.velocity.x = 0;
+    this.direction = this.getDirection();
+    this.changeState(FighterState.IDLE);
+}
 
 }
