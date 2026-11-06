@@ -34,14 +34,14 @@ export class Mamaoni extends Fighter {
         this.voiceSpecial2.volume = 0.9;
         this.voiceSpecial3.volume = 0.9;
         this.voiceHyperSkill1.volume = 0.9;
-        this.deathSound = document.querySelector('audio#sound-malupiton-death');
+        this.deathSound = document.querySelector('audio#sound-mamaoni-death');
         this.deathSound.volume = 0.9;
         this.soundSuperLaunch = document.querySelector('audio#super-launch');
   
         this.soundPayterHurts = [
-            document.querySelector("audio#sound-malupiton-hurt-1"),
-            document.querySelector("audio#sound-malupiton-hurt-2"),
-            document.querySelector("audio#sound-malupiton-hurt-3"),
+            document.querySelector("audio#sound-mamaoni-hurt-1"),
+            document.querySelector("audio#sound-mamaoni-hurt-2"),
+            document.querySelector("audio#sound-mamaoni-hurt-3"),
         ];
         
         this.frames = new Map([
@@ -310,10 +310,10 @@ export class Mamaoni extends Fighter {
                                 ['death-7', FrameDelay.FREEZE],
                             ],
                             [FighterState.FALL]:[
-                                ['fall-4', 100], ['fall-5', 100], ['fall-6', 100], 
-                                ['fall-7', 100],
-                                ['fall-7', FrameDelay.TRANSITION],
-                            ],
+                        ['death-4', 100], ['death-5', 100], ['death-6', 100], 
+                        ['death-7', 100],
+                        ['death-7', FrameDelay.TRANSITION],
+                        ],
                              [FighterState.GETUP]:[
                                 ['death-7', 300], ['getUp-1', 120], ['getUp-2', 120], ['getUp-3', 120],
                                 ['getUp-3', FrameDelay.TRANSITION],

@@ -780,7 +780,7 @@ handleHeavyKickState(){
         this.changeState(FighterState.CROUCH);
     }
     handleJumpHeavyKickState(){
-        if (!this.isAnimationCompleted()) return;
+       // if (!this.isAnimationCompleted()) return;
         if(this.position.y >= STAGE_FLOOR){
             this.changeState(FighterState.IDLE);
             return;

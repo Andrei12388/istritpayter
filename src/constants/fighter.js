@@ -47,7 +47,7 @@ export const FighterAttackBaseData = {
         y: 0,
     },
     slide: {
-        velocity: -10 * FRAME_TIME,
+        velocity: -8 * FRAME_TIME,
         friction: 300,
     },
   // effect: { type: 'burn', duration: 1500 },
@@ -62,7 +62,7 @@ export const FighterAttackBaseData = {
     },
     damage: 8,
     slide: {
-        velocity: -23 * FRAME_TIME,
+        velocity: -18 * FRAME_TIME,
         friction: 500,
     },
   // effect: { type: 'poison', duration: 1500 },
