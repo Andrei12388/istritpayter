@@ -265,6 +265,9 @@ KNEEDASH: 'knee-dash',
 TORNADO_DIG: 'tornado-dig',
 PICKUP: 'pickup',
 TOSS: 'toss',
+
+//Mama Oni Moves
+CHUNLI_KICK: 'chunli-kick',
 };
 
 export const FrameDelay = {
