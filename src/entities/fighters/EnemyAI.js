@@ -3,6 +3,7 @@ import { Control, controls } from "../../constants/control.js";
 import { heldKeys, pressedKeys } from "../../inputHandler.js";
 import { FighterHurtBox, FighterState } from "../../constants/fighter.js";
 import { gameState } from "../../state/gameState.js";
+import { getCharacterComboSet, getRandomLongDistanceMove } from "./longDistanceMovePool.js";
 
 function randomBetween(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -85,13 +86,51 @@ export class EnemyAI {
     this.isBlocking = false;
     this.blockUntil = 0;
     this.nextDecisionTime = 0;
+    this.stateComboQueue = [];
+    this.stateComboTimer = 0;
     // Enable to log slow AI frames (ms)
     this.debugProfiling = true;
   }
 
-  
+  queueStateCombo(steps, time) {
+    this.stateComboQueue = [...steps];
+    this.stateComboTimer = 0;
 
+    if (this.stateComboQueue.length) {
+      this.executeStateCombo(time);
+    }
+  }
 
+  executeStateCombo(time) {
+    if (!this.stateComboQueue.length) return false;
+    if (this.stateComboTimer > 0) return false;
+
+    const queuedStep = this.stateComboQueue.shift();
+    const nextState = queuedStep?.state ?? queuedStep;
+    const stepDuration = queuedStep?.duration ?? 180;
+    if (!nextState) return false;
+
+    if (
+      nextState === FighterState.SPECIAL_1 ||
+      nextState === FighterState.SPECIAL_2 ||
+      nextState === FighterState.HYPERSKILL_1 ||
+      nextState === FighterState.HYPERSKILL_2
+    ) {
+      const skillCost = nextState === FighterState.HYPERSKILL_1 || nextState === FighterState.HYPERSKILL_2 ? 3 : 1;
+      const currentSkill = gameState.fighters[this.fighter.playerId]?.skillNumber ?? 0;
+      if (currentSkill < skillCost) return false;
+      this.fighter.skillNumber = Math.max(0, this.fighter.skillNumber - skillCost);
+    }
+
+    this.resetInputs();
+    const triggered = this.safeChangeState(nextState, time, 1);
+    if (!triggered) {
+      return this.executeStateCombo(time);
+    }
+
+    this.stateComboTimer = stepDuration;
+    return true;
+  }
 
   // -------------------- INPUT HELPERS --------------------
   resetInputs() {
@@ -155,6 +194,14 @@ export class EnemyAI {
     // Always run combo if queued
     if (this.comboQueue.length) {
       this.runCombo(delta);
+      return;
+    }
+
+    if (this.stateComboQueue.length) {
+      this.stateComboTimer = Math.max(0, this.stateComboTimer - delta);
+      if (this.stateComboTimer <= 0) {
+        this.executeStateCombo(time);
+      }
       return;
     }
 
@@ -296,6 +343,12 @@ export class EnemyAI {
   }
 
   performAttack() {
+    const characterCombo = getCharacterComboSet(this.fighter);
+    if (characterCombo.length && Math.random() < 0.5) {
+      this.queueStateCombo(characterCombo, { now: performance.now(), secondsPassed: 0 });
+      return;
+    }
+
     const combos = [
       [{ control: Control.LIGHT_PUNCH, duration: 150 },{ control: Control.LIGHT_PUNCH, duration: 150 }, { control: Control.HEAVY_PUNCH, duration: 150 }],
       [{ control: Control.LIGHT_KICK, duration: 150 },{ control: Control.LIGHT_PUNCH, duration: 150 }, { control: Control.HEAVY_KICK, duration: 150 }],
@@ -343,6 +396,21 @@ export class EnemyAI {
         this.fighter.skillNumber -= 3;
         this.fighter.performHyperSkill2?.(time, defaultStrength) ??  this.safeChangeState(FighterState.HYPERSKILL_2, time, defaultStrength);
         break;
+      case FighterState.SPECIAL_MOVE_1:
+        this.safeChangeState(FighterState.SPECIAL_MOVE_1, time, 1);
+        break;
+      case FighterState.SPECIAL_MOVE_2:
+        this.safeChangeState(FighterState.SPECIAL_MOVE_2, time, 1);
+        break;
+      case FighterState.SPECIAL_MOVE_5:
+        this.safeChangeState(FighterState.SPECIAL_MOVE_5, time, 1);
+        break;
+      case FighterState.SPECIAL_MOVE_4:
+        this.safeChangeState(FighterState.SPECIAL_MOVE_4, time, 1);
+        break;
+      case FighterState.SPECIAL_MOVE_3:
+        this.safeChangeState(FighterState.SPECIAL_MOVE_3, time, 'heavyKick');
+        break;
       default:
          this.safeChangeState(move, time, defaultStrength);
     }
@@ -358,20 +426,25 @@ export class EnemyAI {
 
   // Long distance move: ranged attacks for when opponent is far
   performLongDistanceMove(time) {
-    const enemySkillNumber = gameState.fighters[this.fighter.playerId].skillNumber;
-    const moves = [FighterState.HEADBUTT, FighterState.SPECIAL_1, FighterState.SPECIAL_2, FighterState.SPECIAL_2_ROCKRELEASE, FighterState.TORNADO_DIG,FighterState.KNEEDASH, FighterState.HEADBUTT_DOWN];
-    const move = moves[Math.floor(Math.random() * moves.length)];
+    const enemySkillNumber = gameState.fighters[this.fighter.playerId]?.skillNumber ?? 0;
+    const comboSet = getCharacterComboSet(this.fighter);
+    const move = getRandomLongDistanceMove(this.fighter);
     const defaultStrength = 1;
+
+    if (comboSet.length && Math.random() < 0.15) {
+      this.queueStateCombo(comboSet, time);
+      return;
+    }
 
     this.resetInputs(); // Make sure move triggers
     switch (move) {
       case FighterState.SPECIAL_1:
-        if(enemySkillNumber < 1) return;
+        if (enemySkillNumber < 1) return;
         this.fighter.skillNumber -= 1;
         this.fighter.performSpecial1?.(time, defaultStrength) ?? this.safeChangeState(FighterState.SPECIAL_1, time, defaultStrength);
         break;
       case FighterState.SPECIAL_2:
-        if(enemySkillNumber < 1) return;
+        if (enemySkillNumber < 1) return;
         this.fighter.skillNumber -= 1;
         this.fighter.performSpecial2?.(time, defaultStrength) ?? this.safeChangeState(FighterState.SPECIAL_2, time, 300);
         break;
@@ -379,29 +452,14 @@ export class EnemyAI {
         this.fighter.performSpecial2?.(time, defaultStrength) ?? this.safeChangeState(FighterState.SPECIAL_2_ROCKRELEASE, time, 300);
         break;
       case FighterState.HYPERSKILL_1:
-        if(enemySkillNumber < 3) return;
+        if (enemySkillNumber < 3) return;
         this.fighter.skillNumber -= 3;
         this.fighter.performHyperSkill1?.(time, defaultStrength) ?? this.safeChangeState(FighterState.HYPERSKILL_1, time, defaultStrength);
         break;
       case FighterState.HYPERSKILL_2:
-        if(enemySkillNumber < 3) return;
+        if (enemySkillNumber < 3) return;
         this.fighter.skillNumber -= 3;
         this.fighter.performHyperSkill2?.(time, defaultStrength) ?? this.safeChangeState(FighterState.HYPERSKILL_2, time, defaultStrength);
-        break;
-      case FighterState.HEADBUTT:
-        this.safeChangeState(FighterState.HEADBUTT, time, 1);
-        break;
-      case FighterState.HEADBUTT_DOWN:
-        this.safeChangeState(FighterState.HEADBUTT_DOWN, time, 1);
-        break;
-      case FighterState.HEADBUTT_UP:
-        this.safeChangeState(FighterState.HEADBUTT_UP, time, 1);
-        break;
-      case FighterState.TORNADO_DIG:
-        this.safeChangeState(FighterState.TORNADO_DIG, time, 1);
-        break;
-      case FighterState.KNEEDASH:
-        this.safeChangeState(FighterState.KNEEDASH, time, 'heavyKick');
         break;
       default:
         this.safeChangeState(move, time, defaultStrength);

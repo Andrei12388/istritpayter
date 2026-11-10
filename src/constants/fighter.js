@@ -268,6 +268,13 @@ TOSS: 'toss',
 
 //Mama Oni Moves
 CHUNLI_KICK: 'chunli-kick',
+
+//Special Moves
+SPECIAL_MOVE_1: 'special-move-1',
+SPECIAL_MOVE_2: 'special-move-2',
+SPECIAL_MOVE_3: 'special-move-3',
+SPECIAL_MOVE_4: 'special-move-4',
+SPECIAL_MOVE_5: 'special-move-5',
 };
 
 export const FrameDelay = {

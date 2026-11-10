@@ -328,11 +328,11 @@ export class Mamaoni extends Fighter {
                                 ['death-7', 300], ['getUp-1', 120], ['getUp-2', 120], ['getUp-3', 120],
                                 ['getUp-3', FrameDelay.TRANSITION],
                             ], 
-                            [FighterState.KNEEDASH]:[
+                            [FighterState.SPECIAL_MOVE_1]:[
                                         ['slide-start', 80],['slide-backward-1', 60],['slide-backward-2', 120],['slide-backward-2', 40],['slide-backward-1', 40],
                                                ['slide-backward-1', FrameDelay.TRANSITION],
                                     ],     
-                                     [FighterState.CHUNLI_KICK]:[
+                                     [FighterState.SPECIAL_MOVE_2]:[
                                     ['chun-li-1', 50],['chun-li-2', 50],['chun-li-3', 50],['chun-li-2', 50],['chun-li-1', 50],
                                 ['chun-li-1', FrameDelay.TRANSITION],
                             ],         
@@ -399,21 +399,21 @@ export class Mamaoni extends Fighter {
                 cursor: 0,
             },
             {
-                state: FighterState.KNEEDASH,
+                state: FighterState.SPECIAL_MOVE_1,
                 sequence: 
                 [SpecialMoveDirection.DOWN,SpecialMoveDirection.BACKWARD_DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveButton.ANY_KICK,
                 ],
                 cursor: 0,
             },
              {
-                state: FighterState.CHUNLI_KICK,
+                state: FighterState.SPECIAL_MOVE_2,
                 sequence: 
                 [SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveButton.ANY_KICK, SpecialMoveButton.ANY_KICK,SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveButton.ANY_KICK, SpecialMoveButton.ANY_KICK,
                 ],
                 cursor: 0,
             },
             {
-                state: FighterState.CHUNLI_KICK,
+                state: FighterState.SPECIAL_MOVE_2,
                 sequence: 
                 [SpecialMoveDirection.FORWARD, SpecialMoveDirection.FORWARD, SpecialMoveButton.ANY_KICK, SpecialMoveButton.ANY_KICK,SpecialMoveDirection.FORWARD, SpecialMoveDirection.FORWARD, SpecialMoveButton.ANY_KICK, SpecialMoveButton.ANY_KICK,
                 ],
@@ -449,7 +449,8 @@ export class Mamaoni extends Fighter {
                 FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD,
             ],
         }
-         this.states[FighterState.KNEEDASH] = {
+                        //Slide Kick
+                        this.states[FighterState.SPECIAL_MOVE_1] = {
                             attackType: FighterAttackType.KICK,
                              attackStrength: FighterAttackStrength.HEAVY,
                              init: this.handleKneeDashInit.bind(this),
@@ -458,12 +459,12 @@ export class Mamaoni extends Fighter {
                             validFrom: [
                                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.WALK_BACKWARD,
                                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_BLOCK,
-                                FighterState.JUMP_LIGHTKICK, FighterState.JUMP_HEAVYKICK,
-                                FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD,
-                                FighterState.JUMP_UP, FighterState.JUMP_START, FighterState.JUMP_LAND, 
+                                FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, 
+                                
                             ],
                         }
-        this.states[FighterState.CHUNLI_KICK] = {
+                        //Chun Li Kicks
+        this.states[FighterState.SPECIAL_MOVE_2] = {
                             attackType: FighterAttackType.KICK,
                              attackStrength: FighterAttackStrength.LIGHT,
                              init: this.handleChunliKickInit.bind(this),
@@ -481,9 +482,10 @@ export class Mamaoni extends Fighter {
         //Dodges
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_FORWARD];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_BACKWARD];
+
         //Special Moves
-        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.KNEEDASH];
-        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.CHUNLI_KICK];
+        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_MOVE_1];
+        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_MOVE_2];
        
         
     }

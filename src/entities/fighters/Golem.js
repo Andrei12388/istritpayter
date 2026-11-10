@@ -709,6 +709,7 @@ export class Golem extends Fighter {
                 FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD,
             ],
         }
+        //Knee Dash Move
          this.states[FighterState.KNEEDASH] = {
                     attackType: FighterAttackType.KICK,
                      attackStrength: FighterAttackStrength.HEAVY,
@@ -723,6 +724,8 @@ export class Golem extends Fighter {
                         FighterState.JUMP_UP, FighterState.JUMP_START, FighterState.JUMP_LAND, 
                     ],
                 }
+
+                //Tornado Dig Move
         this.states[FighterState.TORNADO_DIG] = {
                     attackType: FighterAttackType.PUNCH,
             attackStrength: FighterAttackStrength.HEAVY,
@@ -766,6 +769,7 @@ export class Golem extends Fighter {
 
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_FORWARD];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_BACKWARD];
+
         //Special Moves
          this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.KNEEDASH];
          this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.TORNADO_DIG];

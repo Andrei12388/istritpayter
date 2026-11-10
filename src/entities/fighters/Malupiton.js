@@ -355,29 +355,29 @@ export class Malupiton extends Fighter {
                 ['light-kick-1', 66],['light-kick-1', FrameDelay.TRANSITION],
                  // ['jump-attack-1',FrameDelay.TRANSITION],
             ],
-            [FighterState.KNOCKLIFT]:[
+            [FighterState.SPECIAL_MOVE_1]:[
                 ['knock-lift-7', 50],['knock-lift-6', 50],
                 ['knock-lift-5', 50],['knock-lift-4', 50],
                 ['knock-lift-3', 50],['knock-lift-2', 50],
                 ['knock-lift-1', FrameDelay.TRANSITION],
             ],
-            [FighterState.KNOCKLIFTDOWN]:[
+            [FighterState.SPECIAL_MOVE_2]:[
                 ['knock-lift-1', 50],['knock-lift-2', 50],
                 ['knock-lift-3', 50],['knock-lift-4-down', 50],
                 ['knock-lift-5', 50],['knock-lift-6', 50],
                 ['knock-lift-7', FrameDelay.TRANSITION],
             ],
-            [FighterState.HEADBUTT]:[
+            [FighterState.SPECIAL_MOVE_3]:[
                 ['headbutt-1', 80],['headbutt-2', 80],
                 ['headbutt-3', 1000],
                 ['headbutt-3', FrameDelay.TRANSITION],
             ],
-            [FighterState.HEADBUTT_UP]:[
+            [FighterState.SPECIAL_MOVE_4]:[
                 ['headbutt-up-1', 80],['headbutt-up-2', 80],
                 ['headbutt-up-3', 1000],
                 ['headbutt-up-3', FrameDelay.TRANSITION],
             ],
-            [FighterState.HEADBUTT_DOWN]:[
+            [FighterState.SPECIAL_MOVE_5]:[
                 ['headbutt-down-1', 40],['headbutt-down-2', 40],
                 ['headbutt-down-3', 1000],
                 ['headbutt-down-3', FrameDelay.TRANSITION],
@@ -497,9 +497,9 @@ export class Malupiton extends Fighter {
                 [FighterState.WALK_BACKWARD]: -(2 * 60),
                 [FighterState.JUMP_FORWARD]: ((48 * 3) + (12 * 2)),
                 [FighterState.JUMP_BACKWARD]: -((45 * 4) + (15 * 3)),
-                [FighterState.HEADBUTT]: 600,
-                [FighterState.HEADBUTT_UP]: 600,
-                [FighterState.HEADBUTT_DOWN]: 700,
+                [FighterState.SPECIAL_MOVE_3]: 600,
+                [FighterState.SPECIAL_MOVE_4]: 600,
+                [FighterState.SPECIAL_MOVE_5]: 700,
             },
             jump: -420,
         };
@@ -552,40 +552,41 @@ export class Malupiton extends Fighter {
                 cursor: 0,
             },
              {
-                state: FighterState.KNOCKLIFT,
+                state: FighterState.SPECIAL_MOVE_1,
                 sequence: 
                 [SpecialMoveDirection.DOWN,SpecialMoveDirection.BACKWARD_DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveButton.HEAVY_KICK,
                 ],
                 cursor: 0,
             },
             {
-                state: FighterState.KNOCKLIFTDOWN,
+                state: FighterState.SPECIAL_MOVE_2,
                 sequence: 
                 [SpecialMoveDirection.DOWN, SpecialMoveDirection.FORWARD_DOWN, SpecialMoveDirection.FORWARD, SpecialMoveButton.HEAVY_KICK,
                 ],
                 cursor: 0,
             },
            {
-                state: FighterState.HEADBUTT_DOWN,
+                state: FighterState.SPECIAL_MOVE_3,
+                sequence: 
+                [SpecialMoveDirection.DOWN,SpecialMoveDirection.BACKWARD_DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveButton.HEAVY_PUNCH,
+                ],
+                cursor: 0,
+            },
+            {
+                state: FighterState.SPECIAL_MOVE_4,
                 sequence: 
                 [SpecialMoveDirection.DOWN,SpecialMoveDirection.FORWARD_DOWN, SpecialMoveDirection.FORWARD, SpecialMoveDirection.FORWARD, SpecialMoveButton.HEAVY_PUNCH,
                 ],
                 cursor: 0,
             },
             {
-                state: FighterState.HEADBUTT_UP,
+                state: FighterState.SPECIAL_MOVE_5,
                 sequence: 
                 [SpecialMoveDirection.DOWN,SpecialMoveDirection.FORWARD_DOWN, SpecialMoveDirection.FORWARD, SpecialMoveDirection.FORWARD, SpecialMoveButton.HEAVY_PUNCH,
                 ],
                 cursor: 0,
             },
-             {
-                state: FighterState.HEADBUTT,
-                sequence: 
-                [SpecialMoveDirection.DOWN,SpecialMoveDirection.BACKWARD_DOWN, SpecialMoveDirection.BACKWARD, SpecialMoveDirection.BACKWARD, SpecialMoveButton.HEAVY_PUNCH,
-                ],
-                cursor: 0,
-            },
+             
             
         ];
         this.gravity = 1000;
@@ -601,7 +602,7 @@ export class Malupiton extends Fighter {
                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD, FighterState.JUMP_START,
                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
-                FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
+                FighterState.SPECIAL_MOVE_1, FighterState.SPECIAL_MOVE_2,
             ],
         }
         this.states[FighterState.SPECIAL_2] = {
@@ -614,7 +615,7 @@ export class Malupiton extends Fighter {
                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, 
                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
-                FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
+                FighterState.SPECIAL_MOVE_1,FighterState.SPECIAL_MOVE_2,
             ],
         }
         this.states[FighterState.HYPERSKILL_1] = {
@@ -627,7 +628,7 @@ export class Malupiton extends Fighter {
                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.JUMP_UP, FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD, FighterState.JUMP_LAND,
                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
-                FighterState.HEADBUTT, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
+                FighterState.SPECIAL_MOVE_3, FighterState.SPECIAL_MOVE_1, FighterState.SPECIAL_MOVE_2,
             ],
         }
         this.states[FighterState.HYPERSKILL_2] = {
@@ -640,7 +641,7 @@ export class Malupiton extends Fighter {
                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.JUMP_UP, FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD, FighterState.JUMP_LAND,
                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_BLOCK,
-                FighterState.HEADBUTT, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
+                FighterState.SPECIAL_MOVE_3, FighterState.SPECIAL_MOVE_1,FighterState.SPECIAL_MOVE_2,
             ],
         }
         
@@ -653,7 +654,7 @@ export class Malupiton extends Fighter {
                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
                 FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD,
-                 FighterState.HEADBUTT, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
+                 FighterState.SPECIAL_MOVE_3, FighterState.SPECIAL_MOVE_1,FighterState.SPECIAL_MOVE_2,
             ],
         }
         this.states[FighterState.DODGE_BACKWARD] = {
@@ -665,10 +666,11 @@ export class Malupiton extends Fighter {
                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN,
                 FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD,
-                FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
+                FighterState.SPECIAL_MOVE_1,FighterState.SPECIAL_MOVE_2,
             ],
         }
-        this.states[FighterState.KNOCKLIFT] = {
+        //Knock Lift Move
+        this.states[FighterState.SPECIAL_MOVE_1] = {
              attackType: FighterAttackType.PUNCH,
             attackStrength: FighterAttackStrength.KNOCKLIFT,
              init: this.handleKnockLiftInit.bind(this),
@@ -678,11 +680,12 @@ export class Malupiton extends Fighter {
                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, 
                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_BLOCK,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, FighterState.JUMP_LIGHTKICK, FighterState.JUMP_HEAVYKICK,
-                FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD, FighterState.JUMP_START, FighterState.JUMP_LAND, FighterState.KNOCKLIFTDOWN
+                FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD, FighterState.JUMP_START, FighterState.JUMP_LAND, FighterState.SPECIAL_MOVE_2,
                  
             ],
         }
-        this.states[FighterState.KNOCKLIFTDOWN] = {
+        //Knock Lift Down Move
+        this.states[FighterState.SPECIAL_MOVE_2] = {
             attackType: FighterAttackType.KICK,
             attackStrength: FighterAttackStrength.KNOCKLIFTDOWN,
              init: this.handleKnockLiftInit.bind(this),
@@ -692,11 +695,12 @@ export class Malupiton extends Fighter {
                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, 
                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_BLOCK,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, FighterState.JUMP_LIGHTKICK, FighterState.JUMP_HEAVYKICK,
-                FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD, FighterState.JUMP_START, FighterState.JUMP_LAND, FighterState.KNOCKLIFT,
+                FighterState.JUMP_UP, FighterState.JUMP_FORWARD, FighterState.JUMP_BACKWARD, FighterState.JUMP_START, FighterState.JUMP_LAND, FighterState.SPECIAL_MOVE_1,
                
             ],
         }
-        this.states[FighterState.HEADBUTT] = {
+        //Headbutt Straight Move
+        this.states[FighterState.SPECIAL_MOVE_3] = {
             attackType: FighterAttackType.PUNCH,
             attackStrength: FighterAttackStrength.HEAVY,
              init: this.handleHeadbuttInit.bind(this),
@@ -707,10 +711,11 @@ export class Malupiton extends Fighter {
                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_BLOCK,
                 FighterState.JUMP_LIGHTKICK, FighterState.JUMP_HEAVYKICK,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD,
-                FighterState.JUMP_UP, FighterState.JUMP_START, FighterState.JUMP_LAND, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
+                FighterState.JUMP_UP, FighterState.JUMP_START, FighterState.JUMP_LAND, 
             ],
         }
-        this.states[FighterState.HEADBUTT_UP] = {
+        //Headbutt up move
+        this.states[FighterState.SPECIAL_MOVE_4] = {
             attackType: FighterAttackType.PUNCH,
             attackStrength: FighterAttackStrength.HEAVY,
              init: this.handleHeadbuttUpInit.bind(this),
@@ -720,10 +725,11 @@ export class Malupiton extends Fighter {
                 FighterState.IDLE, FighterState.WALK_FORWARD, FighterState.IDLE_TURN, FighterState.WALK_BACKWARD,
                 FighterState.HEAVY_PUNCH, FighterState.LIGHT_PUNCH, FighterState.LIGHT_KICK, FighterState.HEAVY_KICK, FighterState.CROUCH_HEAVYKICK, FighterState.CROUCH_LIGHTKICK, FighterState.CROUCH_BLOCK,
                 FighterState.CROUCH, FighterState.CROUCH_DOWN, FighterState.CROUCH_UP, FighterState.CROUCH_TURN, 
-                FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
+                
             ],
         }
-        this.states[FighterState.HEADBUTT_DOWN] = {
+        //Headbutt Down Move
+        this.states[FighterState.SPECIAL_MOVE_5] = {
             attackType: FighterAttackType.PUNCH,
             attackStrength: FighterAttackStrength.HEAVY,
              init: this.handleHeadbuttDownInit.bind(this),
@@ -732,7 +738,7 @@ export class Malupiton extends Fighter {
             validFrom: [
                 FighterState.JUMP_LIGHTKICK, FighterState.JUMP_HEAVYKICK,
                  FighterState.JUMP_BACKWARD, FighterState.JUMP_FORWARD,
-                FighterState.JUMP_UP, FighterState.JUMP_START, FighterState.JUMP_LAND, FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN,
+                FighterState.JUMP_UP, FighterState.JUMP_START, FighterState.JUMP_LAND, FighterState.SPECIAL_MOVE_1,FighterState.SPECIAL_MOVE_2,
             ],
         }
         
@@ -745,25 +751,24 @@ export class Malupiton extends Fighter {
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_FORWARD];
         this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.DODGE_BACKWARD];
         //special moves
-        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.KNOCKLIFT];
-        
-        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.KNOCKLIFTDOWN];
-        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.HEADBUTT];
-        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.HEADBUTT_UP];
-        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.HEADBUTT_DOWN];
+        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_MOVE_1];
+        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_MOVE_2];
+        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_MOVE_3];
+        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_MOVE_4];
+        this.states[FighterState.IDLE].validFrom = [...this.states[FighterState.IDLE].validFrom, FighterState.SPECIAL_MOVE_5];
 
          //headbutt up valid states
-        this.states[FighterState.JUMP_BACKWARD].validFrom = [...this.states[FighterState.JUMP_BACKWARD].validFrom, FighterState.HEADBUTT];
-        this.states[FighterState.JUMP_FORWARD].validFrom = [...this.states[FighterState.JUMP_FORWARD].validFrom, FighterState.HEADBUTT];
-        this.states[FighterState.KNOCKLIFT].validFrom = [...this.states[FighterState.KNOCKLIFT].validFrom, FighterState.HEADBUTT];
+        this.states[FighterState.JUMP_BACKWARD].validFrom = [...this.states[FighterState.JUMP_BACKWARD].validFrom, FighterState.SPECIAL_MOVE_3];
+        this.states[FighterState.JUMP_FORWARD].validFrom = [...this.states[FighterState.JUMP_FORWARD].validFrom, FighterState.SPECIAL_MOVE_3];
+        this.states[FighterState.SPECIAL_MOVE_1].validFrom = [...this.states[FighterState.SPECIAL_MOVE_1].validFrom, FighterState.SPECIAL_MOVE_3];
         //headbutt up valid states
-        this.states[FighterState.JUMP_BACKWARD].validFrom = [...this.states[FighterState.JUMP_BACKWARD].validFrom, FighterState.HEADBUTT_UP];
-        this.states[FighterState.JUMP_FORWARD].validFrom = [...this.states[FighterState.JUMP_FORWARD].validFrom, FighterState.HEADBUTT_UP];
-        this.states[FighterState.KNOCKLIFT].validFrom = [...this.states[FighterState.KNOCKLIFT].validFrom, FighterState.HEADBUTT_UP];
+        this.states[FighterState.JUMP_BACKWARD].validFrom = [...this.states[FighterState.JUMP_BACKWARD].validFrom, FighterState.SPECIAL_MOVE_4];
+        this.states[FighterState.JUMP_FORWARD].validFrom = [...this.states[FighterState.JUMP_FORWARD].validFrom, FighterState.SPECIAL_MOVE_4];
+        this.states[FighterState.SPECIAL_MOVE_1].validFrom = [...this.states[FighterState.SPECIAL_MOVE_1].validFrom, FighterState.SPECIAL_MOVE_4];
          //headbutt Down valid states
-        this.states[FighterState.JUMP_BACKWARD].validFrom = [...this.states[FighterState.JUMP_BACKWARD].validFrom, FighterState.HEADBUTT_DOWN];
-        this.states[FighterState.JUMP_FORWARD].validFrom = [...this.states[FighterState.JUMP_FORWARD].validFrom, FighterState.HEADBUTT_DOWN];
-        this.states[FighterState.KNOCKLIFT].validFrom = [...this.states[FighterState.KNOCKLIFT].validFrom, FighterState.HEADBUTT_DOWN];
+        this.states[FighterState.JUMP_BACKWARD].validFrom = [...this.states[FighterState.JUMP_BACKWARD].validFrom, FighterState.SPECIAL_MOVE_5];
+        this.states[FighterState.JUMP_FORWARD].validFrom = [...this.states[FighterState.JUMP_FORWARD].validFrom, FighterState.SPECIAL_MOVE_5];
+        this.states[FighterState.SPECIAL_MOVE_2].validFrom = [...this.states[FighterState.SPECIAL_MOVE_2].validFrom, FighterState.SPECIAL_MOVE_5];
         
     }
 
