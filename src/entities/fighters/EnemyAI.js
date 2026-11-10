@@ -431,10 +431,11 @@ export class EnemyAI {
     const move = getRandomLongDistanceMove(this.fighter);
     const defaultStrength = 1;
 
-    if (comboSet.length && Math.random() < 0.15) {
+   {/*  if (comboSet.length && Math.random() < 0.15) {
       this.queueStateCombo(comboSet, time);
       return;
     }
+      */}
 
     this.resetInputs(); // Make sure move triggers
     switch (move) {
@@ -501,7 +502,12 @@ export class EnemyAI {
        this.opponent.currentState.includes(FighterState.TOSS) ||
        this.opponent.currentState.includes(FighterState.KNEEDASH) ||
        this.opponent.currentState.includes(FighterState.KNOCKLIFT) ||
-       this.opponent.currentState.includes(FighterState.KNOCKLIFTDOWN) 
+       this.opponent.currentState.includes(FighterState.KNOCKLIFTDOWN) ||
+       this.opponent.currentState.includes(FighterState.SPECIAL_MOVE_1) ||
+       this.opponent.currentState.includes(FighterState.SPECIAL_MOVE_2) ||
+       this.opponent.currentState.includes(FighterState.SPECIAL_MOVE_3) ||
+       this.opponent.currentState.includes(FighterState.SPECIAL_MOVE_4) ||
+       this.opponent.currentState.includes(FighterState.SPECIAL_MOVE_5)
     );
   }
 
@@ -525,7 +531,12 @@ export class EnemyAI {
       this.opponent.currentState.includes(FighterState.SPECIAL_2_ROCKRELEASE) ||
       this.opponent.currentState.includes(FighterState.KNEEDASH) ||
        this.opponent.currentState.includes(FighterState.HEADBUTT_DOWN) ||
-       this.opponent.currentState.includes(FighterState.HEADBUTT_UP) 
+       this.opponent.currentState.includes(FighterState.HEADBUTT_UP) ||
+       this.opponent.currentState.includes(FighterState.SPECIAL_MOVE_1) ||
+       this.opponent.currentState.includes(FighterState.SPECIAL_MOVE_2) ||
+       this.opponent.currentState.includes(FighterState.SPECIAL_MOVE_3) ||
+       this.opponent.currentState.includes(FighterState.SPECIAL_MOVE_4) ||
+       this.opponent.currentState.includes(FighterState.SPECIAL_MOVE_5)
     );
   }
 }

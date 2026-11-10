@@ -13,16 +13,12 @@ const GENERIC_LONG_DISTANCE_MOVES = [
 const CHARACTER_LONG_DISTANCE_MOVES = {
   malupiton: [
     FighterState.SPECIAL_MOVE_3,
-    FighterState.SPECIAL_MOVE_4,
     FighterState.SPECIAL_MOVE_5,
   ],
   golem: [
     FighterState.SPECIAL_2_ROCKRELEASE,
     FighterState.KNEEDASH,
     FighterState.TORNADO_DIG,
-    FighterState.HEADBUTT,
-    FighterState.HEADBUTT_DOWN,
-    FighterState.SPECIAL_2,
   ],
   mamaoni: [
     FighterState.SPECIAL_MOVE_1,
@@ -32,46 +28,75 @@ const CHARACTER_LONG_DISTANCE_MOVES = {
 const CHARACTER_COMBO_SETS = {
   malupiton: [
     [
-      { state: FighterState.SPECIAL_MOVE_1, duration: 300 },
-      { state: FighterState.SPECIAL_MOVE_2, duration: 300 },
+      { state: FighterState.LIGHT_PUNCH, duration: 340 },
+      { state: FighterState.LIGHT_PUNCH, duration: 340 },
+      { state: FighterState.HEAVY_PUNCH, duration: 220 },
+    ],
+    [
+      { state: FighterState.CROUCH_LIGHTKICK, duration: 340 },
+      { state: FighterState.CROUCH_LIGHTKICK, duration: 340 },
+      { state: FighterState.HEAVY_PUNCH, duration: 220 },
+    ],
+    [
+      { state: FighterState.SPECIAL_MOVE_1, duration: 340 },
+      { state: FighterState.SPECIAL_MOVE_2, duration: 340 },
       { state: FighterState.SPECIAL_MOVE_3, duration: 220 },
     ],
     [
-      { state: FighterState.SPECIAL_MOVE_1, duration: 300 },
-      { state: FighterState.SPECIAL_MOVE_2, duration: 300 },
+      { state: FighterState.SPECIAL_MOVE_1, duration: 340 },
+      { state: FighterState.SPECIAL_MOVE_2, duration: 340 },
       { state: FighterState.SPECIAL_MOVE_5, duration: 220 },
     ],
      [
-      { state: FighterState.SPECIAL_MOVE_1, duration: 300 },
-      { state: FighterState.SPECIAL_MOVE_2, duration: 300 },
+      { state: FighterState.SPECIAL_MOVE_1, duration: 340 },
+      { state: FighterState.SPECIAL_MOVE_2, duration: 340 },
       { state: FighterState.HYPERSKILL_1, duration: 220 },
     ],
   ],
   golem: [
     [
-      { state: FighterState.SPECIAL_2_ROCKRELEASE, duration: 320 },
+      { state: FighterState.CROUCH_LIGHTKICK, duration: 340 },
+      { state: FighterState.CROUCH_LIGHTKICK, duration: 340 },
+      { state: FighterState.HEAVY_PUNCH, duration: 220 },
       { state: FighterState.KNEEDASH, duration: 250 },
       { state: FighterState.TORNADO_DIG, duration: 360 },
     ],
     [
-      { state: FighterState.HEADBUTT, duration: 220 },
-      { state: FighterState.KNEEDASH, duration: 260 },
-      { state: FighterState.SPECIAL_2, duration: 300 },
+      { state: FighterState.CROUCH_LIGHTKICK, duration: 340 },
+      { state: FighterState.CROUCH_LIGHTKICK, duration: 340 },
+      { state: FighterState.HEAVY_PUNCH, duration: 220 },
+    ],
+    [
+      { state: FighterState.LIGHT_PUNCH, duration: 340 },
+      { state: FighterState.LIGHT_PUNCH, duration: 340 },
+      { state: FighterState.HEAVY_PUNCH, duration: 220 },
+    ],
+    [
+      { state: FighterState.LIGHT_PUNCH, duration: 340 },
+      { state: FighterState.LIGHT_PUNCH, duration: 340 },
+      { state: FighterState.HEAVY_PUNCH, duration: 220 },
+      { state: FighterState.KNEEDASH, duration: 250 },
+      { state: FighterState.TORNADO_DIG, duration: 360 },
     ],
   ],
   mamaoni: [
     [
+      { state: FighterState.HEAVY_PUNCH, duration: 340 },
+      { state: FighterState.SPECIAL_MOVE_1, duration: 340 },
+    ],
+     [
+      { state: FighterState.LIGHT_PUNCH, duration: 340 },
+      { state: FighterState.LIGHT_PUNCH, duration: 340 },
       { state: FighterState.HEAVY_PUNCH, duration: 220 },
-      { state: FighterState.SPECIAL_MOVE_1, duration: 220 },
     ],
     [
-      { state: FighterState.SPECIAL_MOVE_2, duration: 220 },
-      { state: FighterState.HEAVY_PUNCH, duration: 220 },
+      { state: FighterState.SPECIAL_MOVE_2, duration: 340 },
+      { state: FighterState.HEAVY_PUNCH, duration: 340 },
     ],
     [
-      { state: FighterState.SPECIAL_MOVE_2, duration: 220 },
-      { state: FighterState.HEAVY_PUNCH, duration: 220 },
-      { state: FighterState.SPECIAL_MOVE_1, duration: 220 },
+      { state: FighterState.SPECIAL_MOVE_2, duration: 340 },
+      { state: FighterState.HEAVY_PUNCH, duration: 340 },
+      { state: FighterState.SPECIAL_MOVE_1, duration: 340 },
     ],
   ],
 };

@@ -328,7 +328,7 @@ export const hurtStateValidFrom = [
     FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.HYPERSKILL_2, 
     FighterState.DIE, FighterState.DEATH, FighterState.KNOCKUP, FighterState.SPECIAL_2_MOVEFIGHTER,
     FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN, FighterState.HEADBUTT, FighterState.KNEEDASH, FighterState.HEADBUTT_DOWN,FighterState.HEADBUTT_UP, FighterState.TORNADO_DIG, FighterState.PICKUP, 
-    FighterState.TOSS, FighterState.KNEEDASH,
+    FighterState.TOSS, FighterState.KNEEDASH, FighterState.SPECIAL_MOVE_1, FighterState.SPECIAL_MOVE_2, FighterState.SPECIAL_MOVE_3, FighterState.SPECIAL_MOVE_4, FighterState.SPECIAL_MOVE_5,
 ];
 
 export const knockUpStateValidFrom = [
@@ -343,7 +343,7 @@ export const knockUpStateValidFrom = [
     FighterState.SPECIAL_1, FighterState.SPECIAL_2,FighterState.DODGE_BACKWARD, FighterState.DODGE_FORWARD, FighterState.BLOCK, FighterState.CROUCH_BLOCK, FighterState.HYPERSKILL_2, FighterState.KNOCKUP,
     FighterState.KNOCKLIFT, FighterState.KNOCKLIFTDOWN, FighterState.HEADBUTT, 
     FighterState.SPECIAL_2_MOVEFIGHTER, FighterState.LAYDOWN_GROUND, FighterState.KNEEDASH, FighterState.HEADBUTT_DOWN,FighterState.HEADBUTT_UP, 
-    FighterState.FALL, FighterState.TORNADO_DIG, FighterState.PICKUP, FighterState.TOSS, FighterState.KNEEDASH,
+    FighterState.FALL, FighterState.TORNADO_DIG, FighterState.PICKUP, FighterState.TOSS, FighterState.KNEEDASH, FighterState.SPECIAL_MOVE_1, FighterState.SPECIAL_MOVE_2, FighterState.SPECIAL_MOVE_3, FighterState.SPECIAL_MOVE_4, FighterState.SPECIAL_MOVE_5,
 ];
 
 export const SpecialMoveDirection = {

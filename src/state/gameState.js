@@ -24,10 +24,10 @@ export const gameState = {
     pauseTimer: 0,
     credits: 5,
     pauseFrameMove: -30,
-    skillNumber: 1,
+    skillNumber: 5,
     fighterNotIdle: false,
     difficultyIndex: 1,
-    difficulty: 'normal',
+    difficulty: 'insane',
     buttonHold: false,
     stage: 'test',
     flash: false,
@@ -37,7 +37,7 @@ export const gameState = {
     kapeCom: false,
     stageMusic: 'audio#stage-payatas',
     debug: {
-      fighters: true,
+      fighters: false,
       entities: false,
     },
     cameraShake: {
